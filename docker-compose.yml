@@ -1,0 +1,37 @@
+###########################
+# laravel-inertia-template
+# Vite+SSRで作成するプロジェクトのサンプル
+# ローカル開発環境
+
+services:
+  ###########################
+  # template_web : php + Apache + Composer + npm
+  # webサーバー
+  template_web:
+    container_name: template_web
+    build: ./laravel-inertia-template-app/docker/web
+    env_file:
+      - ./laravel-inertia-template-app/.env
+    environment:
+      - APP_TIMEOUT=60
+      - PHP_MEMORY_LIMIT=256M
+      - PHP_MAX_UPLOAD=20M
+    working_dir: /var/www/html/laravel-inertia-template-app
+    ports:
+      - "9190:80"   # Laravel用
+      - "5173:5173" # Vite用
+    networks:
+      - template_local
+    volumes:
+      - ./:/var/www/html
+
+networks:
+  template_local:
+    name: template_local
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.246.0/24 # 他と衝突しなければなんでも良い認識
