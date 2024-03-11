@@ -20,3 +20,18 @@ Route::get('/', function () {
 Route::get('/Test', function () {
     return Inertia::render('Test');
 });
+Route::get('/First', function () {
+    return Inertia::render('First', [
+        'numberValue' => 919,
+        'stringValue' => "Quick",
+        'arrayValue' => [
+            11,
+            22,
+            "33",
+            44,
+        ]
+    ]);
+});
+Route::get('/Second', function () {
+    return Inertia::render('Second');
+});
