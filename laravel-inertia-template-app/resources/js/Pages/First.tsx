@@ -6,6 +6,11 @@ interface IPros {
   arrayValue: number[];
 }
 export const First: React.FC<IPros> = ({ numberValue, stringValue, arrayValue }) => {
+
+  const handleClick = () => {
+    console.log('クリックされた')
+  }
+
   return (
     <React.Fragment>
       <div>
@@ -24,6 +29,12 @@ export const First: React.FC<IPros> = ({ numberValue, stringValue, arrayValue })
           </div>
         )
       })}
+      <div
+        style={{background: '#F00' }}
+        onClick={() => handleClick()}
+      >
+        test
+      </div>
     </React.Fragment>
   )
 }
