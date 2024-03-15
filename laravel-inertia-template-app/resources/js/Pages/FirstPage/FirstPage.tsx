@@ -23,7 +23,7 @@ export const FirstPage: React.FC<IPros> = () => {
           padding: '5px',
         }}
       >
-        This is First Page !.
+        This is First Page.
       </Paper>
       <Paper
         sx={{
