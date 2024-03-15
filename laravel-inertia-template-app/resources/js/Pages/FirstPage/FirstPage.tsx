@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IPropsBase } from '@/js/System/System';
 import { Box, Button, Paper } from '@mui/material';
+import { IPropsBase } from '@/js/System/System';
 import { useFirstPageContext } from '@/js/Pages/FirstPageIndex';
 
 interface IPros extends IPropsBase {}
@@ -8,6 +8,7 @@ export const FirstPage: React.FC<IPros> = () => {
   const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
   const handleClick = () => {
+    // eslint-disable-next-line no-console
     console.log('クリックされた');
   };
 
