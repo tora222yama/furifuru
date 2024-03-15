@@ -1,8 +1,5 @@
-import { createTheme } from '@mui/material/styles';
+import {createTheme} from "@mui/material";
 
-/**
- *  サイト全体の利用テーマ
- */
 export const themeCommon = createTheme({
   palette: {
     mode: 'light',

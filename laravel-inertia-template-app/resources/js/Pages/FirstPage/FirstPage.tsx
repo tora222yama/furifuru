@@ -1,13 +1,13 @@
 import * as React from 'react';
+import {IPropsBase} from "@/js/System/System";
+import {themeCommon} from "@/js/System/Theme";
 import {Box, Button, CssBaseline, Paper, ThemeProvider} from "@mui/material";
-import {themeCommon} from "@/js/ThemeCommon";
+import {useFirstPageContext} from "@/js/Pages/FirstPageIndex";
 
-interface IPros {
-  numberValue: number;
-  stringValue: string;
-  arrayValue: number[];
-}
-export const First: React.FC<IPros> = ({ numberValue, stringValue, arrayValue }) => {
+interface IPros extends IPropsBase {}
+export const FirstPage: React.FC<IPros> = () => {
+
+  const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
   const handleClick = () => {
     console.log('クリックされた')
@@ -69,4 +69,3 @@ export const First: React.FC<IPros> = ({ numberValue, stringValue, arrayValue })
     </ThemeProvider>
   )
 }
-export default First;

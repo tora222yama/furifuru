@@ -21,7 +21,7 @@ Route::get('/Test', function () {
     return Inertia::render('Test');
 });
 Route::get('/First', function () {
-    return Inertia::render('First', [
+    return Inertia::render('FirstPageIndex', [
         'numberValue' => 919,
         'stringValue' => "Quick",
         'arrayValue' => [
