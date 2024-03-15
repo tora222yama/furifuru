@@ -1,8 +1,6 @@
 import * as React from 'react';
 export const Second = () => {
-    return (<React.Fragment>
-      <div>This is Second Page.</div>
-    </React.Fragment>);
+    return <div>This is Second Page.</div>;
 };
 export default Second;
 //# sourceMappingURL=Second.jsx.map

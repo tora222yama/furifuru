@@ -6,7 +6,9 @@
         "build": "vite build && vite build --ssr",
         "tsc": "tsc",
         "prettier": "./node_modules/.bin/prettier --write 'resources/js/**/*.{ts,tsx}'",
-        "eslint": "./node_modules/.bin/eslint --fix 'resources/js/**/*.{ts,tsx}'"
+        "eslint": "./node_modules/.bin/eslint --fix 'resources/js/**/*.{ts,tsx}'",
+        "prepare": "cd .. && husky ./laravel-inertia-template-app/.husky",
+        "lint-staged": "lint-staged"
     },
     "devDependencies": {
         "@emotion/react": "^11.11.4",
@@ -25,11 +27,19 @@
         "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-react": "^7.34.0",
         "eslint-plugin-react-hooks": "^4.6.0",
+        "husky": "^9.0.11",
         "laravel-vite-plugin": "^1.0.0",
+        "lint-staged": "^15.2.2",
         "prettier": "^3.2.5",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "typescript": "^5.4.2",
         "vite": "^5.0.0"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "prettier --write",
+            "eslint --fix"
+        ]
     }
 }

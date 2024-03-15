@@ -4,6 +4,7 @@ import { useFirstPageContext } from '@/js/Pages/FirstPageIndex';
 export const FirstPage = () => {
     const { numberValue, stringValue, arrayValue } = useFirstPageContext();
     const handleClick = () => {
+        // eslint-disable-next-line no-console
         console.log('クリックされた');
     };
     return (<Box sx={{
@@ -41,4 +42,5 @@ export const FirstPage = () => {
       </Button>
     </Box>);
 };
+export default FirstPage;
 //# sourceMappingURL=FirstPage.jsx.map
