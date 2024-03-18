@@ -23,13 +23,13 @@ Route::get('/Test', function () {
 Route::get('/First', function () {
     return Inertia::render('FirstPageIndex', [
         'numberValue' => 919,
-        'stringValue' => "Quick",
+        'stringValue' => 'Quick',
         'arrayValue' => [
             11,
             22,
-            "33",
+            '33',
             44,
-        ]
+        ],
     ]);
 });
 Route::get('/Second', function () {
