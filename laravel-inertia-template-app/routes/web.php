@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,4 +33,7 @@ Route::get('/first_page', function () {
 });
 Route::get('/second', function () {
     return Inertia::render('Second');
+});
+Route::get('/health_check', function () {
+    return Inertia::render('HealthCheckIndex');
 });
