@@ -17,10 +17,13 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('IndexProvider/DashboardIndex');
+});
+Route::get('/dashboard', function () {
+    return Inertia::render('IndexProvider/DashboardIndex');
 });
 Route::get('/first_page', function () {
-    return Inertia::render('FirstPageIndex', [
+    return Inertia::render('IndexProvider/FirstPageIndex', [
         'numberValue' => 919,
         'stringValue' => 'Quick',
         'arrayValue' => [
@@ -31,9 +34,6 @@ Route::get('/first_page', function () {
         ],
     ]);
 });
-Route::get('/second', function () {
-    return Inertia::render('Second');
-});
 Route::get('/health_check', function () {
-    return Inertia::render('HealthCheckIndex');
+    return Inertia::render('IndexProvider/HealthCheckIndex');
 });
