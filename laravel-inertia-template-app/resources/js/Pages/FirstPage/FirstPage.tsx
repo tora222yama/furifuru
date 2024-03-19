@@ -7,7 +7,7 @@ interface IPros extends IPropsBase {}
 export const FirstPage: React.FC<IPros> = () => {
   const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
-  // error-test
+  // error-test2
   const i = 0;
 
   const handleClick = () => {
