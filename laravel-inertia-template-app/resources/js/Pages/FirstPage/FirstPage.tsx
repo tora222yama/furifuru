@@ -7,6 +7,8 @@ interface IPros extends IPropsBase {}
 export const FirstPage: React.FC<IPros> = () => {
   const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
+  const i = 0;
+
   const handleClick = () => {
     // eslint-disable-next-line no-console
     console.log('クリックされた');
@@ -63,4 +65,4 @@ export const FirstPage: React.FC<IPros> = () => {
     </Box>
   );
 };
-export default FirstPage;
+export default FirstPag;

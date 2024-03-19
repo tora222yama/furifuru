@@ -32,7 +32,6 @@ export const FirstPageIndex: React.FC<IPros> = ({
   stringValue,
   arrayValue,
 }) => {
-
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */

@@ -9,7 +9,8 @@
         "eslint": "./node_modules/.bin/eslint --fix 'resources/js/**/*.{ts,tsx}'",
         "prepare": "cd .. && husky ./laravel-inertia-template-app/.husky",
         "pint": "./vendor/bin/pint",
-        "lint-staged": "lint-staged"
+        "lint-staged": "lint-staged",
+        "lefthook": "lefthook run pre-commit"
     },
     "devDependencies": {
         "@emotion/react": "^11.11.4",
@@ -30,6 +31,7 @@
         "eslint-plugin-react-hooks": "^4.6.0",
         "husky": "^9.0.11",
         "laravel-vite-plugin": "^1.0.0",
+        "lefthook": "^1.6.7",
         "lint-staged": "^15.2.2",
         "prettier": "^3.2.5",
         "react": "^18.2.0",
@@ -40,7 +42,9 @@
     "lint-staged": {
         "*.{ts,tsx}": [
             "prettier --write",
-            "eslint --fix",
+            "eslint --fix"
+        ],
+        "*.php": [
             "pint"
         ]
     }
