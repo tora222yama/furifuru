@@ -1,0 +1,19 @@
+# npm run lefthook で実行可能
+
+pre-commit:
+  parallel: false
+  commands:
+    prettier:
+      glob: '*.{ts,tsx}'
+      run: |
+        ./laravel-inertia-template-app/node_modules/.bin/prettier --write {staged_files}
+        git add {staged_files}
+    eslint:
+      glob: '*.{ts,tsx}'
+      run: |
+        ./laravel-inertia-template-app/node_modules/.bin/eslint --fix {staged_files}
+    pint:
+      glob: '*.{php}'
+      run: |
+        ./laravel-inertia-template-app/vendor/bin/pint
+
