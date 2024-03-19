@@ -17,10 +17,7 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/Test', function () {
-    return Inertia::render('Test');
-});
-Route::get('/First', function () {
+Route::get('/first_page', function () {
     return Inertia::render('FirstPageIndex', [
         'numberValue' => 919,
         'stringValue' => 'Quick',
@@ -32,6 +29,6 @@ Route::get('/First', function () {
         ],
     ]);
 });
-Route::get('/Second', function () {
+Route::get('/second', function () {
     return Inertia::render('Second');
 });

@@ -63,4 +63,4 @@ export const FirstPage: React.FC<IPros> = () => {
     </Box>
   );
 };
-export default FirstPag;
+export default FirstPage;
