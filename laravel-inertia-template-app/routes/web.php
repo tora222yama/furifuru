@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enum\EPages;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,27 +16,8 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('IndexProvider/DashboardIndex');
-});
-Route::get('/dashboard', function () {
-    return Inertia::render('IndexProvider/DashboardIndex');
-});
-Route::get('/slack_log', function () {
-    return Inertia::render('IndexProvider/SlackLogIndex');
-});
-Route::get('/first_page', function () {
-    return Inertia::render('IndexProvider/FirstPageIndex', [
-        'numberValue' => 919,
-        'stringValue' => 'Quick',
-        'arrayValue' => [
-            11,
-            22,
-            '33',
-            44,
-        ],
-    ]);
-});
-Route::get('/health_check', function () {
-    return Inertia::render('IndexProvider/HealthCheckIndex');
-});
+Route::get('/', EPages::DASHBOARD->getInvokePath());
+Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
+Route::get('/slack_log', EPages::SLACK_LOG->getInvokePath());
+Route::get('/first_page', EPages::FIRST_PAGE->getInvokePath());
+Route::get('/health_check', EPages::HEALTH_CHECK->getInvokePath());
