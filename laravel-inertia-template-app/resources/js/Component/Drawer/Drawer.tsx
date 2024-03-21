@@ -1,9 +1,32 @@
 import * as React from 'react';
-import { Drawer as MuiDrawer } from '@mui/material';
+import {
+  Box,
+  Drawer as MuiDrawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
 
 interface IProps extends IPropsBase {}
 export const Drawer: React.FC<IProps> = () => {
+  /**
+   * 仮処理
+   */
+  const handleClickLogo = () => {
+    window.location = '/dashboard';
+  };
+
+  /**
+   * 仮処理.
+   */
+  const handleClickSlack = () => {
+    // 仮でテストページに移動
+    window.location = '/slack_log';
+  };
+
   return (
     <MuiDrawer
       sx={{
@@ -17,7 +40,37 @@ export const Drawer: React.FC<IProps> = () => {
       variant="permanent"
       anchor="left"
     >
-      ここにdrawerを表示
+      <Box
+        sx={{
+          padding: '20px',
+        }}
+      >
+        <Box
+          sx={{
+            cursor: 'pointer',
+          }}
+          onClick={handleClickLogo}
+        >
+          <Typography>Laravel-Inertia-Template</Typography>
+        </Box>
+        <List>
+          <ListItem key={1} disablePadding>
+            <ListItemButton>
+              <ListItemText>List1</ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={2} disablePadding>
+            <ListItemButton>
+              <ListItemText>List2</ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={3} disablePadding>
+            <ListItemButton onClick={handleClickSlack}>
+              <ListItemText>Slack通知・Log出力</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
     </MuiDrawer>
   );
 };

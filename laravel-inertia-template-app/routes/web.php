@@ -20,9 +20,10 @@ Route::get('/', function () {
     return Inertia::render('IndexProvider/DashboardIndex');
 });
 Route::get('/dashboard', function () {
-    \Illuminate\Support\Facades\Log::info('dashboardへの接続');
-
     return Inertia::render('IndexProvider/DashboardIndex');
+});
+Route::get('/slack_log', function () {
+    return Inertia::render('IndexProvider/SlackLogIndex');
 });
 Route::get('/first_page', function () {
     return Inertia::render('IndexProvider/FirstPageIndex', [
