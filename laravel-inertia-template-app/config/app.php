@@ -170,6 +170,14 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /**
+         * Custom providers...
+         */
+
+        // External.
+        App\Providers\External\SlackServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -184,7 +192,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+
+        // External.
+        'external\slack_service' => App\Facades\External\SlackService::class,
+
     ])->toArray(),
 
 ];
