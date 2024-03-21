@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Logging;
 
-use App\Models\Scat\Auth\AuthUser;
-use Auth;
+//use App\Models\Scat\Auth\AuthUser;
+//use Auth;
 use Monolog\Logger;
 use Monolog\Processor\IntrospectionProcessor;
 use Monolog\Processor\ProcessIdProcessor;
@@ -36,21 +36,21 @@ class CustomizeFormatter
             $handler->pushProcessor($wp);
             $handler->pushProcessor($pid);
             // extraにオリジナル項目追加
-            $handler->pushProcessor([$this, 'addAuthID']);
+            // $handler->pushProcessor([$this, 'addAuthID']);
         }
     }
 
     /**
      * 認証IDをログ出力に付加
      */
-    public function addAuthID(array $record): array
-    {
-        /** @var AuthUser $auth */
-        $auth = Auth::user();
-
-        $authId = $auth ? $auth->id : '';
-        $record['extra']['auth_id'] = $authId;
-
-        return $record;
-    }
+    //    public function addAuthID(array $record): array
+    //    {
+    //        /** @var AuthUser $auth */
+    //        $auth = Auth::user();
+    //
+    //        $authId = $auth ? $auth->id : '';
+    //        $record['extra']['auth_id'] = $authId;
+    //
+    //        return $record;
+    //    }
 }
