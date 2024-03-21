@@ -1,6 +1,8 @@
 # laravel-inertia-template
 Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
+- [※利用ライブラリについての説明はこちら](./PACKAGE.md)
+
 # 環境構築
 
 ## 前提

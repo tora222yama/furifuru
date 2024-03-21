@@ -16,4 +16,5 @@ pre-commit:
       glob: '*.{php}'
       run: |
         ./laravel-inertia-template-app/vendor/bin/pint
+        git add {staged_files}
 

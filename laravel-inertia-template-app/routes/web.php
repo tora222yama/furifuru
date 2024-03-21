@@ -20,6 +20,8 @@ Route::get('/', function () {
     return Inertia::render('IndexProvider/DashboardIndex');
 });
 Route::get('/dashboard', function () {
+    \Illuminate\Support\Facades\Log::info('dashboardへの接続');
+
     return Inertia::render('IndexProvider/DashboardIndex');
 });
 Route::get('/first_page', function () {
