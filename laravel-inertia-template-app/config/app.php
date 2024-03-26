@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -168,6 +170,14 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /**
+         * Custom providers...
+         */
+
+        // External.
+        App\Providers\External\SlackServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -182,7 +192,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+
+        // External.
+        'external\slack_service' => App\Facades\External\SlackService::class,
+
     ])->toArray(),
 
 ];

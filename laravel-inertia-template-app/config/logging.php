@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -52,10 +54,22 @@ return [
     */
 
     'channels' => [
+        // kibanaで参照するために1ログ1ライン(json)
         'stack' => [
-            'driver' => 'stack',
-            'channels' => ['single'],
-            'ignore_exceptions' => false,
+            'driver' => 'single',
+            'tap' => [App\Logging\CustomizeFormatter::class],
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'permission' => 0664,
+        ],
+
+        // [Local環境で利用]laravel標準のstack traceが出力される
+        'multiline_stack' => [
+            'driver' => 'single',
+            'tap' => [App\Logging\LogDebugProcessor::class, App\Logging\LogDebugFormatter::class],
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'permission' => 0664,
         ],
 
         'single' => [
@@ -125,6 +139,22 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'ecs' => [
+            'driver' => 'stack',
+            'tap' => [App\Logging\CustomizeFormatter::class],
+            'channels' => ['stdout'],
+            'ignore_exceptions' => false,
+        ],
+
+        'stdout' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'with' => [
+                'stream' => 'php://stdout',
+            ],
+            'level' => 'debug',
         ],
     ],
 

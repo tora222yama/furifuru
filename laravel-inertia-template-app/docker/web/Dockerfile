@@ -19,6 +19,7 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -\
 # install git for local
 RUN apt-get update && \
     apt-get install -y git
+RUN git config --global --add safe.directory /var/www/html
 
 # set configuration for apache and php
 COPY apache-virtualhost.conf /etc/apache2/sites-enabled/000-default.conf

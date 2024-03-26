@@ -1,6 +1,8 @@
 # laravel-inertia-template
 Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
+- [※利用ライブラリについての説明はこちら](./PACKAGE.md)
+
 # 環境構築
 
 ## 前提
@@ -29,10 +31,13 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 ### セットアップ手順
 
-- ※laravel-inertia-template-app直下で実施
+- インストール時の権限でファイル所有者がrootなどになっていると正常に動作しない場合があるので、その場合はchownで対応してください
+- 例）```sudo chown {name}:{group} -R {target_dir}```
 
 ```
+cd laravel-inertia-template-app
 cp .env.local .env
+cd ..
 docker-compose build
 docker-compose up -d
 
@@ -48,7 +53,7 @@ docker exec -it template_web bash
 npm run prepare
 (husky - Git hooks installed と表示されればOK)
 
-# ログファイルの権限を修正（Ubuntu上など、ターミナル側のscat2_app直下で実施する）
+# ログファイルの権限を修正（Ubuntu上など、ターミナル側のlaravel-inertia-template-app直下で実施する）
 sudo chmod 777 -R storage/
 
 # webコンテナでビルドテスト

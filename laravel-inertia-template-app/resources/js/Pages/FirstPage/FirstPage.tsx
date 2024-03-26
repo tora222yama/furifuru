@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Button, Paper } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
-import { useFirstPageContext } from '@/js/Pages/FirstPageIndex';
+import { useFirstPageContext } from '@/js/Pages/IndexProvider/FirstPageIndex';
 
 interface IPros extends IPropsBase {}
 export const FirstPage: React.FC<IPros> = () => {
