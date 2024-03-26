@@ -20,4 +20,10 @@ pre-commit:
       run: |
         ./laravel-inertia-template-app/vendor/bin/pint {staged_files}
         git add {staged_files}
+    ide-helper:
+      glob: '*.{php}'
+      run: |
+        cd ./laravel-inertia-template-app
+        php artisan ide-helper:generate
+        php artisan ide-helper:models -N
 
