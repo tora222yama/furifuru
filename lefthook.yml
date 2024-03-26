@@ -3,6 +3,9 @@
 pre-commit:
   parallel: false
   commands:
+    tsc:
+      glob: '*.{ts,tsx}'
+      run: npm run tsc --prefix ./laravel-inertia-template-app
     prettier:
       glob: '*.{ts,tsx}'
       run: |
@@ -15,6 +18,6 @@ pre-commit:
     pint:
       glob: '*.{php}'
       run: |
-        ./laravel-inertia-template-app/vendor/bin/pint
+        ./laravel-inertia-template-app/vendor/bin/pint {staged_files}
         git add {staged_files}
 

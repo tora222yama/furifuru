@@ -16,7 +16,7 @@ export const Drawer: React.FC<IProps> = () => {
    * 仮処理
    */
   const handleClickLogo = () => {
-    window.location = '/dashboard';
+    window.location.href = '/dashboard';
   };
 
   /**
@@ -24,7 +24,7 @@ export const Drawer: React.FC<IProps> = () => {
    */
   const handleClickSlack = () => {
     // 仮でテストページに移動
-    window.location = '/slack_log';
+    window.location.href = '/slack_log';
   };
 
   return (
