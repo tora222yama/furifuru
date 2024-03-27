@@ -50,8 +50,14 @@ export const themeCommon = createTheme({
     drawer: {
       width: '250px',
     },
-    container: {
-      minWidth: '300px',
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 375,
+      md: 1024,
+      lg: 1200,
+      xl: 1536,
     },
   },
   components: {

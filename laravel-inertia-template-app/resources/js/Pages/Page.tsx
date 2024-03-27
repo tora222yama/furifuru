@@ -25,7 +25,7 @@ export const Page: React.FC<IProps> = ({ sx, children }) => {
       <Container
         sx={{
           marginTop: theme => theme.mixins.toolbar.height,
-          minWidth: theme => theme.mixins.container?.minWidth,
+          minWidth: theme => theme.breakpoints.values.sm,
         }}
         disableGutters
       >
