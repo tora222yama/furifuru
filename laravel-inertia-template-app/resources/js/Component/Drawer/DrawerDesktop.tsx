@@ -11,7 +11,7 @@ import {
 import { IPropsBase } from '@/js/System/System';
 
 interface IProps extends IPropsBase {}
-export const Drawer: React.FC<IProps> = () => {
+export const DrawerDesktop: React.FC<IProps> = () => {
   /**
    * 仮処理
    */
