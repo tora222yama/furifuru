@@ -47,6 +47,12 @@ export const themeCommon = createTheme({
       height: '64px',
       padding: '0px',
     },
+    drawer: {
+      width: '250px',
+    },
+    container: {
+      minWidth: '300px',
+    },
   },
   components: {
     MuiTypography: {

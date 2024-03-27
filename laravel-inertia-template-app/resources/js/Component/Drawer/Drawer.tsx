@@ -30,10 +30,10 @@ export const Drawer: React.FC<IProps> = () => {
   return (
     <MuiDrawer
       sx={{
-        width: '250px',
+        width: theme => theme.mixins.drawer?.width,
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: '250px',
+          width: theme => theme.mixins.drawer?.width,
           boxSizing: 'border-box',
         },
       }}

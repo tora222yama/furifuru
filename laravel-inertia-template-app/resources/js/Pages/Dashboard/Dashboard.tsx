@@ -13,7 +13,7 @@ export const Dashboard: React.FC<IPros> = () => {
           padding: '10px',
         }}
       >
-        dashboard.
+        長いメッセージ長いメッセージ長いメッセージ長いメッセージ長いメッセージ
       </Box>
     </Page>
   );

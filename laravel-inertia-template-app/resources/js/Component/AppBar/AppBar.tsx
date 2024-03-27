@@ -7,12 +7,16 @@ export const AppBar: React.FC<IProps> = () => {
   return (
     <MuiAppBar
       sx={{
-        width: 'calc(100% - 250px)',
+        left: theme => ({
+          sm: '0px',
+          md: theme.mixins.drawer?.width,
+        }),
       }}
       position="fixed"
     >
       <Toolbar
         sx={{
+          width: '100%',
           padding: '5px',
         }}
         disableGutters
