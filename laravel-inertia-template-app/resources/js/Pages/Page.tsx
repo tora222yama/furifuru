@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
-import { AppBar } from '@/js/Component/AppBar/AppBar';
-import { Drawer } from '@/js/Component/Drawer/Drawer';
+import { AppBarDesktop } from '@/js/Component/AppBar/AppBarDesktop';
+import { DrawerDesktop } from '@/js/Component/Drawer/DrawerDesktop';
+import { DisplayDesktop } from '@/js/Component/Misc/DisplayDesktop';
+import { DisplayMobile } from '@/js/Component/Misc/DisplayMobile';
+import { AppBarMobile } from '@/js/Component/AppBar/AppBarMobile';
 
 interface IProps extends IPropsBase {}
 export const Page: React.FC<IProps> = ({ sx, children }) => {
@@ -13,15 +16,22 @@ export const Page: React.FC<IProps> = ({ sx, children }) => {
         ...sx,
       }}
     >
-      <AppBar />
-      <Drawer />
-      <Box
+      <DisplayDesktop>
+        <AppBarDesktop />
+        <DrawerDesktop />
+      </DisplayDesktop>
+      <DisplayMobile>
+        <AppBarMobile />
+      </DisplayMobile>
+      <Container
         sx={{
           marginTop: theme => theme.mixins.toolbar.height,
+          minWidth: theme => theme.breakpoints.values.sm,
         }}
+        disableGutters
       >
         {children}
-      </Box>
+      </Container>
     </Box>
   );
 };

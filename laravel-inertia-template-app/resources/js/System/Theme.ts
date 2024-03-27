@@ -47,6 +47,18 @@ export const themeCommon = createTheme({
       height: '64px',
       padding: '0px',
     },
+    drawer: {
+      width: '250px',
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 375,
+      md: 1024,
+      lg: 1200,
+      xl: 1536,
+    },
   },
   components: {
     MuiTypography: {
