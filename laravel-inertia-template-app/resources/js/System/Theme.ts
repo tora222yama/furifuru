@@ -4,12 +4,13 @@ export const themeCommon = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#CDDC39',
-      contrastText: '#333333',
+      main: '#009688',
+      light: '#80CBC4',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#FFFFFF',
-      contrastText: '#4d4d4d',
+      main: '#FDD835',
+      contrastText: '#242424',
     },
     background: {
       default: '#EEEEEE',

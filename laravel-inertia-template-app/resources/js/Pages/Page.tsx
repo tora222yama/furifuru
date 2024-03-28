@@ -12,6 +12,7 @@ export const Page: React.FC<IProps> = ({ sx, children }) => {
   return (
     <Box
       sx={{
+        padding: '20px',
         display: 'flex',
         ...sx,
       }}

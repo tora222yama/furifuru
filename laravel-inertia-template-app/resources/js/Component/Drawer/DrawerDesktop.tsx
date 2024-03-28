@@ -22,6 +22,13 @@ export const DrawerDesktop: React.FC<IProps> = () => {
   /**
    * 仮処理.
    */
+  const handleClickRedis = () => {
+    window.location.href = '/redis';
+  };
+
+  /**
+   * 仮処理.
+   */
   const handleClickSlack = () => {
     // 仮でテストページに移動
     window.location.href = '/slack_log';
@@ -60,8 +67,8 @@ export const DrawerDesktop: React.FC<IProps> = () => {
             </ListItemButton>
           </ListItem>
           <ListItem key={2} disablePadding>
-            <ListItemButton>
-              <ListItemText>List2</ListItemText>
+            <ListItemButton onClick={handleClickRedis}>
+              <ListItemText>Redis/GraphQL</ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem key={3} disablePadding>
