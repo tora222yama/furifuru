@@ -7,6 +7,7 @@ import { TypoText } from '@/js/Component/Typography/TypoText';
 import { TypoSubTitle1 } from '@/js/Component/Typography/TypoSubTitle1';
 import { Log } from '@/js/Common/Log';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
+import { E_BUTTON_TYPE } from '@/js/Component/Typography/EButtonType';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
@@ -58,10 +59,9 @@ export const Redis: React.FC<IProps> = () => {
           sx={{
             marginTop: '20px',
           }}
+          label="取得"
           onClick={handleClickLoad}
-        >
-          <TypoText>取得</TypoText>
-        </ButtonGeneral>
+        />
       </Paper>
       <Paper
         sx={{
@@ -74,10 +74,10 @@ export const Redis: React.FC<IProps> = () => {
           sx={{
             marginTop: '20px',
           }}
+          buttonType={E_BUTTON_TYPE.SECONDARY}
           onClick={handleClickSave}
-        >
-          <TypoText>保存</TypoText>
-        </ButtonGeneral>
+          label="保存"
+        />
       </Paper>
     </Page>
   );

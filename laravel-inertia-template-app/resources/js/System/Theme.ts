@@ -1,22 +1,26 @@
 import { createTheme } from '@mui/material';
+import { E_COLOR } from '@/js/Component/Enum/EColor';
 
 export const themeCommon = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#009688',
-      light: '#80CBC4',
-      contrastText: '#FFFFFF',
+      main: E_COLOR.PRIMARY_MAIN,
+      light: E_COLOR.PRIMARY_LIGHT,
+      dark: E_COLOR.PRIMARY_DARK,
+      contrastText: E_COLOR.PRIMARY_TEXT,
     },
     secondary: {
-      main: '#FDD835',
-      contrastText: '#242424',
+      main: E_COLOR.SECONDARY_MAIN,
+      light: E_COLOR.SECONDARY_LIGHT,
+      dark: E_COLOR.SECONDARY_DARK,
+      contrastText: E_COLOR.SECONDARY_TEXT,
     },
     background: {
-      default: '#EEEEEE',
+      default: E_COLOR.BACKGROUND,
     },
     text: {
-      primary: '#242424',
+      primary: E_COLOR.TEXT_PRIMARY,
     },
   },
   typography: {
