@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material';
-import { E_COLOR } from '@/js/Component/Enum/EColor';
+import { E_COLOR } from '@/js/Enum/EColor';
 
 export const themeCommon = createTheme({
   palette: {

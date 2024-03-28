@@ -7,7 +7,7 @@ import { TypoText } from '@/js/Component/Typography/TypoText';
 import { TypoSubTitle1 } from '@/js/Component/Typography/TypoSubTitle1';
 import { Log } from '@/js/Common/Log';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
-import { E_BUTTON_TYPE } from '@/js/Component/Typography/EButtonType';
+import { E_BUTTON_TYPE } from '@/js/Component/Button/EButtonType';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {

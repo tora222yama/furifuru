@@ -8,7 +8,7 @@ import {
   getButtonColorHover,
   getButtonColorNormal,
   getButtonColorText,
-} from '@/js/Component/Typography/EButtonType';
+} from '@/js/Component/Button/EButtonType';
 
 /**
  * 一般的なボタン、paddingやmarginなど共通で編集できるようにするためのラッパー.

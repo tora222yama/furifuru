@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import { E_COLOR, EColor } from '@/js/Component/Enum/EColor';
+import { E_COLOR, EColor } from '@/js/Enum/EColor';
 
 /**
  * ボタン種別.

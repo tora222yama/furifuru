@@ -1,6 +1,6 @@
 import { ButtonProps } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
-import { EButtonType } from '@/js/Component/Typography/EButtonType';
+import { EButtonType } from '@/js/Component/Button/EButtonType';
 
 // ButtonPropsから利用するキー.
 type UseButtonPropsKeys =
