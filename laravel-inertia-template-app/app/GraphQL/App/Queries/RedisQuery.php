@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 final class RedisQuery
 {
-    const REDIS_QUERY_STORE_KEY = 'redis_query_store_key';
+    public const REDIS_QUERY_STORE_KEY = 'redis_query_store_key';
 
     public function __invoke($_, array $args): array
     {

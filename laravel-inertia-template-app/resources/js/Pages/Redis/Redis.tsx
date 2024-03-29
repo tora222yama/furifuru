@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
+import { match } from 'ts-pattern';
 import { IPropsBase } from '@/js/System/System';
 import { Page } from '@/js/Pages/Page';
 import { TypoH1 } from '@/js/Component/Typography/TypoH1';
 import { TypoText } from '@/js/Component/Typography/TypoText';
 import { TypoSubTitle1 } from '@/js/Component/Typography/TypoSubTitle1';
-import { Log } from '@/js/Common/Log';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
 import { E_BUTTON_TYPE } from '@/js/Component/Button/EButtonType';
-import { useLazyFetchAppRedis } from '@/js/Hooks/Queries/useLazyFetchAppRedis';
+import { useLazyFetchAppRedis } from '@/js/Hooks/App/Queries/useLazyFetchAppRedis';
 import { Loading } from '@/js/Component/Misc/Loading';
+import { useMutationActionAppRedisUpdate } from '@/js/Hooks/App/Mutations/useMutationActionAppRedisUpdate';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
-  const [loading, lazyFetch] = useLazyFetchAppRedis();
+  const [loadingRedis, lazyFetch] = useLazyFetchAppRedis();
+  const [processingRedis, mutationUpdate] = useMutationActionAppRedisUpdate();
   const [currentValue, setCurrentValue] = React.useState<string>('-');
+  const loading = loadingRedis || processingRedis;
 
   /**
    * Redisの値を取得.
@@ -29,7 +32,19 @@ export const Redis: React.FC<IProps> = () => {
    * Redisへ値を保存.
    */
   const handleClickSave = () => {
-    Log.info('値を保存');
+    const storeValue = '保存する値';
+
+    mutationUpdate(
+      {
+        storeValue,
+      },
+      [],
+    ).then(res => {
+      // TODO: Enum同期
+      match(res.statusCode).with(200, () => {
+        setCurrentValue(storeValue);
+      });
+    });
   };
 
   return (
@@ -81,7 +96,7 @@ export const Redis: React.FC<IProps> = () => {
           sx={{
             marginTop: '20px',
           }}
-          buttonType={E_BUTTON_TYPE.SECONDARY}
+          buttonType={E_BUTTON_TYPE.PRIMARY}
           onClick={handleClickSave}
           label="保存"
         />

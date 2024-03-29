@@ -40,5 +40,15 @@ type User {
     updated_at: DateTime!
 }
 
+type Query
+
+type Mutation
+
+type Response {
+  status_code: Int!
+  status_message: String!
+  errors: String
+}
+
 # Query/Mutationの定義.
 #import App/Redis.graphql

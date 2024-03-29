@@ -38,6 +38,15 @@ export type AppRedis = {
   store_value: Scalars['String']['output'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  ActionAppRedisUpdate?: Maybe<Response>;
+};
+
+export type MutationActionAppRedisUpdateArgs = {
+  store_value: Scalars['String']['input'];
+};
+
 /** Indicates what fields are available at the top level of a query operation. */
 export type Query = {
   __typename?: 'Query';
@@ -59,6 +68,13 @@ export type QueryUsersArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Response = {
+  __typename?: 'Response';
+  errors?: Maybe<Scalars['String']['output']>;
+  status_code: Scalars['Int']['output'];
+  status_message: Scalars['String']['output'];
+};
+
 /** Account of a person who utilizes this application. */
 export type User = {
   __typename?: 'User';
@@ -76,6 +92,20 @@ export type User = {
   updated_at: Scalars['DateTime']['output'];
 };
 
+export type ActionAppRedisUpdateMutationVariables = Exact<{
+  store_value: Scalars['String']['input'];
+}>;
+
+export type ActionAppRedisUpdateMutation = {
+  __typename?: 'Mutation';
+  ActionAppRedisUpdate?: {
+    __typename?: 'Response';
+    status_code: number;
+    status_message: string;
+    errors?: string | null;
+  } | null;
+};
+
 export type AppRedisQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AppRedisQuery = {
@@ -83,6 +113,58 @@ export type AppRedisQuery = {
   AppRedis: { __typename?: 'AppRedis'; store_value: string };
 };
 
+export const ActionAppRedisUpdateDocument = gql`
+  mutation ActionAppRedisUpdate($store_value: String!) {
+    ActionAppRedisUpdate(store_value: $store_value) {
+      status_code
+      status_message
+      errors
+    }
+  }
+`;
+export type ActionAppRedisUpdateMutationFn = Apollo.MutationFunction<
+  ActionAppRedisUpdateMutation,
+  ActionAppRedisUpdateMutationVariables
+>;
+
+/**
+ * __useActionAppRedisUpdateMutation__
+ *
+ * To run a mutation, you first call `useActionAppRedisUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActionAppRedisUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [actionAppRedisUpdateMutation, { data, loading, error }] = useActionAppRedisUpdateMutation({
+ *   variables: {
+ *      store_value: // value for 'store_value'
+ *   },
+ * });
+ */
+export function useActionAppRedisUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ActionAppRedisUpdateMutation,
+    ActionAppRedisUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ActionAppRedisUpdateMutation,
+    ActionAppRedisUpdateMutationVariables
+  >(ActionAppRedisUpdateDocument, options);
+}
+export type ActionAppRedisUpdateMutationHookResult = ReturnType<
+  typeof useActionAppRedisUpdateMutation
+>;
+export type ActionAppRedisUpdateMutationResult =
+  Apollo.MutationResult<ActionAppRedisUpdateMutation>;
+export type ActionAppRedisUpdateMutationOptions = Apollo.BaseMutationOptions<
+  ActionAppRedisUpdateMutation,
+  ActionAppRedisUpdateMutationVariables
+>;
 export const AppRedisDocument = gql`
   query AppRedis {
     AppRedis {

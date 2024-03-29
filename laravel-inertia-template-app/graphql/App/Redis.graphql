@@ -4,6 +4,13 @@ extend type Query {
   AppRedis: AppRedis! @field(resolver: "App\\GraphQL\\App\\Queries\\RedisQuery")
 }
 
+extend type Mutation {
+  # Redisへ保存する値の更新.
+  ActionAppRedisUpdate(
+    store_value: String!
+  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppRedisUpdate")
+}
+
 type AppRedis {
   store_value: String!
 }
