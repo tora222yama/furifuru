@@ -25,6 +25,19 @@ services:
     volumes:
       - ./:/var/www/html
 
+  ###########################
+  # template_redis : Redis 7.2 cache server
+  # Redisサーバー
+  template_redis:
+    container_name: template_redis
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    networks:
+      - template_local
+    volumes:
+      - template_redis_volume:/data
+
 networks:
   template_local:
     name: template_local
@@ -35,3 +48,7 @@ networks:
       driver: default
       config:
         - subnet: 172.16.246.0/24 # 他と衝突しなければなんでも良い認識
+
+volumes:
+  template_redis_volume:
+    driver: local

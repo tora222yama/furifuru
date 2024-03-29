@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Box, Button, Paper } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
-import { useFirstPageContext } from '@/js/Pages/IndexProvider/FirstPageIndex';
+import { useFirstPageContext } from '@/js/Pages/IndexProvider/MvcValueIndex';
+import { Page } from '@/js/Pages/Page';
+import { TypoH1 } from '@/js/Component/Typography/TypoH1';
 
 interface IPros extends IPropsBase {}
-export const FirstPage: React.FC<IPros> = () => {
+export const MvcValue: React.FC<IPros> = () => {
   const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
   const handleClick = () => {
@@ -13,13 +15,11 @@ export const FirstPage: React.FC<IPros> = () => {
   };
 
   return (
-    <Box
-      sx={{
-        padding: '20px',
-      }}
-    >
+    <Page>
+      <TypoH1>MVC値渡しサンプル</TypoH1>
       <Paper
         sx={{
+          marginTop: '20px',
           padding: '5px',
         }}
       >
@@ -60,7 +60,7 @@ export const FirstPage: React.FC<IPros> = () => {
       >
         test
       </Button>
-    </Box>
+    </Page>
   );
 };
-export default FirstPage;
+export default MvcValue;

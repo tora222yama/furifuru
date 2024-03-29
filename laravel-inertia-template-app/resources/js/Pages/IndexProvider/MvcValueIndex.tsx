@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/js/System/System';
-import { FirstPage } from '@/js/Pages/FirstPage/FirstPage';
+import { MvcValue } from '@/js/Pages/MvcValue/MvcValue';
 import { IndexProvider } from '@/js/Provider/IndexProvider';
 
 /**
@@ -27,7 +27,7 @@ interface IPros extends IPropsBase {
   stringValue: string;
   arrayValue: number[];
 }
-export const FirstPageIndex: React.FC<IPros> = ({
+export const MvcValueIndex: React.FC<IPros> = ({
   numberValue,
   stringValue,
   arrayValue,
@@ -47,9 +47,9 @@ export const FirstPageIndex: React.FC<IPros> = ({
   return (
     <context.Provider value={providerValue}>
       <IndexProvider>
-        <FirstPage />
+        <MvcValue />
       </IndexProvider>
     </context.Provider>
   );
 };
-export default FirstPageIndex;
+export default MvcValueIndex;

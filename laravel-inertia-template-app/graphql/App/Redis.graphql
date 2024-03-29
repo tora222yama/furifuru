@@ -1,0 +1,9 @@
+# App/Redis.graphql
+
+extend type Query {
+  AppRedis: AppRedis! @field(resolver: "App\\GraphQL\\App\\Queries\\RedisQuery")
+}
+
+type AppRedis {
+  store_value: String!
+}

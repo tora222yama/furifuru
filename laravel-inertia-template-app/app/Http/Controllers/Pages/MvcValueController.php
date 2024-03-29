@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class FirstPageController extends Controller
+class MvcValueController extends Controller
 {
     public function invoke(): Response
     {
-        return Inertia::render('IndexProvider/FirstPageIndex', [
+        return Inertia::render('IndexProvider/MvcValueIndex', [
             'numberValue' => 919,
             'stringValue' => 'Quick',
             'arrayValue' => [

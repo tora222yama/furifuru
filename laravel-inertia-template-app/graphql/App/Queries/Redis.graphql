@@ -1,0 +1,6 @@
+# Redisに格納した値を取得.
+query AppRedis {
+  AppRedis {
+    store_value
+  }
+}

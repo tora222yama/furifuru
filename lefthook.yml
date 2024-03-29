@@ -26,4 +26,9 @@ pre-commit:
         cd ./laravel-inertia-template-app
         php artisan ide-helper:generate
         php artisan ide-helper:models -N
+    graphql:
+      glob: '*'
+      run: |
+        cd ./laravel-inertia-template-app
+        php artisan lighthouse:ide-helper
 

@@ -24,5 +24,10 @@ export default defineConfig({
         alias: {
             '@': '/resources'
         }
+    },
+    ssr: {
+        noExternal: [
+            "@apollo/client"
+        ]
     }
 });

@@ -8,16 +8,21 @@ import { TypoSubTitle1 } from '@/js/Component/Typography/TypoSubTitle1';
 import { Log } from '@/js/Common/Log';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
 import { E_BUTTON_TYPE } from '@/js/Component/Button/EButtonType';
+import { useLazyFetchAppRedis } from '@/js/Hooks/Queries/useLazyFetchAppRedis';
+import { Loading } from '@/js/Component/Misc/Loading';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
-  const [currentValue] = React.useState<string>('-');
+  const [loading, lazyFetch] = useLazyFetchAppRedis();
+  const [currentValue, setCurrentValue] = React.useState<string>('-');
 
   /**
    * Redisの値を取得.
    */
   const handleClickLoad = () => {
-    Log.info('値を取得');
+    lazyFetch().then(res => {
+      setCurrentValue(res);
+    });
   };
 
   /**
@@ -46,14 +51,16 @@ export const Redis: React.FC<IProps> = () => {
             alignItems: 'center',
           }}
         >
-          <TypoText>現在の値</TypoText>
-          <TypoText
-            sx={{
-              marginLeft: '20px',
-            }}
-          >
-            {currentValue}
-          </TypoText>
+          <Loading sx={{ width: '100%' }} loading={loading}>
+            <TypoText>現在の値</TypoText>
+            <TypoText
+              sx={{
+                marginLeft: '20px',
+              }}
+            >
+              {currentValue}
+            </TypoText>
+          </Loading>
         </Box>
         <ButtonGeneral
           sx={{

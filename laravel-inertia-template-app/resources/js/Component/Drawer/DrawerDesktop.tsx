@@ -22,6 +22,13 @@ export const DrawerDesktop: React.FC<IProps> = () => {
   /**
    * 仮処理.
    */
+  const handleClickFirst = () => {
+    window.location.href = '/mvc_value';
+  };
+
+  /**
+   * 仮処理.
+   */
   const handleClickRedis = () => {
     window.location.href = '/redis';
   };
@@ -63,7 +70,7 @@ export const DrawerDesktop: React.FC<IProps> = () => {
         <List>
           <ListItem key={1} disablePadding>
             <ListItemButton>
-              <ListItemText>List1</ListItemText>
+              <ListItemText onClick={handleClickFirst}>MVC値渡し</ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem key={2} disablePadding>
