@@ -26,7 +26,7 @@ final class ActionAppRedisUpdate
         return [
             'status_code' => 200,
             'status_message' => '',
-            'errors' => '',
+            'errors' => json_encode([]),
         ];
     }
 }

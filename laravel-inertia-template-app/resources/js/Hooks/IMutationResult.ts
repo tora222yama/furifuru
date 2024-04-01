@@ -22,5 +22,6 @@ export const parseErrors = (
   Object.keys(errorsJson).forEach(name => {
     ret[name] = Object.values(errorsJson[name]);
   });
+
   return ret;
 };

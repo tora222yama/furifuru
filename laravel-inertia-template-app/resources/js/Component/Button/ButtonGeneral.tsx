@@ -41,6 +41,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
     <Button
       id={id}
       sx={{
+        display: 'block',
         backgroundColor: getButtonColorNormal(buttonType),
         textTransform: 'none',
         padding: '10px 16px',

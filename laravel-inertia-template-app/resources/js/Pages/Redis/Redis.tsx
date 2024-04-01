@@ -7,17 +7,30 @@ import { TypoH1 } from '@/js/Component/Typography/TypoH1';
 import { TypoText } from '@/js/Component/Typography/TypoText';
 import { TypoSubTitle1 } from '@/js/Component/Typography/TypoSubTitle1';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
-import { E_BUTTON_TYPE } from '@/js/Component/Button/EButtonType';
 import { useLazyFetchAppRedis } from '@/js/Hooks/App/Queries/useLazyFetchAppRedis';
 import { Loading } from '@/js/Component/Misc/Loading';
 import { useMutationActionAppRedisUpdate } from '@/js/Hooks/App/Mutations/useMutationActionAppRedisUpdate';
+import { FormRedis, IFormRedis } from '@/js/Pages/Redis/FormRedis';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
+  const [formRedis, setFormRedis] = React.useState<IFormRedis>({
+    storeValue: '',
+  });
   const [loadingRedis, lazyFetch] = useLazyFetchAppRedis();
   const [processingRedis, mutationUpdate] = useMutationActionAppRedisUpdate();
   const [currentValue, setCurrentValue] = React.useState<string>('-');
   const loading = loadingRedis || processingRedis;
+
+  /**
+   * Redisの値を更新.
+   */
+  const handleUpdate = React.useCallback(
+    (newValues: Partial<IFormRedis>) => {
+      setFormRedis(prevState => ({ ...prevState, ...newValues }));
+    },
+    [setFormRedis],
+  );
 
   /**
    * Redisの値を取得.
@@ -32,17 +45,15 @@ export const Redis: React.FC<IProps> = () => {
    * Redisへ値を保存.
    */
   const handleClickSave = () => {
-    const storeValue = '保存する値';
-
     mutationUpdate(
       {
-        storeValue,
+        storeValue: formRedis.storeValue,
       },
       [],
     ).then(res => {
       // TODO: Enum同期
       match(res.statusCode).with(200, () => {
-        setCurrentValue(storeValue);
+        setCurrentValue(formRedis.storeValue);
       });
     });
   };
@@ -83,6 +94,7 @@ export const Redis: React.FC<IProps> = () => {
           }}
           label="取得"
           onClick={handleClickLoad}
+          disabled={loading}
         />
       </Paper>
       <Paper
@@ -92,13 +104,15 @@ export const Redis: React.FC<IProps> = () => {
         }}
       >
         <TypoSubTitle1>入力した値をRedisに保存</TypoSubTitle1>
-        <ButtonGeneral
+        <FormRedis
           sx={{
-            marginTop: '20px',
+            marginTop: '10px',
           }}
-          buttonType={E_BUTTON_TYPE.PRIMARY}
-          onClick={handleClickSave}
-          label="保存"
+          loading={loading}
+          formRedis={formRedis}
+          handleUpdate={handleUpdate}
+          handleSaveGraphQL={handleClickSave}
+          handleSavePost={handleClickSave}
         />
       </Paper>
     </Page>
