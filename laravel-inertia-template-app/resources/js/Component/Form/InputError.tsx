@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormHelperText } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
-import { TypoText } from '@/js/Component/Typography/TypoText';
+import { TypoError } from '@/js/Component/Typography/TypeError';
 
 interface IProps extends IPropsBase {
   errors?: string[];
@@ -22,9 +22,9 @@ export const InputError: React.FC<IProps> = ({
       {errors?.map((v, index) => {
         const key = `${index}:${v}`;
         return (
-          <TypoText key={key} noWrap={noWarp}>
+          <TypoError key={key} noWrap={noWarp}>
             {v}
-          </TypoText>
+          </TypoError>
         );
       })}
     </FormHelperText>

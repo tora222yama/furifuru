@@ -4,6 +4,7 @@ import { IPropsBase } from '@/js/System/System';
 import { InputField } from '@/js/Component/Form/InputField';
 import { ButtonGeneral } from '@/js/Component/Button/ButtonGeneral';
 import { E_BUTTON_TYPE } from '@/js/Component/Button/EButtonType';
+import { IFormRedisValidationResult } from '@/js/Pages/Redis/FormRedisValidation';
 
 export interface IFormRedis {
   storeValue: string;
@@ -12,6 +13,7 @@ export interface IFormRedis {
 interface IProps extends IPropsBase {
   loading: boolean;
   formRedis: IFormRedis;
+  validation: IFormRedisValidationResult;
   handleUpdate: (newValues: Partial<IFormRedis>) => void;
   handleSaveGraphQL: () => void;
   handleSavePost: () => void;
@@ -20,6 +22,7 @@ export const FormRedis: React.FC<IProps> = ({
   sx,
   loading,
   formRedis,
+  validation,
   handleUpdate,
   handleSaveGraphQL,
   handleSavePost,
@@ -34,6 +37,8 @@ export const FormRedis: React.FC<IProps> = ({
         inputValue={formRedis.storeValue}
         onChange={storeValue => handleUpdate({ storeValue })}
         placeHolder="入力してください"
+        errors={validation.data.storeValue?.errors}
+        visibleError
       />
       <ButtonGeneral
         sx={{

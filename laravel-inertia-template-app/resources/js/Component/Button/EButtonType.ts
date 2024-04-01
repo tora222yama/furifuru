@@ -1,4 +1,3 @@
-import { match } from 'ts-pattern';
 import { E_COLOR, EColor } from '@/js/Enum/EColor';
 
 /**
@@ -16,13 +15,16 @@ export type EButtonType = (typeof E_BUTTON_TYPE)[keyof typeof E_BUTTON_TYPE];
  * @param type
  */
 export const getButtonColorNormal = (type: EButtonType): EColor => {
-  return <EColor>match(type)
-    .with(E_BUTTON_TYPE.INVALID, () => E_COLOR.WHITE)
-    .with(E_BUTTON_TYPE.PRIMARY as never, () => E_COLOR.PRIMARY_MAIN)
-    .with(E_BUTTON_TYPE.SECONDARY as never, () => E_COLOR.SECONDARY_MAIN)
-    .otherwise(() => {
+  switch (type) {
+    case E_BUTTON_TYPE.INVALID:
+      return E_COLOR.WHITE;
+    case E_BUTTON_TYPE.PRIMARY:
+      return E_COLOR.PRIMARY_MAIN;
+    case E_BUTTON_TYPE.SECONDARY:
+      return E_COLOR.SECONDARY_MAIN;
+    default:
       throw new Error();
-    });
+  }
 };
 
 /**
@@ -30,13 +32,16 @@ export const getButtonColorNormal = (type: EButtonType): EColor => {
  * @param type
  */
 export const getButtonColorHover = (type: EButtonType): EColor => {
-  return <EColor>match(type)
-    .with(E_BUTTON_TYPE.INVALID, () => E_COLOR.WHITE)
-    .with(E_BUTTON_TYPE.PRIMARY as never, () => E_COLOR.PRIMARY_DARK)
-    .with(E_BUTTON_TYPE.SECONDARY as never, () => E_COLOR.SECONDARY_DARK)
-    .otherwise(() => {
+  switch (type) {
+    case E_BUTTON_TYPE.INVALID:
+      return E_COLOR.WHITE;
+    case E_BUTTON_TYPE.PRIMARY:
+      return E_COLOR.PRIMARY_DARK;
+    case E_BUTTON_TYPE.SECONDARY:
+      return E_COLOR.SECONDARY_DARK;
+    default:
       throw new Error();
-    });
+  }
 };
 
 /**
@@ -44,13 +49,14 @@ export const getButtonColorHover = (type: EButtonType): EColor => {
  * @param type
  */
 export const getButtonColorDisabled = (type: EButtonType): EColor => {
-  return <EColor>match(type)
-    .with(E_BUTTON_TYPE.INVALID, () => E_COLOR.GREY)
-    .with(E_BUTTON_TYPE.PRIMARY as never, () => E_COLOR.GREY)
-    .with(E_BUTTON_TYPE.SECONDARY as never, () => E_COLOR.GREY)
-    .otherwise(() => {
+  switch (type) {
+    case E_BUTTON_TYPE.INVALID:
+    case E_BUTTON_TYPE.PRIMARY:
+    case E_BUTTON_TYPE.SECONDARY:
+      return E_COLOR.GREY;
+    default:
       throw new Error();
-    });
+  }
 };
 
 /**
@@ -58,11 +64,14 @@ export const getButtonColorDisabled = (type: EButtonType): EColor => {
  * @param type
  */
 export const getButtonColorText = (type: EButtonType): EColor => {
-  return <EColor>match(type)
-    .with(E_BUTTON_TYPE.INVALID, () => E_COLOR.TEXT_PRIMARY)
-    .with(E_BUTTON_TYPE.PRIMARY as never, () => E_COLOR.WHITE)
-    .with(E_BUTTON_TYPE.SECONDARY as never, () => E_COLOR.TEXT_PRIMARY)
-    .otherwise(() => {
+  switch (type) {
+    case E_BUTTON_TYPE.INVALID:
+      return E_COLOR.TEXT_PRIMARY;
+    case E_BUTTON_TYPE.PRIMARY:
+      return E_COLOR.WHITE;
+    case E_BUTTON_TYPE.SECONDARY:
+      return E_COLOR.TEXT_PRIMARY;
+    default:
       throw new Error();
-    });
+  }
 };

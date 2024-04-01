@@ -3,6 +3,7 @@ import { Box, TextField } from '@mui/material';
 import { IInputFieldProps } from '@/js/Component/Form/IInputFieldProps';
 import { Closable } from '@/js/Component/Misc/Closable';
 import { InputError } from '@/js/Component/Form/InputError';
+import { E_COLOR } from '@/js/Enum/EColor';
 
 export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   sx,
@@ -17,10 +18,23 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   autoComplete,
   disabled,
 }) => {
+  const [isEdited, setIsEdited] = React.useState<boolean>(false);
+
+  /**
+   * 背景色の取得.
+   */
+  const getBackgroundColor = (): string => {
+    if (errors === undefined || !errors.length) {
+      return E_COLOR.WHITE;
+    }
+    return !isEdited ? E_COLOR.RED_LIGHT : E_COLOR.WHITE;
+  };
+
   /**
    * 入力値変更の検知.
    */
   const handleChange = (value: string) => {
+    setIsEdited(true);
     onChange(value);
   };
 
@@ -41,10 +55,8 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
     >
       <TextField
         id={id}
-        inputProps={{
-          sx: {
-            resize: 'both',
-          },
+        sx={{
+          backgroundColor: getBackgroundColor(),
         }}
         variant="outlined"
         value={inputValue}

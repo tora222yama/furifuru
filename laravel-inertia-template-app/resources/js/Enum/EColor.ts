@@ -5,6 +5,8 @@ export const E_COLOR = {
   WHITE: '#FFFFFF',
   BLACK: '#000000',
   GREY: '#A0A0A0',
+  RED: '#F44336',
+  RED_LIGHT: '#FFCDD2',
 
   // 設定カラー.
   PRIMARY_LIGHT: '#80CBC4',
@@ -19,5 +21,7 @@ export const E_COLOR = {
 
   // 文字色.
   TEXT_PRIMARY: '#333333',
+  TEXT_BLUE: '#155B94',
+  TEXT_RED: '#DC3C31',
 } as const;
 export type EColor = (typeof E_COLOR)[keyof typeof E_COLOR];

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
-import { match } from 'ts-pattern';
 import { IPropsBase } from '@/js/System/System';
 import { Page } from '@/js/Pages/Page';
 import { TypoH1 } from '@/js/Component/Typography/TypoH1';
@@ -11,12 +10,19 @@ import { useLazyFetchAppRedis } from '@/js/Hooks/App/Queries/useLazyFetchAppRedi
 import { Loading } from '@/js/Component/Misc/Loading';
 import { useMutationActionAppRedisUpdate } from '@/js/Hooks/App/Mutations/useMutationActionAppRedisUpdate';
 import { FormRedis, IFormRedis } from '@/js/Pages/Redis/FormRedis';
+import {
+  IFormRedisValidationResult,
+  initialResult,
+  validateAll,
+} from '@/js/Pages/Redis/FormRedisValidation';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
   const [formRedis, setFormRedis] = React.useState<IFormRedis>({
     storeValue: '',
   });
+  const [validation, setValidation] =
+    React.useState<IFormRedisValidationResult>(initialResult);
   const [loadingRedis, lazyFetch] = useLazyFetchAppRedis();
   const [processingRedis, mutationUpdate] = useMutationActionAppRedisUpdate();
   const [currentValue, setCurrentValue] = React.useState<string>('-');
@@ -45,6 +51,16 @@ export const Redis: React.FC<IProps> = () => {
    * Redisへ値を保存.
    */
   const handleClickSave = () => {
+    // バリデーション実行.
+    const validation = validateAll(formRedis);
+    setValidation(validation);
+
+    // エラーがある場合は処理をしない.
+    if (validation.hasError) {
+      return;
+    }
+
+    // 更新処理の実施.
     mutationUpdate(
       {
         storeValue: formRedis.storeValue,
@@ -52,9 +68,13 @@ export const Redis: React.FC<IProps> = () => {
       [],
     ).then(res => {
       // TODO: Enum同期
-      match(res.statusCode).with(200, () => {
-        setCurrentValue(formRedis.storeValue);
-      });
+      switch (res.statusCode) {
+        case 200:
+          setCurrentValue(formRedis.storeValue);
+          break;
+        default:
+          break;
+      }
     });
   };
 
@@ -110,6 +130,7 @@ export const Redis: React.FC<IProps> = () => {
           }}
           loading={loading}
           formRedis={formRedis}
+          validation={validation}
           handleUpdate={handleUpdate}
           handleSaveGraphQL={handleClickSave}
           handleSavePost={handleClickSave}
