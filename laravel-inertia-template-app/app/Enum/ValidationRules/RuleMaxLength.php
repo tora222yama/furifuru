@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Enum\App\ValidationRules;
+namespace App\Enum\ValidationRules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;

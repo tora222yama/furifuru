@@ -16,6 +16,7 @@ import {
   parseServerValidation,
   validateAll,
 } from '@/js/Pages/Redis/FormRedisValidation';
+import { E_STATUS_CODE } from '@/js/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
@@ -68,12 +69,11 @@ export const Redis: React.FC<IProps> = () => {
       },
       [],
     ).then(res => {
-      // TODO: Enum同期
       switch (res.statusCode) {
-        case 200:
+        case E_STATUS_CODE.OK:
           setCurrentValue(formRedis.storeValue);
           break;
-        case 422:
+        case E_STATUS_CODE.UNPROCESSABLE_ENTITY:
           setValidation(parseServerValidation(res));
           break;
         default:

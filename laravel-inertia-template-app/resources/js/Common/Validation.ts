@@ -1,9 +1,9 @@
+import { Env } from '@/js/Common/Env';
+import { IMutationResult } from '@/js/Hooks/IMutationResult';
 import {
   E_VALIDATION_TYPE,
   EValidationType,
-} from '@/js/Common/EValidationType';
-import { Env } from '@/js/Common/Env';
-import { IMutationResult } from '@/js/Hooks/IMutationResult';
+} from '@/js/Enum/Server/App/EValidationType';
 
 /**
  * バリデーション結果.

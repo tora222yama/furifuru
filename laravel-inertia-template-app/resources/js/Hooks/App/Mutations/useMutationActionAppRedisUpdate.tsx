@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/js/Hooks/IMutationResult';
 import { useActionAppRedisUpdateMutation } from '@/js/Graphql/codegen/graphql';
+import { E_STATUS_CODE } from '@/js/Enum/Server/App/EStatusCode';
 
 export interface IActionAppRedisUpdate {
   storeValue: string;
@@ -38,8 +39,7 @@ export function useMutationActionAppRedisUpdate(): [
             response.data?.ActionAppRedisUpdate?.status_code,
           );
 
-          // TODO: Enumの同期.
-          if (statusCode === 200 && refetchQueries.length) {
+          if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
             await client.refetchQueries({
               include: refetchQueries,
             });

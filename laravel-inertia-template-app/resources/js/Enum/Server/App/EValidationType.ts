@@ -1,5 +1,7 @@
+// #ENUM_DEFINE_START#
 /**
  * バリデーション種別.
+ * Class EValidationType
  */
 export const E_VALIDATION_TYPE = {
   INVALID: 'invalid', // 未設定.
@@ -23,3 +25,4 @@ export const E_VALIDATION_TYPE = {
 } as const;
 export type EValidationType =
   (typeof E_VALIDATION_TYPE)[keyof typeof E_VALIDATION_TYPE];
+// #ENUM_DEFINE_END#

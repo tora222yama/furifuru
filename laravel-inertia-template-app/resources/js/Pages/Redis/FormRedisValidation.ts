@@ -6,8 +6,8 @@ import {
   ValidationFunction,
   ValidationResult,
 } from '@/js/Common/Validation';
-import { E_VALIDATION_TYPE } from '@/js/Common/EValidationType';
 import { IMutationResult } from '@/js/Hooks/IMutationResult';
+import { E_VALIDATION_TYPE } from '@/js/Enum/Server/App/EValidationType';
 
 type IFormRedisValidation = Partial<{
   [K in keyof IFormRedis]: ValidationResult;
