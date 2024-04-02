@@ -30,7 +30,7 @@ export function useMutationActionAppRedisUpdate(): [
     return new Promise<IMutationResult>(resolve => {
       mutation({
         variables: {
-          store_value: props.storeValue,
+          store_value: String(props.storeValue),
         },
       })
         .then(async response => {

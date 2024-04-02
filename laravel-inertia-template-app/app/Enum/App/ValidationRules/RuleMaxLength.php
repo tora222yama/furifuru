@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Enum\App\ValidationRules;
+
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+
+class RuleMaxLength implements ValidationRule
+{
+    public int $max = 0;
+
+    /**
+     * Create a new rule instance.
+     *
+     * @return void
+     */
+    public function __construct($max)
+    {
+        $this->max = $max;
+    }
+
+    /**
+     * Run the validation rule.
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        // string以外は通さない.
+        if (! is_string($value)) {
+            $fail('TEST');
+        }
+
+        // 改行コードを統一する.
+        $replacedValue = str_replace("\r\n", "\n", $value);
+
+        if (mb_strlen($replacedValue) > $this->max) {
+            $fail('TEST');
+        }
+    }
+
+    /**
+     * エラー発生時のmessage.
+     */
+    private function message(): string
+    {
+        return ":attributeは{$this->max}文字以下で入力してください。";
+    }
+}

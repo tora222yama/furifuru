@@ -178,6 +178,9 @@ return [
         // External.
         App\Providers\External\SlackServiceProvider::class,
 
+        // Internal.
+        App\Providers\Internal\PipeServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -195,6 +198,9 @@ return [
 
         // External.
         'external\slack_service' => App\Facades\External\SlackService::class,
+
+        // Internal.
+        'internal\pipe_service' => App\Facades\Internal\PipeService::class,
 
     ])->toArray(),
 

@@ -2,6 +2,8 @@ import {
   E_VALIDATION_TYPE,
   EValidationType,
 } from '@/js/Common/EValidationType';
+import { Env } from '@/js/Common/Env';
+import { IMutationResult } from '@/js/Hooks/IMutationResult';
 
 /**
  * バリデーション結果.
@@ -64,6 +66,15 @@ export const validateMulti = (
   columnName: string,
   validations: BaseValidationType[],
 ): ValidationResult => {
+  // ローカルバリデーションの実施有無のチェック.
+  if (!Env.idEnableLocalValidation()) {
+    return {
+      hasError: false,
+      errors: [],
+      warnings: [],
+    };
+  }
+
   let hasError = false;
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -239,4 +250,27 @@ const validatePeriod = (value: string) => {
  */
 const count = (value: string): number => {
   return value.replaceAll('\r\n', '\n').length;
+};
+
+/**
+ * サーバーのバリデーション結果をparseする.
+ * @param key
+ * @param result
+ */
+export const parseErrorMessage = (
+  key: string,
+  result: IMutationResult,
+): ValidationResult => {
+  if (result.errors === undefined) {
+    return {
+      hasError: false,
+      errors: [],
+      warnings: [],
+    };
+  }
+  return {
+    hasError: key in result.errors,
+    errors: key in result.errors ? result.errors[key] : [],
+    warnings: [],
+  };
 };

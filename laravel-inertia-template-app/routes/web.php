@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enum\EPages;
+use App\Enum\App\EPages;
 use Illuminate\Support\Facades\Route;
 
 /*

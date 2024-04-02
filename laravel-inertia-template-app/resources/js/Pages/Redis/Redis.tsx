@@ -13,6 +13,7 @@ import { FormRedis, IFormRedis } from '@/js/Pages/Redis/FormRedis';
 import {
   IFormRedisValidationResult,
   initialResult,
+  parseServerValidation,
   validateAll,
 } from '@/js/Pages/Redis/FormRedisValidation';
 
@@ -71,6 +72,9 @@ export const Redis: React.FC<IProps> = () => {
       switch (res.statusCode) {
         case 200:
           setCurrentValue(formRedis.storeValue);
+          break;
+        case 422:
+          setValidation(parseServerValidation(res));
           break;
         default:
           break;

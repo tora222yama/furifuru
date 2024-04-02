@@ -44,7 +44,7 @@ export type Mutation = {
 };
 
 export type MutationActionAppRedisUpdateArgs = {
-  store_value: Scalars['String']['input'];
+  store_value?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Indicates what fields are available at the top level of a query operation. */
@@ -93,7 +93,7 @@ export type User = {
 };
 
 export type ActionAppRedisUpdateMutationVariables = Exact<{
-  store_value: Scalars['String']['input'];
+  store_value?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type ActionAppRedisUpdateMutation = {
@@ -114,7 +114,7 @@ export type AppRedisQuery = {
 };
 
 export const ActionAppRedisUpdateDocument = gql`
-  mutation ActionAppRedisUpdate($store_value: String!) {
+  mutation ActionAppRedisUpdate($store_value: String) {
     ActionAppRedisUpdate(store_value: $store_value) {
       status_code
       status_message

@@ -21,6 +21,13 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   const [isEdited, setIsEdited] = React.useState<boolean>(false);
 
   /**
+   * ロード時に編集フラグを落とす.
+   */
+  React.useEffect(() => {
+    setIsEdited(false);
+  }, [errors]);
+
+  /**
    * 背景色の取得.
    */
   const getBackgroundColor = (): string => {

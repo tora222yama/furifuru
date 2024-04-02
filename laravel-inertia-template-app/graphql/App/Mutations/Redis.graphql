@@ -1,6 +1,6 @@
 # Redisに値を格納.
 mutation ActionAppRedisUpdate(
-  $store_value: String!
+  $store_value: String
 ) {
   ActionAppRedisUpdate(
     store_value: $store_value

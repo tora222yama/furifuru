@@ -1,11 +1,13 @@
 import { IFormRedis } from '@/js/Pages/Redis/FormRedis';
 import {
   EValidationLevel,
+  parseErrorMessage,
   validateMulti,
   ValidationFunction,
   ValidationResult,
 } from '@/js/Common/Validation';
 import { E_VALIDATION_TYPE } from '@/js/Common/EValidationType';
+import { IMutationResult } from '@/js/Hooks/IMutationResult';
 
 type IFormRedisValidation = Partial<{
   [K in keyof IFormRedis]: ValidationResult;
@@ -18,6 +20,24 @@ export interface IFormRedisValidationResult {
 export const initialResult: IFormRedisValidationResult = {
   hasError: false,
   data: {},
+};
+
+/**
+ * サーバー側のバリデーションをparseする.
+ */
+export const parseServerValidation = (
+  result: IMutationResult,
+): IFormRedisValidationResult => {
+  if (!result.errors) {
+    return initialResult;
+  }
+  const ret: IFormRedisValidation = {
+    storeValue: parseErrorMessage('store_value', result),
+  };
+  return {
+    hasError: Object.entries(ret).some(([, res]) => res && res.hasError),
+    data: ret,
+  };
 };
 
 /**

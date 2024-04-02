@@ -56,7 +56,7 @@ export const FormRedis: React.FC<IProps> = ({
         buttonType={E_BUTTON_TYPE.PRIMARY}
         onClick={handleSavePost}
         label="Post通信で保存"
-        disabled={loading}
+        disabled
       />
     </FormControl>
   );
