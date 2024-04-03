@@ -43,6 +43,9 @@ export const InputSingle: React.FC<IProps> = ({
           sx={{
             marginTop: '10px',
           }}
+          inputProps={{
+            width: '400px',
+          }}
           inputValue={formInputForm.inputSingle}
           onChange={inputSingle => handleUpdate({ inputSingle })}
           placeHolder="入力してください"

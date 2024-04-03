@@ -22,6 +22,7 @@ const MemoComponent = React.memo<IInputFieldProps>(
     type,
     autoComplete,
     disabled,
+    inputProps,
   }) {
     return (
       <InputFieldMemorized
@@ -36,6 +37,7 @@ const MemoComponent = React.memo<IInputFieldProps>(
         type={type}
         autoComplete={autoComplete}
         disabled={disabled}
+        inputProps={inputProps}
       />
     );
   },
@@ -54,6 +56,7 @@ export const InputField: React.FC<IInputFieldProps> = ({
   type = 'text' as InputFieldType,
   autoComplete = 'off',
   disabled,
+  inputProps,
 }) => {
   return (
     <MemoComponent
@@ -68,6 +71,7 @@ export const InputField: React.FC<IInputFieldProps> = ({
       type={type}
       autoComplete={autoComplete}
       disabled={disabled}
+      inputProps={inputProps}
     />
   );
 };

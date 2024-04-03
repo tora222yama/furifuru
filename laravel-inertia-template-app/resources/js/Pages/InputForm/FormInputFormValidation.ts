@@ -52,6 +52,7 @@ export const validateAll = (
       formInputForm.inputSingle,
       'input(single)',
     ),
+    inputMulti: validateInputMulti(formInputForm.inputMulti, 'input(multi)'),
   };
   return {
     hasError: Object.entries(results).some(
@@ -69,6 +70,14 @@ const validateInputSingle: ValidationFunction = (value, columnName) =>
     },
     {
       type: E_VALIDATION_TYPE.NUMBER,
+      level: EValidationLevel.Error,
+    },
+  ]);
+
+const validateInputMulti: ValidationFunction = (value, columnName) =>
+  validateMulti(value, columnName, [
+    {
+      type: E_VALIDATION_TYPE.REQUIRED,
       level: EValidationLevel.Error,
     },
   ]);

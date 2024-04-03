@@ -1,4 +1,5 @@
 import { IPropsBase } from '@/js/System/System';
+import { IInputProps } from '@/js/Component/Form/IInputProps';
 
 export type InputFieldType = 'text' | 'password' | 'number';
 export interface IInputFieldProps extends IPropsBase {
@@ -11,4 +12,5 @@ export interface IInputFieldProps extends IPropsBase {
   type?: InputFieldType;
   autoComplete?: string;
   disabled?: boolean;
+  inputProps?: IInputProps;
 }

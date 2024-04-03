@@ -5,7 +5,7 @@ import { IFormInputFormValidationResult } from '@/js/Pages/InputForm/FormInputFo
 import { IFormInputForm } from '@/js/Pages/InputForm/FormInputForm';
 import { TypoH3 } from '@/js/Component/Typography/TypoH3';
 import { TypoText } from '@/js/Component/Typography/TypoText';
-import { InputField } from '@/js/Component/Form/InputField';
+import { InputFieldMultiline } from '@/js/Component/Form/InputFieldMultiline';
 
 interface IProps extends IPropsBase {
   formInputForm: IFormInputForm;
@@ -36,10 +36,15 @@ export const InputMulti: React.FC<IProps> = ({
             <TypoText>Required</TypoText>
           </ListItem>
         </List>
-        <InputField
+        <InputFieldMultiline
           sx={{
             marginTop: '10px',
           }}
+          inputProps={{
+            width: '100%',
+            resize: 'vertical',
+          }}
+          rows={5}
           inputValue={formInputForm.inputMulti}
           onChange={inputMulti => handleUpdate({ inputMulti })}
           placeHolder="入力してください"

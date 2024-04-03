@@ -4,6 +4,7 @@ import { IInputFieldProps } from '@/js/Component/Form/IInputFieldProps';
 import { Closable } from '@/js/Component/Misc/Closable';
 import { InputError } from '@/js/Component/Form/InputError';
 import { E_COLOR } from '@/js/Enum/EColor';
+import { parseInputProps } from '@/js/Component/Form/IInputProps';
 
 export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   sx,
@@ -17,7 +18,9 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   type,
   autoComplete,
   disabled,
+  inputProps,
 }) => {
+  const input = parseInputProps(inputProps);
   const [isEdited, setIsEdited] = React.useState<boolean>(false);
 
   /**
@@ -57,13 +60,32 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   return (
     <Box
       sx={{
+        '& .MuiOutlinedInput-root': {
+          padding: '4px',
+          lineHeight: 'normal',
+        },
         ...sx,
       }}
     >
       <TextField
         id={id}
         sx={{
+          width: input.width,
+          minWidth: input.minWidth,
+          height: input.height,
           backgroundColor: getBackgroundColor(),
+
+          '& .MuiInputBase-input.Mui-disabled': {
+            WebkitTextFillColor: E_COLOR.GREY,
+          },
+        }}
+        inputProps={{
+          sx: {
+            width: input.width,
+            height: input.height,
+            resize: input.resize,
+            padding: input.padding,
+          },
         }}
         variant="outlined"
         value={inputValue}
