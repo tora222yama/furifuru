@@ -3,12 +3,13 @@ import { Paper } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
 import { Page } from '@/js/Pages/Page';
 import { TypoH1 } from '@/js/Component/Typography/TypoH1';
+import { E_PAGES, getPagesName } from '@/js/Enum/Server/App/EPages';
 
 interface IPros extends IPropsBase {}
 export const SlackLog: React.FC<IPros> = () => {
   return (
     <Page>
-      <TypoH1>Slack通知・Log出力</TypoH1>
+      <TypoH1>{getPagesName(E_PAGES.SLACK_LOG)}</TypoH1>
       <Paper
         sx={{
           marginTop: '20px',

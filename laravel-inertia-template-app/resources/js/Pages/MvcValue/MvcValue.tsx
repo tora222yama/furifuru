@@ -4,30 +4,23 @@ import { IPropsBase } from '@/js/System/System';
 import { useFirstPageContext } from '@/js/Pages/IndexProvider/MvcValueIndex';
 import { Page } from '@/js/Pages/Page';
 import { TypoH1 } from '@/js/Component/Typography/TypoH1';
+import { E_PAGES, getPagesName } from '@/js/Enum/Server/App/EPages';
+import { Log } from '@/js/Common/Log';
 
 interface IPros extends IPropsBase {}
 export const MvcValue: React.FC<IPros> = () => {
   const { numberValue, stringValue, arrayValue } = useFirstPageContext();
 
   const handleClick = () => {
-    // eslint-disable-next-line no-console
-    console.log('クリックされた');
+    Log.info('クリックされた');
   };
 
   return (
     <Page>
-      <TypoH1>MVC値渡しサンプル</TypoH1>
+      <TypoH1>{getPagesName(E_PAGES.MVC_VALUE)}</TypoH1>
       <Paper
         sx={{
           marginTop: '20px',
-          padding: '5px',
-        }}
-      >
-        This is First Page.
-      </Paper>
-      <Paper
-        sx={{
-          marginTop: '10px',
           padding: '5px',
         }}
       >

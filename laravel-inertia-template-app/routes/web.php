@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', EPages::DASHBOARD->getInvokePath());
 Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
 Route::get('/mvc_value', EPages::MVC_VALUE->getInvokePath());
+Route::get('/input_form', EPages::INPUT_FORM->getInvokePath());
 Route::get('/redis', EPages::REDIS->getInvokePath());
 Route::get('/slack_log', EPages::SLACK_LOG->getInvokePath());
 Route::get('/health_check', EPages::HEALTH_CHECK->getInvokePath());

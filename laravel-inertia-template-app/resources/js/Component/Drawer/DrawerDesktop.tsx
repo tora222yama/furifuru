@@ -2,44 +2,33 @@ import * as React from 'react';
 import {
   Box,
   Drawer as MuiDrawer,
+  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  Typography,
 } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
+import {
+  E_PAGES,
+  EPages,
+  getPagesHref,
+  getPagesName,
+} from '@/js/Enum/Server/App/EPages';
+import { TypoText } from '@/js/Component/Typography/TypoText';
+import { E_COLOR } from '@/js/Enum/EColor';
 
 interface IProps extends IPropsBase {}
 export const DrawerDesktop: React.FC<IProps> = () => {
   /**
-   * 仮処理
+   * 表示するリンク.
    */
-  const handleClickLogo = () => {
-    window.location.href = '/dashboard';
-  };
-
-  /**
-   * 仮処理.
-   */
-  const handleClickFirst = () => {
-    window.location.href = '/mvc_value';
-  };
-
-  /**
-   * 仮処理.
-   */
-  const handleClickRedis = () => {
-    window.location.href = '/redis';
-  };
-
-  /**
-   * 仮処理.
-   */
-  const handleClickSlack = () => {
-    // 仮でテストページに移動
-    window.location.href = '/slack_log';
-  };
+  const hrefList: EPages[] = [
+    E_PAGES.MVC_VALUE,
+    E_PAGES.INPUT_FORM,
+    E_PAGES.REDIS,
+    E_PAGES.SLACK_LOG,
+  ];
 
   return (
     <MuiDrawer
@@ -59,30 +48,21 @@ export const DrawerDesktop: React.FC<IProps> = () => {
           padding: '20px',
         }}
       >
-        <Box
-          sx={{
-            cursor: 'pointer',
-          }}
-          onClick={handleClickLogo}
-        >
-          <Typography>Laravel-Inertia-Template</Typography>
-        </Box>
+        <Link href={getPagesHref(E_PAGES.DASHBOARD)} underline="none">
+          <TypoText color={E_COLOR.TEXT_PRIMARY}>
+            Laravel-Inertia-Template
+          </TypoText>
+        </Link>
         <List>
-          <ListItem key={1} disablePadding>
-            <ListItemButton>
-              <ListItemText onClick={handleClickFirst}>MVC値渡し</ListItemText>
-            </ListItemButton>
-          </ListItem>
-          <ListItem key={2} disablePadding>
-            <ListItemButton onClick={handleClickRedis}>
-              <ListItemText>Redis/GraphQL</ListItemText>
-            </ListItemButton>
-          </ListItem>
-          <ListItem key={3} disablePadding>
-            <ListItemButton onClick={handleClickSlack}>
-              <ListItemText>Slack通知・Log出力</ListItemText>
-            </ListItemButton>
-          </ListItem>
+          {hrefList.map(page => {
+            return (
+              <ListItem key={page} disablePadding>
+                <ListItemButton href={getPagesHref(page)}>
+                  <ListItemText>{getPagesName(page)}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Box>
     </MuiDrawer>

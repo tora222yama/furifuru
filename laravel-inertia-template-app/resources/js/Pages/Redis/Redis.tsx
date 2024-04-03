@@ -17,6 +17,7 @@ import {
   validateAll,
 } from '@/js/Pages/Redis/FormRedisValidation';
 import { E_STATUS_CODE } from '@/js/Enum/Server/App/EStatusCode';
+import { E_PAGES, getPagesName } from '@/js/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
@@ -84,7 +85,7 @@ export const Redis: React.FC<IProps> = () => {
 
   return (
     <Page>
-      <TypoH1>Redis/GraphQLサンプル</TypoH1>
+      <TypoH1>{getPagesName(E_PAGES.REDIS)}</TypoH1>
       <Paper
         sx={{
           marginTop: '20px',

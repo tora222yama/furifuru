@@ -31,11 +31,14 @@ export const themeCommon = createTheme({
     h2: {
       fontSize: '26px',
     },
-    subtitle1: {
+    h3: {
       fontSize: '24px',
     },
-    subtitle2: {
+    subtitle1: {
       fontSize: '20px',
+    },
+    subtitle2: {
+      fontSize: '18px',
     },
     body1: {
       fontSize: '16px',
