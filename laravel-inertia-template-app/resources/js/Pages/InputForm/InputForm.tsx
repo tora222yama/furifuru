@@ -1,34 +1,66 @@
 import * as React from 'react';
-import { Paper } from '@mui/material';
 import { IPropsBase } from '@/js/System/System';
 import { Page } from '@/js/Pages/Page';
 import { TypoH1 } from '@/js/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/js/Enum/Server/App/EPages';
-import { TypoH3 } from '@/js/Component/Typography/TypoH3';
+import {
+  FormInputForm,
+  IFormInputForm,
+} from '@/js/Pages/InputForm/FormInputForm';
+import {
+  IFormInputFormValidationResult,
+  initialResult,
+  validateAll,
+} from '@/js/Pages/InputForm/FormInputFormValidation';
+import { Log } from '@/js/Common/Log';
 
 interface IProps extends IPropsBase {}
 export const InputForm: React.FC<IProps> = () => {
+  const [formInputForm, setFormInputForm] = React.useState<IFormInputForm>({
+    inputSingle: '',
+    inputMulti: '',
+  });
+  const [validation, setValidation] =
+    React.useState<IFormInputFormValidationResult>(initialResult);
+
+  /**
+   * 値の更新.
+   */
+  const handleUpdate = React.useCallback(
+    (newValues: Partial<IFormInputForm>) => {
+      setFormInputForm(prevState => ({ ...prevState, ...newValues }));
+    },
+    [setFormInputForm],
+  );
+
+  /**
+   * graphqlで送信.
+   */
+  const handleSaveGraphQL = () => {
+    // バリデーション実行.
+    const validation = validateAll(formInputForm);
+    setValidation(validation);
+
+    // エラーがある場合は処理をしない.
+    if (validation.hasError) {
+      return;
+    }
+
+    Log.info('graphqlでの保存を実行');
+  };
+
   return (
     <Page>
       <TypoH1>{getPagesName(E_PAGES.INPUT_FORM)}</TypoH1>
-      <TypoH3 sx={{ marginTop: '20px' }}>Input(single)</TypoH3>
-      <Paper
+      <FormInputForm
         sx={{
-          marginTop: '20px',
-          padding: '10px',
+          width: '100%',
         }}
-      >
-        --
-      </Paper>
-      <TypoH3 sx={{ marginTop: '20px' }}>Input(multi)</TypoH3>
-      <Paper
-        sx={{
-          marginTop: '20px',
-          padding: '10px',
-        }}
-      >
-        --
-      </Paper>
+        formInputForm={formInputForm}
+        validation={validation}
+        handleUpdate={handleUpdate}
+        handleSaveGraphQL={handleSaveGraphQL}
+      />
     </Page>
   );
 };
