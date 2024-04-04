@@ -7,7 +7,6 @@ namespace App\GraphQL\App\Mutations\Pipe;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\GraphQL\PipeBase;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 final class PipeActionAppInputFormUpdate extends PipeBase
@@ -15,6 +14,8 @@ final class PipeActionAppInputFormUpdate extends PipeBase
     public string $inputSingleNumber = '';
 
     public string $inputSingleNotZero = '';
+
+    public string $inputSingleRange = '';
 
     public string $inputMulti = '';
 
@@ -33,6 +34,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
     {
         $this->inputSingleNumber = $this->getArgAsString('input_single_number');
         $this->inputSingleNotZero = $this->getArgAsString('input_single_not_zero');
+        $this->inputSingleRange = $this->getArgAsString('input_single_range');
         $this->inputMulti = $this->getArgAsString('input_multi');
     }
 
@@ -45,11 +47,14 @@ final class PipeActionAppInputFormUpdate extends PipeBase
         $data = [
             'input_single_number' => $this->inputSingleNumber,
             'input_single_not_zero' => $this->inputSingleNotZero,
+            'input_single_range' => $this->inputSingleRange,
             'input_multi' => $this->inputMulti,
         ];
 
         // ルール.
         $rules = [
+
+            // Input(single)
             ...EValidationType::getRules(
                 'input_single_number',
                 collect([
@@ -64,6 +69,14 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                 ])
             ),
             ...EValidationType::getRules(
+                'input_single_range',
+                collect([
+                    EValidationType::NUMBER_RANGE->pack(20, 50),
+                ])
+            ),
+
+            // Input(multi)
+            ...EValidationType::getRules(
                 'input_multi',
                 collect([
                     EValidationType::REQUIRED->pack(),
@@ -71,10 +84,10 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                 ])
             ),
         ];
-        Log::info(print_r($rules, true));
 
         // エラー発生時のメッセージ.
         $messages = [
+            // Input(single)
             ...EValidationType::getMessages(
                 'input_single_number',
                 'input(single:整数)',
@@ -90,6 +103,15 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                     EValidationType::REQUIRED_NOT_ZERO->pack(),
                 ])
             ),
+            ...EValidationType::getMessages(
+                'input_single_range',
+                'input(single:範囲)',
+                collect([
+                    EValidationType::NUMBER_RANGE->pack(20, 50),
+                ])
+            ),
+
+            // Input(multi)
             ...EValidationType::getMessages(
                 'input_multi',
                 'input(multi)',

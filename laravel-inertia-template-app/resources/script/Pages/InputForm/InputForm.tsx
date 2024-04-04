@@ -21,6 +21,7 @@ export const InputForm: React.FC<IProps> = () => {
   const [formInputForm, setFormInputForm] = React.useState<IFormInputForm>({
     inputSingleNumber: '',
     inputSingleNotZero: '',
+    inputSingleRange: '',
     inputMulti: '',
   });
   const [validation, setValidation] =
@@ -57,6 +58,7 @@ export const InputForm: React.FC<IProps> = () => {
       {
         inputSingleNumber: formInputForm.inputSingleNumber,
         inputSingleNotZero: formInputForm.inputSingleNotZero,
+        inputSingleRange: formInputForm.inputSingleRange,
         inputMulti: formInputForm.inputMulti,
       },
       [],

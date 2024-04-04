@@ -10,6 +10,7 @@ import { InputSingle } from '@/script/Pages/InputForm/FormInputForm/InputSingle'
 export interface IFormInputForm {
   inputSingleNumber: string;
   inputSingleNotZero: string;
+  inputSingleRange: string;
   inputMulti: string;
 }
 

@@ -48,6 +48,7 @@ export type MutationActionAppInputFormUpdateArgs = {
   input_multi?: InputMaybe<Scalars['String']['input']>;
   input_single_not_zero?: InputMaybe<Scalars['String']['input']>;
   input_single_number?: InputMaybe<Scalars['String']['input']>;
+  input_single_range?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationActionAppRedisUpdateArgs = {
@@ -102,6 +103,7 @@ export type User = {
 export type ActionAppInputFormUpdateMutationVariables = Exact<{
   input_single_number?: InputMaybe<Scalars['String']['input']>;
   input_single_not_zero?: InputMaybe<Scalars['String']['input']>;
+  input_single_range?: InputMaybe<Scalars['String']['input']>;
   input_multi?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -140,11 +142,13 @@ export const ActionAppInputFormUpdateDocument = gql`
   mutation ActionAppInputFormUpdate(
     $input_single_number: String
     $input_single_not_zero: String
+    $input_single_range: String
     $input_multi: String
   ) {
     ActionAppInputFormUpdate(
       input_single_number: $input_single_number
       input_single_not_zero: $input_single_not_zero
+      input_single_range: $input_single_range
       input_multi: $input_multi
     ) {
       status_code
@@ -173,6 +177,7 @@ export type ActionAppInputFormUpdateMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      input_single_number: // value for 'input_single_number'
  *      input_single_not_zero: // value for 'input_single_not_zero'
+ *      input_single_range: // value for 'input_single_range'
  *      input_multi: // value for 'input_multi'
  *   },
  * });

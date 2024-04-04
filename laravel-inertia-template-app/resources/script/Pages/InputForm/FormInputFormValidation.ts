@@ -34,6 +34,7 @@ export const parseServerValidation = (
   const ret: IFormInputFormValidation = {
     inputSingleNumber: parseErrorMessage('input_single_number', result),
     inputSingleNotZero: parseErrorMessage('input_single_not_zero', result),
+    inputSingleRange: parseErrorMessage('input_single_range', result),
     inputMulti: parseErrorMessage('input_multi', result),
   };
   return {

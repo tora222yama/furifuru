@@ -6,6 +6,7 @@ import { IFormInputForm } from '@/script/Pages/InputForm/FormInputForm';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
 import { Number } from '@/script/Pages/InputForm/FormInputForm/InputSingle/Number';
 import { NotZero } from '@/script/Pages/InputForm/FormInputForm/InputSingle/NotZero';
+import { Range } from '@/script/Pages/InputForm/FormInputForm/InputSingle/Range';
 
 interface IProps extends IPropsBase {
   formInputForm: IFormInputForm;
@@ -42,6 +43,16 @@ export const InputSingle: React.FC<IProps> = ({
           }}
         />
         <NotZero
+          formInputForm={formInputForm}
+          validation={validation}
+          handleUpdate={handleUpdate}
+        />
+        <Divider
+          sx={{
+            margin: '20px 0px',
+          }}
+        />
+        <Range
           formInputForm={formInputForm}
           validation={validation}
           handleUpdate={handleUpdate}

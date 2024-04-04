@@ -110,12 +110,16 @@ enum EValidationType: string
      */
     public function getRule(ValidationPack $pack): Collection
     {
+        $value1 = $pack->value1;
+        $value2 = $pack->value2;
+
         return match ($this) {
             self::REQUIRED => collect(['required']),
             self::NUMBER => collect(['numeric']),
             self::REQUIRED_NOT_ZERO => collect(['required', 'not_in:0']),
-            self::LENGTH => collect([new RuleMaxLength($pack->value1)]),
-            default => [],
+            self::NUMBER_RANGE => collect(['numeric', "gte:$value1", "lte:$value2"]),
+            self::LENGTH => collect([new RuleMaxLength($value1)]),
+            default => collect(),
         };
     }
 
@@ -129,10 +133,14 @@ enum EValidationType: string
             return '';
         }
 
+        $value1 = $pack->value1;
+        $value2 = $pack->value2;
+
         return match ($this) {
             self::REQUIRED,
             self::REQUIRED_NOT_ZERO => "${columnName}は必須項目です",
             self::NUMBER => "${columnName}が数値ではありません",
+            self::NUMBER_RANGE => "${columnName}は[$value1-$value2]の範囲で入力してください",
             default => '',
         };
     }

@@ -8,6 +8,7 @@ import { Log } from '@/script/Common/Log';
 export interface IActionAppInputFormUpdate {
   inputSingleNumber: string;
   inputSingleNotZero: string;
+  inputSingleRange: string;
   inputMulti: string;
 }
 
@@ -36,6 +37,7 @@ export function useMutationActionAppInputFormUpdate(): [
         variables: {
           input_single_number: String(props.inputSingleNumber),
           input_single_not_zero: String(props.inputSingleNotZero),
+          input_single_range: String(props.inputSingleRange),
           input_multi: String(props.inputMulti),
         },
       })

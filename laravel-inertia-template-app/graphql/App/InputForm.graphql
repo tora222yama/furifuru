@@ -5,6 +5,7 @@ extend type Mutation {
   ActionAppInputFormUpdate(
     input_single_number: String
     input_single_not_zero: String
+    input_single_range: String
     input_multi: String
   ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppInputFormUpdate")
 }
