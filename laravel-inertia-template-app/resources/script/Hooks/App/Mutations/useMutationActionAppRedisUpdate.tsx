@@ -3,6 +3,7 @@ import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
 import { useActionAppRedisUpdateMutation } from '@/script/Graphql/codegen/graphql';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { Log } from '@/script/Common/Log';
 
 export interface IActionAppRedisUpdate {
   storeValue: string;
@@ -57,6 +58,7 @@ export function useMutationActionAppRedisUpdate(): [
           });
         })
         .catch(_error => {
+          Log.error(_error);
           setSending(false);
         });
     });

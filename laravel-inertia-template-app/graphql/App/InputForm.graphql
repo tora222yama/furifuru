@@ -1,0 +1,9 @@
+# App/InputForm.graphql
+
+extend type Mutation {
+  # 入力値の受取.
+  ActionAppInputFormUpdate(
+    input_single: String
+    input_multi: String
+  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppInputFormUpdate")
+}

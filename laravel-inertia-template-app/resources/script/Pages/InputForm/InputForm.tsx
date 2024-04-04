@@ -10,9 +10,11 @@ import {
 import {
   IFormInputFormValidationResult,
   initialResult,
+  parseServerValidation,
   validateAll,
 } from '@/script/Pages/InputForm/FormInputFormValidation';
-import { Log } from '@/script/Common/Log';
+import { useMutationActionAppInputFormUpdate } from '@/script/Hooks/App/Mutations/useMutationActionAppInputFormUpdate';
+import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const InputForm: React.FC<IProps> = () => {
@@ -22,6 +24,9 @@ export const InputForm: React.FC<IProps> = () => {
   });
   const [validation, setValidation] =
     React.useState<IFormInputFormValidationResult>(initialResult);
+  const [processingUpdate, mutationUpdate] =
+    useMutationActionAppInputFormUpdate();
+  const loading = processingUpdate;
 
   /**
    * 値の更新.
@@ -46,7 +51,22 @@ export const InputForm: React.FC<IProps> = () => {
       return;
     }
 
-    Log.info('graphqlでの保存を実行');
+    // 更新処理の実施.
+    mutationUpdate(
+      {
+        inputSingle: formInputForm.inputSingle,
+        inputMulti: formInputForm.inputMulti,
+      },
+      [],
+    ).then(res => {
+      switch (res.statusCode) {
+        case E_STATUS_CODE.UNPROCESSABLE_ENTITY:
+          setValidation(parseServerValidation(res));
+          break;
+        default:
+          break;
+      }
+    });
   };
 
   return (
@@ -56,6 +76,7 @@ export const InputForm: React.FC<IProps> = () => {
         sx={{
           width: '100%',
         }}
+        loading={loading}
         formInputForm={formInputForm}
         validation={validation}
         handleUpdate={handleUpdate}

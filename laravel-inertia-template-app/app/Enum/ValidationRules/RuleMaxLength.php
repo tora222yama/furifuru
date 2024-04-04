@@ -28,14 +28,14 @@ class RuleMaxLength implements ValidationRule
     {
         // string以外は通さない.
         if (! is_string($value)) {
-            $fail('TEST');
+            $fail($this->message());
         }
 
         // 改行コードを統一する.
         $replacedValue = str_replace("\r\n", "\n", $value);
 
         if (mb_strlen($replacedValue) > $this->max) {
-            $fail('TEST');
+            $fail($this->message());
         }
     }
 

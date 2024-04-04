@@ -80,4 +80,9 @@ const validateInputMulti: ValidationFunction = (value, columnName) =>
       type: E_VALIDATION_TYPE.REQUIRED,
       level: EValidationLevel.Error,
     },
+    {
+      type: E_VALIDATION_TYPE.LENGTH,
+      level: EValidationLevel.Error,
+      maxLength: 100,
+    },
   ]);

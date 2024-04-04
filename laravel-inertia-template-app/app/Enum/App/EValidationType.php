@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enum\App;
 
+use App\Enum\ValidationRules\RuleMaxLength;
+use App\Enum\ValidationRules\ValidationPack;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 
 /**
@@ -32,17 +35,36 @@ enum EValidationType: string
     case PERIOD = 'period'; // ピリオドの利用禁止.
 
     /**
+     * バリデーション指定の情報を作成.
+     */
+    public function pack(int $value1 = 0, int $value2 = 0): ValidationPack
+    {
+        return new ValidationPack($this, $value1, $value2);
+    }
+
+    /**
+     * 自作バリデーションルールかどうか.
+     */
+    public function isCustomRule(): bool
+    {
+        return match ($this) {
+            self::LENGTH => true,
+            default => false,
+        };
+    }
+
+    /**
      * バリデーションルールを取得.
      *
-     * @param  Collection<EValidationType>  $rules
+     * @param  Collection<ValidationPack>  $rules
      */
     public static function getRules(
         string $columnTag,
         Collection $rules
     ): array {
         return [
-            "$columnTag" => $rules->map(function (EValidationType $rule) {
-                return $rule->getRule();
+            "$columnTag" => $rules->map(function (ValidationPack $pack) {
+                return $pack->rule();
             })->toArray(),
         ];
     }
@@ -50,26 +72,32 @@ enum EValidationType: string
     /**
      * バリデーションメッセージを取得.
      *
-     * @param  Collection<EValidationType>  $rules
+     * @param  Collection<ValidationPack>  $rules
      */
     public static function getMessages(
         string $columnTag,
         string $columnName,
         Collection $rules,
     ): array {
-        return $rules->flatMap(function (EValidationType $rule) use ($columnTag, $columnName) {
-            return ["$columnTag.".$rule->getRule() => $rule->getErrorMessage($columnName)];
+        return $rules->flatMap(function (ValidationPack $pack) use ($columnTag, $columnName) {
+            // カスタムルールはメッセージ設定が不要.
+            if ($pack->type->isCustomRule()) {
+                return true;
+            }
+
+            return ["$columnTag.".$pack->rule() => $pack->message($columnName)];
         })->toArray();
     }
 
     /**
      * バリデーションルールを返す.
      */
-    public function getRule(): string
+    public function getRule(ValidationPack $pack): string|ValidationRule
     {
         return match ($this) {
             self::REQUIRED => 'required',
             self::NUMBER => 'numeric',
+            self::LENGTH => new RuleMaxLength($pack->value1),
             default => '',
         };
     }
@@ -77,8 +105,13 @@ enum EValidationType: string
     /**
      * バリデーションメッセージを返す.
      */
-    public function getErrorMessage(string $columnName): string
+    public function getErrorMessage(string $columnName, ValidationPack $pack): string
     {
+        // カスタムルールはメッセージ設定が不要.
+        if ($this->isCustomRule()) {
+            return '';
+        }
+
         return match ($this) {
             self::REQUIRED => "${columnName}は必須項目です",
             self::NUMBER => "${columnName}が数値ではありません",

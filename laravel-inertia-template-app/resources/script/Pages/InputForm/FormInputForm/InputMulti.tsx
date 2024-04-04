@@ -36,6 +36,9 @@ export const InputMulti: React.FC<IProps> = ({
           <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
             <TypoText>Required</TypoText>
           </ListItem>
+          <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
+            <TypoText>Length:100</TypoText>
+          </ListItem>
         </List>
         <InputFieldMultiline
           sx={{

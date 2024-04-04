@@ -13,6 +13,7 @@ export interface IFormInputForm {
 }
 
 interface IProps extends IPropsBase {
+  loading: boolean;
   formInputForm: IFormInputForm;
   validation: IFormInputFormValidationResult;
   handleUpdate: (newValues: Partial<IFormInputForm>) => void;
@@ -20,6 +21,7 @@ interface IProps extends IPropsBase {
 }
 export const FormInputForm: React.FC<IProps> = ({
   sx,
+  loading,
   formInputForm,
   validation,
   handleUpdate,
@@ -61,6 +63,7 @@ export const FormInputForm: React.FC<IProps> = ({
           buttonType={E_BUTTON_TYPE.PRIMARY}
           label="GraphQLで保存"
           onClick={handleSaveGraphQL}
+          disabled={loading}
         />
       </Box>
     </FormControl>
