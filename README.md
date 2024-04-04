@@ -66,7 +66,7 @@ docker exec -it template_web bash
 ### コミット動作テスト
 
 - テスト用ブランチを作成する
-- ```laravel-inertia-template-app/resources/js/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
+- ```laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
 
 ```
 const i = 0; // 追加箇所
@@ -83,7 +83,7 @@ npm run lefthook
 - 表示されるエラーの例
 
 ```
-/var/www/html/laravel-inertia-template-app/resources/js/Pages/MvcValue/MvcValue.tsx
+/var/www/html/laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx
   10:9  error  'i' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 ✖ 1 problem (1 error, 0 warnings)

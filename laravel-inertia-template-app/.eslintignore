@@ -1,2 +1,2 @@
-resources/js/app.tsx
-resources/js/Graphql/codegen/graphql.tsx
+resources/script/app.tsx
+resources/script/Graphql/codegen/graphql.tsx

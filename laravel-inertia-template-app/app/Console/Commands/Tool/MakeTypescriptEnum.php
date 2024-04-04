@@ -91,7 +91,7 @@ class MakeTypescriptEnum extends Command
 
             $pathPair = new EnumPathPair();
             $pathPair->inputPath = $inputFile;
-            $pathPair->outputPath = resource_path().'/js/Enum/Server/'.$fileName.'.ts';
+            $pathPair->outputPath = resource_path().'/script/Enum/Server/'.$fileName.'.ts';
             $ret[] = $pathPair;
         }
 
@@ -118,7 +118,7 @@ class MakeTypescriptEnum extends Command
 
                 $pathPair = new EnumPathPair();
                 $pathPair->inputPath = $inputFile;
-                $pathPair->outputPath = resource_path()."/js/Enum/Server/${lastDir}/${fileName}.ts";
+                $pathPair->outputPath = resource_path()."/script/Enum/Server/${lastDir}/${fileName}.ts";
                 $ret[] = $pathPair;
             }
         }

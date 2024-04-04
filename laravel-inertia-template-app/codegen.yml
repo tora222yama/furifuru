@@ -6,7 +6,7 @@ documents:
   - "./graphql/App/Queries/*.graphql"
   - "./graphql/App/Mutations/*.graphql"
 generates:
-  resources/js/Graphql/codegen/graphql.tsx:
+  resources/script/Graphql/codegen/graphql.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"
