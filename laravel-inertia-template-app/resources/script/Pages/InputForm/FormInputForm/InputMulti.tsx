@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Box, List, ListItem, ListSubheader, Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { IFormInputFormValidationResult } from '@/script/Pages/InputForm/FormInputFormValidation';
 import { IFormInputForm } from '@/script/Pages/InputForm/FormInputForm';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InputFieldMultiline } from '@/script/Component/Form/InputFieldMultiline';
+import { E_COLOR } from '@/script/Enum/EColor';
 
 interface IProps extends IPropsBase {
   formInputForm: IFormInputForm;
@@ -18,6 +19,9 @@ export const InputMulti: React.FC<IProps> = ({
   validation,
   handleUpdate,
 }) => {
+  // 適用バリデーション.
+  const validationList: string[] = ['required', 'length:100'];
+
   return (
     <Box
       sx={{
@@ -29,17 +33,30 @@ export const InputMulti: React.FC<IProps> = ({
         sx={{
           marginTop: '20px',
           padding: '10px',
-          height: 'auto',
         }}
       >
-        <List subheader={<ListSubheader>適用バリデーション</ListSubheader>}>
-          <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
-            <TypoText>Required</TypoText>
-          </ListItem>
-          <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
-            <TypoText>Length:100</TypoText>
-          </ListItem>
-        </List>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '5px',
+            alignItems: 'center',
+          }}
+        >
+          <TypoText>適用バリデーション</TypoText>
+          {validationList.map(type => {
+            return (
+              <Box
+                key={type}
+                sx={{
+                  backgroundColor: E_COLOR.RED_LIGHT,
+                  padding: '5px',
+                }}
+              >
+                {type}
+              </Box>
+            );
+          })}
+        </Box>
         <InputFieldMultiline
           sx={{
             marginTop: '10px',

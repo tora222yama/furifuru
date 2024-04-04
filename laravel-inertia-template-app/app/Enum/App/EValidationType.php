@@ -8,6 +8,7 @@ use App\Enum\ValidationRules\RuleMaxLength;
 use App\Enum\ValidationRules\ValidationPack;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * バリデーション種別.
@@ -63,7 +64,7 @@ enum EValidationType: string
         Collection $rules
     ): array {
         return [
-            "$columnTag" => $rules->map(function (ValidationPack $pack) {
+            "$columnTag" => $rules->flatMap(function (ValidationPack $pack) {
                 return $pack->rule();
             })->toArray(),
         ];
@@ -85,20 +86,36 @@ enum EValidationType: string
                 return true;
             }
 
-            return ["$columnTag.".$pack->rule() => $pack->message($columnName)];
+            // ルール内の各指定について処理する.
+            return $pack->rule()->flatMap(function (ValidationRule|string $rule) use (
+                $columnTag,
+                $pack,
+                $columnName
+            ) {
+                // 設定値付きのタグから設定値を除外.
+                $tag = $rule;
+                if (Str::contains($tag, ':')) {
+                    $tag = Str::substr($rule, 0, Str::position($rule, ':'));
+                }
+
+                // タグを設定、required|not_inの場合は
+                // column.requiredとcolumn.not_inの両方を設定しておく必要がある.
+                return ["$columnTag.".$tag => $pack->message($columnName)];
+            });
         })->toArray();
     }
 
     /**
      * バリデーションルールを返す.
      */
-    public function getRule(ValidationPack $pack): string|ValidationRule
+    public function getRule(ValidationPack $pack): Collection
     {
         return match ($this) {
-            self::REQUIRED => 'required',
-            self::NUMBER => 'numeric',
-            self::LENGTH => new RuleMaxLength($pack->value1),
-            default => '',
+            self::REQUIRED => collect(['required']),
+            self::NUMBER => collect(['numeric']),
+            self::REQUIRED_NOT_ZERO => collect(['required', 'not_in:0']),
+            self::LENGTH => collect([new RuleMaxLength($pack->value1)]),
+            default => [],
         };
     }
 
@@ -113,7 +130,8 @@ enum EValidationType: string
         }
 
         return match ($this) {
-            self::REQUIRED => "${columnName}は必須項目です",
+            self::REQUIRED,
+            self::REQUIRED_NOT_ZERO => "${columnName}は必須項目です",
             self::NUMBER => "${columnName}が数値ではありません",
             default => '',
         };

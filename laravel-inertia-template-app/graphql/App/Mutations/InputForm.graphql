@@ -1,10 +1,12 @@
 # 入力値の受取.
 mutation ActionAppInputFormUpdate(
-  $input_single: String
+  $input_single_number: String
+  $input_single_not_zero: String
   $input_multi: String
 ) {
   ActionAppInputFormUpdate(
-    input_single: $input_single
+    input_single_number: $input_single_number
+    input_single_not_zero: $input_single_not_zero
     input_multi: $input_multi
   ) {
     status_code

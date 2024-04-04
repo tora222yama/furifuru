@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Box, List, ListItem, ListSubheader, Paper } from '@mui/material';
+import { Box, Divider, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { IFormInputFormValidationResult } from '@/script/Pages/InputForm/FormInputFormValidation';
 import { IFormInputForm } from '@/script/Pages/InputForm/FormInputForm';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { InputField } from '@/script/Component/Form/InputField';
+import { Number } from '@/script/Pages/InputForm/FormInputForm/InputSingle/Number';
+import { NotZero } from '@/script/Pages/InputForm/FormInputForm/InputSingle/NotZero';
 
 interface IProps extends IPropsBase {
   formInputForm: IFormInputForm;
@@ -31,26 +31,20 @@ export const InputSingle: React.FC<IProps> = ({
           padding: '10px',
         }}
       >
-        <List subheader={<ListSubheader>適用バリデーション</ListSubheader>}>
-          <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
-            <TypoText>Required</TypoText>
-          </ListItem>
-          <ListItem sx={{ paddingLeft: '40px' }} disablePadding>
-            <TypoText>Number</TypoText>
-          </ListItem>
-        </List>
-        <InputField
+        <Number
+          formInputForm={formInputForm}
+          validation={validation}
+          handleUpdate={handleUpdate}
+        />
+        <Divider
           sx={{
-            marginTop: '10px',
+            margin: '20px 0px',
           }}
-          inputProps={{
-            width: '400px',
-          }}
-          inputValue={formInputForm.inputSingle}
-          onChange={inputSingle => handleUpdate({ inputSingle })}
-          placeHolder="入力してください"
-          errors={validation.data.inputSingle?.errors}
-          visibleError
+        />
+        <NotZero
+          formInputForm={formInputForm}
+          validation={validation}
+          handleUpdate={handleUpdate}
         />
       </Paper>
     </Box>

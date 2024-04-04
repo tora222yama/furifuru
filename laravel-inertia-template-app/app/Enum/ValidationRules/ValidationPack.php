@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Enum\ValidationRules;
 
 use App\Enum\App\EValidationType;
-use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Collection;
 
 /**
  * バリデーションルール指定情報.
@@ -31,7 +31,7 @@ final class ValidationPack
     /**
      * パック情報からルールを取得.
      */
-    public function rule(): ValidationRule|string
+    public function rule(): Collection
     {
         return $this->type->getRule($this);
     }

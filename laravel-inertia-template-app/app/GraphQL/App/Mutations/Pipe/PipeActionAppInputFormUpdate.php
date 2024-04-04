@@ -7,11 +7,14 @@ namespace App\GraphQL\App\Mutations\Pipe;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\GraphQL\PipeBase;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 final class PipeActionAppInputFormUpdate extends PipeBase
 {
-    public string $inputSingle = '';
+    public string $inputSingleNumber = '';
+
+    public string $inputSingleNotZero = '';
 
     public string $inputMulti = '';
 
@@ -28,7 +31,8 @@ final class PipeActionAppInputFormUpdate extends PipeBase
      */
     public function parse(): void
     {
-        $this->inputSingle = $this->getArgAsString('input_single');
+        $this->inputSingleNumber = $this->getArgAsString('input_single_number');
+        $this->inputSingleNotZero = $this->getArgAsString('input_single_not_zero');
         $this->inputMulti = $this->getArgAsString('input_multi');
     }
 
@@ -39,17 +43,24 @@ final class PipeActionAppInputFormUpdate extends PipeBase
     {
         // データ.
         $data = [
-            'input_single' => $this->inputSingle,
+            'input_single_number' => $this->inputSingleNumber,
+            'input_single_not_zero' => $this->inputSingleNotZero,
             'input_multi' => $this->inputMulti,
         ];
 
         // ルール.
         $rules = [
             ...EValidationType::getRules(
-                'input_single',
+                'input_single_number',
                 collect([
                     EValidationType::REQUIRED->pack(),
                     EValidationType::NUMBER->pack(),
+                ])
+            ),
+            ...EValidationType::getRules(
+                'input_single_not_zero',
+                collect([
+                    EValidationType::REQUIRED_NOT_ZERO->pack(),
                 ])
             ),
             ...EValidationType::getRules(
@@ -60,15 +71,23 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                 ])
             ),
         ];
+        Log::info(print_r($rules, true));
 
         // エラー発生時のメッセージ.
         $messages = [
             ...EValidationType::getMessages(
-                'input_single',
-                'input(single)',
+                'input_single_number',
+                'input(single:整数)',
                 collect([
                     EValidationType::REQUIRED->pack(),
                     EValidationType::NUMBER->pack(),
+                ])
+            ),
+            ...EValidationType::getMessages(
+                'input_single_not_zero',
+                'input(single:非0整数)',
+                collect([
+                    EValidationType::REQUIRED_NOT_ZERO->pack(),
                 ])
             ),
             ...EValidationType::getMessages(

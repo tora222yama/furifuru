@@ -19,7 +19,8 @@ import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 interface IProps extends IPropsBase {}
 export const InputForm: React.FC<IProps> = () => {
   const [formInputForm, setFormInputForm] = React.useState<IFormInputForm>({
-    inputSingle: '',
+    inputSingleNumber: '',
+    inputSingleNotZero: '',
     inputMulti: '',
   });
   const [validation, setValidation] =
@@ -54,7 +55,8 @@ export const InputForm: React.FC<IProps> = () => {
     // 更新処理の実施.
     mutationUpdate(
       {
-        inputSingle: formInputForm.inputSingle,
+        inputSingleNumber: formInputForm.inputSingleNumber,
+        inputSingleNotZero: formInputForm.inputSingleNotZero,
         inputMulti: formInputForm.inputMulti,
       },
       [],

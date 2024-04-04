@@ -6,7 +6,8 @@ import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 
 export interface IActionAppInputFormUpdate {
-  inputSingle: string;
+  inputSingleNumber: string;
+  inputSingleNotZero: string;
   inputMulti: string;
 }
 
@@ -33,7 +34,8 @@ export function useMutationActionAppInputFormUpdate(): [
     return new Promise<IMutationResult>(resolve => {
       mutation({
         variables: {
-          input_single: String(props.inputSingle),
+          input_single_number: String(props.inputSingleNumber),
+          input_single_not_zero: String(props.inputSingleNotZero),
           input_multi: String(props.inputMulti),
         },
       })

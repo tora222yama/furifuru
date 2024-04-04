@@ -32,7 +32,8 @@ export const parseServerValidation = (
     return initialResult;
   }
   const ret: IFormInputFormValidation = {
-    inputSingle: parseErrorMessage('input_single', result),
+    inputSingleNumber: parseErrorMessage('input_single_number', result),
+    inputSingleNotZero: parseErrorMessage('input_single_not_zero', result),
     inputMulti: parseErrorMessage('input_multi', result),
   };
   return {
@@ -49,8 +50,8 @@ export const validateAll = (
 ): IFormInputFormValidationResult => {
   const results = {
     inputSingle: validateInputSingle(
-      formInputForm.inputSingle,
-      'input(single)',
+      formInputForm.inputSingleNumber,
+      'input(single:整数)',
     ),
     inputMulti: validateInputMulti(formInputForm.inputMulti, 'input(multi)'),
   };

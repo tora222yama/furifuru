@@ -4,6 +4,12 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [利用パッケージについて](document/PACKAGE.md)
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
 
+-　他作成が必要なドキュメント
+  - Enum利用・Enumの自動出力について
+  - GraphQL一式について
+  - バリデーションについて
+  - ページ作成ガイド
+
 # 環境構築
 
 ## 前提

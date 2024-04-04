@@ -4,11 +4,12 @@ import { IPropsBase } from '@/script/System/System';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { IFormInputFormValidationResult } from '@/script/Pages/InputForm/FormInputFormValidation';
-import { InputSingle } from '@/script/Pages/InputForm/FormInputForm/InputSingle';
 import { InputMulti } from '@/script/Pages/InputForm/FormInputForm/InputMulti';
+import { InputSingle } from '@/script/Pages/InputForm/FormInputForm/InputSingle';
 
 export interface IFormInputForm {
-  inputSingle: string;
+  inputSingleNumber: string;
+  inputSingleNotZero: string;
   inputMulti: string;
 }
 
