@@ -3,7 +3,6 @@ import {
   EValidationLevel,
   parseErrorMessage,
   validateMulti,
-  ValidationFunction,
   ValidationResult,
 } from '@/script/Common/Validation';
 import { IMutationResult } from '@/script/Hooks/IMutationResult';
@@ -35,6 +34,7 @@ export const parseServerValidation = (
     inputSingleNumber: parseErrorMessage('input_single_number', result),
     inputSingleNotZero: parseErrorMessage('input_single_not_zero', result),
     inputSingleRange: parseErrorMessage('input_single_range', result),
+    inputSingleEmail: parseErrorMessage('input_single_email', result),
     inputMulti: parseErrorMessage('input_multi', result),
   };
   return {
@@ -50,11 +50,72 @@ export const validateAll = (
   formInputForm: IFormInputForm,
 ): IFormInputFormValidationResult => {
   const results = {
-    inputSingle: validateInputSingle(
+    // input(single:整数.
+    inputSingleNumber: validateMulti(
       formInputForm.inputSingleNumber,
       'input(single:整数)',
+      [
+        {
+          type: E_VALIDATION_TYPE.REQUIRED,
+          level: EValidationLevel.Error,
+        },
+        {
+          type: E_VALIDATION_TYPE.NUMBER,
+          level: EValidationLevel.Error,
+        },
+      ],
     ),
-    inputMulti: validateInputMulti(formInputForm.inputMulti, 'input(multi)'),
+
+    // input(single:非0)
+    inputSingleNotZero: validateMulti(
+      formInputForm.inputSingleNotZero,
+      'input(single:非0)',
+      [
+        {
+          type: E_VALIDATION_TYPE.REQUIRED_NOT_ZERO,
+          level: EValidationLevel.Error,
+        },
+      ],
+    ),
+
+    // input(single:範囲).
+    inputSingleRange: validateMulti(
+      formInputForm.inputSingleRange,
+      'input(single:範囲)',
+      [
+        {
+          type: E_VALIDATION_TYPE.NUMBER_RANGE,
+          level: EValidationLevel.Error,
+          min: 20,
+          max: 50,
+        },
+      ],
+    ),
+
+    // input(email).
+    inputSingleEmail: validateMulti(
+      formInputForm.inputSingleEmail,
+      'input(email)',
+      [
+        {
+          type: E_VALIDATION_TYPE.EMAIL,
+          level: EValidationLevel.Error,
+        },
+      ],
+    ),
+
+    // input(multi)
+    inputMulti: validateMulti(formInputForm.inputMulti, 'input(multi)', [
+      {
+        type: E_VALIDATION_TYPE.REQUIRED,
+        level: EValidationLevel.Error,
+      },
+      {
+        type: E_VALIDATION_TYPE.LENGTH,
+        level: EValidationLevel.Error,
+        maxLength: 100,
+      },
+    ]),
   };
   return {
     hasError: Object.entries(results).some(
@@ -63,28 +124,3 @@ export const validateAll = (
     data: results,
   };
 };
-
-const validateInputSingle: ValidationFunction = (value, columnName) =>
-  validateMulti(value, columnName, [
-    {
-      type: E_VALIDATION_TYPE.REQUIRED,
-      level: EValidationLevel.Error,
-    },
-    {
-      type: E_VALIDATION_TYPE.NUMBER,
-      level: EValidationLevel.Error,
-    },
-  ]);
-
-const validateInputMulti: ValidationFunction = (value, columnName) =>
-  validateMulti(value, columnName, [
-    {
-      type: E_VALIDATION_TYPE.REQUIRED,
-      level: EValidationLevel.Error,
-    },
-    {
-      type: E_VALIDATION_TYPE.LENGTH,
-      level: EValidationLevel.Error,
-      maxLength: 100,
-    },
-  ]);

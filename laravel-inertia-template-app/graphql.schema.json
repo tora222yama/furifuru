@@ -97,6 +97,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "input_single_email",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "input_single_not_zero",
                 "description": null,
                 "type": {

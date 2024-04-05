@@ -41,13 +41,11 @@ type RangeValidation = {
   max: number;
 };
 
-/*
 type DigitValidation = {
   type: EValidationType;
   level: EValidationLevel.Error;
   max: number;
 };
- */
 
 type LengthValidation = {
   type: EValidationType;
@@ -55,13 +53,11 @@ type LengthValidation = {
   maxLength: number;
 };
 
-/*
 type MaxValidation = {
   type: EValidationType;
   level: EValidationLevel.Error;
   max: number;
 };
- */
 
 /**
  * バリデーション種別.
@@ -127,8 +123,16 @@ const errorMessage = (
       return `${columnName}は数値とハイフンのみで入力してください`;
     case E_VALIDATION_TYPE.NUMBER_PLUS:
       return `${columnName}が正の数値ではありません`;
+    case E_VALIDATION_TYPE.NUMBER_MAX:
+      return `${columnName}は${
+        (validation as MaxValidation).max
+      }以下の数値を入力してください`;
     case E_VALIDATION_TYPE.NUMBER_RANGE:
       return `${columnName}が範囲外です`;
+    case E_VALIDATION_TYPE.MAX_DIGIT:
+      return `${columnName}は${
+        (validation as DigitValidation).max
+      }桁の整数で入力してください`;
     case E_VALIDATION_TYPE.LENGTH:
       return `${columnName}は${
         (validation as LengthValidation).maxLength
@@ -159,11 +163,19 @@ const validate = (value: string, validation: BaseValidationType): boolean => {
       return validateNumberHyphen(value);
     case E_VALIDATION_TYPE.NUMBER_PLUS:
       return validateNumberPlus(value);
+    case E_VALIDATION_TYPE.NUMBER_MAX:
+      return validateNumberMax(value, (validation as MaxValidation).max, false);
     case E_VALIDATION_TYPE.NUMBER_RANGE:
       return validateNumberRange(
         value,
         (validation as RangeValidation).min,
         (validation as RangeValidation).max,
+        false,
+      );
+    case E_VALIDATION_TYPE.MAX_DIGIT:
+      return validateMaxDigit(
+        value,
+        (validation as DigitValidation).max,
         false,
       );
     case E_VALIDATION_TYPE.LENGTH:
@@ -187,6 +199,12 @@ const validateNumberHyphen = (value: string) =>
   value.trim() === '' || /^[0-9-]+$/.test(value);
 const validateNumberPlus = (value: string) =>
   value.trim() === '' || /^[0-9]+$/.test(value);
+const validateNumberMax = (value: string, max: number, isRequired: boolean) => {
+  if (!isRequired && value === '') {
+    return true;
+  }
+  return /^[+-]?\d+(?:\.\d+)?$/.test(value) && Number(value) <= max;
+};
 const validateNumberRange = (
   value: string,
   min: number,
@@ -198,6 +216,12 @@ const validateNumberRange = (
   }
   const number = Number(value);
   return number >= min && number <= max;
+};
+const validateMaxDigit = (value: string, max: number, isRequired: boolean) => {
+  if (!isRequired && value === '') {
+    return true;
+  }
+  return /^[-0-9]+$/.test(value) && value.length <= max;
 };
 const validateLength = (value: string, maxLength: number) =>
   count(value) <= maxLength;

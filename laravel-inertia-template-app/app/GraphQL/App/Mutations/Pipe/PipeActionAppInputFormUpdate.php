@@ -17,6 +17,8 @@ final class PipeActionAppInputFormUpdate extends PipeBase
 
     public string $inputSingleRange   = '';
 
+    public string $inputSingleEmail   = '';
+
     public string $inputMulti         = '';
 
     /**
@@ -35,6 +37,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
         $this->inputSingleNumber  = $this->getArgAsString('input_single_number');
         $this->inputSingleNotZero = $this->getArgAsString('input_single_not_zero');
         $this->inputSingleRange   = $this->getArgAsString('input_single_range');
+        $this->inputSingleEmail   = $this->getArgAsString('input_single_email');
         $this->inputMulti         = $this->getArgAsString('input_multi');
     }
 
@@ -48,6 +51,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
             'input_single_number'   => $this->inputSingleNumber,
             'input_single_not_zero' => $this->inputSingleNotZero,
             'input_single_range'    => $this->inputSingleRange,
+            'input_single_email'    => $this->inputSingleEmail,
             'input_multi'           => $this->inputMulti,
         ];
 
@@ -74,6 +78,12 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                     EValidationType::NUMBER_RANGE->pack(20, 50),
                 ])
             ),
+            ...EValidationType::getRules(
+                'input_single_email',
+                collect([
+                    EValidationType::EMAIL->pack(),
+                ])
+            ),
 
             // Input(multi)
             ...EValidationType::getRules(
@@ -98,7 +108,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
             ),
             ...EValidationType::getMessages(
                 'input_single_not_zero',
-                'input(single:非0整数)',
+                'input(single:非0)',
                 collect([
                     EValidationType::REQUIRED_NOT_ZERO->pack(),
                 ])
@@ -108,6 +118,13 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                 'input(single:範囲)',
                 collect([
                     EValidationType::NUMBER_RANGE->pack(20, 50),
+                ])
+            ),
+            ...EValidationType::getMessages(
+                'input_single_email',
+                'input(email)',
+                collect([
+                    EValidationType::EMAIL->pack(),
                 ])
             ),
 

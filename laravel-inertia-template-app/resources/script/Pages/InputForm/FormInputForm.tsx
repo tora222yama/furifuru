@@ -11,6 +11,7 @@ export interface IFormInputForm {
   inputSingleNumber: string;
   inputSingleNotZero: string;
   inputSingleRange: string;
+  inputSingleEmail: string;
   inputMulti: string;
 }
 

@@ -9,6 +9,7 @@ export interface IActionAppInputFormUpdate {
   inputSingleNumber: string;
   inputSingleNotZero: string;
   inputSingleRange: string;
+  inputSingleEmail: string;
   inputMulti: string;
 }
 
@@ -38,6 +39,7 @@ export function useMutationActionAppInputFormUpdate(): [
           input_single_number: String(props.inputSingleNumber),
           input_single_not_zero: String(props.inputSingleNotZero),
           input_single_range: String(props.inputSingleRange),
+          input_single_email: String(props.inputSingleEmail),
           input_multi: String(props.inputMulti),
         },
       })
