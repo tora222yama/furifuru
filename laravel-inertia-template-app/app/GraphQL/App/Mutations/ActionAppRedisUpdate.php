@@ -33,9 +33,9 @@ final class ActionAppRedisUpdate
         Cache::set(RedisQuery::REDIS_QUERY_STORE_KEY, $pipe->storeValue, 3600);
 
         return [
-            'status_code' => 200,
+            'status_code'    => 200,
             'status_message' => '',
-            'errors' => json_encode([]),
+            'errors'         => json_encode([]),
         ];
     }
 }

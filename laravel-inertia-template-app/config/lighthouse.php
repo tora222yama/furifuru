@@ -14,16 +14,16 @@ return [
     |
     */
 
-    'route' => [
+    'route'                          => [
         /*
          * The URI the endpoint responds to, e.g. mydomain.com/graphql.
          */
-        'uri' => '/graphql',
+        'uri'        => '/graphql',
 
         /*
          * Lighthouse creates a named route for convenient URL generation and redirects.
          */
-        'name' => 'graphql',
+        'name'       => 'graphql',
 
         /*
          * Beware that middleware defined here runs before the GraphQL execution phase,
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'guards' => null,
+    'guards'                         => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -75,7 +75,7 @@ return [
     |
     */
 
-    'schema_path' => base_path('graphql/schema.graphql'),
+    'schema_path'                    => base_path('graphql/schema.graphql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ return [
     |
     */
 
-    'schema_cache' => [
+    'schema_cache'                   => [
         /*
          * Setting to true enables schema caching.
          */
@@ -97,7 +97,7 @@ return [
         /*
          * File path to store the lighthouse schema.
          */
-        'path' => env('LIGHTHOUSE_SCHEMA_CACHE_PATH', base_path('bootstrap/cache/lighthouse-schema.php')),
+        'path'   => env('LIGHTHOUSE_SCHEMA_CACHE_PATH', base_path('bootstrap/cache/lighthouse-schema.php')),
     ],
 
     /*
@@ -108,7 +108,7 @@ return [
     | Should the `@cache` directive use a tagged cache?
     |
     */
-    'cache_directive_tags' => false,
+    'cache_directive_tags'           => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'query_cache' => [
+    'query_cache'                    => [
         /*
          * Setting to true enables query caching.
          */
@@ -128,12 +128,12 @@ return [
         /*
          * Allows using a specific cache store, uses the app's default if set to null.
          */
-        'store' => env('LIGHTHOUSE_QUERY_CACHE_STORE', null),
+        'store'  => env('LIGHTHOUSE_QUERY_CACHE_STORE', null),
 
         /*
          * Duration in seconds the query should remain cached, null means forever.
          */
-        'ttl' => env('LIGHTHOUSE_QUERY_CACHE_TTL', 24 * 60 * 60),
+        'ttl'    => env('LIGHTHOUSE_QUERY_CACHE_TTL', 24 * 60 * 60),
     ],
 
     /*
@@ -147,7 +147,7 @@ return [
     |
     */
 
-    'parse_source_location' => true,
+    'parse_source_location'          => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -160,17 +160,17 @@ return [
     |
     */
 
-    'namespaces' => [
-        'models' => ['App', 'App\\Models'],
-        'queries' => 'App\\GraphQL\\Queries',
-        'mutations' => 'App\\GraphQL\\Mutations',
+    'namespaces'                     => [
+        'models'        => ['App', 'App\\Models'],
+        'queries'       => 'App\\GraphQL\\Queries',
+        'mutations'     => 'App\\GraphQL\\Mutations',
         'subscriptions' => 'App\\GraphQL\\Subscriptions',
-        'types' => 'App\\GraphQL\\Types',
-        'interfaces' => 'App\\GraphQL\\Interfaces',
-        'unions' => 'App\\GraphQL\\Unions',
-        'scalars' => 'App\\GraphQL\\Scalars',
-        'directives' => 'App\\GraphQL\\Directives',
-        'validators' => 'App\\GraphQL\\Validators',
+        'types'         => 'App\\GraphQL\\Types',
+        'interfaces'    => 'App\\GraphQL\\Interfaces',
+        'unions'        => 'App\\GraphQL\\Unions',
+        'scalars'       => 'App\\GraphQL\\Scalars',
+        'directives'    => 'App\\GraphQL\\Directives',
+        'validators'    => 'App\\GraphQL\\Validators',
     ],
 
     /*
@@ -183,9 +183,9 @@ return [
     |
     */
 
-    'security' => [
-        'max_query_complexity' => GraphQL\Validator\Rules\QueryComplexity::DISABLED,
-        'max_query_depth' => GraphQL\Validator\Rules\QueryDepth::DISABLED,
+    'security'                       => [
+        'max_query_complexity'  => GraphQL\Validator\Rules\QueryComplexity::DISABLED,
+        'max_query_depth'       => GraphQL\Validator\Rules\QueryDepth::DISABLED,
         'disable_introspection' => (bool) env('LIGHTHOUSE_SECURITY_DISABLE_INTROSPECTION', false)
             ? GraphQL\Validator\Rules\DisableIntrospection::ENABLED
             : GraphQL\Validator\Rules\DisableIntrospection::DISABLED,
@@ -201,7 +201,7 @@ return [
     |
     */
 
-    'pagination' => [
+    'pagination'                     => [
         /*
          * Allow clients to query paginated lists without specifying the amount of items.
          * Setting this to `null` means clients have to explicitly ask for the count.
@@ -212,7 +212,7 @@ return [
          * Limit the maximum amount of items that clients can request from paginated lists.
          * Setting this to `null` means the count is unrestricted.
          */
-        'max_count' => null,
+        'max_count'     => null,
     ],
 
     /*
@@ -243,7 +243,7 @@ return [
     |
     */
 
-    'debug' => env('LIGHTHOUSE_DEBUG', GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE | GraphQL\Error\DebugFlag::INCLUDE_TRACE),
+    'debug'                          => env('LIGHTHOUSE_DEBUG', GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE | GraphQL\Error\DebugFlag::INCLUDE_TRACE),
 
     /*
     |--------------------------------------------------------------------------
@@ -256,7 +256,7 @@ return [
     |
     */
 
-    'error_handlers' => [
+    'error_handlers'                 => [
         Nuwave\Lighthouse\Execution\AuthenticationErrorHandler::class,
         Nuwave\Lighthouse\Execution\AuthorizationErrorHandler::class,
         Nuwave\Lighthouse\Execution\ValidationErrorHandler::class,
@@ -274,7 +274,7 @@ return [
     |
     */
 
-    'field_middleware' => [
+    'field_middleware'               => [
         Nuwave\Lighthouse\Schema\Directives\TrimDirective::class,
         Nuwave\Lighthouse\Schema\Directives\ConvertEmptyStringsToNullDirective::class,
         Nuwave\Lighthouse\Schema\Directives\SanitizeDirective::class,
@@ -295,7 +295,7 @@ return [
     |
     */
 
-    'global_id_field' => 'id',
+    'global_id_field'                => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -308,7 +308,7 @@ return [
     |
     */
 
-    'persisted_queries' => true,
+    'persisted_queries'              => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -320,7 +320,7 @@ return [
     |
     */
 
-    'transactional_mutations' => true,
+    'transactional_mutations'        => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -333,7 +333,7 @@ return [
     |
     */
 
-    'force_fill' => true,
+    'force_fill'                     => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -345,7 +345,7 @@ return [
     |
     */
 
-    'batchload_relations' => true,
+    'batchload_relations'            => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -370,11 +370,11 @@ return [
     |
     */
 
-    'subscriptions' => [
+    'subscriptions'                  => [
         /*
          * Determines if broadcasts should be queued by default.
          */
-        'queue_broadcasts' => env('LIGHTHOUSE_QUEUE_BROADCASTS', true),
+        'queue_broadcasts'      => env('LIGHTHOUSE_QUEUE_BROADCASTS', true),
 
         /*
          * Determines the queue to use for broadcasting queue jobs.
@@ -386,7 +386,7 @@ return [
          *
          * Any Laravel supported cache driver options are available here.
          */
-        'storage' => env('LIGHTHOUSE_SUBSCRIPTION_STORAGE', 'redis'),
+        'storage'               => env('LIGHTHOUSE_SUBSCRIPTION_STORAGE', 'redis'),
 
         /*
          * Default subscription storage time to live in seconds.
@@ -395,29 +395,29 @@ return [
          * Setting this to `null` means the subscriptions are stored forever. This may cause
          * stale subscriptions to linger indefinitely in case cleanup fails for any reason.
          */
-        'storage_ttl' => env('LIGHTHOUSE_SUBSCRIPTION_STORAGE_TTL', null),
+        'storage_ttl'           => env('LIGHTHOUSE_SUBSCRIPTION_STORAGE_TTL', null),
 
         /*
          * Default subscription broadcaster.
          */
-        'broadcaster' => env('LIGHTHOUSE_BROADCASTER', 'pusher'),
+        'broadcaster'           => env('LIGHTHOUSE_BROADCASTER', 'pusher'),
 
         /*
          * Subscription broadcasting drivers with config options.
          */
-        'broadcasters' => [
-            'log' => [
+        'broadcasters'          => [
+            'log'    => [
                 'driver' => 'log',
             ],
             'pusher' => [
-                'driver' => 'pusher',
-                'routes' => Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@pusher',
+                'driver'     => 'pusher',
+                'routes'     => Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@pusher',
                 'connection' => 'pusher',
             ],
-            'echo' => [
-                'driver' => 'echo',
+            'echo'   => [
+                'driver'     => 'echo',
                 'connection' => env('LIGHTHOUSE_SUBSCRIPTION_REDIS_CONNECTION', 'default'),
-                'routes' => Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@echoRoutes',
+                'routes'     => Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@echoRoutes',
             ],
         ],
 
@@ -425,7 +425,7 @@ return [
          * Should the subscriptions extension be excluded when the response has no subscription channel?
          * This optimizes performance by sending less data, but clients must anticipate this appropriately.
          */
-        'exclude_empty' => env('LIGHTHOUSE_SUBSCRIPTION_EXCLUDE_EMPTY', true),
+        'exclude_empty'         => env('LIGHTHOUSE_SUBSCRIPTION_EXCLUDE_EMPTY', true),
     ],
 
     /*
@@ -437,7 +437,7 @@ return [
     |
     */
 
-    'defer' => [
+    'defer'                          => [
         /*
          * Maximum number of nested fields that can be deferred in one query.
          * Once reached, remaining fields will be resolved synchronously.
@@ -450,7 +450,7 @@ return [
          * Once reached, remaining fields will be resolved synchronously.
          * 0 means unlimited.
          */
-        'max_execution_ms' => 0,
+        'max_execution_ms'  => 0,
     ],
 
     /*
@@ -462,7 +462,7 @@ return [
     |
     */
 
-    'federation' => [
+    'federation'                     => [
         /*
          * Location of resolver classes when resolving the `_entities` field.
          */
@@ -478,7 +478,7 @@ return [
     |
     */
 
-    'tracing' => [
+    'tracing'                        => [
         /*
          * Driver used for tracing.
          *

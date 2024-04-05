@@ -8,18 +8,18 @@ use Illuminate\Support\Str;
 
 class EnumPathPair
 {
-    public string $inputPath = '';
+    public string $inputPath    = '';
 
-    public string $outputPath = '';
+    public string $outputPath   = '';
 
     private string $enumExplain = '';
 
-    private string $enumName = '';
+    private string $enumName    = '';
 
-    private string $enumType = '';
+    private string $enumType    = '';
 
     /** @var EnumValue[] */
-    private array $enumList = [];
+    private array $enumList     = [];
 
     /**
      * 入力ファイルが存在するか.
@@ -87,10 +87,10 @@ class EnumPathPair
         }
 
         // ファイルの内容を取得.
-        $fileContents = file_get_contents($this->inputPath);
+        $fileContents   = file_get_contents($this->inputPath);
 
         // 正規表現で改行なしデータからenum説明を取得.
-        $regex = preg_match(
+        $regex          = preg_match(
             '/(\/\*.*?\*\/)/s',
             $fileContents,
             $matches
@@ -100,7 +100,7 @@ class EnumPathPair
         }
 
         // 正規表現でenum名を取得.
-        $regex = preg_match('/enum (.*):(.*)/', $fileContents, $matches);
+        $regex          = preg_match('/enum (.*):(.*)/', $fileContents, $matches);
         if (! $regex) {
             return [false, 'enum名不正'];
         }
@@ -108,7 +108,7 @@ class EnumPathPair
         $this->enumType = trim($matches[2]);
 
         // 正規表現で改行なしデータから定義データ群を取得.
-        $regex = preg_match(
+        $regex          = preg_match(
             '/enum .*?:.*?{\n(.*)\n}/s',
             $fileContents,
             $matches
@@ -116,11 +116,10 @@ class EnumPathPair
         if (! $regex) {
             return [false, 'enumブロックに不正'];
         }
-        $enums = explode("\n", $matches[1]);
+        $enums          = explode("\n", $matches[1]);
         foreach ($enums as $enum) {
-
             // 空行などを除外.
-            $regex = preg_match('/\scase\s/', $enum);
+            $regex            = preg_match('/\scase\s/', $enum);
             if (! $regex) {
                 continue;
             }
@@ -130,13 +129,13 @@ class EnumPathPair
             }
             */
 
-            $regex = preg_match('/case(.*)=(.*);.*\/\/(.*)/', $enum, $matches);
+            $regex            = preg_match('/case(.*)=(.*);.*\/\/(.*)/', $enum, $matches);
             if (! $regex) {
                 return [false, "enum値・コメント不正 -> $enum"];
             }
-            $key = trim($matches[1]);
-            $value = trim($matches[2]);
-            $comment = trim($matches[3]);
+            $key              = trim($matches[1]);
+            $value            = trim($matches[2]);
+            $comment          = trim($matches[3]);
 
             // 重複キー.
             if (isset($this->enumList[$key])) {
@@ -144,7 +143,7 @@ class EnumPathPair
             }
 
             // enum配列に格納.
-            $enum = new EnumValue($key, $value, $comment);
+            $enum             = new EnumValue($key, $value, $comment);
             $this->enumList[] = $enum;
         }
 
@@ -159,7 +158,7 @@ class EnumPathPair
         $upperSnake = $this->getEnumNameUpperSnake();
         $upperCamel = $this->getEnumNameUpperCamel();
 
-        $block = '';
+        $block      = '';
         if (! empty($this->enumExplain)) {
             $block .= $this->getEnumExplain()."\n";
         }

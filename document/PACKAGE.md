@@ -28,6 +28,8 @@ Laravelに組み込まれたphp-cs-fixer
 
 ```pint.json```記載のルールに沿ってPHPコードの自動整形を行う
 
+ルール一覧は[こちら](https://mlocati.github.io/php-cs-fixer-configurator/#version:3.52)
+
 ### laravel-ide-helper
 
 IDE上で各PHPコードの自動補完を行うため下記のファイルを出力する

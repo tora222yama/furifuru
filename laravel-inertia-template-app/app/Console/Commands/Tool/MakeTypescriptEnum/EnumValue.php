@@ -6,9 +6,9 @@ namespace App\Console\Commands\Tool\MakeTypescriptEnum;
 
 final class EnumValue
 {
-    public string $key = '';
+    public string $key     = '';
 
-    public string $value = '';
+    public string $value   = '';
 
     public string $comment = '';
 
@@ -17,8 +17,8 @@ final class EnumValue
      */
     public function __construct(string $key, string $value, string $comment)
     {
-        $this->key = $key;
-        $this->value = $value;
+        $this->key     = $key;
+        $this->value   = $value;
         $this->comment = $comment;
     }
 

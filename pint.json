@@ -277,7 +277,7 @@
             "allow_single_line_closure": false
         },
         "binary_operator_spaces" : {
-            "default": "align"
+            "default": "align_by_scope"
         }
     }
 }

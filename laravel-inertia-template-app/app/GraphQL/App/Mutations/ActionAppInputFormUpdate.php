@@ -23,9 +23,9 @@ final class ActionAppInputFormUpdate
         }
 
         return [
-            'status_code' => 200,
+            'status_code'    => 200,
             'status_message' => '',
-            'errors' => json_encode([]),
+            'errors'         => json_encode([]),
         ];
     }
 }

@@ -19,7 +19,7 @@ export const Range: React.FC<IProps> = ({
   handleUpdate,
 }) => {
   // 適用バリデーション.
-  const validationList: string[] = ['number_range'];
+  const validationList: string[] = ['number_range:20-50'];
 
   return (
     <Box

@@ -13,14 +13,14 @@ use App\GraphQL\PipeBase;
  */
 class PipeService
 {
-    protected array $pipes = [];
+    protected array $pipes        = [];
 
-    protected array $pipeArgs = [];
+    protected array $pipeArgs     = [];
 
     /**
      * エラートレース用.
      */
-    protected array $paramArgs = [];
+    protected array $paramArgs    = [];
 
     protected EPipeKind $pipeKind = EPipeKind::INVALID;
 
@@ -40,11 +40,11 @@ class PipeService
      */
     public function getValidationResult(): array
     {
-        $status_code = EStatusCode::UNPROCESSABLE_ENTITY->value;
+        $status_code    = EStatusCode::UNPROCESSABLE_ENTITY->value;
         $status_message = 'validation error';
 
         // バリデーションエラーを格納.
-        $errorValues = [];
+        $errorValues    = [];
         /** @var PipeBase $pipe */
         foreach ($this->pipes as $pipe) {
             $validationErrors = $pipe->getValidationErrors();
@@ -55,7 +55,7 @@ class PipeService
             }
         }
 
-        $errors = json_encode($errorValues);
+        $errors         = json_encode($errorValues);
 
         return compact('status_code', 'errors', 'status_message');
     }

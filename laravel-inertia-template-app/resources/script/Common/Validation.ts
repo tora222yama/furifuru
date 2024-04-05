@@ -41,11 +41,27 @@ type RangeValidation = {
   max: number;
 };
 
+/*
+type DigitValidation = {
+  type: EValidationType;
+  level: EValidationLevel.Error;
+  max: number;
+};
+ */
+
 type LengthValidation = {
   type: EValidationType;
   level: EValidationLevel.Error;
   maxLength: number;
 };
+
+/*
+type MaxValidation = {
+  type: EValidationType;
+  level: EValidationLevel.Error;
+  max: number;
+};
+ */
 
 /**
  * バリデーション種別.
@@ -117,18 +133,10 @@ const errorMessage = (
       return `${columnName}は${
         (validation as LengthValidation).maxLength
       }字以内で入力してください`;
-    case E_VALIDATION_TYPE.INTEGER:
-      return `${columnName}は整数で入力してください`;
     case E_VALIDATION_TYPE.PHONE:
       return `${columnName}は10〜13字の半角数字及び"-"で入力してください`;
     case E_VALIDATION_TYPE.EMAIL:
       return `${columnName}はメールアドレス形式で入力してください`;
-    case E_VALIDATION_TYPE.ZIP_BEFORE:
-      return `${columnName}は3文字の半角数字で入力してください`;
-    case E_VALIDATION_TYPE.ZIP_AFTER:
-      return `${columnName}は4文字の半角数字で入力してください`;
-    case E_VALIDATION_TYPE.PERIOD:
-      return `${columnName}はピリオド(.)を利用できません`;
     default:
       return '';
   }
@@ -160,18 +168,10 @@ const validate = (value: string, validation: BaseValidationType): boolean => {
       );
     case E_VALIDATION_TYPE.LENGTH:
       return validateLength(value, (validation as LengthValidation).maxLength);
-    case E_VALIDATION_TYPE.INTEGER:
-      return validateInteger(value, false);
     case E_VALIDATION_TYPE.PHONE:
       return validatePhoneRegex(value, false);
     case E_VALIDATION_TYPE.EMAIL:
       return validateMailRegex(value, false);
-    case E_VALIDATION_TYPE.ZIP_BEFORE:
-      return validateZipBeforeRegex(value, false);
-    case E_VALIDATION_TYPE.ZIP_AFTER:
-      return validateZipAfterRegex(value, false);
-    case E_VALIDATION_TYPE.PERIOD:
-      return validatePeriod(value);
     default:
       throw new Error(`invalid validation.`);
   }
@@ -201,12 +201,6 @@ const validateNumberRange = (
 };
 const validateLength = (value: string, maxLength: number) =>
   count(value) <= maxLength;
-const validateInteger = (value: string, isRequired: boolean) => {
-  if (!isRequired && value === '') {
-    return true;
-  }
-  return /^[+-]?\d+$/.test(value);
-};
 
 const validatePhoneRegex = (value: string, isRequired: boolean) => {
   if (!isRequired && value === '') {
@@ -224,26 +218,6 @@ const validateMailRegex = (value: string, isRequired: boolean) => {
   return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/.test(
     value,
   );
-};
-
-const validateZipBeforeRegex = (value: string, isRequired: boolean) => {
-  if (!isRequired && value === '') {
-    return true;
-  }
-
-  return /^[0-9]{3}$/.test(value);
-};
-
-const validateZipAfterRegex = (value: string, isRequired: boolean) => {
-  if (!isRequired && value === '') {
-    return true;
-  }
-
-  return /^[0-9]{4}$/.test(value);
-};
-
-const validatePeriod = (value: string) => {
-  return !/\./.test(value);
 };
 
 /**

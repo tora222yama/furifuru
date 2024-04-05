@@ -16,7 +16,7 @@ class MakeTypescriptEnum extends Command
      *
      * @var string
      */
-    protected $signature = 'tool:MakeTypescriptEnum';
+    protected $signature   = 'tool:MakeTypescriptEnum';
 
     /**
      * The console command description.
@@ -60,14 +60,14 @@ class MakeTypescriptEnum extends Command
     /**
      * 出力無視対象.
      */
-    const IGNORE_LIST = [
+    const IGNORE_LIST      = [
         'EPipeKind',
     ];
 
     /**
      * 出力無視ディレクトリ.
      */
-    const IGNORE_DIR_LIST = [
+    const IGNORE_DIR_LIST  = [
     ];
 
     /**
@@ -77,29 +77,29 @@ class MakeTypescriptEnum extends Command
      */
     private function getPathPairList(): array
     {
-        $ret = [];
+        $ret        = [];
 
         // ディレクトリ直下から巡回取得
         $inputFiles = glob(app_path().'/Enum/E*.php');
         foreach ($inputFiles as $inputFile) {
-            $fileName = basename($inputFile, '.php');
+            $fileName             = basename($inputFile, '.php');
             if (in_array($fileName, self::IGNORE_LIST, true)) {
                 $this->info("${fileName}を除外");
 
                 continue;
             }
 
-            $pathPair = new EnumPathPair();
-            $pathPair->inputPath = $inputFile;
+            $pathPair             = new EnumPathPair();
+            $pathPair->inputPath  = $inputFile;
             $pathPair->outputPath = resource_path().'/script/Enum/Server/'.$fileName.'.ts';
-            $ret[] = $pathPair;
+            $ret[]                = $pathPair;
         }
 
         // サブディレクトリから巡回
         $this->info('サブディレクトリへの処理を実施');
-        $inputDirs = glob(app_path().'/Enum/*', GLOB_ONLYDIR);
+        $inputDirs  = glob(app_path().'/Enum/*', GLOB_ONLYDIR);
         foreach ($inputDirs as $inputDir) {
-            $lastDir = str_replace(app_path().'/Enum/', '', $inputDir);
+            $lastDir    = str_replace(app_path().'/Enum/', '', $inputDir);
             if (in_array($lastDir, self::IGNORE_DIR_LIST, true)) {
                 $this->info("${lastDir}を除外");
 
@@ -109,17 +109,17 @@ class MakeTypescriptEnum extends Command
             // 巡回取得.
             $inputFiles = glob($inputDir.'/E*.php');
             foreach ($inputFiles as $inputFile) {
-                $fileName = basename($inputFile, '.php');
+                $fileName             = basename($inputFile, '.php');
                 if (in_array($fileName, self::IGNORE_LIST, true)) {
                     $this->info("${fileName}を除外");
 
                     continue;
                 }
 
-                $pathPair = new EnumPathPair();
-                $pathPair->inputPath = $inputFile;
+                $pathPair             = new EnumPathPair();
+                $pathPair->inputPath  = $inputFile;
                 $pathPair->outputPath = resource_path()."/script/Enum/Server/${lastDir}/${fileName}.ts";
-                $ret[] = $pathPair;
+                $ret[]                = $pathPair;
             }
         }
 
@@ -169,7 +169,7 @@ class MakeTypescriptEnum extends Command
         $this->info(' >新規作成を開始:'.$pathPair->outputPath);
 
         $typescriptBlock = $pathPair->toTypescriptBlock();
-        $newCode = "\n\n// #ENUM_DEFINE_START#\n$typescriptBlock\n// #ENUM_DEFINE_END#";
+        $newCode         = "\n\n// #ENUM_DEFINE_START#\n$typescriptBlock\n// #ENUM_DEFINE_END#";
         file_put_contents($pathPair->outputPath, $newCode);
 
         $this->info(' >新規作成を終了:'.$pathPair->outputPath);
@@ -184,10 +184,10 @@ class MakeTypescriptEnum extends Command
     {
         $this->info('> 更新を開始:'.$pathPair->outputPath);
 
-        $existCode = file_get_contents($pathPair->outputPath);
+        $existCode       = file_get_contents($pathPair->outputPath);
 
         $typescriptBlock = $pathPair->toTypescriptBlock();
-        $newCode = preg_replace(
+        $newCode         = preg_replace(
             '/\/\/ #ENUM_DEFINE_START#.*\/\/ #ENUM_DEFINE_END#/s',
             "// #ENUM_DEFINE_START#\n$typescriptBlock\n// #ENUM_DEFINE_END#",
             $existCode

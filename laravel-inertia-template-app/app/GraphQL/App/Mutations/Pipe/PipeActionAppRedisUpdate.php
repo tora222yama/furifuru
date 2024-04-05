@@ -35,12 +35,12 @@ final class PipeActionAppRedisUpdate extends PipeBase
     public function validate(): void
     {
         // データ.
-        $data = [
+        $data      = [
             'store_value' => $this->storeValue,
         ];
 
         // ルール.
-        $rules = [
+        $rules     = [
             ...EValidationType::getRules(
                 'store_value',
                 collect([
@@ -50,7 +50,7 @@ final class PipeActionAppRedisUpdate extends PipeBase
         ];
 
         // エラー発生時のメッセージ.
-        $messages = [
+        $messages  = [
             ...EValidationType::getMessages(
                 'store_value',
                 'Redis保存値',

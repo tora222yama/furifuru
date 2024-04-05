@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 final class PipeActionAppInputFormUpdate extends PipeBase
 {
-    public string $inputSingleNumber = '';
+    public string $inputSingleNumber  = '';
 
     public string $inputSingleNotZero = '';
 
-    public string $inputSingleRange = '';
+    public string $inputSingleRange   = '';
 
-    public string $inputMulti = '';
+    public string $inputMulti         = '';
 
     /**
      * PipeActionAppInputFormUpdate constructor.
@@ -32,10 +32,10 @@ final class PipeActionAppInputFormUpdate extends PipeBase
      */
     public function parse(): void
     {
-        $this->inputSingleNumber = $this->getArgAsString('input_single_number');
+        $this->inputSingleNumber  = $this->getArgAsString('input_single_number');
         $this->inputSingleNotZero = $this->getArgAsString('input_single_not_zero');
-        $this->inputSingleRange = $this->getArgAsString('input_single_range');
-        $this->inputMulti = $this->getArgAsString('input_multi');
+        $this->inputSingleRange   = $this->getArgAsString('input_single_range');
+        $this->inputMulti         = $this->getArgAsString('input_multi');
     }
 
     /**
@@ -44,15 +44,15 @@ final class PipeActionAppInputFormUpdate extends PipeBase
     public function validate(): void
     {
         // データ.
-        $data = [
-            'input_single_number' => $this->inputSingleNumber,
+        $data      = [
+            'input_single_number'   => $this->inputSingleNumber,
             'input_single_not_zero' => $this->inputSingleNotZero,
-            'input_single_range' => $this->inputSingleRange,
-            'input_multi' => $this->inputMulti,
+            'input_single_range'    => $this->inputSingleRange,
+            'input_multi'           => $this->inputMulti,
         ];
 
         // ルール.
-        $rules = [
+        $rules     = [
 
             // Input(single)
             ...EValidationType::getRules(
@@ -81,12 +81,12 @@ final class PipeActionAppInputFormUpdate extends PipeBase
                 collect([
                     EValidationType::REQUIRED->pack(),
                     EValidationType::LENGTH->pack(100),
-                ])
+                ]),
             ),
         ];
 
         // エラー発生時のメッセージ.
-        $messages = [
+        $messages  = [
             // Input(single)
             ...EValidationType::getMessages(
                 'input_single_number',

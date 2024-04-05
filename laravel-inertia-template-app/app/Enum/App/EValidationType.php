@@ -16,24 +16,18 @@ use Illuminate\Support\Str;
  */
 enum EValidationType: string
 {
-    case INVALID = 'invalid'; // 未設定.
-    case REQUIRED = 'required'; // 空白を許可しない.
-    case NULLABLE = 'nullable'; // nullを許可する.
+    case INVALID           = 'invalid'; // 未設定.
+    case REQUIRED          = 'required'; // 空白を許可しない.
     case REQUIRED_NOT_ZERO = 'required_not_zero';   // 空白・0を許可しない.
-    case NUMBER = 'number'; // 数値のみ.
-    case NUMBER_HYPHEN = 'number_hyphen'; // 数値とハイフンのみ.
-    case NUMBER_PLUS = 'number_plus'; // 0以上の数値のみ.
-    case NUMBER_RANGE = 'number_range'; // min〜maxの範囲内のみ.
-    case MAX_DIGIT = 'max_digit'; // max桁以下の整数のみ.
-    case LENGTH = 'length'; // 文字数がmax以下.
-    case INTEGER = 'integer'; // 整数のみ.
-    case MAX = 'max'; // 数値の最大値.
-    case JSON = 'json'; // json文字列のみ.
-    case PHONE = 'phone'; // 電話番号.
-    case EMAIL = 'email'; // Eメール.
-    case ZIP_BEFORE = 'zip_before'; // 郵便番号 前半.
-    case ZIP_AFTER = 'zip_after'; // 郵便番号 後半.
-    case PERIOD = 'period'; // ピリオドの利用禁止.
+    case NUMBER            = 'number'; // 数値のみ.
+    case NUMBER_HYPHEN     = 'number_hyphen'; // 数値とハイフンのみ.
+    case NUMBER_PLUS       = 'number_plus'; // 0以上の数値のみ.
+    case NUMBER_MAX        = 'max'; // 数値の最大値.
+    case NUMBER_RANGE      = 'number_range'; // min〜maxの範囲内のみ.
+    case MAX_DIGIT         = 'max_digit'; // max桁以下の整数のみ.
+    case LENGTH            = 'length'; // 文字数がmax以下.
+    case PHONE             = 'phone'; // 電話番号.
+    case EMAIL             = 'email'; // Eメール.
 
     /**
      * バリデーション指定の情報を作成.
@@ -50,7 +44,7 @@ enum EValidationType: string
     {
         return match ($this) {
             self::LENGTH => true,
-            default => false,
+            default      => false,
         };
     }
 
@@ -114,12 +108,18 @@ enum EValidationType: string
         $value2 = $pack->value2;
 
         return match ($this) {
-            self::REQUIRED => collect(['required']),
-            self::NUMBER => collect(['numeric']),
+            self::REQUIRED          => collect(['required']),
             self::REQUIRED_NOT_ZERO => collect(['required', 'not_in:0']),
-            self::NUMBER_RANGE => collect(['numeric', "gte:$value1", "lte:$value2"]),
-            self::LENGTH => collect([new RuleMaxLength($value1)]),
-            default => collect(),
+            self::NUMBER            => collect(['numeric']),
+            self::NUMBER_HYPHEN     => collect(['regex:/^[0-9-]+$/']),
+            self::NUMBER_PLUS       => collect(['numeric', 'gte:0']),
+            self::NUMBER_MAX        => collect(['numeric', "max:$value1"]),
+            self::NUMBER_RANGE      => collect(['numeric', "gte:$value1", "lte:$value2"]),
+            self::MAX_DIGIT         => collect(["max_digits:$value1"]),
+            self::LENGTH            => collect([new RuleMaxLength($value1)]),
+            self::PHONE             => collect(['regex:/^[0-9-]{10,13}$/']),
+            self::EMAIL             => collect(["regex:/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/"]),
+            default                 => collect(),
         };
     }
 
@@ -139,9 +139,16 @@ enum EValidationType: string
         return match ($this) {
             self::REQUIRED,
             self::REQUIRED_NOT_ZERO => "${columnName}は必須項目です",
-            self::NUMBER => "${columnName}が数値ではありません",
-            self::NUMBER_RANGE => "${columnName}は[$value1-$value2]の範囲で入力してください",
-            default => '',
+            self::NUMBER            => "${columnName}が数値ではありません",
+            self::NUMBER_HYPHEN     => "${columnName}は数値とハイフンのみで入力してください",
+            self::NUMBER_PLUS       => "${columnName}が正の数値ではありません",
+            self::NUMBER_MAX        => "${columnName}は${value1}以下の整数で入力してください",
+            self::NUMBER_RANGE      => "${columnName}は[$value1-$value2]の範囲で入力してください",
+            self::MAX_DIGIT         => "${columnName}は${value1}桁以下の整数で入力してください",
+            // self::LENGTH => '', カスタムルール.
+            self::PHONE             => "${columnName}は10〜13字の半角数字及び\"-\"で入力してください",
+            self::EMAIL             => "${columnName}はメールアドレス形式で入力してください",
+            default                 => '',
         };
     }
 }

@@ -13,9 +13,9 @@ abstract class PipeBase
 {
     use GraphQLVariablesHelper;
 
-    protected EPipeKind $kind = EPipeKind::INVALID;
+    protected EPipeKind $kind     = EPipeKind::INVALID;
 
-    protected array $caller = [];
+    protected array $caller       = [];
 
     protected ?MessageBag $errors = null;
 

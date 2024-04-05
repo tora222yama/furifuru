@@ -15,7 +15,7 @@ class MvcValueController extends Controller
         return Inertia::render('IndexProvider/MvcValueIndex', [
             'numberValue' => 919,
             'stringValue' => 'This message was provided from PHP Controller.',
-            'arrayValue' => [
+            'arrayValue'  => [
                 11,
                 22,
                 '33',

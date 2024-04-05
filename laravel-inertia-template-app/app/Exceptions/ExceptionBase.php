@@ -11,7 +11,7 @@ class ExceptionBase extends Exception
     protected function getNotifyFilePath(): string
     {
         $filePath = str_replace(app_path(), '', $this->file);
-        $line = $this->line;
+        $line     = $this->line;
 
         return "$filePath:$line";
     }

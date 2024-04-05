@@ -8,7 +8,7 @@
         "prettier": "./node_modules/.bin/prettier --write 'resources/script/**/*.{ts,tsx}'",
         "eslint": "./node_modules/.bin/eslint --fix 'resources/script/**/*.{ts,tsx}'",
         "prepare": "cd .. && husky ./laravel-inertia-template-app/.husky",
-        "pint": "./vendor/bin/pint",
+        "pint": "cd .. && ./laravel-inertia-template-app/vendor/bin/pint",
         "lefthook": "lefthook run pre-commit",
         "gen": "graphql-codegen --config codegen.yml"
     },
