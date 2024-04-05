@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Test;
 
 use App\Facades\External\SlackService;
@@ -12,7 +14,7 @@ class SendSlack extends Command
      *
      * @var string
      */
-    protected $signature = 'test:SendSlack';
+    protected $signature   = 'test:SendSlack';
 
     /**
      * The console command description.

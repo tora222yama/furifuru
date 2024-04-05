@@ -20,7 +20,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default'      => env('LOG_CHANNEL', 'stack'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return [
 
     'deprecations' => [
         'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
-        'trace' => false,
+        'trace'   => false,
     ],
 
     /*
@@ -53,108 +53,108 @@ return [
     |
     */
 
-    'channels' => [
+    'channels'     => [
         // kibanaで参照するために1ログ1ライン(json)
-        'stack' => [
-            'driver' => 'single',
-            'tap' => [App\Logging\CustomizeFormatter::class],
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'info'),
+        'stack'           => [
+            'driver'     => 'single',
+            'tap'        => [App\Logging\CustomizeFormatter::class],
+            'path'       => storage_path('logs/laravel.log'),
+            'level'      => env('LOG_LEVEL', 'info'),
             'permission' => 0664,
         ],
 
         // [Local環境で利用]laravel標準のstack traceが出力される
         'multiline_stack' => [
-            'driver' => 'single',
-            'tap' => [App\Logging\LogDebugProcessor::class, App\Logging\LogDebugFormatter::class],
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'driver'     => 'single',
+            'tap'        => [App\Logging\LogDebugProcessor::class, App\Logging\LogDebugFormatter::class],
+            'path'       => storage_path('logs/laravel.log'),
+            'level'      => env('LOG_LEVEL', 'debug'),
             'permission' => 0664,
         ],
 
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+        'single'          => [
+            'driver'               => 'single',
+            'path'                 => storage_path('logs/laravel.log'),
+            'level'                => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
-        'daily' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 14,
+        'daily'           => [
+            'driver'               => 'daily',
+            'path'                 => storage_path('logs/laravel.log'),
+            'level'                => env('LOG_LEVEL', 'debug'),
+            'days'                 => 14,
             'replace_placeholders' => true,
         ],
 
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
-            'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
+        'slack'           => [
+            'driver'               => 'slack',
+            'url'                  => env('LOG_SLACK_WEBHOOK_URL'),
+            'username'             => 'Laravel Log',
+            'emoji'                => ':boom:',
+            'level'                => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
         ],
 
-        'papertrail' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
+        'papertrail'      => [
+            'driver'       => 'monolog',
+            'level'        => env('LOG_LEVEL', 'debug'),
+            'handler'      => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
             'handler_with' => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
+                'host'             => env('PAPERTRAIL_URL'),
+                'port'             => env('PAPERTRAIL_PORT'),
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
-            'processors' => [PsrLogMessageProcessor::class],
+            'processors'   => [PsrLogMessageProcessor::class],
         ],
 
-        'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with' => [
+        'stderr'          => [
+            'driver'     => 'monolog',
+            'level'      => env('LOG_LEVEL', 'debug'),
+            'handler'    => StreamHandler::class,
+            'formatter'  => env('LOG_STDERR_FORMATTER'),
+            'with'       => [
                 'stream' => 'php://stderr',
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'facility' => LOG_USER,
+        'syslog'          => [
+            'driver'               => 'syslog',
+            'level'                => env('LOG_LEVEL', 'debug'),
+            'facility'             => LOG_USER,
             'replace_placeholders' => true,
         ],
 
-        'errorlog' => [
-            'driver' => 'errorlog',
-            'level' => env('LOG_LEVEL', 'debug'),
+        'errorlog'        => [
+            'driver'               => 'errorlog',
+            'level'                => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
-        'null' => [
-            'driver' => 'monolog',
+        'null'            => [
+            'driver'  => 'monolog',
             'handler' => NullHandler::class,
         ],
 
-        'emergency' => [
+        'emergency'       => [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        'ecs' => [
-            'driver' => 'stack',
-            'tap' => [App\Logging\CustomizeFormatter::class],
-            'channels' => ['stdout'],
+        'ecs'             => [
+            'driver'            => 'stack',
+            'tap'               => [App\Logging\CustomizeFormatter::class],
+            'channels'          => ['stdout'],
             'ignore_exceptions' => false,
         ],
 
-        'stdout' => [
-            'driver' => 'monolog',
+        'stdout'          => [
+            'driver'  => 'monolog',
             'handler' => StreamHandler::class,
-            'with' => [
+            'with'    => [
                 'stream' => 'php://stdout',
             ],
-            'level' => 'debug',
+            'level'   => 'debug',
         ],
     ],
 

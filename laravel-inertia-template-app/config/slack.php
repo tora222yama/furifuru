@@ -11,5 +11,5 @@ return [
     'NoticeUrl' => env('SLACK_URL_NOTICE', ''),
 
     // error webhook url.
-    'ErrorUrl' => env('SLACK_URL_ERROR', ''),
+    'ErrorUrl'  => env('SLACK_URL_ERROR', ''),
 ];

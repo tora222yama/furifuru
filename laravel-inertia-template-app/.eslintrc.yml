@@ -76,4 +76,6 @@ rules:
   react/jsx-no-useless-fragment:
     - error
     - allowExpressions: true
-
+ignorePatterns:
+  - "resources/script/app.tsx"
+  - "resources/script/Graphql/codegen/graphql.tsx"

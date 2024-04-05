@@ -14,10 +14,10 @@ class SlackService
      */
     public function notifyNotice(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url = config('slack.NoticeUrl');
-        $env = config('app.env');
-        $fixedTitle = "[env]:`$env`";
-        $fixedFile = '';
+        $url         = config('slack.NoticeUrl');
+        $env         = config('app.env');
+        $fixedTitle  = "[env]:`$env`";
+        $fixedFile   = '';
 
         // タイトル指定があれば追加.
         if (isset($title)) {
@@ -48,10 +48,10 @@ EOF;
      */
     public function notifyError(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url = config('slack.ErrorUrl');
-        $env = config('app.env');
-        $fixedTitle = "[env]:`$env`";
-        $fixedFile = '';
+        $url         = config('slack.ErrorUrl');
+        $env         = config('app.env');
+        $fixedTitle  = "[env]:`$env`";
+        $fixedFile   = '';
 
         // タイトル指定があれば追加.
         if (isset($title)) {
@@ -91,24 +91,24 @@ EOF;
             return;
         }
 
-        $params = [
+        $params  = [
             // メッセージ本文.
             'text' => $message,
         ];
-        $params = array_merge($params, $appendParams);
+        $params  = array_merge($params, $appendParams);
 
         // 送信オプション.
         $options = [
-            CURLOPT_URL => $url,
-            CURLOPT_HTTPHEADER => ['Content-type: application/json'],
+            CURLOPT_URL            => $url,
+            CURLOPT_HTTPHEADER     => ['Content-type: application/json'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($params),
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($params),
         ];
 
         // curlで送信
-        $curl = curl_init();
+        $curl    = curl_init();
         curl_setopt_array($curl, $options);
         curl_exec($curl);
         curl_close($curl);

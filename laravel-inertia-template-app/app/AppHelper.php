@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 if (! function_exists('isLocal')) {
-
     /**
      * ローカル環境かどうか
      */
@@ -14,7 +13,6 @@ if (! function_exists('isLocal')) {
 }
 
 if (! function_exists('isDev')) {
-
     /**
      * Dev環境かどうか
      */
@@ -25,7 +23,6 @@ if (! function_exists('isDev')) {
 }
 
 if (! function_exists('isStg')) {
-
     /**
      * Stg環境かどうか
      */
@@ -36,7 +33,6 @@ if (! function_exists('isStg')) {
 }
 
 if (! function_exists('isPrd')) {
-
     /**
      * Prd環境かどうか.
      */
@@ -47,7 +43,6 @@ if (! function_exists('isPrd')) {
 }
 
 if (! function_exists('isTst')) {
-
     /**
      * Tst環境かどうか.
      */

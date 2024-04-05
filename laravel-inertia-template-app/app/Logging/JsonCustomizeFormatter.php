@@ -31,15 +31,15 @@ class JsonCustomizeFormatter extends JsonFormatter
         }
 
         $data = [
-            'class' => get_class($e),
+            'class'   => get_class($e),
             'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'file' => $e->getFile().':'.$e->getLine(),
+            'code'    => $e->getCode(),
+            'file'    => $e->getFile().':'.$e->getLine(),
         ];
 
         if ($this->includeStacktraces) {
             // traceを文字列で取得し、改行で区切った配列にする
-            $trace = $e->getTraceAsString();
+            $trace         = $e->getTraceAsString();
             $data['trace'] = explode("\n", $trace);
         }
 

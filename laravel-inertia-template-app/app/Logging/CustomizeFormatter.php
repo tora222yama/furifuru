@@ -26,9 +26,9 @@ class CustomizeFormatter
         // extraフィールドを追加
         $backtrace = new IntrospectionProcessor(Logger::DEBUG, ['Illuminate\\']);
         // extraフィールドにurl, ip, http_method, server, referrer追加
-        $wp = new WebProcessor();
+        $wp        = new WebProcessor();
         // extraフィールドにprocess_id追加
-        $pid = new ProcessIdProcessor();
+        $pid       = new ProcessIdProcessor();
 
         foreach ($logger->getHandlers() as $handler) {
             $handler->setFormatter($formatter);

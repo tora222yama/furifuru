@@ -4,6 +4,12 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [利用パッケージについて](document/PACKAGE.md)
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
 
+-　他作成が必要なドキュメント
+  - Enum利用・Enumの自動出力について
+  - GraphQL一式について
+  - バリデーションについて
+  - ページ作成ガイド
+
 # 環境構築
 
 ## 前提
@@ -66,7 +72,7 @@ docker exec -it template_web bash
 ### コミット動作テスト
 
 - テスト用ブランチを作成する
-- ```laravel-inertia-template-app/resources/js/Pages/FirstPage/FirstPage.tsx```に下記のような意味のないコードを追加
+- ```laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
 
 ```
 const i = 0; // 追加箇所
@@ -83,7 +89,7 @@ npm run lefthook
 - 表示されるエラーの例
 
 ```
-/var/www/html/laravel-inertia-template-app/resources/js/Pages/FirstPage/FirstPage.tsx
+/var/www/html/laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx
   10:9  error  'i' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 ✖ 1 problem (1 error, 0 warnings)

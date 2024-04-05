@@ -21,3 +21,7 @@ yarn-error.log
 /.idea
 /.vscode
 /bootstrap/ssr
+_lighthouse_ide_helper.php
+programmatic-types.graphql
+schema-directives.graphql
+

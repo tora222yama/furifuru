@@ -1,0 +1,20 @@
+# 入力値の受取.
+mutation ActionAppInputFormUpdate(
+  $input_single_number: String
+  $input_single_not_zero: String
+  $input_single_range: String
+  $input_single_email: String
+  $input_multi: String
+) {
+  ActionAppInputFormUpdate(
+    input_single_number: $input_single_number
+    input_single_not_zero: $input_single_not_zero
+    input_single_range: $input_single_range
+    input_single_email: $input_single_email
+    input_multi: $input_multi
+  ) {
+    status_code
+    status_message
+    errors
+  }
+}
