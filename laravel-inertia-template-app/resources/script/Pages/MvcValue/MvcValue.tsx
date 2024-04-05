@@ -56,4 +56,3 @@ export const MvcValue: React.FC<IPros> = () => {
     </Page>
   );
 };
-export default MvcValue;

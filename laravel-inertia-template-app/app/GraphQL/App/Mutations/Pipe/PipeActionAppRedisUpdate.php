@@ -44,7 +44,7 @@ final class PipeActionAppRedisUpdate extends PipeBase
             ...EValidationType::getRules(
                 'store_value',
                 collect([
-                    EValidationType::REQUIRED,
+                    EValidationType::REQUIRED->pack(),
                 ])
             ),
         ];
@@ -55,7 +55,7 @@ final class PipeActionAppRedisUpdate extends PipeBase
                 'store_value',
                 'Redis保存値',
                 collect([
-                    EValidationType::REQUIRED,
+                    EValidationType::REQUIRED->pack(),
                 ])
             ),
         ];
