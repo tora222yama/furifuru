@@ -37,6 +37,16 @@ IDE上で各PHPコードの自動補完を行うため下記のファイルを�
 - ```_ide_helper.php```
 - ```_ide_helper_models.php```
 
+### nuwave/lighthouse
+
+graphql利用時にのみ利用。
+
+Laravel上でgraphqlを利用するために使う.
+
+設定ファイルは```config/lighthouse.php```
+
+IDE用設定ファイルは```_lighthouse_ide_helper.php```
+
 ## npm(package.json)
 
 ### Vite
@@ -111,4 +121,22 @@ UIフレームワークのため他を選んでも問題ない
 を、修正したコードに対して実行する
 
 コミット時のコマンド指定は```lefthook.yml```
+
+### graphql-codegen
+
+graphql利用時にのみ利用。
+
+スキーマ駆動開発を行う際に、宣言したスキーマからTypeScript側の関数を自動出力する
+
+出力されるファイルはApolloClient向けのコード
+
+- スキーマ宣言
+  - ```app/grapqh```以下
+- 生成ルール
+  - ```codegen.yml```
+- 生成ファイル
+  - ```resources/script/Graphql/codegen/graphql.tsx```
+- その他IDE用関連ファイル
+  - programmatic-type.graphql
+  - schema-directives.graphql
 
