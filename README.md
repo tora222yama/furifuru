@@ -3,7 +3,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 - [利用パッケージについて](document/PACKAGE.md)
 - [Laravel/Inertiaの基本的な導線とページ作成ガイド](./document/PAGE_CREATION_GUIDE.md)
-- 推奨するEnumの利用・自動出力について
+- [推奨するEnumの利用・自動出力について](./document/ENUM_EXPORT.md)
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
 - GraphQLの利用方法について
 - バリデーション（フロント/サーバー）について
