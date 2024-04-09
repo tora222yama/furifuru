@@ -5,7 +5,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [Laravel/Inertiaの基本的な導線とページ作成ガイド](./document/PAGE_CREATION_GUIDE.md)
 - [推奨するEnumの利用・自動出力について](./document/ENUM_EXPORT.md)
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
-- GraphQLの利用方法について
+- [GraphQLの利用方法について](./document/GRAPHQL.md)
 - [バリデーション（フロント/サーバー）について](./document/VALIDATION.md)
 
 # 環境構築
@@ -16,6 +16,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 - Docker Desktop for Windows が利用可能になっている
 - clone先にWSL2+Ubuntu環境が構築済み
+  - 参考）[Ubuntu22.04のセットアップ](./document/WSL2.md)
 - hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
 
 ### Mac
