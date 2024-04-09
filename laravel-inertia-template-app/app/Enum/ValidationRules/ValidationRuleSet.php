@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 /**
  * バリデーションルール指定情報.
  */
-final class ValidationPack
+final class ValidationRuleSet
 {
     public EValidationType $type = EValidationType::INVALID;
 

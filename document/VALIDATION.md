@@ -51,45 +51,33 @@
   - validate()は値をparseするPipeクラスに配置
   - 共通処理は```app/Enum/App/EValidationType.php```に記載
   - バリデーションを行いたいデータに対して、それぞれ後述例のようにタグとのペアで記載する
-    - 対象データ
-    - ルール
+    - タグ
     - カラム名
-  - ```$validator = Validator::make($data, $rules, $messages);```で実施
+    - 値
+    - ルールセット
+  - ```$packer->makeValidator()```で実施
+
+※２つの入力値にバリデーションをそれぞれ実施する場合の例）
 
 ```
-        // データ.
-        $data      = [
-            'input_single_number'   => $this->inputSingleNumber,
-        ];
-```
-    
-```
-        // ルール.
-        $rules     = [
-            // Input(single)
-            ...EValidationType::getRules(
-                'input_single_number',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::NUMBER->pack(),
-                ])
-            ),
-        ]
-```
-
-```
-        // エラー発生時のメッセージ.
-        $messages  = [
-            // Input(single)
-            ...EValidationType::getMessages(
-                'input_single_number',
-                'input(single:整数)',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::NUMBER->pack(),
-                ])
-            ),
-        ]
+        $packer = new ValidationPacker();
+        $packer->addValidation(
+            'input_single_number',
+            'input(single:整数)',
+            $this->inputSingleNumber,
+            collect([
+                EValidationType::REQUIRED->ruleSet(),
+                EValidationType::NUMBER->ruleSet(),
+            ])
+        );
+        $packer->addValidation(
+            'input_single_not_zero',
+            'input(single:非0)',
+            $this->inputSingleNotZero,
+            collect([
+                EValidationType::REQUIRED_NOT_ZERO->ruleSet(),
+            ])
+        );
 ```
 
 実施したバリデーション結果はJson形式となり、そのままフロントで表示する事ができない

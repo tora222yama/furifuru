@@ -6,8 +6,8 @@ namespace App\GraphQL\App\Mutations\Pipe;
 
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
+use App\Enum\ValidationRules\ValidationPacker;
 use App\GraphQL\PipeBase;
-use Illuminate\Support\Facades\Validator;
 
 final class PipeActionAppInputFormUpdate extends PipeBase
 {
@@ -46,102 +46,56 @@ final class PipeActionAppInputFormUpdate extends PipeBase
      */
     public function validate(): void
     {
-        // データ.
-        $data      = [
-            'input_single_number'   => $this->inputSingleNumber,
-            'input_single_not_zero' => $this->inputSingleNotZero,
-            'input_single_range'    => $this->inputSingleRange,
-            'input_single_email'    => $this->inputSingleEmail,
-            'input_multi'           => $this->inputMulti,
-        ];
+        $packer    = new ValidationPacker();
 
-        // ルール.
-        $rules     = [
+        // Input(single).
+        $packer->addValidation(
+            'input_single_number',
+            'input(single:整数)',
+            $this->inputSingleNumber,
+            collect([
+                EValidationType::REQUIRED->ruleSet(),
+                EValidationType::NUMBER->ruleSet(),
+            ])
+        );
+        $packer->addValidation(
+            'input_single_not_zero',
+            'input(single:非0)',
+            $this->inputSingleNotZero,
+            collect([
+                EValidationType::REQUIRED_NOT_ZERO->ruleSet(),
+            ])
+        );
+        $packer->addValidation(
+            'input_single_range',
+            'input(single:範囲)',
+            $this->inputSingleRange,
+            collect([
+                EValidationType::NUMBER_RANGE->ruleSet(20, 50),
+            ])
+        );
+        $packer->addValidation(
+            'input_single_email',
+            'input(email)',
+            $this->inputSingleEmail,
+            collect([
+                EValidationType::EMAIL->ruleSet(),
+            ])
+        );
 
-            // Input(single)
-            ...EValidationType::getRules(
-                'input_single_number',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::NUMBER->pack(),
-                ])
-            ),
-            ...EValidationType::getRules(
-                'input_single_not_zero',
-                collect([
-                    EValidationType::REQUIRED_NOT_ZERO->pack(),
-                ])
-            ),
-            ...EValidationType::getRules(
-                'input_single_range',
-                collect([
-                    EValidationType::NUMBER_RANGE->pack(20, 50),
-                ])
-            ),
-            ...EValidationType::getRules(
-                'input_single_email',
-                collect([
-                    EValidationType::EMAIL->pack(),
-                ])
-            ),
-
-            // Input(multi)
-            ...EValidationType::getRules(
-                'input_multi',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::LENGTH->pack(100),
-                ]),
-            ),
-        ];
-
-        // エラー発生時のメッセージ.
-        $messages  = [
-            // Input(single)
-            ...EValidationType::getMessages(
-                'input_single_number',
-                'input(single:整数)',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::NUMBER->pack(),
-                ])
-            ),
-            ...EValidationType::getMessages(
-                'input_single_not_zero',
-                'input(single:非0)',
-                collect([
-                    EValidationType::REQUIRED_NOT_ZERO->pack(),
-                ])
-            ),
-            ...EValidationType::getMessages(
-                'input_single_range',
-                'input(single:範囲)',
-                collect([
-                    EValidationType::NUMBER_RANGE->pack(20, 50),
-                ])
-            ),
-            ...EValidationType::getMessages(
-                'input_single_email',
-                'input(email)',
-                collect([
-                    EValidationType::EMAIL->pack(),
-                ])
-            ),
-
-            // Input(multi)
-            ...EValidationType::getMessages(
-                'input_multi',
-                'input(multi)',
-                collect([
-                    EValidationType::REQUIRED->pack(),
-                    EValidationType::LENGTH->pack(100),
-                ])
-            ),
-        ];
+        // Input(multi)
+        $packer->addValidation(
+            'input_multi',
+            'input(multi)',
+            $this->inputMulti,
+            collect([
+                EValidationType::REQUIRED->ruleSet(),
+                EValidationType::LENGTH->ruleSet(100),
+            ]),
+        );
 
         // バリデーションの実施.
-        $validator = Validator::make($data, $rules, $messages);
-
+        $validator = $packer->makeValidator();
         if ($validator->fails()) {
             $this->errors = $validator->errors();
         }
