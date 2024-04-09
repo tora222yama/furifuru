@@ -4,9 +4,9 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { SlackLog } from '@/script/Pages/SlackLog/SlackLog';
 
 interface IProps extends IPropsBase {}
-export const SlackLogIndex: React.FC<IProps> = () => {
+export const SlackLogIndex: React.FC<IProps> = ({ csrfToken }) => {
   return (
-    <IndexProvider>
+    <IndexProvider csrfToken={csrfToken}>
       <SlackLog />
     </IndexProvider>
   );

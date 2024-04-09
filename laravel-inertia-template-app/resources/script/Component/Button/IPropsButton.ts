@@ -4,6 +4,7 @@ import { EButtonType } from '@/script/Component/Button/EButtonType';
 
 // ButtonPropsから利用するキー.
 type UseButtonPropsKeys =
+  | 'type'
   | 'disabled'
   | 'startIcon'
   | 'endIcon'

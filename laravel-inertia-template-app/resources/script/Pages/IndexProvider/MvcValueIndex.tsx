@@ -7,17 +7,17 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 /**
  * コントローラーから受取保持する値.
  */
-type FirstPageContext = {
+type MvcValueContext = {
   numberValue: number;
   stringValue: string;
   arrayValue: number[];
 };
-export const context = React.createContext<FirstPageContext>({
+export const context = React.createContext<MvcValueContext>({
   numberValue: 0,
   stringValue: '',
   arrayValue: [],
 });
-export const useFirstPageContext = (): FirstPageContext => useContext(context);
+export const useMvcValueContext = (): MvcValueContext => useContext(context);
 
 /**
  * コントローラーから受け取るprops.
@@ -28,6 +28,7 @@ interface IPros extends IPropsBase {
   arrayValue: number[];
 }
 export const MvcValueIndex: React.FC<IPros> = ({
+  csrfToken,
   numberValue,
   stringValue,
   arrayValue,
@@ -35,7 +36,7 @@ export const MvcValueIndex: React.FC<IPros> = ({
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const providerValue: FirstPageContext = useMemo(
+  const providerValue: MvcValueContext = useMemo(
     () => ({
       numberValue,
       stringValue,
@@ -46,7 +47,7 @@ export const MvcValueIndex: React.FC<IPros> = ({
 
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider>
+      <IndexProvider csrfToken={csrfToken}>
         <MvcValue />
       </IndexProvider>
     </context.Provider>

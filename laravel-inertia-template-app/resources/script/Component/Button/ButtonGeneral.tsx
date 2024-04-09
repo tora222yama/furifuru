@@ -18,6 +18,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
   sx,
   id,
   buttonType = E_BUTTON_TYPE.PRIMARY,
+  type,
   disabled,
   label,
   startIcon,
@@ -54,6 +55,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
           backgroundColor: getButtonColorDisabled(buttonType),
         },
       }}
+      type={type}
       disabled={disabled}
       startIcon={startIcon}
       endIcon={endIcon}

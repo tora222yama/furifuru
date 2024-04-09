@@ -23,11 +23,11 @@
   - 認証とguard領域の作成
   - PHP側ユニットテスト
   - ~~GraphQLのfetchとmutation１件づつ~~
-  - CSRF設定
+  - ~~CSRF設定~~
   - OpenSearch登録・検索・インデックス管理
   - ~~Redis登録/取得~~
   - バッチ管理
-  - Post通信
+  - ~~Post通信~~
   - Selectなどのコンポーネント
   - PHP側のバリデーションをもう一段階整理する
   - fetchの場合のargumentの例がない

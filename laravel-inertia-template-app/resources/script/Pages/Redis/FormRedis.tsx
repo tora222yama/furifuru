@@ -16,7 +16,6 @@ interface IProps extends IPropsBase {
   validation: IFormRedisValidationResult;
   handleUpdate: (newValues: Partial<IFormRedis>) => void;
   handleSaveGraphQL: () => void;
-  handleSavePost: () => void;
 }
 export const FormRedis: React.FC<IProps> = ({
   sx,
@@ -25,7 +24,6 @@ export const FormRedis: React.FC<IProps> = ({
   validation,
   handleUpdate,
   handleSaveGraphQL,
-  handleSavePost,
 }) => {
   return (
     <FormControl
@@ -48,15 +46,6 @@ export const FormRedis: React.FC<IProps> = ({
         onClick={handleSaveGraphQL}
         label="GraphQLで保存"
         disabled={loading}
-      />
-      <ButtonGeneral
-        sx={{
-          marginTop: '10px',
-        }}
-        buttonType={E_BUTTON_TYPE.PRIMARY}
-        onClick={handleSavePost}
-        label="Post通信で保存"
-        disabled
       />
     </FormControl>
   );

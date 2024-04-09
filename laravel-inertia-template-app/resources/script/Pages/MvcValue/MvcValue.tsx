@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Button, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { useFirstPageContext } from '@/script/Pages/IndexProvider/MvcValueIndex';
+import { useMvcValueContext } from '@/script/Pages/IndexProvider/MvcValueIndex';
 import { Page } from '@/script/Pages/Page';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
@@ -9,7 +9,7 @@ import { Log } from '@/script/Common/Log';
 
 interface IPros extends IPropsBase {}
 export const MvcValue: React.FC<IPros> = () => {
-  const { numberValue, stringValue, arrayValue } = useFirstPageContext();
+  const { numberValue, stringValue, arrayValue } = useMvcValueContext();
 
   const handleClick = () => {
     Log.info('クリックされた');

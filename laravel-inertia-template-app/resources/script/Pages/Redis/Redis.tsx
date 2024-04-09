@@ -18,6 +18,7 @@ import {
 } from '@/script/Pages/Redis/FormRedisValidation';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
+import { FormRedisPost } from '@/script/Pages/Redis/FormRedisPost';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
@@ -138,8 +139,8 @@ export const Redis: React.FC<IProps> = () => {
           validation={validation}
           handleUpdate={handleUpdate}
           handleSaveGraphQL={handleClickSave}
-          handleSavePost={handleClickSave}
         />
+        <FormRedisPost loading={loading} formRedis={formRedis} />
       </Paper>
     </Page>
   );

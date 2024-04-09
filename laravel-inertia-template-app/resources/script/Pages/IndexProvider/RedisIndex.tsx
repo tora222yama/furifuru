@@ -4,9 +4,9 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { Redis } from '@/script/Pages/Redis/Redis';
 
 interface IProps extends IPropsBase {}
-export const RedisIndex: React.FC<IProps> = () => {
+export const RedisIndex: React.FC<IProps> = ({ csrfToken }) => {
   return (
-    <IndexProvider>
+    <IndexProvider csrfToken={csrfToken}>
       <Redis />
     </IndexProvider>
   );
