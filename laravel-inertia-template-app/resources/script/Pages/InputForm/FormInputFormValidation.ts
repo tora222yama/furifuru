@@ -50,7 +50,7 @@ export const validateAll = (
   formInputForm: IFormInputForm,
 ): IFormInputFormValidationResult => {
   const results = {
-    // input(single:整数.
+    // input(single:整数).
     inputSingleNumber: validateMulti(
       formInputForm.inputSingleNumber,
       'input(single:整数)',
