@@ -18,6 +18,7 @@ enum EPages: string
     case REDIS_POST_RESULT = 'redis_post_result'; // RedisをPostで更新.
     case SLACK_LOG         = 'slack_log'; // Slackログ通知.
     case HEALTH_CHECK      = 'health_check'; // ヘルスチェック.
+    case NOT_FOUND         = 'not_found'; // ページが見つからない.
 
     /**
      * routing時のinvokeパスの取得.
@@ -25,13 +26,15 @@ enum EPages: string
     public function getInvokePath(): string
     {
         return match ($this) {
+            self::INVALID           => '',
+            self::DASHBOARD         => '\App\Http\Controllers\Pages\DashboardController@invoke',
             self::MVC_VALUE         => '\App\Http\Controllers\Pages\MvcValueController@invoke',
             self::INPUT_FORM        => '\App\Http\Controllers\Pages\InputFormController@invoke',
             self::REDIS             => '\App\Http\Controllers\Pages\RedisController@invoke',
             self::REDIS_POST_RESULT => '\App\Http\Controllers\Pages\RedisPostResultController@invoke',
             self::SLACK_LOG         => '\App\Http\Controllers\Pages\SlackLogController@invoke',
             self::HEALTH_CHECK      => '\App\Http\Controllers\Pages\HealthCheckController@invoke',
-            default                 => '\App\Http\Controllers\Pages\DashboardController@invoke'
+            self::NOT_FOUND         => '\App\Http\Controllers\Pages\NotFoundController@invoke',
         };
     }
 }

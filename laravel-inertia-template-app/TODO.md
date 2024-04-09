@@ -17,7 +17,7 @@
   - ~~何かしらのEnum利用~~
   - ~~TypeScript側への同期処理~~
   - Exceptionの基底処理、DBのマスク
-  - Fallback時の処理
+  - ~~Fallback時の処理~~
   - ~~UIフレームワーク上でのレスポンシブルのコンポーネント~~
 - あると良い
   - 認証とguard領域の作成

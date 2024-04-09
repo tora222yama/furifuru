@@ -16,6 +16,7 @@ export const RedisPostResult: React.FC<IProps> = () => {
       <TypoH1>{getPagesName(E_PAGES.REDIS_POST_RESULT)}</TypoH1>
       <Paper
         sx={{
+          marginTop: '20px',
           padding: '10px',
         }}
       >
