@@ -20,9 +20,9 @@ class TestCaseSeeder extends Seeder
     {
         $this->command->info('******* initialize local/test data. ********');
 
-        // localまたはtst環境でなければ初期化実行不可.
-        if (! (isLocal() || isTst())) {
-            $this->command->info('!!! caution local/test environment only. !!!');
+        // local/tst/dev環境でなければ初期化実行不可.
+        if (! (isLocal() || isTst() || isDev())) {
+            $this->command->info('!!! caution local/tst/dev environment only. !!!');
 
             return;
         }
