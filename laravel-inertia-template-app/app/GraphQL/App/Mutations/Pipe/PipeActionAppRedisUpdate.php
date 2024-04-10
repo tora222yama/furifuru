@@ -6,15 +6,15 @@ namespace App\GraphQL\App\Mutations\Pipe;
 
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
+use App\Enum\ValidationRules\ValidationPacker;
 use App\GraphQL\PipeBase;
-use Illuminate\Support\Facades\Validator;
 
 final class PipeActionAppRedisUpdate extends PipeBase
 {
     public string $storeValue = '';
 
     /**
-     * PipeActionAppRedisUpdate constructor.
+     * constructor.
      */
     public function __construct(array $args)
     {
@@ -34,35 +34,19 @@ final class PipeActionAppRedisUpdate extends PipeBase
      */
     public function validate(): void
     {
-        // データ.
-        $data      = [
-            'store_value' => $this->storeValue,
-        ];
+        $packer    = new ValidationPacker();
 
-        // ルール.
-        $rules     = [
-            ...EValidationType::getRules(
-                'store_value',
-                collect([
-                    EValidationType::REQUIRED->ruleSet(),
-                ])
-            ),
-        ];
-
-        // エラー発生時のメッセージ.
-        $messages  = [
-            ...EValidationType::getMessages(
-                'store_value',
-                'Redis保存値',
-                collect([
-                    EValidationType::REQUIRED->ruleSet(),
-                ])
-            ),
-        ];
+        $packer->addValidation(
+            'store_value',
+            'Redis保存値',
+            $this->storeValue,
+            collect([
+                EValidationType::REQUIRED->ruleSet(),
+            ])
+        );
 
         // バリデーションの実施.
-        $validator = Validator::make($data, $rules, $messages);
-
+        $validator = $packer->makeValidator();
         if ($validator->fails()) {
             $this->errors = $validator->errors();
         }

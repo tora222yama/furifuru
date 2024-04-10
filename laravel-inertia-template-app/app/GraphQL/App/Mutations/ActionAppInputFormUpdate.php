@@ -15,7 +15,9 @@ final class ActionAppInputFormUpdate
         sleep(1);
 
         // パイプ作成.
-        PipeService::insertNewPipe(new PipeActionAppInputFormUpdate($args));
+        PipeService::insertNewPipe(
+            new PipeActionAppInputFormUpdate($args)
+        );
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {

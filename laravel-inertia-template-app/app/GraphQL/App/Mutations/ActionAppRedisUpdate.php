@@ -6,7 +6,7 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
 use App\GraphQL\App\Mutations\Pipe\PipeActionAppRedisUpdate;
-use App\GraphQL\App\Queries\RedisQuery;
+use App\GraphQL\App\Queries\AppRedisQuery;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -22,7 +22,9 @@ final class ActionAppRedisUpdate
 
         // パイプ作成.
         /** @var PipeActionAppRedisUpdate $pipe */
-        $pipe = PipeService::insertNewPipe(new PipeActionAppRedisUpdate($args));
+        $pipe = PipeService::insertNewPipe(
+            new PipeActionAppRedisUpdate($args)
+        );
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
@@ -30,7 +32,7 @@ final class ActionAppRedisUpdate
         }
 
         // キャッシュに値を保存.
-        Cache::set(RedisQuery::REDIS_QUERY_STORE_KEY, $pipe->storeValue, 3600);
+        Cache::set(AppRedisQuery::REDIS_QUERY_STORE_KEY, $pipe->storeValue, 3600);
 
         return [
             'status_code'    => 200,

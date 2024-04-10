@@ -12,6 +12,7 @@ export const E_PAGES = {
   REDIS_POST_RESULT: 'redis_post_result', // RedisをPostで更新.
   SLACK_LOG: 'slack_log', // Slackログ通知.
   HEALTH_CHECK: 'health_check', // ヘルスチェック.
+  NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
 // #ENUM_DEFINE_END#

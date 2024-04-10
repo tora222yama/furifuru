@@ -46,7 +46,9 @@ export const Redis: React.FC<IProps> = () => {
    * Redisの値を取得.
    */
   const handleClickLoad = () => {
-    lazyFetch().then(res => {
+    lazyFetch({
+      sampleArgument: 'テスト引数-例えばIDとかを指定する',
+    }).then(res => {
       setCurrentValue(res);
     });
   };

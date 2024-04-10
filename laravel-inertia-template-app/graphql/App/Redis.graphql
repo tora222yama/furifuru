@@ -1,7 +1,10 @@
 # App/Redis.graphql
 
 extend type Query {
-  AppRedis: AppRedis! @field(resolver: "App\\GraphQL\\App\\Queries\\RedisQuery")
+  # Redisから値を取得.
+  AppRedis(
+    sample_argument: String!
+  ): AppRedis! @field(resolver: "App\\GraphQL\\App\\Queries\\AppRedisQuery")
 }
 
 extend type Mutation {

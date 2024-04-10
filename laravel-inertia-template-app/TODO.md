@@ -1,8 +1,8 @@
 # テンプレートのToDo
 
 - 必須
-  - 仮データのmigration/seeder
-  - 対応するmodelとhelper
+  - ~~仮データのmigration/seeder~~
+  - ~~対応するmodelとhelper~~
   - SPA版のサンプル(Inertia利用を行った場合の変更点を吸収する)
 - ほぼ必須
   - ~~各環境の.envの仮ファイルと、環境判定関数の作成~~
@@ -29,5 +29,5 @@
   - バッチ管理
   - ~~Post通信~~
   - Selectなどのコンポーネント
-  - PHP側のバリデーションをもう一段階整理する
+  - ~~PHP側のバリデーションをもう一段階整理する~~
   - fetchの場合のargumentの例がない

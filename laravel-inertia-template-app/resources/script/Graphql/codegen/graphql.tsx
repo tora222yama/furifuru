@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -64,6 +63,11 @@ export type Query = {
   user?: Maybe<User>;
   /** List multiple users. */
   users: Array<User>;
+};
+
+/** Indicates what fields are available at the top level of a query operation. */
+export type QueryAppRedisArgs = {
+  sample_argument: Scalars['String']['input'];
 };
 
 /** Indicates what fields are available at the top level of a query operation. */
@@ -133,7 +137,9 @@ export type ActionAppRedisUpdateMutation = {
   } | null;
 };
 
-export type AppRedisQueryVariables = Exact<{ [key: string]: never }>;
+export type AppRedisQueryVariables = Exact<{
+  sample_argument: Scalars['String']['input'];
+}>;
 
 export type AppRedisQuery = {
   __typename?: 'Query';
@@ -262,8 +268,8 @@ export type ActionAppRedisUpdateMutationOptions = Apollo.BaseMutationOptions<
   ActionAppRedisUpdateMutationVariables
 >;
 export const AppRedisDocument = gql`
-  query AppRedis {
-    AppRedis {
+  query AppRedis($sample_argument: String!) {
+    AppRedis(sample_argument: $sample_argument) {
       store_value
     }
   }
@@ -281,11 +287,13 @@ export const AppRedisDocument = gql`
  * @example
  * const { data, loading, error } = useAppRedisQuery({
  *   variables: {
+ *      sample_argument: // value for 'sample_argument'
  *   },
  * });
  */
 export function useAppRedisQuery(
-  baseOptions?: Apollo.QueryHookOptions<AppRedisQuery, AppRedisQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<AppRedisQuery, AppRedisQueryVariables> &
+    ({ variables: AppRedisQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<AppRedisQuery, AppRedisQueryVariables>(

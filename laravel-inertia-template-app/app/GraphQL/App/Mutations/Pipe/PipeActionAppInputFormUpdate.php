@@ -22,7 +22,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
     public string $inputMulti         = '';
 
     /**
-     * PipeActionAppInputFormUpdate constructor.
+     * constructor.
      */
     public function __construct(array $args)
     {
