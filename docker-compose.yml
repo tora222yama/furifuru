@@ -41,6 +41,7 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - template_db_volume:/var/lib/mysql
+      - ./laravel-inertia-template-app/docker/db/conf.d:/etc/mysql/conf.d
     networks:
       - template_local
 

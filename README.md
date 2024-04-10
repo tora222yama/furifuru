@@ -76,7 +76,12 @@ docker exec -it template_web bash
 
 ### 初期データ投入
 
-※Seederを追加したら追記する
+seederを利用してテストデータを投入する
+
+```
+docker exec -it scat2_web bash
+> php artisan db:seed --class=TestCaseSeeder
+```
 
 ### コミット動作テスト
 
