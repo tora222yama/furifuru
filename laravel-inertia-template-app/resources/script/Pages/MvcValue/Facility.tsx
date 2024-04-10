@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { ITrnFacility } from '@/script/Models/App/TrnFacility';
+import { IAppTrnFacility } from '@/script/Models/App/TrnFacilityList';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 
 interface IPros extends IPropsBase {
-  trnFacility: ITrnFacility;
+  trnFacility: IAppTrnFacility;
 }
 export const Facility: React.FC<IPros> = ({ sx, trnFacility }) => {
   return (
@@ -26,7 +26,9 @@ export const Facility: React.FC<IPros> = ({ sx, trnFacility }) => {
           padding: '5px',
         }}
       >
-        <TypoText noWrap={false}>{trnFacility.explain}</TypoText>
+        <TypoText sx={{ whiteSpace: 'pre-wrap' }}>
+          {trnFacility.explain}
+        </TypoText>
       </Box>
     </Paper>
   );

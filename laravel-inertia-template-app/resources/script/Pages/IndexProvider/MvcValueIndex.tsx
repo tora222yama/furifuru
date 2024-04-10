@@ -3,7 +3,10 @@ import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { MvcValue } from '@/script/Pages/MvcValue/MvcValue';
 import { IndexProvider } from '@/script/Provider/IndexProvider';
-import { ITrnFacility, parsePayload } from '@/script/Models/App/TrnFacility';
+import {
+  AppTrnFacilityList,
+  parsePayload,
+} from '@/script/Models/App/TrnFacilityList';
 
 /**
  * コントローラーから受取保持する値.
@@ -13,14 +16,14 @@ type MvcValueContext = {
   stringValue: string;
   arrayValue: number[];
 
-  trnFacilityList: ITrnFacility[];
+  trnFacilityList: AppTrnFacilityList;
 };
 export const context = React.createContext<MvcValueContext>({
   numberValue: 0,
   stringValue: '',
   arrayValue: [],
 
-  trnFacilityList: [],
+  trnFacilityList: new AppTrnFacilityList(),
 });
 export const useMvcValueContext = (): MvcValueContext => useContext(context);
 
@@ -51,7 +54,9 @@ export const MvcValueIndex: React.FC<IPros> = ({
       stringValue,
       arrayValue,
 
-      trnFacilityList: trnFacilityList.map(v => parsePayload(v)),
+      trnFacilityList: new AppTrnFacilityList(
+        trnFacilityList.map(v => parsePayload(v)),
+      ),
     }),
     [numberValue, stringValue, arrayValue, trnFacilityList],
   );

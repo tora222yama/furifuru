@@ -75,7 +75,7 @@ export const MvcValue: React.FC<IPros> = () => {
           gap: '5px',
         }}
       >
-        {trnFacilityList.map(trnFacility => (
+        {trnFacilityList.list().map(trnFacility => (
           <Facility
             sx={{
               width: 'calc(50% - 5px)',
