@@ -52,7 +52,9 @@ docker exec -it template_web bash
 > composer install
 > npm ci
 
-※データの初期化を追加したらここに記載する
+# webコンテナでデータベース初期化
+> php artisan migrate
+> (php artisan migrate:refresh // 再初期化する場合)
 
 # precommitの設定（Ubuntu上など、ターミナル側のscat2_app直下で実施する）
 (> exit)
@@ -67,6 +69,14 @@ docker exec -it template_web bash
 > npm run build
 ※念のため画面が表示されるかチェック http://localhost:9190/first_page
 ```
+
+### minio(ローカル向けS3)の設定
+
+※コンテナ追加したら追記する
+
+### 初期データ投入
+
+※Seederを追加したら追記する
 
 ### コミット動作テスト
 
