@@ -8,7 +8,6 @@ use App\GraphQL\App\Queries\AppRedisQuery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Inertia\Inertia;
 use Inertia\Response;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -25,7 +24,7 @@ class RedisPostResultController extends Controller
         // キャッシュに値を保存.
         Cache::set(AppRedisQuery::REDIS_QUERY_STORE_KEY, $storeValue, 3600);
 
-        return Inertia::render('IndexProvider/RedisPostResultIndex', [
+        return $this->render('IndexProvider/RedisPostResultIndex', [
             'storeValue' => $storeValue,
         ]);
     }

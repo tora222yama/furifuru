@@ -1,0 +1,14 @@
+# ログイン実施.
+mutation ActionAppLoginFormLogin(
+  $email: String
+  $password: String
+) {
+  ActionAppLoginFormLogin(
+    email: $email
+    password: $password
+  ) {
+    status_code
+    status_message
+    errors
+  }
+}

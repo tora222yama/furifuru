@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IAppTrnFacility } from '@/script/Models/App/TrnFacilityList';
+import { IAppTrnFacility } from '@/script/Models/App/Trn/TrnFacilityList';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 
 interface IPros extends IPropsBase {

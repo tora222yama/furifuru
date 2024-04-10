@@ -24,6 +24,8 @@ interface IProps extends IPropsBase {
 }
 export const RedisPostResultIndex: React.FC<IProps> = ({
   csrfToken,
+  authUser,
+
   storeValue,
 }) => {
   /**
@@ -38,7 +40,7 @@ export const RedisPostResultIndex: React.FC<IProps> = ({
 
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider csrfToken={csrfToken}>
+      <IndexProvider csrfToken={csrfToken} authUser={authUser}>
         <RedisPostResult />
       </IndexProvider>
     </context.Provider>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL\App\Mutations;
 
+use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\App\Mutations\Pipe\PipeActionAppRedisUpdate;
 use App\GraphQL\App\Queries\AppRedisQuery;
@@ -35,7 +36,7 @@ final class ActionAppRedisUpdate
         Cache::set(AppRedisQuery::REDIS_QUERY_STORE_KEY, $pipe->storeValue, 3600);
 
         return [
-            'status_code'    => 200,
+            'status_code'    => EStatusCode::OK->value,
             'status_message' => '',
             'errors'         => json_encode([]),
         ];

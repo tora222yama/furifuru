@@ -6,10 +6,11 @@ namespace App\Models\App\Auth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class AuthUser extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table    = 'auth_user';
 
@@ -21,7 +22,7 @@ class AuthUser extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'pwd',
+        'password',
     ];
 
     /**
@@ -43,4 +44,16 @@ class AuthUser extends Authenticatable
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
     ];
+
+    /**
+     * レコードをGraphQLなどでの受け渡し用に変換.
+     */
+    public function toPayload(): array
+    {
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name        ?? '',
+            'email'       => $this->email       ?? '',
+        ];
+    }
 }

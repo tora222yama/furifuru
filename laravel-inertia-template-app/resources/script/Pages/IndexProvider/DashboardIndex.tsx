@@ -4,9 +4,9 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { Dashboard } from '@/script/Pages/Dashboard/Dashboard';
 
 interface IProps extends IPropsBase {}
-export const DashboardIndex: React.FC<IProps> = ({ csrfToken }) => {
+export const DashboardIndex: React.FC<IProps> = ({ csrfToken, authUser }) => {
   return (
-    <IndexProvider csrfToken={csrfToken}>
+    <IndexProvider csrfToken={csrfToken} authUser={authUser}>
       <Dashboard />
     </IndexProvider>
   );

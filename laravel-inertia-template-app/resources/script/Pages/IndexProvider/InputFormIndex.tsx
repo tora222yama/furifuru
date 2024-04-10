@@ -4,9 +4,9 @@ import { InputForm } from '@/script/Pages/InputForm/InputForm';
 import { IndexProvider } from '@/script/Provider/IndexProvider';
 
 interface IProps extends IPropsBase {}
-export const InputFormIndex: React.FC<IProps> = ({ csrfToken }) => {
+export const InputFormIndex: React.FC<IProps> = ({ csrfToken, authUser }) => {
   return (
-    <IndexProvider csrfToken={csrfToken}>
+    <IndexProvider csrfToken={csrfToken} authUser={authUser}>
       <InputForm />
     </IndexProvider>
   );

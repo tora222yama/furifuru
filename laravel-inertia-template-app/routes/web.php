@@ -23,6 +23,7 @@ Route::get('/input_form', EPages::INPUT_FORM->getInvokePath());
 Route::get('/redis', EPages::REDIS->getInvokePath());
 Route::post('/redis_post_result', EPages::REDIS_POST_RESULT->getInvokePath());
 Route::get('/slack_log', EPages::SLACK_LOG->getInvokePath());
+Route::get('/login_form', EPages::LOGIN_FORM->getInvokePath());
 Route::get('/health_check', EPages::HEALTH_CHECK->getInvokePath());
 
 Route::fallback(EPages::NOT_FOUND->getInvokePath());

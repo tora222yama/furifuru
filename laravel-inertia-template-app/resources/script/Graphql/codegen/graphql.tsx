@@ -40,6 +40,7 @@ export type AppRedis = {
 export type Mutation = {
   __typename?: 'Mutation';
   ActionAppInputFormUpdate?: Maybe<Response>;
+  ActionAppLoginFormLogin?: Maybe<Response>;
   ActionAppRedisUpdate?: Maybe<Response>;
 };
 
@@ -49,6 +50,11 @@ export type MutationActionAppInputFormUpdateArgs = {
   input_single_not_zero?: InputMaybe<Scalars['String']['input']>;
   input_single_number?: InputMaybe<Scalars['String']['input']>;
   input_single_range?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationActionAppLoginFormLoginArgs = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationActionAppRedisUpdateArgs = {
@@ -116,6 +122,21 @@ export type ActionAppInputFormUpdateMutationVariables = Exact<{
 export type ActionAppInputFormUpdateMutation = {
   __typename?: 'Mutation';
   ActionAppInputFormUpdate?: {
+    __typename?: 'Response';
+    status_code: number;
+    status_message: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type ActionAppLoginFormLoginMutationVariables = Exact<{
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type ActionAppLoginFormLoginMutation = {
+  __typename?: 'Mutation';
+  ActionAppLoginFormLogin?: {
     __typename?: 'Response';
     status_code: number;
     status_message: string;
@@ -215,6 +236,59 @@ export type ActionAppInputFormUpdateMutationOptions =
     ActionAppInputFormUpdateMutation,
     ActionAppInputFormUpdateMutationVariables
   >;
+export const ActionAppLoginFormLoginDocument = gql`
+  mutation ActionAppLoginFormLogin($email: String, $password: String) {
+    ActionAppLoginFormLogin(email: $email, password: $password) {
+      status_code
+      status_message
+      errors
+    }
+  }
+`;
+export type ActionAppLoginFormLoginMutationFn = Apollo.MutationFunction<
+  ActionAppLoginFormLoginMutation,
+  ActionAppLoginFormLoginMutationVariables
+>;
+
+/**
+ * __useActionAppLoginFormLoginMutation__
+ *
+ * To run a mutation, you first call `useActionAppLoginFormLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActionAppLoginFormLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [actionAppLoginFormLoginMutation, { data, loading, error }] = useActionAppLoginFormLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useActionAppLoginFormLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ActionAppLoginFormLoginMutation,
+    ActionAppLoginFormLoginMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ActionAppLoginFormLoginMutation,
+    ActionAppLoginFormLoginMutationVariables
+  >(ActionAppLoginFormLoginDocument, options);
+}
+export type ActionAppLoginFormLoginMutationHookResult = ReturnType<
+  typeof useActionAppLoginFormLoginMutation
+>;
+export type ActionAppLoginFormLoginMutationResult =
+  Apollo.MutationResult<ActionAppLoginFormLoginMutation>;
+export type ActionAppLoginFormLoginMutationOptions = Apollo.BaseMutationOptions<
+  ActionAppLoginFormLoginMutation,
+  ActionAppLoginFormLoginMutationVariables
+>;
 export const ActionAppRedisUpdateDocument = gql`
   mutation ActionAppRedisUpdate($store_value: String) {
     ActionAppRedisUpdate(store_value: $store_value) {

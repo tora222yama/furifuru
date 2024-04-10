@@ -6,7 +6,7 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import {
   AppTrnFacilityList,
   parsePayload,
-} from '@/script/Models/App/TrnFacilityList';
+} from '@/script/Models/App/Trn/TrnFacilityList';
 
 /**
  * コントローラーから受取保持する値.
@@ -39,6 +39,8 @@ interface IPros extends IPropsBase {
 }
 export const MvcValueIndex: React.FC<IPros> = ({
   csrfToken,
+  authUser,
+
   numberValue,
   stringValue,
   arrayValue,
@@ -63,7 +65,7 @@ export const MvcValueIndex: React.FC<IPros> = ({
 
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider csrfToken={csrfToken}>
+      <IndexProvider csrfToken={csrfToken} authUser={authUser}>
         <MvcValue />
       </IndexProvider>
     </context.Provider>

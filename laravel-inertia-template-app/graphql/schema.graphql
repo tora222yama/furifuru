@@ -51,5 +51,6 @@ type Response {
 }
 
 # Query/Mutationの定義.
-#import App/Redis.graphql
 #import App/InputForm.graphql
+#import App/LoginForm.graphql
+#import App/Redis.graphql

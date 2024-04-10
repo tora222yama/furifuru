@@ -1,0 +1,9 @@
+# App/LoginForm.graphql
+
+extend type Mutation {
+  # ログイン実施.
+  ActionAppLoginFormLogin(
+    email: String
+    password: String
+  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormLogin")
+}

@@ -4,6 +4,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { themeCommon } from '@/script/System/Theme';
+import { IAuthUser } from '@/script/Models/App/Auth/AuthUser';
 
 const client = new ApolloClient({
   ssrMode: true,
@@ -16,22 +17,37 @@ const client = new ApolloClient({
  */
 type IndexContext = {
   csrfToken: string;
+  authUser: IAuthUser;
 };
 export const context = React.createContext<IndexContext>({
   csrfToken: '',
+  authUser: {
+    id: 0,
+    name: '',
+    email: '',
+  },
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {}
-export const IndexProvider: React.FC<IProps> = ({ csrfToken, children }) => {
+export const IndexProvider: React.FC<IProps> = ({
+  csrfToken,
+  authUser,
+  children,
+}) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
   const providerValue: IndexContext = useMemo(
     () => ({
       csrfToken: csrfToken ?? '',
+      authUser: {
+        id: authUser.id ? Number(authUser.id) : 0,
+        name: authUser.name ? String(authUser.name) : '',
+        email: authUser.email ? String(authUser.email) : '',
+      },
     }),
-    [csrfToken],
+    [csrfToken, authUser],
   );
 
   return (

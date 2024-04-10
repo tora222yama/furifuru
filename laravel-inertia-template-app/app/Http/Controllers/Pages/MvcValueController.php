@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnFacility;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class MvcValueController extends Controller
@@ -18,7 +17,7 @@ class MvcValueController extends Controller
             ->where('category_id', '<=', 1500)
             ->get();
 
-        return Inertia::render('IndexProvider/MvcValueIndex', [
+        return $this->render('IndexProvider/MvcValueIndex', [
             'numberValue'     => 919,
             'stringValue'     => 'This message was provided from PHP Controller.',
             'arrayValue'      => [
