@@ -8,7 +8,7 @@ use App\Enum\App\EStatusCode;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-final class ActionAppLoginFormCheck
+final class AppLoginFormCheck
 {
     /**
      * @throws Exception

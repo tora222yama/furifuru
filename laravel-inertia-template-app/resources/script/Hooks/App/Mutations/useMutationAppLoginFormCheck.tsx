@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
-import { useActionAppLoginFormLogoutMutation } from '@/script/Graphql/codegen/graphql';
+import { useAppLoginFormCheckMutation } from '@/script/Graphql/codegen/graphql';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 
-export function useMutationActionAppLoginFormLogout(): [
+export function useMutationAppLoginFormCheck(): [
   boolean,
   (refetchQueries: DocumentNode[]) => Promise<IMutationResult>,
 ] {
   const [sending, setSending] = React.useState<boolean>(false);
-  const [mutation] = useActionAppLoginFormLogoutMutation({});
+  const [mutation] = useAppLoginFormCheckMutation();
   const client = useApolloClient();
 
   /**
    * 送信関数
    */
-  const mutationActionAppLoginFormLogout = async (
+  const mutationAppLoginFormCheck = async (
     refetchQueries: DocumentNode[],
   ): Promise<IMutationResult> => {
     setSending(true);
@@ -25,7 +25,7 @@ export function useMutationActionAppLoginFormLogout(): [
       mutation({})
         .then(async response => {
           const statusCode = Number(
-            response.data?.ActionAppLoginFormLogout?.status_code,
+            response.data?.AppLoginFormCheck?.status_code,
           );
 
           if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
@@ -40,11 +40,9 @@ export function useMutationActionAppLoginFormLogout(): [
           resolve({
             statusCode,
             statusMessage: String(
-              response.data?.ActionAppLoginFormLogout?.status_message,
+              response.data?.AppLoginFormCheck?.status_message,
             ),
-            errors: parseErrors(
-              response.data?.ActionAppLoginFormLogout?.errors,
-            ),
+            errors: parseErrors(response.data?.AppLoginFormCheck?.errors),
           });
         })
         .catch(_error => {
@@ -54,5 +52,5 @@ export function useMutationActionAppLoginFormLogout(): [
     });
   };
 
-  return [sending, mutationActionAppLoginFormLogout];
+  return [sending, mutationAppLoginFormCheck];
 }

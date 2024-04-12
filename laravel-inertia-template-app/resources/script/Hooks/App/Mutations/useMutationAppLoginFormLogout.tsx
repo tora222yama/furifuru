@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
-import { useActionAppLoginFormCheckMutation } from '@/script/Graphql/codegen/graphql';
+import { useAppLoginFormLogoutMutation } from '@/script/Graphql/codegen/graphql';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 
-export function useMutationActionAppLoginFormCheck(): [
+export function useMutationAppLoginFormLogout(): [
   boolean,
   (refetchQueries: DocumentNode[]) => Promise<IMutationResult>,
 ] {
   const [sending, setSending] = React.useState<boolean>(false);
-  const [mutation] = useActionAppLoginFormCheckMutation();
+  const [mutation] = useAppLoginFormLogoutMutation({});
   const client = useApolloClient();
 
   /**
    * 送信関数
    */
-  const mutationActionAppLoginFormCheck = async (
+  const mutationAppLoginFormLogout = async (
     refetchQueries: DocumentNode[],
   ): Promise<IMutationResult> => {
     setSending(true);
@@ -25,7 +25,7 @@ export function useMutationActionAppLoginFormCheck(): [
       mutation({})
         .then(async response => {
           const statusCode = Number(
-            response.data?.ActionAppLoginFormCheck?.status_code,
+            response.data?.AppLoginFormLogout?.status_code,
           );
 
           if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
@@ -40,9 +40,9 @@ export function useMutationActionAppLoginFormCheck(): [
           resolve({
             statusCode,
             statusMessage: String(
-              response.data?.ActionAppLoginFormCheck?.status_message,
+              response.data?.AppLoginFormLogout?.status_message,
             ),
-            errors: parseErrors(response.data?.ActionAppLoginFormCheck?.errors),
+            errors: parseErrors(response.data?.AppLoginFormLogout?.errors),
           });
         })
         .catch(_error => {
@@ -52,5 +52,5 @@ export function useMutationActionAppLoginFormCheck(): [
     });
   };
 
-  return [sending, mutationActionAppLoginFormCheck];
+  return [sending, mutationAppLoginFormLogout];
 }

@@ -6,11 +6,11 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeActionLoginFormLogin;
+use App\GraphQL\App\Mutations\Pipe\PipeAppLoginFormLogin;
 use App\Models\App\Auth\AuthUser;
 use Illuminate\Support\Facades\Auth;
 
-final class ActionAppLoginFormLogin
+final class AppLoginFormLogin
 {
     public function __invoke($_, array $args): array
     {
@@ -19,7 +19,7 @@ final class ActionAppLoginFormLogin
 
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeActionLoginFormLogin($args)
+            new PipeAppLoginFormLogin($args)
         );
 
         // ユーザーを強制的に取得.

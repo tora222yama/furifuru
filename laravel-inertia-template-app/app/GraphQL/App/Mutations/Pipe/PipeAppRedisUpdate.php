@@ -9,7 +9,7 @@ use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
 use App\GraphQL\PipeBase;
 
-final class PipeActionAppRedisUpdate extends PipeBase
+final class PipeAppRedisUpdate extends PipeBase
 {
     public string $storeValue = '';
 
@@ -18,7 +18,7 @@ final class PipeActionAppRedisUpdate extends PipeBase
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::ACTION_APP_REDIS_UPDATE, $args);
+        parent::__construct(EPipeKind::APP_REDIS_UPDATE, $args);
     }
 
     /**

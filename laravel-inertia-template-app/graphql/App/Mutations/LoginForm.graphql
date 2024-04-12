@@ -1,9 +1,9 @@
 # ログイン実施.
-mutation ActionAppLoginFormLogin(
+mutation AppLoginFormLogin(
   $email: String
   $password: String
 ) {
-  ActionAppLoginFormLogin(
+  AppLoginFormLogin(
     email: $email
     password: $password
   ) {
@@ -14,8 +14,8 @@ mutation ActionAppLoginFormLogin(
 }
 
 # ログアウト実施.
-mutation ActionAppLoginFormLogout {
-  ActionAppLoginFormLogout {
+mutation AppLoginFormLogout {
+  AppLoginFormLogout {
     status_code
     status_message
     errors
@@ -23,8 +23,8 @@ mutation ActionAppLoginFormLogout {
 }
 
 # ガードチェック用.
-mutation ActionAppLoginFormCheck {
-  ActionAppLoginFormCheck {
+mutation AppLoginFormCheck {
+  AppLoginFormCheck {
     status_code
     status_message
     errors

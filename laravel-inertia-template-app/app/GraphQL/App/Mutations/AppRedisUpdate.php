@@ -6,12 +6,12 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeActionAppRedisUpdate;
+use App\GraphQL\App\Mutations\Pipe\PipeAppRedisUpdate;
 use App\GraphQL\App\Queries\AppRedisQuery;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
-final class ActionAppRedisUpdate
+final class AppRedisUpdate
 {
     /**
      * @throws InvalidArgumentException
@@ -22,9 +22,9 @@ final class ActionAppRedisUpdate
         sleep(1);
 
         // パイプ作成.
-        /** @var PipeActionAppRedisUpdate $pipe */
+        /** @var PipeAppRedisUpdate $pipe */
         $pipe = PipeService::insertNewPipe(
-            new PipeActionAppRedisUpdate($args)
+            new PipeAppRedisUpdate($args)
         );
 
         // バリデーションチェック.

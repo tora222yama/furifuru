@@ -7,7 +7,7 @@ namespace App\GraphQL\App\Mutations\Pipe;
 use App\Enum\App\EPipeKind;
 use App\GraphQL\PipeBase;
 
-final class PipeActionLoginFormLogin extends PipeBase
+final class PipeAppLoginFormLogin extends PipeBase
 {
     public string $email    = '';
 
@@ -18,7 +18,7 @@ final class PipeActionLoginFormLogin extends PipeBase
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::ACTION_APP_LOGIN_FORM_LOGIN, $args);
+        parent::__construct(EPipeKind::APP_LOGIN_FORM_LOGIN, $args);
     }
 
     /**

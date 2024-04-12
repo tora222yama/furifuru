@@ -8,7 +8,7 @@ import { TypoSubTitle1 } from '@/script/Component/Typography/TypoSubTitle1';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useLazyFetchAppRedis } from '@/script/Hooks/App/Queries/useLazyFetchAppRedis';
 import { Loading } from '@/script/Component/Misc/Loading';
-import { useMutationActionAppRedisUpdate } from '@/script/Hooks/App/Mutations/useMutationActionAppRedisUpdate';
+import { useMutationAppRedisUpdate } from '@/script/Hooks/App/Mutations/useMutationAppRedisUpdate';
 import { FormRedis, IFormRedis } from '@/script/Pages/Redis/FormRedis';
 import {
   IFormRedisValidationResult,
@@ -28,7 +28,7 @@ export const Redis: React.FC<IProps> = () => {
   const [validation, setValidation] =
     React.useState<IFormRedisValidationResult>(initialResult);
   const [loadingRedis, lazyFetch] = useLazyFetchAppRedis();
-  const [processingRedis, mutationUpdate] = useMutationActionAppRedisUpdate();
+  const [processingRedis, mutationUpdate] = useMutationAppRedisUpdate();
   const [currentValue, setCurrentValue] = React.useState<string>('-');
   const loading = loadingRedis || processingRedis;
 

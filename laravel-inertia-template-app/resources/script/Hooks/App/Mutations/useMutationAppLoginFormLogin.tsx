@@ -1,31 +1,31 @@
 import * as React from 'react';
 import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
-import { useActionAppLoginFormLoginMutation } from '@/script/Graphql/codegen/graphql';
+import { useAppLoginFormLoginMutation } from '@/script/Graphql/codegen/graphql';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 
-export interface IActionAppLoginFormLogin {
+export interface IAppLoginFormLogin {
   email: string;
   password: string;
 }
 
-export function useMutationActionAppLoginFormLogin(): [
+export function useMutationAppLoginFormLogin(): [
   boolean,
   (
-    props: IActionAppLoginFormLogin,
+    props: IAppLoginFormLogin,
     refetchQueries: DocumentNode[],
   ) => Promise<IMutationResult>,
 ] {
   const [sending, setSending] = React.useState<boolean>(false);
-  const [mutation] = useActionAppLoginFormLoginMutation({});
+  const [mutation] = useAppLoginFormLoginMutation({});
   const client = useApolloClient();
 
   /**
    * 送信関数
    */
-  const mutationActionAppLoginFormLogin = async (
-    props: IActionAppLoginFormLogin,
+  const mutationAppLoginFormLogin = async (
+    props: IAppLoginFormLogin,
     refetchQueries: DocumentNode[],
   ): Promise<IMutationResult> => {
     setSending(true);
@@ -39,7 +39,7 @@ export function useMutationActionAppLoginFormLogin(): [
       })
         .then(async response => {
           const statusCode = Number(
-            response.data?.ActionAppLoginFormLogin?.status_code,
+            response.data?.AppLoginFormLogin?.status_code,
           );
 
           if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
@@ -54,9 +54,9 @@ export function useMutationActionAppLoginFormLogin(): [
           resolve({
             statusCode,
             statusMessage: String(
-              response.data?.ActionAppLoginFormLogin?.status_message,
+              response.data?.AppLoginFormLogin?.status_message,
             ),
-            errors: parseErrors(response.data?.ActionAppLoginFormLogin?.errors),
+            errors: parseErrors(response.data?.AppLoginFormLogin?.errors),
           });
         })
         .catch(_error => {
@@ -66,5 +66,5 @@ export function useMutationActionAppLoginFormLogin(): [
     });
   };
 
-  return [sending, mutationActionAppLoginFormLogin];
+  return [sending, mutationAppLoginFormLogin];
 }

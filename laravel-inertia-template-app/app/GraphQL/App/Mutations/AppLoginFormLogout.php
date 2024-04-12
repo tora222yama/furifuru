@@ -8,7 +8,7 @@ use App\Enum\App\EStatusCode;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
-final class ActionAppLoginFormLogout
+final class AppLoginFormLogout
 {
     /**
      * @throws Exception

@@ -2,16 +2,16 @@
 
 extend type Mutation {
   # ログイン実施.
-  ActionAppLoginFormLogin(
+  AppLoginFormLogin(
     email: String
     password: String
-  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormLogin")
+  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\AppLoginFormLogin")
 
   # ログアウト実施.
-  ActionAppLoginFormLogout: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormLogout")
+  AppLoginFormLogout: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\AppLoginFormLogout")
 }
 
 extend type Mutation @guard {
   # ログインチェック.
-  ActionAppLoginFormCheck: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormCheck")
+  AppLoginFormCheck: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\AppLoginFormCheck")
 }

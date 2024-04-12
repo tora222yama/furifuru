@@ -1,34 +1,30 @@
 import * as React from 'react';
 import { DocumentNode, useApolloClient } from '@apollo/client';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
-import { useActionAppInputFormUpdateMutation } from '@/script/Graphql/codegen/graphql';
+import { useAppRedisUpdateMutation } from '@/script/Graphql/codegen/graphql';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 
-export interface IActionAppInputFormUpdate {
-  inputSingleNumber: string;
-  inputSingleNotZero: string;
-  inputSingleRange: string;
-  inputSingleEmail: string;
-  inputMulti: string;
+export interface IAppRedisUpdate {
+  storeValue: string;
 }
 
-export function useMutationActionAppInputFormUpdate(): [
+export function useMutationAppRedisUpdate(): [
   boolean,
   (
-    props: IActionAppInputFormUpdate,
+    props: IAppRedisUpdate,
     refetchQueries: DocumentNode[],
   ) => Promise<IMutationResult>,
 ] {
   const [sending, setSending] = React.useState<boolean>(false);
-  const [mutation] = useActionAppInputFormUpdateMutation({});
+  const [mutation] = useAppRedisUpdateMutation({});
   const client = useApolloClient();
 
   /**
-   * 送信関数
+   * 送信関数.
    */
-  const mutationActionAppInputFormUpdate = async (
-    props: IActionAppInputFormUpdate,
+  const mutationAppRedisUpdate = async (
+    props: IAppRedisUpdate,
     refetchQueries: DocumentNode[],
   ): Promise<IMutationResult> => {
     setSending(true);
@@ -36,17 +32,11 @@ export function useMutationActionAppInputFormUpdate(): [
     return new Promise<IMutationResult>(resolve => {
       mutation({
         variables: {
-          input_single_number: String(props.inputSingleNumber),
-          input_single_not_zero: String(props.inputSingleNotZero),
-          input_single_range: String(props.inputSingleRange),
-          input_single_email: String(props.inputSingleEmail),
-          input_multi: String(props.inputMulti),
+          store_value: String(props.storeValue),
         },
       })
         .then(async response => {
-          const statusCode = Number(
-            response.data?.ActionAppInputFormUpdate?.status_code,
-          );
+          const statusCode = Number(response.data?.AppRedisUpdate?.status_code);
 
           if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
             await client.refetchQueries({
@@ -60,11 +50,9 @@ export function useMutationActionAppInputFormUpdate(): [
           resolve({
             statusCode,
             statusMessage: String(
-              response.data?.ActionAppInputFormUpdate?.status_message,
+              response.data?.AppRedisUpdate?.status_message,
             ),
-            errors: parseErrors(
-              response.data?.ActionAppInputFormUpdate?.errors,
-            ),
+            errors: parseErrors(response.data?.AppRedisUpdate?.errors),
           });
         })
         .catch(_error => {
@@ -74,5 +62,5 @@ export function useMutationActionAppInputFormUpdate(): [
     });
   };
 
-  return [sending, mutationActionAppInputFormUpdate];
+  return [sending, mutationAppRedisUpdate];
 }

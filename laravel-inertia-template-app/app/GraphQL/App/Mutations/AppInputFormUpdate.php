@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeActionAppInputFormUpdate;
+use App\GraphQL\App\Mutations\Pipe\PipeAppInputFormUpdate;
 
-final class ActionAppInputFormUpdate
+final class AppInputFormUpdate
 {
     public function __invoke($_, array $args): array
     {
@@ -16,7 +16,7 @@ final class ActionAppInputFormUpdate
 
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeActionAppInputFormUpdate($args)
+            new PipeAppInputFormUpdate($args)
         );
 
         // バリデーションチェック.

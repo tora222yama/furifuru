@@ -45,8 +45,8 @@
 
 基本的にはサーバー側で値を受け取った直後に実施する
 
-- 例）```app/GraphQL/App/Mutations/Pipe/PipeActionAppInputFormUpdate.php```
-  - ```/app/GraphQL/App/Mutations/ActionAppInputFormUpdate.php```で値を受け取った直後に実施
+- 例）```app/GraphQL/App/Mutations/Pipe/PipeAppInputFormUpdate.php```
+  - ```/app/GraphQL/App/Mutations/AppInputFormUpdate.php```で値を受け取った直後に実施
   - validate()で保持している入力値に対してバリデーションを実施する
   - validate()は値をparseするPipeクラスに配置
   - 共通処理は```app/Enum/App/EValidationType.php```に記載

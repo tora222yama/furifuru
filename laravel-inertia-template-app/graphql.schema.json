@@ -81,7 +81,7 @@
         "description": null,
         "fields": [
           {
-            "name": "ActionAppInputFormUpdate",
+            "name": "AppInputFormUpdate",
             "description": null,
             "args": [
               {
@@ -154,7 +154,7 @@
             "deprecationReason": null
           },
           {
-            "name": "ActionAppLoginFormCheck",
+            "name": "AppLoginFormCheck",
             "description": null,
             "args": [],
             "type": {
@@ -166,7 +166,7 @@
             "deprecationReason": null
           },
           {
-            "name": "ActionAppLoginFormLogin",
+            "name": "AppLoginFormLogin",
             "description": null,
             "args": [
               {
@@ -203,7 +203,7 @@
             "deprecationReason": null
           },
           {
-            "name": "ActionAppLoginFormLogout",
+            "name": "AppLoginFormLogout",
             "description": null,
             "args": [],
             "type": {
@@ -215,7 +215,7 @@
             "deprecationReason": null
           },
           {
-            "name": "ActionAppRedisUpdate",
+            "name": "AppRedisUpdate",
             "description": null,
             "args": [
               {

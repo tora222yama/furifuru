@@ -51,11 +51,11 @@ fetch/mutationを追加する場合はおよそ以下の流れで対応が必要
 - PHP側の処理を実装する
   - バリデーションがあるため、引数の受け取りは別クラス(Pipe)で実施する
   - 例）app/GraphQL/App/Queries/RedisQuery.php
-  - 例）app/GraphQL/App/Mutations/ActionAppRedisUpdate.php
+  - 例）app/GraphQL/App/Mutations/AppRedisUpdate.php
 - コンテナ上で```npm run gen```を実施して```script/Graphql/codegen/graphql.tsx```を更新する
   - ※schemaで宣言したgraphqlのTypeScriptコードが追加されるはずです
 - コンポーネントから呼び出すHooksを作成する
-  - 例）```script/Hooks/App/Mutations/useMutationActionAppRedisUpdate.tsx```
+  - 例）```script/Hooks/App/Mutations/useMutationAppRedisUpdate.tsx```
     - 生成されたコードをPromiseで呼び出すための関数・通信状況を返します
   - 例）```script/Hooks/App/Queries/useLazyFetchAppRedis.tsx```
     - 要求されたデータセットをPromiseで呼び出すための関数・通信状況を返します

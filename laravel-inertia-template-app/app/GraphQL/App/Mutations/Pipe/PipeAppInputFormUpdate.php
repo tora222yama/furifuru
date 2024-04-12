@@ -9,7 +9,7 @@ use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
 use App\GraphQL\PipeBase;
 
-final class PipeActionAppInputFormUpdate extends PipeBase
+final class PipeAppInputFormUpdate extends PipeBase
 {
     public string $inputSingleNumber  = '';
 
@@ -26,7 +26,7 @@ final class PipeActionAppInputFormUpdate extends PipeBase
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::ACTION_APP_INPUT_FORM_UPDATE, $args);
+        parent::__construct(EPipeKind::APP_INPUT_FORM_UPDATE, $args);
     }
 
     /**

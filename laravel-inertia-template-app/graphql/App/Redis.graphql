@@ -9,9 +9,9 @@ extend type Query {
 
 extend type Mutation {
   # Redisへ保存する値の更新.
-  ActionAppRedisUpdate(
+  AppRedisUpdate(
     store_value: String
-  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppRedisUpdate")
+  ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\AppRedisUpdate")
 }
 
 type AppRedis {

@@ -10,14 +10,14 @@ import {
   IFormLoginForm,
 } from '@/script/Pages/LoginForm/FormLoginForm';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
-import { useMutationActionAppLoginFormLogin } from '@/script/Hooks/App/Mutations/useMutationActionAppLoginFormLogin';
+import { useMutationAppLoginFormLogin } from '@/script/Hooks/App/Mutations/useMutationAppLoginFormLogin';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { Log } from '@/script/Common/Log';
 import { useIndexContext } from '@/script/Provider/IndexProvider';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { useMutationActionAppLoginFormLogout } from '@/script/Hooks/App/Mutations/useMutationActionAppLoginFormLogout';
-import { useMutationActionAppLoginFormCheck } from '@/script/Hooks/App/Mutations/useMutationActionAppLoginFormCheck';
+import { useMutationAppLoginFormLogout } from '@/script/Hooks/App/Mutations/useMutationAppLoginFormLogout';
+import { useMutationAppLoginFormCheck } from '@/script/Hooks/App/Mutations/useMutationAppLoginFormCheck';
 import { E_COLOR } from '@/script/Enum/EColor';
 
 interface IProps extends IPropsBase {}
@@ -27,10 +27,9 @@ export const LoginForm: React.FC<IProps> = () => {
     email: '',
     password: '',
   });
-  const [processingLogin, mutationLogin] = useMutationActionAppLoginFormLogin();
-  const [processingLogout, mutationLogout] =
-    useMutationActionAppLoginFormLogout();
-  const [processingCheck, mutationCheck] = useMutationActionAppLoginFormCheck();
+  const [processingLogin, mutationLogin] = useMutationAppLoginFormLogin();
+  const [processingLogout, mutationLogout] = useMutationAppLoginFormLogout();
+  const [processingCheck, mutationCheck] = useMutationAppLoginFormCheck();
   const loading = processingLogin || processingLogout || processingCheck;
 
   /**
