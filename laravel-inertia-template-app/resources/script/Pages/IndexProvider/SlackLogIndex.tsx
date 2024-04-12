@@ -4,9 +4,11 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { SlackLog } from '@/script/Pages/SlackLog/SlackLog';
 
 interface IProps extends IPropsBase {}
-export const SlackLogIndex: React.FC<IProps> = () => {
+export const SlackLogIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <SlackLog />
     </IndexProvider>
   );

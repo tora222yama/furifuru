@@ -3,21 +3,29 @@ import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { MvcValue } from '@/script/Pages/MvcValue/MvcValue';
 import { IndexProvider } from '@/script/Provider/IndexProvider';
+import {
+  AppTrnFacilityList,
+  parsePayload,
+} from '@/script/Models/App/Trn/TrnFacilityList';
 
 /**
  * コントローラーから受取保持する値.
  */
-type FirstPageContext = {
+type MvcValueContext = {
   numberValue: number;
   stringValue: string;
   arrayValue: number[];
+
+  trnFacilityList: AppTrnFacilityList;
 };
-export const context = React.createContext<FirstPageContext>({
+export const context = React.createContext<MvcValueContext>({
   numberValue: 0,
   stringValue: '',
   arrayValue: [],
+
+  trnFacilityList: new AppTrnFacilityList(),
 });
-export const useFirstPageContext = (): FirstPageContext => useContext(context);
+export const useMvcValueContext = (): MvcValueContext => useContext(context);
 
 /**
  * コントローラーから受け取るprops.
@@ -26,27 +34,39 @@ interface IPros extends IPropsBase {
   numberValue: number;
   stringValue: string;
   arrayValue: number[];
+
+  trnFacilityList: [];
 }
 export const MvcValueIndex: React.FC<IPros> = ({
   numberValue,
   stringValue,
   arrayValue,
+
+  trnFacilityList,
+
+  ...props
 }) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const providerValue: FirstPageContext = useMemo(
+  const providerValue: MvcValueContext = useMemo(
     () => ({
       numberValue,
       stringValue,
       arrayValue,
+
+      trnFacilityList: new AppTrnFacilityList(
+        trnFacilityList.map(v => parsePayload(v)),
+      ),
     }),
-    [numberValue, stringValue, arrayValue],
+    [numberValue, stringValue, arrayValue, trnFacilityList],
   );
 
+  // noinspection TypeScriptValidateTypes
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <IndexProvider {...props}>
         <MvcValue />
       </IndexProvider>
     </context.Provider>

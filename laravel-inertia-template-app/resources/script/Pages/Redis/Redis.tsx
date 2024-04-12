@@ -8,7 +8,7 @@ import { TypoSubTitle1 } from '@/script/Component/Typography/TypoSubTitle1';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useLazyFetchAppRedis } from '@/script/Hooks/App/Queries/useLazyFetchAppRedis';
 import { Loading } from '@/script/Component/Misc/Loading';
-import { useMutationActionAppRedisUpdate } from '@/script/Hooks/App/Mutations/useMutationActionAppRedisUpdate';
+import { useMutationAppRedisUpdate } from '@/script/Hooks/App/Mutations/useMutationAppRedisUpdate';
 import { FormRedis, IFormRedis } from '@/script/Pages/Redis/FormRedis';
 import {
   IFormRedisValidationResult,
@@ -18,6 +18,7 @@ import {
 } from '@/script/Pages/Redis/FormRedisValidation';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
+import { FormRedisPost } from '@/script/Pages/Redis/FormRedisPost';
 
 interface IProps extends IPropsBase {}
 export const Redis: React.FC<IProps> = () => {
@@ -27,7 +28,7 @@ export const Redis: React.FC<IProps> = () => {
   const [validation, setValidation] =
     React.useState<IFormRedisValidationResult>(initialResult);
   const [loadingRedis, lazyFetch] = useLazyFetchAppRedis();
-  const [processingRedis, mutationUpdate] = useMutationActionAppRedisUpdate();
+  const [processingRedis, mutationUpdate] = useMutationAppRedisUpdate();
   const [currentValue, setCurrentValue] = React.useState<string>('-');
   const loading = loadingRedis || processingRedis;
 
@@ -45,7 +46,9 @@ export const Redis: React.FC<IProps> = () => {
    * Redisの値を取得.
    */
   const handleClickLoad = () => {
-    lazyFetch().then(res => {
+    lazyFetch({
+      sampleArgument: 'テスト引数-例えばIDとかを指定する',
+    }).then(res => {
       setCurrentValue(res);
     });
   };
@@ -138,8 +141,8 @@ export const Redis: React.FC<IProps> = () => {
           validation={validation}
           handleUpdate={handleUpdate}
           handleSaveGraphQL={handleClickSave}
-          handleSavePost={handleClickSave}
         />
+        <FormRedisPost loading={loading} formRedis={formRedis} />
       </Paper>
     </Page>
   );

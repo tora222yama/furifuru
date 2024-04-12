@@ -1,0 +1,32 @@
+# ログイン実施.
+mutation AppLoginFormLogin(
+  $email: String
+  $password: String
+) {
+  AppLoginFormLogin(
+    email: $email
+    password: $password
+  ) {
+    status_code
+    status_message
+    errors
+  }
+}
+
+# ログアウト実施.
+mutation AppLoginFormLogout {
+  AppLoginFormLogout {
+    status_code
+    status_message
+    errors
+  }
+}
+
+# ガードチェック用.
+mutation AppLoginFormCheck {
+  AppLoginFormCheck {
+    status_code
+    status_message
+    errors
+  }
+}

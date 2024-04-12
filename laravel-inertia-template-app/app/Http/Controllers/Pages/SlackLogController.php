@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Pages;
 use App\Facades\External\SlackService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 use Inertia\Response;
 
 class SlackLogController extends Controller
@@ -29,6 +28,6 @@ class SlackLogController extends Controller
         // 標準エラーログの出力.
         Log::error('Laravel-Inertia-TemplateのLaravelエラーログ');
 
-        return Inertia::render('IndexProvider/SlackLogIndex');
+        return $this->render('IndexProvider/SlackLogIndex');
     }
 }

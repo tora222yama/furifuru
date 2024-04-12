@@ -17,9 +17,12 @@ import {
 } from '@/script/Enum/Server/App/EPages';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { useIndexContext } from '@/script/Provider/IndexProvider';
 
 interface IProps extends IPropsBase {}
 export const DrawerDesktop: React.FC<IProps> = () => {
+  const { authUser } = useIndexContext();
+
   /**
    * 表示するリンク.
    */
@@ -28,6 +31,7 @@ export const DrawerDesktop: React.FC<IProps> = () => {
     E_PAGES.INPUT_FORM,
     E_PAGES.REDIS,
     E_PAGES.SLACK_LOG,
+    E_PAGES.LOGIN_FORM,
   ];
 
   return (
@@ -53,6 +57,15 @@ export const DrawerDesktop: React.FC<IProps> = () => {
             Laravel-Inertia-Template
           </TypoText>
         </Link>
+        <Box
+          sx={{
+            marginTop: '10px',
+            padding: '5px',
+            backgroundColor: E_COLOR.RED_LIGHT,
+          }}
+        >
+          <TypoText>login：{authUser.id ? authUser.name : '----'}</TypoText>
+        </Box>
         <List>
           {hrefList.map(page => {
             return (

@@ -4,9 +4,11 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { Redis } from '@/script/Pages/Redis/Redis';
 
 interface IProps extends IPropsBase {}
-export const RedisIndex: React.FC<IProps> = () => {
+export const RedisIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <Redis />
     </IndexProvider>
   );

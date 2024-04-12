@@ -4,9 +4,11 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { Dashboard } from '@/script/Pages/Dashboard/Dashboard';
 
 interface IProps extends IPropsBase {}
-export const DashboardIndex: React.FC<IProps> = () => {
+export const DashboardIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <Dashboard />
     </IndexProvider>
   );

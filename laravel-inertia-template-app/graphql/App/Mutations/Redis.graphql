@@ -1,8 +1,8 @@
 # Redisに値を格納.
-mutation ActionAppRedisUpdate(
+mutation AppRedisUpdate(
   $store_value: String
 ) {
-  ActionAppRedisUpdate(
+  AppRedisUpdate(
     store_value: $store_value
   ) {
     status_code

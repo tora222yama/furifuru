@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Enum\App;
 
 use App\Enum\ValidationRules\RuleMaxLength;
-use App\Enum\ValidationRules\ValidationPack;
+use App\Enum\ValidationRules\ValidationRuleSet;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -32,9 +32,9 @@ enum EValidationType: string
     /**
      * バリデーション指定の情報を作成.
      */
-    public function pack(int $value1 = 0, int $value2 = 0): ValidationPack
+    public function ruleSet(int $value1 = 0, int $value2 = 0): ValidationRuleSet
     {
-        return new ValidationPack($this, $value1, $value2);
+        return new ValidationRuleSet($this, $value1, $value2);
     }
 
     /**
@@ -51,14 +51,14 @@ enum EValidationType: string
     /**
      * バリデーションルールを取得.
      *
-     * @param  Collection<ValidationPack>  $rules
+     * @param  Collection<ValidationRuleSet>  $rules
      */
     public static function getRules(
         string $columnTag,
         Collection $rules
     ): array {
         return [
-            "$columnTag" => $rules->flatMap(function (ValidationPack $pack) {
+            "$columnTag" => $rules->flatMap(function (ValidationRuleSet $pack) {
                 return $pack->rule();
             })->toArray(),
         ];
@@ -67,14 +67,14 @@ enum EValidationType: string
     /**
      * バリデーションメッセージを取得.
      *
-     * @param  Collection<ValidationPack>  $rules
+     * @param  Collection<ValidationRuleSet>  $rules
      */
     public static function getMessages(
         string $columnTag,
         string $columnName,
         Collection $rules,
     ): array {
-        return $rules->flatMap(function (ValidationPack $pack) use ($columnTag, $columnName) {
+        return $rules->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
             // カスタムルールはメッセージ設定が不要.
             if ($pack->type->isCustomRule()) {
                 return true;
@@ -102,7 +102,7 @@ enum EValidationType: string
     /**
      * バリデーションルールを返す.
      */
-    public function getRule(ValidationPack $pack): Collection
+    public function getRule(ValidationRuleSet $pack): Collection
     {
         $value1 = $pack->value1;
         $value2 = $pack->value2;
@@ -126,7 +126,7 @@ enum EValidationType: string
     /**
      * バリデーションメッセージを返す.
      */
-    public function getErrorMessage(string $columnName, ValidationPack $pack): string
+    public function getErrorMessage(string $columnName, ValidationRuleSet $pack): string
     {
         // カスタムルールはメッセージ設定が不要.
         if ($this->isCustomRule()) {

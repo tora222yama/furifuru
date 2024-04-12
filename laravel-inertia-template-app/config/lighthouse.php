@@ -30,6 +30,11 @@ return [
          * make sure to return spec-compliant responses in case an error is thrown.
          */
         'middleware' => [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+
             // Ensures the request is not vulnerable to cross-site request forgery.
             // Nuwave\Lighthouse\Http\Middleware\EnsureXHR::class,
 
@@ -257,6 +262,9 @@ return [
     */
 
     'error_handlers'                 => [
+
+        \App\GraphQL\CustomErrorHandler::class,
+
         Nuwave\Lighthouse\Execution\AuthenticationErrorHandler::class,
         Nuwave\Lighthouse\Execution\AuthorizationErrorHandler::class,
         Nuwave\Lighthouse\Execution\ValidationErrorHandler::class,

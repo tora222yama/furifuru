@@ -13,7 +13,7 @@ import {
   parseServerValidation,
   validateAll,
 } from '@/script/Pages/InputForm/FormInputFormValidation';
-import { useMutationActionAppInputFormUpdate } from '@/script/Hooks/App/Mutations/useMutationActionAppInputFormUpdate';
+import { useMutationAppInputFormUpdate } from '@/script/Hooks/App/Mutations/useMutationAppInputFormUpdate';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
@@ -27,8 +27,7 @@ export const InputForm: React.FC<IProps> = () => {
   });
   const [validation, setValidation] =
     React.useState<IFormInputFormValidationResult>(initialResult);
-  const [processingUpdate, mutationUpdate] =
-    useMutationActionAppInputFormUpdate();
+  const [processingUpdate, mutationUpdate] = useMutationAppInputFormUpdate();
   const loading = processingUpdate;
 
   /**

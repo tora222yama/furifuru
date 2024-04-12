@@ -1,6 +1,10 @@
 # Redisに格納した値を取得.
-query AppRedis {
-  AppRedis {
+query AppRedis(
+  $sample_argument: String!
+) {
+  AppRedis (
+    sample_argument: $sample_argument
+  ) {
     store_value
   }
 }

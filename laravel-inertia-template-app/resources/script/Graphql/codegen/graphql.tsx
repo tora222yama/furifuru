@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -40,11 +39,14 @@ export type AppRedis = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  ActionAppInputFormUpdate?: Maybe<Response>;
-  ActionAppRedisUpdate?: Maybe<Response>;
+  AppInputFormUpdate?: Maybe<Response>;
+  AppLoginFormCheck?: Maybe<Response>;
+  AppLoginFormLogin?: Maybe<Response>;
+  AppLoginFormLogout?: Maybe<Response>;
+  AppRedisUpdate?: Maybe<Response>;
 };
 
-export type MutationActionAppInputFormUpdateArgs = {
+export type MutationAppInputFormUpdateArgs = {
   input_multi?: InputMaybe<Scalars['String']['input']>;
   input_single_email?: InputMaybe<Scalars['String']['input']>;
   input_single_not_zero?: InputMaybe<Scalars['String']['input']>;
@@ -52,7 +54,12 @@ export type MutationActionAppInputFormUpdateArgs = {
   input_single_range?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type MutationActionAppRedisUpdateArgs = {
+export type MutationAppLoginFormLoginArgs = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationAppRedisUpdateArgs = {
   store_value?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -64,6 +71,11 @@ export type Query = {
   user?: Maybe<User>;
   /** List multiple users. */
   users: Array<User>;
+};
+
+/** Indicates what fields are available at the top level of a query operation. */
+export type QueryAppRedisArgs = {
+  sample_argument: Scalars['String']['input'];
 };
 
 /** Indicates what fields are available at the top level of a query operation. */
@@ -101,7 +113,7 @@ export type User = {
   updated_at: Scalars['DateTime']['output'];
 };
 
-export type ActionAppInputFormUpdateMutationVariables = Exact<{
+export type AppInputFormUpdateMutationVariables = Exact<{
   input_single_number?: InputMaybe<Scalars['String']['input']>;
   input_single_not_zero?: InputMaybe<Scalars['String']['input']>;
   input_single_range?: InputMaybe<Scalars['String']['input']>;
@@ -109,9 +121,9 @@ export type ActionAppInputFormUpdateMutationVariables = Exact<{
   input_multi?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-export type ActionAppInputFormUpdateMutation = {
+export type AppInputFormUpdateMutation = {
   __typename?: 'Mutation';
-  ActionAppInputFormUpdate?: {
+  AppInputFormUpdate?: {
     __typename?: 'Response';
     status_code: number;
     status_message: string;
@@ -119,13 +131,56 @@ export type ActionAppInputFormUpdateMutation = {
   } | null;
 };
 
-export type ActionAppRedisUpdateMutationVariables = Exact<{
+export type AppLoginFormLoginMutationVariables = Exact<{
+  email?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AppLoginFormLoginMutation = {
+  __typename?: 'Mutation';
+  AppLoginFormLogin?: {
+    __typename?: 'Response';
+    status_code: number;
+    status_message: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppLoginFormLogoutMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppLoginFormLogoutMutation = {
+  __typename?: 'Mutation';
+  AppLoginFormLogout?: {
+    __typename?: 'Response';
+    status_code: number;
+    status_message: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppLoginFormCheckMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppLoginFormCheckMutation = {
+  __typename?: 'Mutation';
+  AppLoginFormCheck?: {
+    __typename?: 'Response';
+    status_code: number;
+    status_message: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppRedisUpdateMutationVariables = Exact<{
   store_value?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-export type ActionAppRedisUpdateMutation = {
+export type AppRedisUpdateMutation = {
   __typename?: 'Mutation';
-  ActionAppRedisUpdate?: {
+  AppRedisUpdate?: {
     __typename?: 'Response';
     status_code: number;
     status_message: string;
@@ -133,22 +188,24 @@ export type ActionAppRedisUpdateMutation = {
   } | null;
 };
 
-export type AppRedisQueryVariables = Exact<{ [key: string]: never }>;
+export type AppRedisQueryVariables = Exact<{
+  sample_argument: Scalars['String']['input'];
+}>;
 
 export type AppRedisQuery = {
   __typename?: 'Query';
   AppRedis: { __typename?: 'AppRedis'; store_value: string };
 };
 
-export const ActionAppInputFormUpdateDocument = gql`
-  mutation ActionAppInputFormUpdate(
+export const AppInputFormUpdateDocument = gql`
+  mutation AppInputFormUpdate(
     $input_single_number: String
     $input_single_not_zero: String
     $input_single_range: String
     $input_single_email: String
     $input_multi: String
   ) {
-    ActionAppInputFormUpdate(
+    AppInputFormUpdate(
       input_single_number: $input_single_number
       input_single_not_zero: $input_single_not_zero
       input_single_range: $input_single_range
@@ -161,23 +218,23 @@ export const ActionAppInputFormUpdateDocument = gql`
     }
   }
 `;
-export type ActionAppInputFormUpdateMutationFn = Apollo.MutationFunction<
-  ActionAppInputFormUpdateMutation,
-  ActionAppInputFormUpdateMutationVariables
+export type AppInputFormUpdateMutationFn = Apollo.MutationFunction<
+  AppInputFormUpdateMutation,
+  AppInputFormUpdateMutationVariables
 >;
 
 /**
- * __useActionAppInputFormUpdateMutation__
+ * __useAppInputFormUpdateMutation__
  *
- * To run a mutation, you first call `useActionAppInputFormUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useActionAppInputFormUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAppInputFormUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppInputFormUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [actionAppInputFormUpdateMutation, { data, loading, error }] = useActionAppInputFormUpdateMutation({
+ * const [appInputFormUpdateMutation, { data, loading, error }] = useAppInputFormUpdateMutation({
  *   variables: {
  *      input_single_number: // value for 'input_single_number'
  *      input_single_not_zero: // value for 'input_single_not_zero'
@@ -187,83 +244,237 @@ export type ActionAppInputFormUpdateMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useActionAppInputFormUpdateMutation(
+export function useAppInputFormUpdateMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    ActionAppInputFormUpdateMutation,
-    ActionAppInputFormUpdateMutationVariables
+    AppInputFormUpdateMutation,
+    AppInputFormUpdateMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    ActionAppInputFormUpdateMutation,
-    ActionAppInputFormUpdateMutationVariables
-  >(ActionAppInputFormUpdateDocument, options);
+    AppInputFormUpdateMutation,
+    AppInputFormUpdateMutationVariables
+  >(AppInputFormUpdateDocument, options);
 }
-export type ActionAppInputFormUpdateMutationHookResult = ReturnType<
-  typeof useActionAppInputFormUpdateMutation
+export type AppInputFormUpdateMutationHookResult = ReturnType<
+  typeof useAppInputFormUpdateMutation
 >;
-export type ActionAppInputFormUpdateMutationResult =
-  Apollo.MutationResult<ActionAppInputFormUpdateMutation>;
-export type ActionAppInputFormUpdateMutationOptions =
-  Apollo.BaseMutationOptions<
-    ActionAppInputFormUpdateMutation,
-    ActionAppInputFormUpdateMutationVariables
-  >;
-export const ActionAppRedisUpdateDocument = gql`
-  mutation ActionAppRedisUpdate($store_value: String) {
-    ActionAppRedisUpdate(store_value: $store_value) {
+export type AppInputFormUpdateMutationResult =
+  Apollo.MutationResult<AppInputFormUpdateMutation>;
+export type AppInputFormUpdateMutationOptions = Apollo.BaseMutationOptions<
+  AppInputFormUpdateMutation,
+  AppInputFormUpdateMutationVariables
+>;
+export const AppLoginFormLoginDocument = gql`
+  mutation AppLoginFormLogin($email: String, $password: String) {
+    AppLoginFormLogin(email: $email, password: $password) {
       status_code
       status_message
       errors
     }
   }
 `;
-export type ActionAppRedisUpdateMutationFn = Apollo.MutationFunction<
-  ActionAppRedisUpdateMutation,
-  ActionAppRedisUpdateMutationVariables
+export type AppLoginFormLoginMutationFn = Apollo.MutationFunction<
+  AppLoginFormLoginMutation,
+  AppLoginFormLoginMutationVariables
 >;
 
 /**
- * __useActionAppRedisUpdateMutation__
+ * __useAppLoginFormLoginMutation__
  *
- * To run a mutation, you first call `useActionAppRedisUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useActionAppRedisUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAppLoginFormLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppLoginFormLoginMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [actionAppRedisUpdateMutation, { data, loading, error }] = useActionAppRedisUpdateMutation({
+ * const [appLoginFormLoginMutation, { data, loading, error }] = useAppLoginFormLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useAppLoginFormLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppLoginFormLoginMutation,
+    AppLoginFormLoginMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppLoginFormLoginMutation,
+    AppLoginFormLoginMutationVariables
+  >(AppLoginFormLoginDocument, options);
+}
+export type AppLoginFormLoginMutationHookResult = ReturnType<
+  typeof useAppLoginFormLoginMutation
+>;
+export type AppLoginFormLoginMutationResult =
+  Apollo.MutationResult<AppLoginFormLoginMutation>;
+export type AppLoginFormLoginMutationOptions = Apollo.BaseMutationOptions<
+  AppLoginFormLoginMutation,
+  AppLoginFormLoginMutationVariables
+>;
+export const AppLoginFormLogoutDocument = gql`
+  mutation AppLoginFormLogout {
+    AppLoginFormLogout {
+      status_code
+      status_message
+      errors
+    }
+  }
+`;
+export type AppLoginFormLogoutMutationFn = Apollo.MutationFunction<
+  AppLoginFormLogoutMutation,
+  AppLoginFormLogoutMutationVariables
+>;
+
+/**
+ * __useAppLoginFormLogoutMutation__
+ *
+ * To run a mutation, you first call `useAppLoginFormLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppLoginFormLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appLoginFormLogoutMutation, { data, loading, error }] = useAppLoginFormLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppLoginFormLogoutMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppLoginFormLogoutMutation,
+    AppLoginFormLogoutMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppLoginFormLogoutMutation,
+    AppLoginFormLogoutMutationVariables
+  >(AppLoginFormLogoutDocument, options);
+}
+export type AppLoginFormLogoutMutationHookResult = ReturnType<
+  typeof useAppLoginFormLogoutMutation
+>;
+export type AppLoginFormLogoutMutationResult =
+  Apollo.MutationResult<AppLoginFormLogoutMutation>;
+export type AppLoginFormLogoutMutationOptions = Apollo.BaseMutationOptions<
+  AppLoginFormLogoutMutation,
+  AppLoginFormLogoutMutationVariables
+>;
+export const AppLoginFormCheckDocument = gql`
+  mutation AppLoginFormCheck {
+    AppLoginFormCheck {
+      status_code
+      status_message
+      errors
+    }
+  }
+`;
+export type AppLoginFormCheckMutationFn = Apollo.MutationFunction<
+  AppLoginFormCheckMutation,
+  AppLoginFormCheckMutationVariables
+>;
+
+/**
+ * __useAppLoginFormCheckMutation__
+ *
+ * To run a mutation, you first call `useAppLoginFormCheckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppLoginFormCheckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appLoginFormCheckMutation, { data, loading, error }] = useAppLoginFormCheckMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppLoginFormCheckMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppLoginFormCheckMutation,
+    AppLoginFormCheckMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppLoginFormCheckMutation,
+    AppLoginFormCheckMutationVariables
+  >(AppLoginFormCheckDocument, options);
+}
+export type AppLoginFormCheckMutationHookResult = ReturnType<
+  typeof useAppLoginFormCheckMutation
+>;
+export type AppLoginFormCheckMutationResult =
+  Apollo.MutationResult<AppLoginFormCheckMutation>;
+export type AppLoginFormCheckMutationOptions = Apollo.BaseMutationOptions<
+  AppLoginFormCheckMutation,
+  AppLoginFormCheckMutationVariables
+>;
+export const AppRedisUpdateDocument = gql`
+  mutation AppRedisUpdate($store_value: String) {
+    AppRedisUpdate(store_value: $store_value) {
+      status_code
+      status_message
+      errors
+    }
+  }
+`;
+export type AppRedisUpdateMutationFn = Apollo.MutationFunction<
+  AppRedisUpdateMutation,
+  AppRedisUpdateMutationVariables
+>;
+
+/**
+ * __useAppRedisUpdateMutation__
+ *
+ * To run a mutation, you first call `useAppRedisUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppRedisUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appRedisUpdateMutation, { data, loading, error }] = useAppRedisUpdateMutation({
  *   variables: {
  *      store_value: // value for 'store_value'
  *   },
  * });
  */
-export function useActionAppRedisUpdateMutation(
+export function useAppRedisUpdateMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    ActionAppRedisUpdateMutation,
-    ActionAppRedisUpdateMutationVariables
+    AppRedisUpdateMutation,
+    AppRedisUpdateMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    ActionAppRedisUpdateMutation,
-    ActionAppRedisUpdateMutationVariables
-  >(ActionAppRedisUpdateDocument, options);
+    AppRedisUpdateMutation,
+    AppRedisUpdateMutationVariables
+  >(AppRedisUpdateDocument, options);
 }
-export type ActionAppRedisUpdateMutationHookResult = ReturnType<
-  typeof useActionAppRedisUpdateMutation
+export type AppRedisUpdateMutationHookResult = ReturnType<
+  typeof useAppRedisUpdateMutation
 >;
-export type ActionAppRedisUpdateMutationResult =
-  Apollo.MutationResult<ActionAppRedisUpdateMutation>;
-export type ActionAppRedisUpdateMutationOptions = Apollo.BaseMutationOptions<
-  ActionAppRedisUpdateMutation,
-  ActionAppRedisUpdateMutationVariables
+export type AppRedisUpdateMutationResult =
+  Apollo.MutationResult<AppRedisUpdateMutation>;
+export type AppRedisUpdateMutationOptions = Apollo.BaseMutationOptions<
+  AppRedisUpdateMutation,
+  AppRedisUpdateMutationVariables
 >;
 export const AppRedisDocument = gql`
-  query AppRedis {
-    AppRedis {
+  query AppRedis($sample_argument: String!) {
+    AppRedis(sample_argument: $sample_argument) {
       store_value
     }
   }
@@ -281,11 +492,13 @@ export const AppRedisDocument = gql`
  * @example
  * const { data, loading, error } = useAppRedisQuery({
  *   variables: {
+ *      sample_argument: // value for 'sample_argument'
  *   },
  * });
  */
 export function useAppRedisQuery(
-  baseOptions?: Apollo.QueryHookOptions<AppRedisQuery, AppRedisQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<AppRedisQuery, AppRedisQueryVariables> &
+    ({ variables: AppRedisQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<AppRedisQuery, AppRedisQueryVariables>(

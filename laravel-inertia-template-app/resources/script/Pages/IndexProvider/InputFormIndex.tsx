@@ -4,9 +4,11 @@ import { InputForm } from '@/script/Pages/InputForm/InputForm';
 import { IndexProvider } from '@/script/Provider/IndexProvider';
 
 interface IProps extends IPropsBase {}
-export const InputFormIndex: React.FC<IProps> = () => {
+export const InputFormIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <InputForm />
     </IndexProvider>
   );

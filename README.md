@@ -2,13 +2,11 @@
 Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 - [利用パッケージについて](document/PACKAGE.md)
+- [Laravel/Inertiaの基本的な導線とページ作成ガイド](./document/PAGE_CREATION_GUIDE.md)
+- [推奨するEnumの利用・自動出力について](./document/ENUM_EXPORT.md)
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
-
--　他作成が必要なドキュメント
-  - Enum利用・Enumの自動出力について
-  - GraphQL一式について
-  - バリデーションについて
-  - ページ作成ガイド
+- [GraphQLの利用方法について](./document/GRAPHQL.md)
+- [バリデーション（フロント/サーバー）について](./document/VALIDATION.md)
 
 # 環境構築
 
@@ -18,6 +16,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 - Docker Desktop for Windows が利用可能になっている
 - clone先にWSL2+Ubuntu環境が構築済み
+  - 参考）[Ubuntu22.04のセットアップ](./document/WSL2.md)
 - hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
 
 ### Mac
@@ -53,7 +52,9 @@ docker exec -it template_web bash
 > composer install
 > npm ci
 
-※データの初期化を追加したらここに記載する
+# webコンテナでデータベース初期化
+> php artisan migrate
+> (php artisan migrate:refresh // 再初期化する場合)
 
 # precommitの設定（Ubuntu上など、ターミナル側のscat2_app直下で実施する）
 (> exit)
@@ -67,6 +68,19 @@ sudo chmod 777 -R storage/
 docker exec -it template_web bash
 > npm run build
 ※念のため画面が表示されるかチェック http://localhost:9190/first_page
+```
+
+### minio(ローカル向けS3)の設定
+
+※コンテナ追加したら追記する
+
+### 初期データ投入
+
+seederを利用してテストデータを投入する
+
+```
+docker exec -it scat2_web bash
+> php artisan db:seed --class=TestCaseSeeder
 ```
 
 ### コミット動作テスト
