@@ -4,9 +4,11 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { LoginForm } from '@/script/Pages/LoginForm/LoginForm';
 
 interface IProps extends IPropsBase {}
-export const LoginFormIndex: React.FC<IProps> = ({ csrfToken, authUser }) => {
+export const LoginFormIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider csrfToken={csrfToken} authUser={authUser}>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <LoginForm />
     </IndexProvider>
   );

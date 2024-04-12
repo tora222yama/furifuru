@@ -24,7 +24,6 @@ export const context = React.createContext<IndexContext>({
   authUser: {
     id: 0,
     name: '',
-    email: '',
   },
 });
 export const useIndexContext = (): IndexContext => useContext(context);
@@ -42,9 +41,8 @@ export const IndexProvider: React.FC<IProps> = ({
     () => ({
       csrfToken: csrfToken ?? '',
       authUser: {
-        id: authUser.id ? Number(authUser.id) : 0,
-        name: authUser.name ? String(authUser.name) : '',
-        email: authUser.email ? String(authUser.email) : '',
+        id: authUser?.id ? Number(authUser.id) : 0,
+        name: authUser?.name ? String(authUser.name) : '',
       },
     }),
     [csrfToken, authUser],

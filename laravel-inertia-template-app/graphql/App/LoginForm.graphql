@@ -6,4 +6,12 @@ extend type Mutation {
     email: String
     password: String
   ): Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormLogin")
+
+  # ログアウト実施.
+  ActionAppLoginFormLogout: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormLogout")
+}
+
+extend type Mutation @guard {
+  # ログインチェック.
+  ActionAppLoginFormCheck: Response @field(resolver: "App\\GraphQL\\App\\Mutations\\ActionAppLoginFormCheck")
 }

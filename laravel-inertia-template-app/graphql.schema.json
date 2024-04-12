@@ -154,6 +154,18 @@
             "deprecationReason": null
           },
           {
+            "name": "ActionAppLoginFormCheck",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Response",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ActionAppLoginFormLogin",
             "description": null,
             "args": [
@@ -182,6 +194,18 @@
                 "deprecationReason": null
               }
             ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Response",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ActionAppLoginFormLogout",
+            "description": null,
+            "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "Response",

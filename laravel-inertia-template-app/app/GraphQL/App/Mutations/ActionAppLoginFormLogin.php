@@ -9,7 +9,6 @@ use App\Facades\Internal\PipeService;
 use App\GraphQL\App\Mutations\Pipe\PipeActionLoginFormLogin;
 use App\Models\App\Auth\AuthUser;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 final class ActionAppLoginFormLogin
 {
@@ -19,12 +18,9 @@ final class ActionAppLoginFormLogin
         sleep(1);
 
         // パイプ作成.
-        /** @var PipeActionLoginFormLogin $pipe */
-        $pipe     = PipeService::insertNewPipe(
+        PipeService::insertNewPipe(
             new PipeActionLoginFormLogin($args)
         );
-        Log::info('email:'.$pipe->email);
-        Log::info('password:'.$pipe->password);
 
         // ユーザーを強制的に取得.
         $authUser = AuthUser::query()

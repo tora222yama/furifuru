@@ -12,3 +12,21 @@ mutation ActionAppLoginFormLogin(
     errors
   }
 }
+
+# ログアウト実施.
+mutation ActionAppLoginFormLogout {
+  ActionAppLoginFormLogout {
+    status_code
+    status_message
+    errors
+  }
+}
+
+# ガードチェック用.
+mutation ActionAppLoginFormCheck {
+  ActionAppLoginFormCheck {
+    status_code
+    status_message
+    errors
+  }
+}

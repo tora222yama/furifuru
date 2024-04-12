@@ -23,10 +23,9 @@ interface IProps extends IPropsBase {
   storeValue: string;
 }
 export const RedisPostResultIndex: React.FC<IProps> = ({
-  csrfToken,
-  authUser,
-
   storeValue,
+
+  ...props
 }) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
@@ -38,9 +37,11 @@ export const RedisPostResultIndex: React.FC<IProps> = ({
     [storeValue],
   );
 
+  // noinspection TypeScriptValidateTypes
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider csrfToken={csrfToken} authUser={authUser}>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <IndexProvider {...props}>
         <RedisPostResult />
       </IndexProvider>
     </context.Provider>

@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,7 +28,6 @@ class Controller extends BaseController
     ): Response {
         /** @var AuthUser|null $authUser */
         $authUser = Auth::user();
-        Log::info(print_r($authUser, true));
 
         return Inertia::render($component, array_merge(
             $props,

@@ -38,14 +38,13 @@ interface IPros extends IPropsBase {
   trnFacilityList: [];
 }
 export const MvcValueIndex: React.FC<IPros> = ({
-  csrfToken,
-  authUser,
-
   numberValue,
   stringValue,
   arrayValue,
 
   trnFacilityList,
+
+  ...props
 }) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
@@ -63,9 +62,11 @@ export const MvcValueIndex: React.FC<IPros> = ({
     [numberValue, stringValue, arrayValue, trnFacilityList],
   );
 
+  // noinspection TypeScriptValidateTypes
   return (
     <context.Provider value={providerValue}>
-      <IndexProvider csrfToken={csrfToken} authUser={authUser}>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <IndexProvider {...props}>
         <MvcValue />
       </IndexProvider>
     </context.Provider>

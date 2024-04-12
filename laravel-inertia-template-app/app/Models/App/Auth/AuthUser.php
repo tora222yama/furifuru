@@ -53,7 +53,6 @@ class AuthUser extends Authenticatable
         return [
             'id'          => $this->id,
             'name'        => $this->name        ?? '',
-            'email'       => $this->email       ?? '',
         ];
     }
 }
