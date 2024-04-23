@@ -85,7 +85,7 @@ docker exec -it template_web bash
 > php artisan migrate
 > (php artisan migrate:refresh // 再初期化する場合)
 
-# precommitの設定（Ubuntu上など、ターミナル側のscat2_app直下で実施する）
+# precommitの設定（Ubuntu上など、ターミナル側のlaravel-inertia-template-app直下で実施する）
 (> exit)
 npm run prepare
 (husky - Git hooks installed と表示されればOK)
@@ -108,7 +108,7 @@ docker exec -it template_web bash
 seederを利用してテストデータを投入する
 
 ```
-docker exec -it scat2_web bash
+docker exec -it template_web bash
 > php artisan db:seed --class=TestCaseSeeder
 ```
 

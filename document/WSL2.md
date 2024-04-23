@@ -85,7 +85,7 @@ npm -v
     - メモ帳を管理者権限で開き、hostsファイルを編集
 
 ```
-127.0.0.1 localhost minio local-scat.919-system.com
+127.0.0.1 localhost minio
 ```
 
 - IntelliJ IDEAは最初からインストールされている認識ですが、なければダウンロードサイトから入手
