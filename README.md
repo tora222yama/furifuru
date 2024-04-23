@@ -35,6 +35,35 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - dockerディレクトリ以下に```CRLF```ファイルがあるとビルドに失敗します
   - CTRL+選択した状態でCTRL+SHIFT+Aでアクションを実施→```LF - Unix and MacOS```を実施すると一括でLFに変更できます
 
+### コピー環境の作成
+
+※サンプル環境での起動確認、追加、編集を行う場合は本ステップは不要
+※ダウンロードしたディレクトリで「セットアップ手順」以降の対応を実施してください
+
+新規プロジェクトなど、新しい環境を作成する場合は下記の手順を参考にしてください
+
+- 新規リポジトリを作成
+  - 例はgit名称を```new_project.git```とし、プロジェクト名を```newp```とします
+  - 作成時のルールは[Backlog](https://scat919.backlog.jp/alias/wiki/1276308)を参考にしてください
+- ダウンロード済みのテンプレート環境から、新規リポジトリにmirror-pushする
+  - 新規で作成したリポジトリにtemplate環境のhistory含めてすべてpushされる
+
+```
+※テンプレート環境のディレクトリで実施
+$ git push --mirror https://github.com/quick-wpd/new_project.git
+```
+
+- アプリケーション名を変更
+  - 事故に気を付けつつCTRL+SHIFT+Rの一括置換でも問題ありません
+  - そのままでも利用は可能ですが、諸々利用PJにあわせた最適化を推奨します
+  - ディレクトリ名の修正
+    - ```laravel-inertia-template-app``` -> ```newp-app```
+  - ファイル内の宣言の修正
+    - ```laravel-inertia-template-app``` -> ```newp-app```
+    - ```laravel-inertia-template``` -> ```newp```
+    - ```template_``` -> ```newp_```
+      - 主にdocker-composeの宣言が修正されます
+
 ### セットアップ手順
 
 - インストール時の権限でファイル所有者がrootなどになっていると正常に動作しない場合があるので、その場合はchownで対応してください
@@ -56,7 +85,7 @@ docker exec -it template_web bash
 > php artisan migrate
 > (php artisan migrate:refresh // 再初期化する場合)
 
-# precommitの設定（Ubuntu上など、ターミナル側のscat2_app直下で実施する）
+# precommitの設定（Ubuntu上など、ターミナル側のlaravel-inertia-template-app直下で実施する）
 (> exit)
 npm run prepare
 (husky - Git hooks installed と表示されればOK)
@@ -79,7 +108,7 @@ docker exec -it template_web bash
 seederを利用してテストデータを投入する
 
 ```
-docker exec -it scat2_web bash
+docker exec -it template_web bash
 > php artisan db:seed --class=TestCaseSeeder
 ```
 
