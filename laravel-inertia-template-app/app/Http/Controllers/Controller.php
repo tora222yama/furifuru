@@ -26,6 +26,9 @@ class Controller extends BaseController
         string $component,
         array|Arrayable $props = []
     ): Response {
+        // ローカルで処理が早すぎないように調整する.
+        localSleep();
+
         /** @var AuthUser|null $authUser */
         $authUser = Auth::user();
 

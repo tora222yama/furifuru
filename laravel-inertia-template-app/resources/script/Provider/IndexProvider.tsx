@@ -5,6 +5,7 @@ import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { themeCommon } from '@/script/System/Theme';
 import { IAuthUser } from '@/script/Models/App/Auth/AuthUser';
+import { ProgressProvider } from '@/script/Provider/ProgressProvider';
 
 const client = new ApolloClient({
   ssrMode: true,
@@ -52,8 +53,10 @@ export const IndexProvider: React.FC<IProps> = ({
     <context.Provider value={providerValue}>
       <ThemeProvider theme={themeCommon}>
         <ApolloProvider client={client}>
-          <CssBaseline />
-          {children}
+          <ProgressProvider>
+            <CssBaseline />
+            {children}
+          </ProgressProvider>
         </ApolloProvider>
       </ThemeProvider>
     </context.Provider>

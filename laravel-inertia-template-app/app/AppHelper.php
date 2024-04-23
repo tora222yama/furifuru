@@ -51,3 +51,15 @@ if (! function_exists('isTst')) {
         return config('app.env') === 'tst';
     }
 }
+
+if (! function_exists('localSleep')) {
+    /**
+     * ローカルのみ偽装遅延させる.
+     */
+    function localSleep(int $second = 1): void
+    {
+        if (isLocal()) {
+            sleep($second);
+        }
+    }
+}
