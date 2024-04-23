@@ -18,6 +18,7 @@ import {
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { useIndexContext } from '@/script/Provider/IndexProvider';
+import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 
 interface IProps extends IPropsBase {}
 export const DrawerDesktop: React.FC<IProps> = () => {
@@ -70,9 +71,11 @@ export const DrawerDesktop: React.FC<IProps> = () => {
           {hrefList.map(page => {
             return (
               <ListItem key={page} disablePadding>
-                <ListItemButton href={getPagesHref(page)}>
-                  <ListItemText>{getPagesName(page)}</ListItemText>
-                </ListItemButton>
+                <InertiaLink sx={{ width: '100%' }} href={getPagesHref(page)}>
+                  <ListItemButton>
+                    <ListItemText>{getPagesName(page)}</ListItemText>
+                  </ListItemButton>
+                </InertiaLink>
               </ListItem>
             );
           })}
