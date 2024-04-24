@@ -7,4 +7,6 @@ export interface IPropsBase {
   csrfToken?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   authUser?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  location?: any;
 }

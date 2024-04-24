@@ -6,6 +6,11 @@ import { IPropsBase } from '@/script/System/System';
 import { themeCommon } from '@/script/System/Theme';
 import { IAuthUser } from '@/script/Models/App/Auth/AuthUser';
 import { ProgressProvider } from '@/script/Provider/ProgressProvider';
+import {
+  getDefaultLocation,
+  ILocation,
+  parseLocation,
+} from '@/script/Provider/ILocation';
 
 const client = new ApolloClient({
   ssrMode: true,
@@ -19,6 +24,7 @@ const client = new ApolloClient({
 type IndexContext = {
   csrfToken: string;
   authUser: IAuthUser;
+  location: ILocation;
 };
 export const context = React.createContext<IndexContext>({
   csrfToken: '',
@@ -26,6 +32,7 @@ export const context = React.createContext<IndexContext>({
     id: 0,
     name: '',
   },
+  location: getDefaultLocation(),
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
@@ -33,6 +40,7 @@ interface IProps extends IPropsBase {}
 export const IndexProvider: React.FC<IProps> = ({
   csrfToken,
   authUser,
+  location,
   children,
 }) => {
   /**
@@ -45,8 +53,9 @@ export const IndexProvider: React.FC<IProps> = ({
         id: authUser?.id ? Number(authUser.id) : 0,
         name: authUser?.name ? String(authUser.name) : '',
       },
+      location: parseLocation(location),
     }),
-    [csrfToken, authUser],
+    [csrfToken, authUser, location],
   );
 
   return (
