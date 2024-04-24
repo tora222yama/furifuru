@@ -9,7 +9,7 @@ export interface IAppTrnFacility {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const parsePayload = (payload: any): IAppTrnFacility => {
+export const parseAppTrnFacilityPayload = (payload: any): IAppTrnFacility => {
   return {
     id: payload.id ? Number(payload.id) : 0,
     categoryId: payload.category_id ? Number(payload.category_id) : 0,
