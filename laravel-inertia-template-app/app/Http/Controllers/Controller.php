@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,8 +36,12 @@ class Controller extends BaseController
         return Inertia::render($component, array_merge(
             $props,
             [
-                'csrfToken' => csrf_token(),
-                'authUser'  => $authUser?->toPayload(),
+                'csrfToken'      => csrf_token(),
+                'authUser'       => $authUser?->toPayload(),
+                'location'       => [
+                    'current' => Request::url(),
+                    'path'    => Request::path(),
+                ],
             ],
         ));
     }

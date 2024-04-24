@@ -9,9 +9,11 @@ import { Log } from '@/script/Common/Log';
 import { Facility } from '@/script/Pages/MvcValue/Facility';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { useIndexContext } from '@/script/Provider/IndexProvider';
 
 interface IPros extends IPropsBase {}
 export const MvcValue: React.FC<IPros> = () => {
+  const { location } = useIndexContext();
   const { numberValue, stringValue, arrayValue, trnFacilityList } =
     useMvcValueContext();
 
@@ -47,6 +49,15 @@ export const MvcValue: React.FC<IPros> = () => {
         {arrayValue.map(v => {
           return <Box key={v}>{v}</Box>;
         })}
+      </Paper>
+      <Paper
+        sx={{
+          marginTop: '10px',
+          padding: '5px',
+        }}
+      >
+        <TypoText>location: {location.current}</TypoText>
+        <TypoText>path: {location.path}</TypoText>
       </Paper>
       <Button
         sx={{
