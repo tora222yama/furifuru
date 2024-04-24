@@ -7,6 +7,8 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [レスポンシブ対応（mediaQuery)について](document/MEDIA_QUERY.md)
 - [GraphQLの利用方法について](./document/GRAPHQL.md)
 - [バリデーション（フロント/サーバー）について](./document/VALIDATION.md)
+- [SPAビルドについて](./document/SPA.md)
+- [InertiaLinkとPartialLoadについて](./document/INERTIA_LINK_AND_PARTIAL_LOAD.md)
 
 # 環境構築
 
@@ -170,5 +172,5 @@ npm run build
 php artisan inertia:start-ssr
 ```
 
-- 実行後に```localhost:9190/first_page```ページにアクセスすると、サーバー側で描画した結果を受け取れます
+- 実行後に```localhost:9190```ページにアクセスすると、サーバー側で描画した結果を受け取れます
 
