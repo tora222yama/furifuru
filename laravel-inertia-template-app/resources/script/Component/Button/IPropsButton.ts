@@ -8,7 +8,10 @@ type UseButtonPropsKeys =
   | 'disabled'
   | 'startIcon'
   | 'endIcon'
+  | 'variant'
   | 'onClick'
+  | 'onMouseEnter'
+  | 'onMouseLeave'
   | 'href';
 
 export interface IPropsButton
