@@ -5,7 +5,7 @@ import { MvcValue } from '@/script/Pages/MvcValue/MvcValue';
 import { IndexProvider } from '@/script/Provider/IndexProvider';
 import {
   AppTrnFacilityList,
-  parsePayload,
+  parseAppTrnFacilityPayload,
 } from '@/script/Models/App/Trn/TrnFacilityList';
 
 /**
@@ -56,7 +56,7 @@ export const MvcValueIndex: React.FC<IPros> = ({
       arrayValue,
 
       trnFacilityList: new AppTrnFacilityList(
-        trnFacilityList.map(v => parsePayload(v)),
+        trnFacilityList.map(v => parseAppTrnFacilityPayload(v)),
       ),
     }),
     [numberValue, stringValue, arrayValue, trnFacilityList],

@@ -12,6 +12,7 @@ export const E_PAGES = {
   REDIS_POST_RESULT: 'redis_post_result', // RedisをPostで更新.
   SLACK_LOG: 'slack_log', // Slackログ通知.
   LOGIN_FORM: 'login', // ログインフォーム.
+  PAGINATION: 'pagination', // ページネーション.
   HEALTH_CHECK: 'health_check', // ヘルスチェック.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
@@ -38,6 +39,8 @@ export const getPagesHref = (page: EPages): string => {
       return '/slack_log';
     case E_PAGES.LOGIN_FORM:
       return '/login_form';
+    case E_PAGES.PAGINATION:
+      return '/pagination';
     default:
       return '';
   }
@@ -63,6 +66,8 @@ export const getPagesName = (page: EPages): string => {
       return 'Slack通知・Log出力';
     case E_PAGES.LOGIN_FORM:
       return 'ログインフォーム';
+    case E_PAGES.PAGINATION:
+      return 'ページネーション';
     default:
       return '';
   }

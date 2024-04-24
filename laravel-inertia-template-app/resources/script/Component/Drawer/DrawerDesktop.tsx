@@ -33,6 +33,7 @@ export const DrawerDesktop: React.FC<IProps> = () => {
     E_PAGES.REDIS,
     E_PAGES.SLACK_LOG,
     E_PAGES.LOGIN_FORM,
+    E_PAGES.PAGINATION,
   ];
 
   return (
