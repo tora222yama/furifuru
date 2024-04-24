@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button } from '@mui/material';
 import { IPropsButton } from '@/script/Component/Button/IPropsButton';
-import { TypoText } from '@/script/Component/Typography/TypoText';
 import {
   E_BUTTON_TYPE,
   getButtonColorDisabled,
@@ -23,30 +22,19 @@ export const ButtonGeneral: React.FC<IProps> = ({
   label,
   startIcon,
   endIcon,
+  variant,
   onClick,
   href,
   children,
 }) => {
-  /**
-   * 表示ラベル.
-   */
-  const nodeLabel = (): React.ReactNode => {
-    if (children) {
-      return children;
-    }
-
-    return <TypoText color={getButtonColorText(buttonType)}>{label}</TypoText>;
-  };
-
   return (
     <Button
       id={id}
       sx={{
-        display: 'block',
         backgroundColor: getButtonColorNormal(buttonType),
+        color: getButtonColorText(buttonType),
         textTransform: 'none',
         padding: '10px 16px',
-        ...sx,
 
         '&:hover': {
           backgroundColor: getButtonColorHover(buttonType),
@@ -54,6 +42,8 @@ export const ButtonGeneral: React.FC<IProps> = ({
         '&:disabled': {
           backgroundColor: getButtonColorDisabled(buttonType),
         },
+
+        ...sx,
       }}
       type={type}
       disabled={disabled}
@@ -61,9 +51,9 @@ export const ButtonGeneral: React.FC<IProps> = ({
       endIcon={endIcon}
       onClick={onClick}
       href={href}
-      variant="contained"
+      variant={variant ?? 'contained'}
     >
-      {nodeLabel()}
+      {children ?? label}
     </Button>
   );
 };

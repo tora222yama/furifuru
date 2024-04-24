@@ -3,7 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "vite build && vite build --ssr",
         "tsc": "tsc --noEmit",
         "prettier": "./node_modules/.bin/prettier --write 'resources/script/**/*.{ts,tsx}'",
         "eslint": "./node_modules/.bin/eslint --fix 'resources/script/**/*.{ts,tsx}'",
