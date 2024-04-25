@@ -38,7 +38,7 @@ export const PaginationList: React.FC<IProps> = ({ sx }) => {
           index: nextIndex,
           step: pageStep,
         },
-        only: ['trnFacilityList', 'trnFacilityListCount'],
+        only: ['paginationFacility'],
       });
 
       return nextIndex;
@@ -62,7 +62,7 @@ export const PaginationList: React.FC<IProps> = ({ sx }) => {
           index: nextIndex,
           step: pageStep,
         },
-        only: ['trnFacilityList', 'trnFacilityListCount'],
+        only: ['paginationFacility'],
       });
 
       return nextIndex;

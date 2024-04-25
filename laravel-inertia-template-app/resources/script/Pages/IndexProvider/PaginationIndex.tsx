@@ -28,13 +28,11 @@ export const usePaginationContext = (): PaginationContext =>
  * コントローラーから受け取るprops.
  */
 interface IProps extends IPropsBase {
-  trnFacilityList: [];
-  trnFacilityListCount: number;
+  paginationFacility: { list: []; count: number };
   fixList: [];
 }
 export const PaginationIndex: React.FC<IProps> = ({
-  trnFacilityList,
-  trnFacilityListCount,
+  paginationFacility,
   fixList,
 
   ...props
@@ -45,14 +43,14 @@ export const PaginationIndex: React.FC<IProps> = ({
   const providerValue: PaginationContext = useMemo(
     () => ({
       trnFacilityList: new AppTrnFacilityList(
-        trnFacilityList.map(v => parseAppTrnFacilityPayload(v)),
+        paginationFacility.list.map(v => parseAppTrnFacilityPayload(v)),
       ),
-      trnFacilityListCount,
+      trnFacilityListCount: paginationFacility.count,
       fixList: new AppTrnFacilityList(
         fixList.map(v => parseAppTrnFacilityPayload(v)),
       ),
     }),
-    [trnFacilityList, trnFacilityListCount, fixList],
+    [paginationFacility, fixList],
   );
 
   // noinspection TypeScriptValidateTypes

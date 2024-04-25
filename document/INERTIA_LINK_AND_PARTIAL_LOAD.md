@@ -3,7 +3,6 @@
 Inertiaを利用する環境で、要となるInertiaLinkとPartialLoadについて説明します
 
 なお本機能においてはSSRかSPAかは関係ありません。
-（※SSRの時にどうやって実現しているのかいまいち想像できていません）
 
 ## はじめに
 
@@ -81,8 +80,83 @@ Controllerが上記の性質を持つため、例えば
 
 固定リストの描画は変動がありません。
 
-上記を実現するためには、リンク処理をInertiaLinkもしくはPartialReloadで呼び出す必要があり、下記でそれぞれ説明します
+SSR時も実現できているため、おそらくですが、bladeに仕込んである```data-page```で実現していると思われます。
+
+上記の恩恵を受け取るためには、リンク処理をInertiaLinkもしくはPartialReloadで呼び出す必要があり、下記でそれぞれ説明します
 
 ## InertiaLink
 
+通常```<a href=..>```のタグを配置する場所はMUIの<Link>ではなく、Inertiaの提供するリンクを利用してください
+
+- 特に意図せず利用できるように
+- ロード中処理を共通で行えるように
+
+の観点で```laravel-inertia-template-app/resources/script/Component/Misc/InertiaLink.tsx```を用意しています。
+
+サンプルと同様これを利用してもらえばOKです
+
+良く使いそうなパラメータは下記
+
+- as
+  - 何のタグとして配置するか ※as="div"ならdivとして配置される
+- data
+  - コントローラーに送るパラメータ
+  - getのmethodで送信するとクエリストリングに付与される
+- method
+  - 基本はgetかpost
+  - クエリストリングを表示させたくないならpost
+- replace
+  - ブラウザのhistoryを積むか置き換えるか（戻るボタンに影響）
+- only
+  - コントローラーが提供するパラメータのうち、再取得処理を行うものを指定する
+  - ```データ取得処理…3```のような取得方法を指定しないと意味がない
+- preserveScroll
+  - スクロール位置を保持するかどうか
+- preserveState
+  - Reactが保持しているstateをそのまま保持させるかどうか
+- onStart
+  - コントローラーの呼び出しが始まったタイミングでコール
+- onFinish
+  - コントローラーの呼び出しが終了したタイミングでコール
+- ※on～は他にも複数あり
+
+SSR/SPAを問わず動作し、```データ取得処理…1```のような場合は基本的に影響がないので
+
+リンクはすべて```<InertiaLink />```を利用する形で問題ないものと思います。
+
+また、基本的にほぼ全部のパラメータはデフォルト（指定なし）で問題ありません
+
 ## PartialReload
+
+```<InertiaLink>```で実現していることをscriptからコールする場合に利用します
+
+例）
+```
+import { router } from '@inertiajs/react';
+
+// url指定の場合は.visit(url, {})を利用する
+router.reload({
+  method: 'post',
+  preserveState: true,
+  replace: true,
+  onStart,
+  onFinish,
+  data: {
+    index: nextIndex,
+    step: pageStep,
+  },
+  only: ['trnFacilityList', 'trnFacilityListCount'],
+});
+```
+
+動作、パラメータのルールは全て```<InertiaLink>```と同様です
+
+## その他
+
+全体的に、非常に便利な挙動ではありますが、かなり想像しづらい動きになります。
+
+一度、Paginationのサンプルと[TIPS.md](./TIPS.md)のクエリログの確認方法を併用して
+
+挙動を把握することをお勧めします。
+
+2024/04時点では[こちらの記事](https://note.com/mocotech/n/nf82062ca3993)もおすすめ

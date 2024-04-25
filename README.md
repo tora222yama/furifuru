@@ -9,6 +9,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [バリデーション（フロント/サーバー）について](./document/VALIDATION.md)
 - [SPAビルドについて](./document/SPA.md)
 - [InertiaLinkとPartialLoadについて](./document/INERTIA_LINK_AND_PARTIAL_LOAD.md)
+- [TIPS](./document/TIPS.md)
 
 # 環境構築
 
