@@ -9,6 +9,7 @@ enum EPipeKind: string
     case INVALID                      = 'invalid';
 
     // queries.
+    case APP_PAGINATION_QUERY         = 'app_pagination_query';
     case APP_REDIS_QUERY              = 'app_redis_query';
 
     // mutations.
