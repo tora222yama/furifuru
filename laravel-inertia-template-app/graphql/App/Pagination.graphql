@@ -1,0 +1,22 @@
+# App/Pagination.graphql
+
+extend type Query {
+  # ページネーション情報の取得.
+  AppPagination(
+    page_index: Int!
+    page_step: Int!
+  ): AppPagination! @field(resolver: "App\\GraphQL\\App\\Queries\\AppPaginationQuery")
+}
+
+type AppPagination {
+  list: [AppPaginationItem]!
+  count: Int!
+}
+
+type AppPaginationItem {
+  id: Int!
+  category_id: Int!
+  name: String!
+  explain: String!
+  created_at: String!
+}

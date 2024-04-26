@@ -53,4 +53,5 @@ type Response {
 # Query/Mutationの定義.
 #import App/InputForm.graphql
 #import App/LoginForm.graphql
+#import App/Pagination.graphql
 #import App/Redis.graphql

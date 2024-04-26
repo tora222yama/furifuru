@@ -32,6 +32,21 @@ export type Scalars = {
   DateTime: { input: any; output: any };
 };
 
+export type AppPagination = {
+  __typename?: 'AppPagination';
+  count: Scalars['Int']['output'];
+  list: Array<Maybe<AppPaginationItem>>;
+};
+
+export type AppPaginationItem = {
+  __typename?: 'AppPaginationItem';
+  category_id: Scalars['Int']['output'];
+  created_at: Scalars['String']['output'];
+  explain: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type AppRedis = {
   __typename?: 'AppRedis';
   store_value: Scalars['String']['output'];
@@ -66,11 +81,18 @@ export type MutationAppRedisUpdateArgs = {
 /** Indicates what fields are available at the top level of a query operation. */
 export type Query = {
   __typename?: 'Query';
+  AppPagination: AppPagination;
   AppRedis: AppRedis;
   /** Find a single user by an identifying attribute. */
   user?: Maybe<User>;
   /** List multiple users. */
   users: Array<User>;
+};
+
+/** Indicates what fields are available at the top level of a query operation. */
+export type QueryAppPaginationArgs = {
+  page_index: Scalars['Int']['input'];
+  page_step: Scalars['Int']['input'];
 };
 
 /** Indicates what fields are available at the top level of a query operation. */
@@ -186,6 +208,27 @@ export type AppRedisUpdateMutation = {
     status_message: string;
     errors?: string | null;
   } | null;
+};
+
+export type AppPaginationQueryVariables = Exact<{
+  page_index: Scalars['Int']['input'];
+  page_step: Scalars['Int']['input'];
+}>;
+
+export type AppPaginationQuery = {
+  __typename?: 'Query';
+  AppPagination: {
+    __typename?: 'AppPagination';
+    count: number;
+    list: Array<{
+      __typename?: 'AppPaginationItem';
+      id: number;
+      category_id: number;
+      name: string;
+      explain: string;
+      created_at: string;
+    } | null>;
+  };
 };
 
 export type AppRedisQueryVariables = Exact<{
@@ -471,6 +514,91 @@ export type AppRedisUpdateMutationResult =
 export type AppRedisUpdateMutationOptions = Apollo.BaseMutationOptions<
   AppRedisUpdateMutation,
   AppRedisUpdateMutationVariables
+>;
+export const AppPaginationDocument = gql`
+  query AppPagination($page_index: Int!, $page_step: Int!) {
+    AppPagination(page_index: $page_index, page_step: $page_step) {
+      list {
+        id
+        category_id
+        name
+        explain
+        created_at
+      }
+      count
+    }
+  }
+`;
+
+/**
+ * __useAppPaginationQuery__
+ *
+ * To run a query within a React component, call `useAppPaginationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppPaginationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppPaginationQuery({
+ *   variables: {
+ *      page_index: // value for 'page_index'
+ *      page_step: // value for 'page_step'
+ *   },
+ * });
+ */
+export function useAppPaginationQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AppPaginationQuery,
+    AppPaginationQueryVariables
+  > &
+    (
+      | { variables: AppPaginationQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AppPaginationQuery, AppPaginationQueryVariables>(
+    AppPaginationDocument,
+    options,
+  );
+}
+export function useAppPaginationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AppPaginationQuery,
+    AppPaginationQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AppPaginationQuery, AppPaginationQueryVariables>(
+    AppPaginationDocument,
+    options,
+  );
+}
+export function useAppPaginationSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AppPaginationQuery,
+    AppPaginationQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AppPaginationQuery,
+    AppPaginationQueryVariables
+  >(AppPaginationDocument, options);
+}
+export type AppPaginationQueryHookResult = ReturnType<
+  typeof useAppPaginationQuery
+>;
+export type AppPaginationLazyQueryHookResult = ReturnType<
+  typeof useAppPaginationLazyQuery
+>;
+export type AppPaginationSuspenseQueryHookResult = ReturnType<
+  typeof useAppPaginationSuspenseQuery
+>;
+export type AppPaginationQueryResult = Apollo.QueryResult<
+  AppPaginationQuery,
+  AppPaginationQueryVariables
 >;
 export const AppRedisDocument = gql`
   query AppRedis($sample_argument: String!) {
