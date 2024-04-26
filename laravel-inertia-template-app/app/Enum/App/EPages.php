@@ -18,6 +18,7 @@ enum EPages: string
     case REDIS_POST_RESULT = 'redis_post_result'; // RedisをPostで更新.
     case SLACK_LOG         = 'slack_log'; // Slackログ通知.
     case LOGIN_FORM        = 'login'; // ログインフォーム.
+    case PAGINATION        = 'pagination'; // ページネーション.
     case HEALTH_CHECK      = 'health_check'; // ヘルスチェック.
     case NOT_FOUND         = 'not_found'; // ページが見つからない.
 
@@ -35,6 +36,7 @@ enum EPages: string
             self::REDIS_POST_RESULT => '\App\Http\Controllers\Pages\RedisPostResultController@invoke',
             self::SLACK_LOG         => '\App\Http\Controllers\Pages\SlackLogController@invoke',
             self::LOGIN_FORM        => '\App\Http\Controllers\Pages\LoginFormController@invoke',
+            self::PAGINATION        => '\App\Http\Controllers\Pages\PaginationController@invoke',
             self::HEALTH_CHECK      => '\App\Http\Controllers\Pages\HealthCheckController@invoke',
             self::NOT_FOUND         => '\App\Http\Controllers\Pages\NotFoundController@invoke',
         };
