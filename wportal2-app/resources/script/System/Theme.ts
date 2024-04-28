@@ -47,16 +47,16 @@ export const themeCommon = createTheme({
       fontSize: '14px',
     },
     button: {
-      fontSize: '18px',
+      fontSize: '16px',
     },
   },
   mixins: {
     toolbar: {
-      height: '64px',
+      height: '52px',
       padding: '0px',
     },
     drawer: {
-      width: '250px',
+      width: '240px',
     },
   },
   breakpoints: {

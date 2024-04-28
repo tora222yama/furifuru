@@ -11,6 +11,6 @@ class NotFoundController extends Controller
 {
     public function invoke(): Response
     {
-        return $this->render('IndexProvider/NotFoundIndex');
+        return $this->render('NotFound/NotFoundIndex');
     }
 }

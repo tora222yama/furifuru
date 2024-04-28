@@ -27,30 +27,27 @@ export const DrawerDesktop: React.FC<IProps> = () => {
   /**
    * 表示するリンク.
    */
-  const hrefList: EPages[] = [
-    E_PAGES.MVC_VALUE,
-    E_PAGES.INPUT_FORM,
-    E_PAGES.REDIS,
-    E_PAGES.SLACK_LOG,
-    E_PAGES.LOGIN_FORM,
-    E_PAGES.PAGINATION,
-  ];
+  const hrefList: EPages[] = [];
 
   return (
     <MuiDrawer
       sx={{
+        position: 'fixed',
+        height: '100vh',
+        overflow: 'hidden',
         width: theme => theme.mixins.drawer?.width,
+
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        [`& .MuiDrawer-paper`]: {
           width: theme => theme.mixins.drawer?.width,
           boxSizing: 'border-box',
         },
       }}
       variant="permanent"
-      anchor="left"
     >
       <Box
         sx={{
+          marginTop: theme => theme.mixins.toolbar.height,
           padding: '20px',
         }}
       >
