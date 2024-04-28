@@ -55,9 +55,7 @@ export const DrawerDesktop: React.FC<IProps> = () => {
         }}
       >
         <Link href={getPagesHref(E_PAGES.DASHBOARD)} underline="none">
-          <TypoText color={E_COLOR.TEXT_PRIMARY}>
-            Laravel-Inertia-Template
-          </TypoText>
+          <TypoText color={E_COLOR.TEXT_PRIMARY}>wportal2</TypoText>
         </Link>
         <Box
           sx={{

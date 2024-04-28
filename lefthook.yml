@@ -5,30 +5,30 @@ pre-commit:
   commands:
     tsc:
       glob: '*.{ts,tsx}'
-      run: npm run tsc --prefix ./laravel-inertia-template-app
+      run: npm run tsc --prefix ./wportal2-app
     prettier:
       glob: '*.{ts,tsx}'
       run: |
-        ./laravel-inertia-template-app/node_modules/.bin/prettier --write {staged_files}
+        ./wportal2-app/node_modules/.bin/prettier --write {staged_files}
         git add {staged_files}
     eslint:
       glob: '*.{ts,tsx}'
       run: |
-        ./laravel-inertia-template-app/node_modules/.bin/eslint --fix {staged_files}
+        ./wportal2-app/node_modules/.bin/eslint --fix {staged_files}
     pint:
       glob: '*.{php}'
       run: |
-        ./laravel-inertia-template-app/vendor/bin/pint {staged_files}
+        ./wportal2-app/vendor/bin/pint {staged_files}
         git add {staged_files}
     ide-helper:
       glob: '*.{php}'
       run: |
-        cd ./laravel-inertia-template-app
+        cd ./wportal2-app
         php artisan ide-helper:generate
         php artisan ide-helper:models -N
     graphql:
       glob: '*'
       run: |
-        cd ./laravel-inertia-template-app
+        cd ./wportal2-app
         php artisan lighthouse:ide-helper
 

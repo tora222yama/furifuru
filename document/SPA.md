@@ -46,7 +46,7 @@ SPAのビルドを用いたい時はpackage.jsonを下記のように変更し�
 ※SSRではブラウザから情報が拾えないためサーバーから送信していますが、SPAの場合任意のタイミングで
 ```window.location```から情報を取得できます。
 
-あわせて```laravel-inertia-template-app/resources/script/Provider/IndexProvider.tsx```で
+あわせて```wportal2-app/resources/script/Provider/IndexProvider.tsx```で
 行っているlocationの受取も不要となります
 
 ※1.下記のlocationに関わる部分

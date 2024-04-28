@@ -5,7 +5,7 @@
 レスポンシブ対応（PC画面・モバイル画面などで表示を制御する）を行う場合
 JavaScriptでどちらの画面サイズかを判定するので問題がなければMUI提供のuseMediaQueryを利用すれば良い
 
-- laravel-inertia-template-app/resources/script/Hooks/Common/useMediaSize.tsx
+- wportal2-app/resources/script/Hooks/Common/useMediaSize.tsx
 
 ```
 export const useMediaSize = () => {

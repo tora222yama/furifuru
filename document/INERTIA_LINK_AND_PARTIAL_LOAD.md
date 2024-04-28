@@ -47,7 +47,7 @@ Controllerが上記の性質を持つため、例えば
 
 詳しくは```pagination```のURLで確認できる
 
-```laravel-inertia-template-app/app/Http/Controllers/Pages/PaginationController.php```
+```wportal2-app/app/Http/Controllers/Pages/PaginationController.php```
 
 の挙動を確認してください。
 
@@ -91,7 +91,7 @@ SSR時も実現できているため、おそらくですが、bladeに仕込ん
 - 特に意図せず利用できるように
 - ロード中処理を共通で行えるように
 
-の観点で```laravel-inertia-template-app/resources/script/Component/Misc/InertiaLink.tsx```を用意しています。
+の観点で```wportal2-app/resources/script/Component/Misc/InertiaLink.tsx```を用意しています。
 
 サンプルと同様これを利用してもらえばOKです
 
