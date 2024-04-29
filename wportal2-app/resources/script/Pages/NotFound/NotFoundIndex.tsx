@@ -4,9 +4,11 @@ import { IndexProvider } from '@/script/Provider/IndexProvider';
 import { NotFound } from '@/script/Pages/NotFound/NotFound';
 
 interface IProps extends IPropsBase {}
-export const NotFoundIndex: React.FC<IProps> = () => {
+export const NotFoundIndex: React.FC<IProps> = ({ ...props }) => {
+  // noinspection TypeScriptValidateTypes
   return (
-    <IndexProvider>
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <IndexProvider {...props}>
       <NotFound />
     </IndexProvider>
   );

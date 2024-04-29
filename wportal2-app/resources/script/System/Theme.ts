@@ -63,9 +63,9 @@ export const themeCommon = createTheme({
     values: {
       xs: 0,
       sm: 375,
-      md: 1024,
-      lg: 1200,
-      xl: 1536,
+      md: 800,
+      lg: 1024,
+      xl: 1280,
     },
   },
   components: {
@@ -88,6 +88,11 @@ export const themeCommon = createTheme({
       defaultProps: {
         variant: 'contained',
         color: 'primary',
+      },
+      styleOverrides: {
+        startIcon: {
+          alignItems: 'center',
+        },
       },
     },
   },

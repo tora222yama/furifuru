@@ -2,33 +2,17 @@ import * as React from 'react';
 import {
   Box,
   Drawer as MuiDrawer,
-  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
 } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import {
-  E_PAGES,
-  EPages,
-  getPagesHref,
-  getPagesName,
-} from '@/script/Enum/Server/App/EPages';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { E_COLOR } from '@/script/Enum/EColor';
-import { useIndexContext } from '@/script/Provider/IndexProvider';
+import { getPagesHref, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 
 interface IProps extends IPropsBase {}
 export const DrawerDesktop: React.FC<IProps> = () => {
-  const { authUser } = useIndexContext();
-
-  /**
-   * 表示するリンク.
-   */
-  const hrefList: EPages[] = [];
-
   return (
     <MuiDrawer
       sx={{
@@ -51,20 +35,8 @@ export const DrawerDesktop: React.FC<IProps> = () => {
           padding: '20px',
         }}
       >
-        <Link href={getPagesHref(E_PAGES.DASHBOARD)} underline="none">
-          <TypoText color={E_COLOR.TEXT_PRIMARY}>wportal2</TypoText>
-        </Link>
-        <Box
-          sx={{
-            marginTop: '10px',
-            padding: '5px',
-            backgroundColor: E_COLOR.RED_LIGHT,
-          }}
-        >
-          <TypoText>login：{authUser.id ? authUser.name : '----'}</TypoText>
-        </Box>
         <List>
-          {hrefList.map(page => {
+          {[].map(page => {
             return (
               <ListItem key={page} disablePadding>
                 <InertiaLink sx={{ width: '100%' }} href={getPagesHref(page)}>

@@ -114,4 +114,5 @@ return [
 
     'password_timeout' => 10800,
 
+    'check919Domain'   => env('CHECK_919_DOMAIN', true),
 ];

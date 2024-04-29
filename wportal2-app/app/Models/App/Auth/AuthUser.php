@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\App\Auth;
 
+use App\Models\App\EloquentBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use JetBrains\PhpStorm\Pure;
 
 class AuthUser extends Authenticatable
 {
@@ -44,6 +46,15 @@ class AuthUser extends Authenticatable
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
     ];
+
+    /**
+     * EloquentBuilderの拡張を行う.
+     */
+    #[Pure]
+    public function newEloquentBuilder($query): EloquentBuilder
+    {
+        return new EloquentBuilder($query);
+    }
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.

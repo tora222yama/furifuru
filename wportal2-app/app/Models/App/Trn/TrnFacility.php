@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\App\Trn;
 
+use App\Models\App\ModelBase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class TrnFacility extends Model
+class TrnFacility extends ModelBase
 {
     use HasFactory;
 
@@ -19,7 +19,7 @@ class TrnFacility extends Model
     public function toPayload(): array
     {
         return [
-            'id'          => $this->id,
+            'id'          => $this->id          ?? 0,
             'category_id' => $this->category_id ?? 0,
             'name'        => $this->name        ?? '',
             'explain'     => $this->explain     ?? '',

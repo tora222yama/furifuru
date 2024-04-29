@@ -4,13 +4,17 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { themeCommon } from '@/script/System/Theme';
-import { IAuthUser } from '@/script/Models/App/Auth/AuthUser';
 import { ProgressProvider } from '@/script/Provider/ProgressProvider';
 import {
   getDefaultLocation,
   ILocation,
   parseLocation,
 } from '@/script/Provider/ILocation';
+import {
+  AppTrnUserList,
+  IAppTrnUser,
+  parseAppTrnUserPayload,
+} from '@/script/Models/App/Trn/TrnUserList';
 
 const client = new ApolloClient({
   ssrMode: true,
@@ -23,15 +27,12 @@ const client = new ApolloClient({
  */
 type IndexContext = {
   csrfToken: string;
-  authUser: IAuthUser;
+  trnUser: IAppTrnUser;
   location: ILocation;
 };
 export const context = React.createContext<IndexContext>({
   csrfToken: '',
-  authUser: {
-    id: 0,
-    name: '',
-  },
+  trnUser: AppTrnUserList.defaultInterface(),
   location: getDefaultLocation(),
 });
 export const useIndexContext = (): IndexContext => useContext(context);
@@ -39,7 +40,7 @@ export const useIndexContext = (): IndexContext => useContext(context);
 interface IProps extends IPropsBase {}
 export const IndexProvider: React.FC<IProps> = ({
   csrfToken,
-  authUser,
+  trnUser,
   location,
   children,
 }) => {
@@ -49,13 +50,10 @@ export const IndexProvider: React.FC<IProps> = ({
   const providerValue: IndexContext = useMemo(
     () => ({
       csrfToken: csrfToken ?? '',
-      authUser: {
-        id: authUser?.id ? Number(authUser.id) : 0,
-        name: authUser?.name ? String(authUser.name) : '',
-      },
+      trnUser: parseAppTrnUserPayload(trnUser),
       location: parseLocation(location),
     }),
-    [csrfToken, authUser, location],
+    [csrfToken, trnUser, location],
   );
 
   return (

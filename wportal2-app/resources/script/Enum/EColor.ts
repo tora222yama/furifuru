@@ -5,6 +5,7 @@ export const E_COLOR = {
   WHITE: '#FFFFFF',
   BLACK: '#000000',
   GREY: '#A0A0A0',
+  GREY_LIGHT: '#F7F7F7',
   RED: '#F44336',
   RED_LIGHT: '#FFCDD2',
 
