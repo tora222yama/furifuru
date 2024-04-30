@@ -32,13 +32,13 @@ return [
 
     'disks'   => [
 
-        'local'  => [
+        'local'   => [
             'driver' => 'local',
             'root'   => storage_path('app'),
             'throw'  => false,
         ],
 
-        'public' => [
+        'public'  => [
             'driver'     => 'local',
             'root'       => storage_path('app/public'),
             'url'        => env('APP_URL').'/storage',
@@ -46,18 +46,17 @@ return [
             'throw'      => false,
         ],
 
-        's3'     => [
+        'storage' => [
             'driver'                  => 's3',
-            'key'                     => env('AWS_ACCESS_KEY_ID'),
-            'secret'                  => env('AWS_SECRET_ACCESS_KEY'),
-            'region'                  => env('AWS_DEFAULT_REGION'),
-            'bucket'                  => env('AWS_BUCKET'),
-            'url'                     => env('AWS_URL'),
-            'endpoint'                => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw'                   => false,
+            'key'                     => env('WPORTAL_STORAGE_ACCESS_KEY'),
+            'secret'                  => env('WPORTAL_STORAGE_SECRET_KEY'),
+            'region'                  => env('WPORTAL_STORAGE_DEFAULT_REGION'),
+            'bucket'                  => env('WPORTAL_STORAGE_BUCKET'),
+            'url'                     => env('WPORTAL_STORAGE_AWS_URL'),
+            'endpoint'                => env('WPORTAL_STORAGE_ENDPOINT'),
+            'use_path_style_endpoint' => env('WPORTAL_STORAGE_USE_PATH_STYLE_ENDPOINT', false),
+            'throw'                   => true,
         ],
-
     ],
 
     /*
