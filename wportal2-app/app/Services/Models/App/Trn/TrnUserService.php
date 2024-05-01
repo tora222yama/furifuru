@@ -55,7 +55,7 @@ class TrnUserService
         $file                     = Storage::disk('local')->get($defaultPath);
         $ext                      = pathinfo($defaultPath, PATHINFO_EXTENSION);
         $path                     = Constant::FACE_IMAGE_S3_PATH."$trnUser->id.$ext";
-        $ret                      = Storage::disk('storage')->put($path, $file);
+        Storage::disk('storage')->put($path, $file);
 
         // 画像パスを保存.
         $trnUser->face_image_path = $path;

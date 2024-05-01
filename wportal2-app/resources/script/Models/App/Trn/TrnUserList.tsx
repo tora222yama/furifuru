@@ -7,8 +7,9 @@ export interface IAppTrnUser {
   faceImagePath: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const parseAppTrnUserPayload = (payload: any): IAppTrnUser => {
+export const parseAppTrnUserPayload = (
+  payload: IAppTrnUser | any,
+): IAppTrnUser => {
   return {
     id: payload?.id ? Number(payload.id) : 0,
     authId: payload?.authId ? Number(payload.authId) : 0,

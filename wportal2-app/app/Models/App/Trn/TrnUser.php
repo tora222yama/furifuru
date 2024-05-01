@@ -20,9 +20,9 @@ class TrnUser extends ModelBase
     {
         return [
             'id'              => $this->id              ?? 0,
-            'auth_id'         => $this->auth_id         ?? 0,
+            'authId'          => $this->auth_id          ?? 0,
             'nickname'        => $this->nickname        ?? '',
-            'face_image_path' => $this->face_image_path ?? '',
+            'faceImagePath'   => $this->face_image_path   ?? '',
         ];
     }
 }

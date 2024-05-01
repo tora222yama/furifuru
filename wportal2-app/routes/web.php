@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/', EPages::DASHBOARD->getInvokePath());
     Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
+
+    Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
+        ->where('path', '.*');
 });
 
 Route::get('/login', EPages::LOGIN->getInvokePath())

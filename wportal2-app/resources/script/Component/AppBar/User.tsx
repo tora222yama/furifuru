@@ -6,6 +6,7 @@ import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { useIndexContext } from '@/script/Provider/IndexProvider';
+import { Image } from '@/script/Component/Misc/Image';
 
 interface IProps extends IPropsBase {}
 
@@ -47,7 +48,16 @@ export const User: React.FC<IProps> = ({ sx }) => {
         }}
         onClick={handleOpenMenu}
       >
-        <Box>FACE</Box>
+        <Image
+          sx={{
+            display: 'block',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            background: E_COLOR.GREY_LIGHT,
+          }}
+          src={trnUser.faceImagePath}
+        />
         <TypoText sx={{ marginLeft: 'auto' }}>{trnUser.nickname}</TypoText>
         <ExpandMoreTwoToneIcon sx={{ marginLeft: '10px' }} />
       </Box>
