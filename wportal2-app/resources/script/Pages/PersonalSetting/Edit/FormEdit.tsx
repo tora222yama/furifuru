@@ -6,6 +6,10 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InputField } from '@/script/Component/Form/InputField';
 import { IFormEditValidationResult } from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
+import {
+  DropFile,
+  FormEditImageDrop,
+} from '@/script/Pages/PersonalSetting/Edit/FormEditImageDrop';
 
 export interface IFormEdit {
   name: string;
@@ -13,9 +17,11 @@ export interface IFormEdit {
   slackUserId: string;
   slackUserName: string;
   slackTeamId: string;
+  upload?: DropFile & File;
 }
 
 interface IProps extends IPropsBase {
+  loading: boolean;
   formEdit: IFormEdit;
   validation: IFormEditValidationResult;
   handleUpdate: (newValues: Partial<IFormEdit>) => void;
@@ -23,6 +29,7 @@ interface IProps extends IPropsBase {
 }
 export const FormEdit: React.FC<IProps> = ({
   sx,
+  loading,
   formEdit,
   validation,
   handleUpdate,
@@ -38,7 +45,7 @@ export const FormEdit: React.FC<IProps> = ({
         ...sx,
       }}
     >
-      <LabelValue label="名前" value={formEdit.name} />
+      <LabelValue sx={{ width: '400px' }} label="名前" value={formEdit.name} />
       <Box
         sx={{
           display: 'flex',
@@ -54,6 +61,11 @@ export const FormEdit: React.FC<IProps> = ({
           errors={validation.data.nickname?.errors}
         />
       </Box>
+      <FormEditImageDrop
+        sx={{ width: '100%' }}
+        formEdit={formEdit}
+        handleUpdate={handleUpdate}
+      />
       <Box
         sx={{
           display: 'flex',
@@ -99,6 +111,7 @@ export const FormEdit: React.FC<IProps> = ({
         }}
         label="更新"
         onClick={handleSubmit}
+        disabled={loading}
       />
     </FormControl>
   );

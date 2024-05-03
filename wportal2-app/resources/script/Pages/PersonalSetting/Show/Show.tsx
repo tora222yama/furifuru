@@ -23,7 +23,7 @@ import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
-  const { trnUser } = useCommonIndexContext();
+  const { authUser, trnUser } = useCommonIndexContext();
   const { trnUserSlackProfile } = useIndexContext();
 
   /**
@@ -92,7 +92,14 @@ export const Show: React.FC<IProps> = () => {
             }}
             src={trnUser.faceImagePath}
           />
-          <TypoText>{trnUser.nickname}</TypoText>
+          <Box sx={{ width: '400px' }}>
+            <LabelValue label="名前" value={authUser.name} />
+            <LabelValue
+              sx={{ marginTop: '10px' }}
+              label="表示名"
+              value={trnUser.nickname}
+            />
+          </Box>
         </Box>
         <Box
           sx={{

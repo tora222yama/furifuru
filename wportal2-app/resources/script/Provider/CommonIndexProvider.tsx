@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { useContext, useMemo } from 'react';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { IPropsBase } from '@/script/System/System';
 import { themeCommon } from '@/script/System/Theme';
 import { ProgressProvider } from '@/script/Provider/ProgressProvider';
@@ -15,11 +16,20 @@ import {
   IAppTrnUser,
   parseAppTrnUserPayload,
 } from '@/script/Models/App/Trn/TrnUserList';
+import {
+  AppAuthUserList,
+  IAppAuthUser,
+  parseAppAuthUserPayload,
+} from '@/script/Models/App/Auth/AuthUserList';
+
+const link = createUploadLink({
+  uri: '/graphql',
+});
 
 const client = new ApolloClient({
-  ssrMode: true,
-  uri: '/graphql',
+  ssrMode: false,
   cache: new InMemoryCache(),
+  link,
 });
 
 /**
@@ -27,11 +37,13 @@ const client = new ApolloClient({
  */
 type CommonIndexContext = {
   csrfToken: string;
+  authUser: IAppAuthUser;
   trnUser: IAppTrnUser;
   location: ILocation;
 };
 export const context = React.createContext<CommonIndexContext>({
   csrfToken: '',
+  authUser: AppAuthUserList.defaultInterface(),
   trnUser: AppTrnUserList.defaultInterface(),
   location: getDefaultLocation(),
 });
@@ -41,6 +53,7 @@ export const useCommonIndexContext = (): CommonIndexContext =>
 interface IProps extends IPropsBase {}
 export const CommonIndexProvider: React.FC<IProps> = ({
   csrfToken,
+  authUser,
   trnUser,
   location,
   children,
@@ -51,10 +64,11 @@ export const CommonIndexProvider: React.FC<IProps> = ({
   const providerValue: CommonIndexContext = useMemo(
     () => ({
       csrfToken: csrfToken ?? '',
+      authUser: parseAppAuthUserPayload(authUser),
       trnUser: parseAppTrnUserPayload(trnUser),
       location: parseLocation(location),
     }),
-    [csrfToken, trnUser, location],
+    [csrfToken, authUser, trnUser, location],
   );
 
   return (

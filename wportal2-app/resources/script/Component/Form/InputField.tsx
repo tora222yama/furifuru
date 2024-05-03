@@ -52,7 +52,7 @@ export const InputField: React.FC<IInputFieldProps> = ({
   onBlur,
   errors,
   visibleError,
-  placeHolder,
+  placeHolder = '入力してください',
   type = 'text' as InputFieldType,
   autoComplete = 'off',
   disabled,

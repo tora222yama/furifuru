@@ -6,6 +6,7 @@ export interface IPropsBase {
   id?: string;
   children?: React.ReactNode;
   csrfToken?: string;
+  authUser?: [];
   trnUser?: [];
   location?: [];
 }

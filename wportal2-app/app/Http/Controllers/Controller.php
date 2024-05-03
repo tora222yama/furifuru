@@ -41,6 +41,7 @@ class Controller extends BaseController
             $props,
             [
                 'csrfToken'      => csrf_token(),
+                'authUser'       => $authUser?->toPayload(),
                 'trnUser'        => $trnUser?->toPayload(),
                 'location'       => [
                     'current' => Request::url(),

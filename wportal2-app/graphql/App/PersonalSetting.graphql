@@ -1,0 +1,20 @@
+# App/PersonalSetting.graphql
+extend type Query {
+  Dummy: Int @field(
+    resolver: "App\\GraphQL\\App\\Queries\\Dummy"
+  )
+}
+
+extend type Mutation {
+  # 個人設定の更新.
+  AppPersonalSettingEditUpdate(
+    trnUserId: Int!
+    nickname: String!
+    slackUserId: String
+    slackUserName: String
+    slackTeamId: String
+    upload: Upload
+  ): Response @field(
+    resolver: "App\\GraphQL\\App\\Mutations\\AppPersonalSettingEditUpdate"
+  )
+}

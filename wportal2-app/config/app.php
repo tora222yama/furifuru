@@ -184,6 +184,7 @@ return [
 
         // Models.Scat.Trn.
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
     ])->toArray(),
 
@@ -201,13 +202,14 @@ return [
     'aliases'         => Facade::defaultAliases()->merge([
 
         // External.
-        'external\slack_service'          => App\Facades\External\SlackService::class,
+        'external\slack_service'                        => App\Facades\External\SlackService::class,
 
         // Internal.
-        'internal\pipe_service'           => App\Facades\Internal\PipeService::class,
+        'internal\pipe_service'                         => App\Facades\Internal\PipeService::class,
 
         // Models.App.Trn.
-        'models\app\trn\trn_user_service' => App\Facades\Models\App\Trn\TrnUserService::class,
+        'models\app\trn\trn_user_service'               => App\Facades\Models\App\Trn\TrnUserService::class,
+        'models\app\trn\trn_user_slack_profile_service' => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 
     ])->toArray(),
 

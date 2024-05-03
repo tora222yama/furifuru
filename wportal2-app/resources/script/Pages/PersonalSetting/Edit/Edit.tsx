@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { useIndexContext } from '@/script/Pages/PersonalSetting/Show/Index';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
-import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
+import {
+  E_PAGES,
+  getPagesHref,
+  getPagesName,
+} from '@/script/Enum/Server/App/EPages';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { Page } from '@/script/Pages/Page';
 import { BackLink } from '@/script/Pages/Common/BackLink';
@@ -16,14 +19,19 @@ import {
   initialResult,
   validateAll,
 } from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
-import { Log } from '@/script/Common/Log';
+import { useMutationAppPersonalSettingEditUpdate } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingEditUpdate';
+import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { useIndexContext } from '@/script/Pages/PersonalSetting/Edit/Index';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
-  const { trnUser } = useCommonIndexContext();
+  const { authUser, trnUser } = useCommonIndexContext();
   const { trnUserSlackProfile } = useIndexContext();
+  const { onStart, onFinish } = useProgressContext();
+
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
-    name: trnUser.nickname,
+    name: authUser.name,
     nickname: trnUser.nickname,
     slackUserId: trnUserSlackProfile.slackUserId,
     slackUserName: trnUserSlackProfile.slackUserName,
@@ -31,6 +39,9 @@ export const Edit: React.FC<IProps> = () => {
   });
   const [validation, setValidation] =
     React.useState<IFormEditValidationResult>(initialResult);
+  const [processingUpdate, mutationUpdate] =
+    useMutationAppPersonalSettingEditUpdate();
+  const loading = processingUpdate;
 
   /**
    * 値の更新.
@@ -56,7 +67,29 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    Log.info('更新の送信');
+    onStart();
+    mutationUpdate(
+      {
+        trnUserId: trnUser.id,
+        nickname: formEdit.nickname,
+        slackUserId: formEdit.slackUserId,
+        slackUserName: formEdit.slackUserName,
+        slackTeamId: formEdit.slackTeamId,
+        upload: formEdit.upload,
+      },
+      [],
+    ).then(res => {
+      switch (res.statusCode) {
+        case E_STATUS_CODE.OK:
+          // 個人設定ページに移動.
+          // 画像の再読み込みが必要なためフルリロードを実施し、画面ロードは継続する.
+          window.location.href = getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW);
+          break;
+        default:
+          onFinish();
+          break;
+      }
+    });
   };
 
   return (
@@ -70,6 +103,7 @@ export const Edit: React.FC<IProps> = () => {
         }}
       >
         <FormEdit
+          loading={loading}
           formEdit={formEdit}
           validation={validation}
           handleUpdate={handleUpdate}
