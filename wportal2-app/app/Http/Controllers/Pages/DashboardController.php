@@ -11,6 +11,6 @@ class DashboardController extends Controller
 {
     public function invoke(): Response
     {
-        return $this->render('Dashboard/DashboardIndex');
+        return $this->render('Dashboard/Index');
     }
 }

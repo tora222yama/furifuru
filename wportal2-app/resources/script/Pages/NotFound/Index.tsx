@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { IPropsBase } from '@/script/System/System';
-import { IndexProvider } from '@/script/Provider/IndexProvider';
+import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import { NotFound } from '@/script/Pages/NotFound/NotFound';
 
 interface IProps extends IPropsBase {}
-export const NotFoundIndex: React.FC<IProps> = ({ ...props }) => {
+export const Index: React.FC<IProps> = ({ ...props }) => {
   // noinspection TypeScriptValidateTypes
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <IndexProvider {...props}>
+    <CommonIndexProvider {...props}>
       <NotFound />
-    </IndexProvider>
+    </CommonIndexProvider>
   );
 };
-export default NotFoundIndex;
+export default Index;

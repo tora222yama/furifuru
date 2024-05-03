@@ -23,7 +23,13 @@ export const Page: React.FC<IProps> = ({ sx, children }) => {
         maxWidth={false}
         disableGutters
       >
-        {children}
+        <Box
+          sx={{
+            padding: '20px',
+          }}
+        >
+          {children}
+        </Box>
       </Container>
     </Box>
   );

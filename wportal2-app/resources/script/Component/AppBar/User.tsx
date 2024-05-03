@@ -5,13 +5,14 @@ import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
-import { useIndexContext } from '@/script/Provider/IndexProvider';
+import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { Image } from '@/script/Component/Misc/Image';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {}
 
 export const User: React.FC<IProps> = ({ sx }) => {
-  const { trnUser } = useIndexContext();
+  const { trnUser } = useCommonIndexContext();
   const [anchor, setAnchor] = React.useState<HTMLElement | null>(null);
 
   /**
@@ -75,7 +76,7 @@ export const User: React.FC<IProps> = ({ sx }) => {
         onClose={handleClose}
       >
         <MenuItem>
-          <InertiaLink href="/personal_setting/show">
+          <InertiaLink href={getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW)}>
             <TypoText>個人設定</TypoText>
           </InertiaLink>
         </MenuItem>

@@ -19,7 +19,7 @@ class LoginController extends Controller
 {
     public function invoke(): Response
     {
-        return $this->render('Login/LoginIndex');
+        return $this->render('Login/Index');
     }
 
     public function getGoogleAuth(): RedirectResponse

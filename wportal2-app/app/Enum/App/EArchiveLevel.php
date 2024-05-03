@@ -6,7 +6,7 @@ namespace App\Enum\App;
 
 enum EArchiveLevel: int
 {
-    case INVALID = 0;
+    case INVALID = 0; // 無効値.
 
     case ALIVE   = 1; // 生存.
     case ARCHIVE = 2; // アーカイブ.

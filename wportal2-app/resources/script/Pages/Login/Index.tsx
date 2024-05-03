@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { IPropsBase } from '@/script/System/System';
-import { IndexProvider } from '@/script/Provider/IndexProvider';
+import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import { Login } from '@/script/Pages/Login/Login';
 
 interface IProps extends IPropsBase {}
-export const LoginIndex: React.FC<IProps> = ({ ...props }) => {
+export const Index: React.FC<IProps> = ({ ...props }) => {
   // noinspection TypeScriptValidateTypes
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <IndexProvider {...props}>
+    <CommonIndexProvider {...props}>
       <Login />
-    </IndexProvider>
+    </CommonIndexProvider>
   );
 };
-export default LoginIndex;
+export default Index;

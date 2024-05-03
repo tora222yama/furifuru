@@ -22,7 +22,7 @@ Inertiaは
 具体的には、以下のコントローラーアクセスの場合
 
 ```
-        return $this->render('IndexProvider/PaginationIndex', [
+        return $this->render('CommonIndexProvider/PaginationIndex', [
             'trnFacilityList'      => /** データ取得処理…1 */,
             'trnFacilityListCount' => /** データ取得処理…2 */,
             'fixList'              => fn () => /** データ取得処理…3 */,

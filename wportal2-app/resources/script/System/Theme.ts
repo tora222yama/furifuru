@@ -29,16 +29,16 @@ export const themeCommon = createTheme({
       fontSize: '28px',
     },
     h2: {
-      fontSize: '26px',
-    },
-    h3: {
-      fontSize: '24px',
-    },
-    subtitle1: {
       fontSize: '20px',
     },
-    subtitle2: {
+    h3: {
       fontSize: '18px',
+    },
+    subtitle1: {
+      fontSize: '18px',
+    },
+    subtitle2: {
+      fontSize: '16px',
     },
     body1: {
       fontSize: '16px',

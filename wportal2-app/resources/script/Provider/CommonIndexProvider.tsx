@@ -25,20 +25,21 @@ const client = new ApolloClient({
 /**
  * コントローラーからグローバルに受取保持する値.
  */
-type IndexContext = {
+type CommonIndexContext = {
   csrfToken: string;
   trnUser: IAppTrnUser;
   location: ILocation;
 };
-export const context = React.createContext<IndexContext>({
+export const context = React.createContext<CommonIndexContext>({
   csrfToken: '',
   trnUser: AppTrnUserList.defaultInterface(),
   location: getDefaultLocation(),
 });
-export const useIndexContext = (): IndexContext => useContext(context);
+export const useCommonIndexContext = (): CommonIndexContext =>
+  useContext(context);
 
 interface IProps extends IPropsBase {}
-export const IndexProvider: React.FC<IProps> = ({
+export const CommonIndexProvider: React.FC<IProps> = ({
   csrfToken,
   trnUser,
   location,
@@ -47,7 +48,7 @@ export const IndexProvider: React.FC<IProps> = ({
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const providerValue: IndexContext = useMemo(
+  const providerValue: CommonIndexContext = useMemo(
     () => ({
       csrfToken: csrfToken ?? '',
       trnUser: parseAppTrnUserPayload(trnUser),

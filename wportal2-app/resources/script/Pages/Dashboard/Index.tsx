@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { IPropsBase } from '@/script/System/System';
-import { IndexProvider } from '@/script/Provider/IndexProvider';
+import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import { Dashboard } from '@/script/Pages/Dashboard/Dashboard';
 
 interface IProps extends IPropsBase {}
-export const DashboardIndex: React.FC<IProps> = ({ ...props }) => {
+export const Index: React.FC<IProps> = ({ ...props }) => {
   // noinspection TypeScriptValidateTypes
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <IndexProvider {...props}>
+    <CommonIndexProvider {...props}>
       <Dashboard />
-    </IndexProvider>
+    </CommonIndexProvider>
   );
 };
-export default DashboardIndex;
+export default Index;
