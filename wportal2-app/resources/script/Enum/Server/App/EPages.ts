@@ -7,6 +7,7 @@ export const E_PAGES = {
   INVALID: 'invalid', // 無効.
   DASHBOARD: 'dashboard', // ダッシュボード.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
+  PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
   LOGIN: 'login', // ログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
@@ -23,6 +24,8 @@ export const getPagesHref = (page: EPages): string => {
       return '/dashboard';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '/personal_setting/show';
+    case E_PAGES.PERSONAL_SETTING__EDIT:
+      return '/personal_setting/edit';
     default:
       return '';
   }
@@ -38,7 +41,22 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '個人設定';
+    case E_PAGES.PERSONAL_SETTING__EDIT:
+      return '個人設定編集';
     default:
       return '';
+  }
+};
+
+/**
+ * ページの戻り先を取得.
+ * @param pages
+ */
+export const getPagesBack = (pages: EPages): EPages => {
+  switch (pages) {
+    case E_PAGES.PERSONAL_SETTING__EDIT:
+      return E_PAGES.PERSONAL_SETTING__SHOW;
+    default:
+      return E_PAGES.DASHBOARD;
   }
 };

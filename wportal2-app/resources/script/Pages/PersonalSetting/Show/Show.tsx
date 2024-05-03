@@ -2,7 +2,11 @@ import * as React from 'react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
-import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
+import {
+  E_PAGES,
+  getPagesHref,
+  getPagesName,
+} from '@/script/Enum/Server/App/EPages';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
@@ -15,6 +19,7 @@ import { Str } from '@/script/Common/Str';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { Log } from '@/script/Common/Log';
+import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -37,12 +42,14 @@ export const Show: React.FC<IProps> = () => {
         }}
       >
         <TypoH1>{getPagesName(E_PAGES.PERSONAL_SETTING__SHOW)}</TypoH1>
-        <ButtonGeneral
-          sx={{
-            minWidth: '140px',
-          }}
-          label="編集"
-        />
+        <InertiaLink href={getPagesHref(E_PAGES.PERSONAL_SETTING__EDIT)}>
+          <ButtonGeneral
+            sx={{
+              minWidth: '140px',
+            }}
+            label="編集"
+          />
+        </InertiaLink>
       </Box>
       <Closable open={!trnUserSlackProfile.slackUserId}>
         <Box
