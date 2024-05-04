@@ -40,7 +40,7 @@ export function useMutationAppPersonalSettingEditUpdate(): [
         },
       }).then(async response => {
         const statusCode = Number(
-          response.data?.AppPersonalSettingEditUpdate?.status_code,
+          response.data?.AppPersonalSettingEditUpdate?.statusCode,
         );
 
         if (statusCode === E_STATUS_CODE.OK && refetchQueries.length) {
@@ -55,7 +55,7 @@ export function useMutationAppPersonalSettingEditUpdate(): [
         resolve({
           statusCode,
           statusMessage: String(
-            response.data?.AppPersonalSettingEditUpdate?.status_message,
+            response.data?.AppPersonalSettingEditUpdate?.statusMessage,
           ),
           errors: parseErrors(
             response.data?.AppPersonalSettingEditUpdate?.errors,

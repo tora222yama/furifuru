@@ -7,22 +7,27 @@ namespace App\Services\Internal;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EStatusCode;
 use App\GraphQL\PipeBase;
+use Exception;
 
 /**
  * 各Serviceを実行する際のpipe管理サービス.
  */
 class PipeService
 {
-    protected array $pipes        = [];
+    protected array $pipes             = [];
 
-    protected array $pipeArgs     = [];
+    protected array $pipeArgs          = [];
 
     /**
      * エラートレース用.
      */
-    protected array $paramArgs    = [];
+    protected array $paramArgs         = [];
 
-    protected EPipeKind $pipeKind = EPipeKind::INVALID;
+    protected EPipeKind $pipeKind      = EPipeKind::INVALID;
+
+    protected EStatusCode $statusCode  = EStatusCode::OK;
+
+    protected string $statusMessage    = '';
 
     /**
      * @return PipeBase[]
@@ -33,6 +38,49 @@ class PipeService
             /** @var PipeBase $pipe */
             return ! $pipe->isCalled($class);
         });
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function throwResult(EStatusCode $code, Exception $e): void
+    {
+        $this->statusCode    = $code;
+        $this->statusMessage = $e->getMessage();
+        throw $e;
+    }
+
+    /**
+     * 実行結果を返す.
+     */
+    public function getResult(array $attachResult = []): array
+    {
+        // pipeで所持しているstatusCodeで処理.
+        return $this->getResultWithStatus(
+            $this->statusCode,
+            $this->statusMessage,
+            $attachResult
+        );
+    }
+
+    /**
+     * ステータスを指定して実行結果を返す.
+     */
+    public function getResultWithStatus(EStatusCode $code, string $message = '', array $attachResult = []): array
+    {
+        // 基本出力.
+        $resultArray = [
+            'statusCode'    => $code->value,
+            'statusMessage' => $message,
+        ];
+
+        // 追加で指定されたresultを設定する.
+        foreach ($attachResult as $key => $value) {
+            $resultArray[$key] = $value;
+        }
+
+        // 実行結果として返す.
+        return $resultArray;
     }
 
     /**

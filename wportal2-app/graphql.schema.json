@@ -135,6 +135,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "AppPersonalSettingShowAlignSlack",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Response",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -183,7 +195,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status_code",
+            "name": "statusCode",
             "description": null,
             "args": [],
             "type": {
@@ -199,7 +211,7 @@
             "deprecationReason": null
           },
           {
-            "name": "status_message",
+            "name": "statusMessage",
             "description": null,
             "args": [],
             "type": {

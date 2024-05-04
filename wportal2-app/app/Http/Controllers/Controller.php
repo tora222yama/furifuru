@@ -37,6 +37,7 @@ class Controller extends BaseController
         // ユーザー情報を取得.
         $trnUser  = TrnUserService::findByAuthId($authUser?->id ?? 0);
 
+        // TODO: 遅延評価が必要.
         return Inertia::render($component, array_merge(
             $props,
             [

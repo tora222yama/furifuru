@@ -40,10 +40,6 @@ final class AppPersonalSettingEditUpdate
             TrnUserSlackProfileService::updateByPipe();
         });
 
-        return [
-            'status_code'    => 200,
-            'status_message' => '',
-            'errors'         => json_encode([]),
-        ];
+        return PipeService::getResult();
     }
 }

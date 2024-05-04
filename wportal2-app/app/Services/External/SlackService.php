@@ -4,11 +4,63 @@ declare(strict_types=1);
 
 namespace App\Services\External;
 
+use App\Enum\App\EPipeKind;
+use App\Enum\App\EStatusCode;
+use App\Facades\Internal\PipeService;
+use App\GraphQL\App\Mutations\Pipe\PipeAppPersonalSettingShowAlignSlack;
+use App\GraphQL\PipeBase;
+use App\Trait\SlackApi;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Throwable;
+
 /**
  * Slackに対する処理.
  */
 class SlackService
 {
+    use SlackApi;
+
+    /**
+     * パイプによる更新.
+     *
+     * @throws Throwable
+     */
+    public function updateByPipe(): void
+    {
+        foreach (PipeService::getPipes(__CLASS__) as $pipe) {
+            $kind = $pipe->getKind();
+            match ($kind) {
+                EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
+                default                                          => throw new Exception("invalid pipe:$kind->name")
+            };
+        }
+    }
+
+    private function execAppPersonalSettingShowAlignSlack(
+        PipeAppPersonalSettingShowAlignSlack|PipeBase $pipe
+    ): void {
+        // APIを実行.
+        $result      = $this->slackApiLookupByEmail($pipe->email);
+
+        // 結果を取得.
+        $resultArray = json_decode($result, true);
+        if (isset($resultArray['ok']) && $resultArray['ok'] === true) {
+            $pipe->slackUserId   = $resultArray['user']['id'];
+            $pipe->slackUserName = $resultArray['user']['name'];
+            $pipe->slackTeamId   = $resultArray['user']['team_id'];
+
+            return;
+        }
+
+        // PipeServiceにエラー結果を登録してthrow.
+        Log::error(print_r($resultArray, true));
+        PipeService::throwResult(
+            EStatusCode::NOT_FOUND,
+            new Exception("APIによる検索不可:$pipe->email")
+        );
+    }
+
     /**
      * 情報チャンネルへの通知を行う.
      */

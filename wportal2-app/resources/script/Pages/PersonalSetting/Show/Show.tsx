@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { router } from '@inertiajs/react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
@@ -18,19 +19,37 @@ import { useIndexContext } from '@/script/Pages/PersonalSetting/Show/Index';
 import { Str } from '@/script/Common/Str';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_COLOR } from '@/script/Enum/EColor';
-import { Log } from '@/script/Common/Log';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { useMutationAppPersonalSettingShowAlignSlack } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingShowAlignSlack';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
   const { authUser, trnUser } = useCommonIndexContext();
   const { trnUserSlackProfile } = useIndexContext();
+  const { onStart, onFinish } = useProgressContext();
+  const [processingAlignSlack, mutationAlignSlack] =
+    useMutationAppPersonalSettingShowAlignSlack();
+  const loading = processingAlignSlack;
 
   /**
    * SlackIdの有効化を実行.
    */
   const handleClickSlackId = () => {
-    Log.info('SlackIdの有効化を実行');
+    onStart();
+    mutationAlignSlack([]).then(res => {
+      onFinish();
+      if (res.statusCode === E_STATUS_CODE.OK) {
+        router.reload({
+          preserveState: true,
+          replace: true,
+          onStart,
+          onFinish,
+          only: ['trnUserSlackProfile'],
+        });
+      }
+    });
   };
 
   return (
@@ -68,6 +87,7 @@ export const Show: React.FC<IProps> = () => {
           <ButtonGeneral
             label="SlackIDを有効化する"
             onClick={handleClickSlackId}
+            disabled={loading}
           />
         </Box>
       </Closable>

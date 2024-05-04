@@ -85,6 +85,17 @@ class TrnUserService extends ModelServiceBase
     }
 
     /**
+     * 認証ユーザーIDで検索.
+     */
+    public function findByAuthIdOrFail(int $authId): TrnUser
+    {
+        return TrnUser::query()
+            ->where('auth_id', $authId)
+            ->alive()
+            ->firstOrFail();
+    }
+
+    /**
      * 認証成功時にユーザーの作成を行う
      *
      *

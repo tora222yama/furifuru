@@ -7,6 +7,7 @@ namespace App\Services\Models\App\Trn;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\App\Mutations\Pipe\PipeAppPersonalSettingEditUpdate;
+use App\GraphQL\App\Mutations\Pipe\PipeAppPersonalSettingShowAlignSlack;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnUserSlackProfile;
 use App\Services\Models\ModelServiceBase;
@@ -25,10 +26,34 @@ class TrnUserSlackProfileService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
-                EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
-                default                                     => throw new Exception(),
+                EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
+                EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE      => $this->execAppPersonalSettingEditUpdate($pipe),
+                default                                          => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppPersonalSettingShowAlignSlack(
+        PipeAppPersonalSettingShowAlignSlack|PipeBase $pipe
+    ): void {
+        // 更新もしくは生成.
+        $trnUserSlackProfile = $this->findByTrnUserId($pipe->trnUserId);
+        if (is_null($trnUserSlackProfile)) {
+            $trnUserSlackProfile                  = new TrnUserSlackProfile();
+            $trnUserSlackProfile->trn_user_id     = $pipe->trnUserId;
+            $trnUserSlackProfile->slack_user_id   = $pipe->slackUserId;
+            $trnUserSlackProfile->slack_user_name = $pipe->slackUserName;
+            $trnUserSlackProfile->slack_team_id   = $pipe->slackTeamId;
+            $this->insertOrFail($trnUserSlackProfile);
+        } else {
+            $trnUserSlackProfile->slack_user_id   = $pipe->slackUserId;
+            $trnUserSlackProfile->slack_user_name = $pipe->slackUserName;
+            $trnUserSlackProfile->slack_team_id   = $pipe->slackTeamId;
+            $this->updateOrFail($trnUserSlackProfile);
         }
     }
 

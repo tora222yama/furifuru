@@ -23,10 +23,8 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
-        $trnUser = TrnUserService::findByAuthId(Auth::id());
-
         return $this->render('PersonalSetting/Show/Index', [
-            'trnUserSlackProfile' => $trnUser->TrnUserSlackProfile?->toPayload(),
+            'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
     }
 
@@ -41,10 +39,24 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
-        $trnUser = TrnUserService::findByAuthId(Auth::id());
-
         return $this->render('PersonalSetting/Edit/Index', [
-            'trnUserSlackProfile' => $trnUser->TrnUserSlackProfile?->toPayload(),
+            'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
+    }
+
+    /**
+     * TrnUserSlackProfileの取得.
+     */
+    private function getTrnUserSlackProfile(): array
+    {
+        $authId  = Auth::id();
+
+        // ユーザー情報を取得.
+        $trnUser = TrnUserService::findByAuthId($authId);
+        if ($trnUser === null) {
+            return [];
+        }
+
+        return $trnUser->TrnUserSlackProfile?->toPayload();
     }
 }

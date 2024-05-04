@@ -37,6 +37,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   AppPersonalSettingEditUpdate?: Maybe<Response>;
+  AppPersonalSettingShowAlignSlack?: Maybe<Response>;
 };
 
 export type MutationAppPersonalSettingEditUpdateArgs = {
@@ -56,8 +57,8 @@ export type Query = {
 export type Response = {
   __typename?: 'Response';
   errors?: Maybe<Scalars['String']['output']>;
-  status_code: Scalars['Int']['output'];
-  status_message: Scalars['String']['output'];
+  statusCode: Scalars['Int']['output'];
+  statusMessage: Scalars['String']['output'];
 };
 
 export type AppPersonalSettingEditUpdateMutationVariables = Exact<{
@@ -73,8 +74,22 @@ export type AppPersonalSettingEditUpdateMutation = {
   __typename?: 'Mutation';
   AppPersonalSettingEditUpdate?: {
     __typename?: 'Response';
-    status_code: number;
-    status_message: string;
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppPersonalSettingShowAlignSlackMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AppPersonalSettingShowAlignSlackMutation = {
+  __typename?: 'Mutation';
+  AppPersonalSettingShowAlignSlack?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
     errors?: string | null;
   } | null;
 };
@@ -96,8 +111,8 @@ export const AppPersonalSettingEditUpdateDocument = gql`
       slackTeamId: $slackTeamId
       upload: $upload
     ) {
-      status_code
-      status_message
+      statusCode
+      statusMessage
       errors
     }
   }
@@ -150,4 +165,57 @@ export type AppPersonalSettingEditUpdateMutationOptions =
   Apollo.BaseMutationOptions<
     AppPersonalSettingEditUpdateMutation,
     AppPersonalSettingEditUpdateMutationVariables
+  >;
+export const AppPersonalSettingShowAlignSlackDocument = gql`
+  mutation AppPersonalSettingShowAlignSlack {
+    AppPersonalSettingShowAlignSlack {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppPersonalSettingShowAlignSlackMutationFn =
+  Apollo.MutationFunction<
+    AppPersonalSettingShowAlignSlackMutation,
+    AppPersonalSettingShowAlignSlackMutationVariables
+  >;
+
+/**
+ * __useAppPersonalSettingShowAlignSlackMutation__
+ *
+ * To run a mutation, you first call `useAppPersonalSettingShowAlignSlackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppPersonalSettingShowAlignSlackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appPersonalSettingShowAlignSlackMutation, { data, loading, error }] = useAppPersonalSettingShowAlignSlackMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppPersonalSettingShowAlignSlackMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppPersonalSettingShowAlignSlackMutation,
+    AppPersonalSettingShowAlignSlackMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppPersonalSettingShowAlignSlackMutation,
+    AppPersonalSettingShowAlignSlackMutationVariables
+  >(AppPersonalSettingShowAlignSlackDocument, options);
+}
+export type AppPersonalSettingShowAlignSlackMutationHookResult = ReturnType<
+  typeof useAppPersonalSettingShowAlignSlackMutation
+>;
+export type AppPersonalSettingShowAlignSlackMutationResult =
+  Apollo.MutationResult<AppPersonalSettingShowAlignSlackMutation>;
+export type AppPersonalSettingShowAlignSlackMutationOptions =
+  Apollo.BaseMutationOptions<
+    AppPersonalSettingShowAlignSlackMutation,
+    AppPersonalSettingShowAlignSlackMutationVariables
   >;

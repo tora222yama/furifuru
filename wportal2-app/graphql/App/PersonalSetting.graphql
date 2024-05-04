@@ -17,4 +17,10 @@ extend type Mutation {
   ): Response @field(
     resolver: "App\\GraphQL\\App\\Mutations\\AppPersonalSettingEditUpdate"
   )
+
+  # Slack連携の実施.
+  AppPersonalSettingShowAlignSlack
+    : Response @field(
+    resolver: "App\\GraphQL\\App\\Mutations\\AppPersonalSettingShowAlignSlack"
+  )
 }

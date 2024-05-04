@@ -48,8 +48,8 @@ type Query
 type Mutation
 
 type Response {
-  status_code: Int!
-  status_message: String!
+  statusCode: Int!
+  statusMessage: String!
   errors: String
 }
 

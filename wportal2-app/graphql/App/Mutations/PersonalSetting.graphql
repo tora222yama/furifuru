@@ -15,8 +15,17 @@ mutation AppPersonalSettingEditUpdate(
     slackTeamId: $slackTeamId
     upload: $upload
   ) {
-    status_code
-    status_message
+    statusCode
+    statusMessage
+    errors
+  }
+}
+
+# Slack連携の実施.
+mutation AppPersonalSettingShowAlignSlack {
+  AppPersonalSettingShowAlignSlack {
+    statusCode
+    statusMessage
     errors
   }
 }
