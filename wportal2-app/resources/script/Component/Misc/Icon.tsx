@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
-import { IPropsBase } from '@/script/System/System';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import BuildIcon from '@mui/icons-material/Build';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {
   E_ICON,
   EIcon,
@@ -8,6 +11,7 @@ import {
   getIconPath,
   getIconWidth,
 } from '@/script/Enum/EIcon';
+import { IPropsBase } from '@/script/System/System';
 
 const StyledImg = styled('img')({});
 
@@ -27,14 +31,25 @@ export const Icon: React.FC<IProps> = ({ sx, icon, size, width, height }) => {
   const iconWidth = (size || width) ?? getIconWidth(icon);
   const iconHeight = (size || height) ?? getIconHeight(icon);
 
-  return (
-    <StyledImg
-      sx={{
-        width: iconWidth,
-        height: iconHeight,
-        ...sx,
-      }}
-      src={getIconPath(icon)}
-    />
-  );
+  const iconSx = {
+    width: iconWidth,
+    height: iconHeight,
+    ...sx,
+  };
+
+  // 組み込みアイコンの場合.
+  switch (icon) {
+    case E_ICON.ATTENDANCE:
+      return <AccessTimeIcon sx={iconSx} />;
+    case E_ICON.BUILD:
+      return <BuildIcon sx={iconSx} />;
+    case E_ICON.DASHBOARD:
+      return <DashboardIcon sx={iconSx} />;
+    case E_ICON.SHOP:
+      return <ShoppingBasketIcon sx={iconSx} />;
+    default:
+      break;
+  }
+
+  return <StyledImg sx={iconSx} src={getIconPath(icon)} />;
 };

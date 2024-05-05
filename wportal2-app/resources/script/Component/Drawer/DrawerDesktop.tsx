@@ -8,8 +8,10 @@ import {
   ListItemText,
 } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { getPagesHref, getPagesName } from '@/script/Enum/Server/App/EPages';
+import { E_PAGES, PagesList } from '@/script/Enum/Server/App/EPages';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { E_COLOR } from '@/script/Enum/EColor';
 
 interface IProps extends IPropsBase {}
 export const DrawerDesktop: React.FC<IProps> = () => {
@@ -32,16 +34,23 @@ export const DrawerDesktop: React.FC<IProps> = () => {
       <Box
         sx={{
           marginTop: theme => theme.mixins.toolbar.height,
-          padding: '20px',
         }}
       >
         <List>
-          {[].map(page => {
+          {PagesList.filter(v => v.pages !== E_PAGES.INVALID).map(menu => {
+            // TODO: 入れ子コンポーネントにする
             return (
-              <ListItem key={page} disablePadding>
-                <InertiaLink sx={{ width: '100%' }} href={getPagesHref(page)}>
+              <ListItem
+                key={menu.pages}
+                sx={{
+                  borderBottom: `1px solid ${E_COLOR.GREY}`,
+                }}
+                disablePadding
+              >
+                <InertiaLink sx={{ width: '100%' }} href={menu.href}>
                   <ListItemButton>
-                    <ListItemText>{getPagesName(page)}</ListItemText>
+                    <Icon sx={{ marginRight: '10px' }} icon={menu.icon} />
+                    <ListItemText>{menu.name}</ListItemText>
                   </ListItemButton>
                 </InertiaLink>
               </ListItem>

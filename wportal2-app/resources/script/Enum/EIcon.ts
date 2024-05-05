@@ -4,7 +4,11 @@
 export const E_ICON = {
   INVALID: 'invalid',
 
+  ATTENDANCE: 'attendance',
+  BUILD: 'build',
+  DASHBOARD: 'dashboard',
   GOOGLE: 'google_icon.svg',
+  SHOP: 'shop',
 } as const;
 export type EIcon = (typeof E_ICON)[keyof typeof E_ICON];
 
@@ -22,8 +26,16 @@ export const getIconPath = (icon: EIcon): string => {
  */
 export const getIconWidth = (icon: EIcon): string => {
   switch (icon) {
+    case E_ICON.ATTENDANCE:
+      return '20px';
+    case E_ICON.BUILD:
+      return '20px';
+    case E_ICON.DASHBOARD:
+      return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.SHOP:
+      return '20px';
     default:
       return '0px';
   }
@@ -35,8 +47,16 @@ export const getIconWidth = (icon: EIcon): string => {
  */
 export const getIconHeight = (icon: EIcon): string => {
   switch (icon) {
+    case E_ICON.ATTENDANCE:
+      return '20px';
+    case E_ICON.BUILD:
+      return '20px';
+    case E_ICON.DASHBOARD:
+      return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.SHOP:
+      return '20px';
     default:
       return '0px';
   }

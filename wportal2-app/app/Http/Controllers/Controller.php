@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Facades\Models\App\Trn\TrnUserService;
-use App\Models\App\Auth\AuthUser;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -31,24 +30,35 @@ class Controller extends BaseController
         // ローカルで処理が早すぎないように調整する.
         localSleep();
 
-        /** @var AuthUser|null $authUser */
-        $authUser = Auth::user();
-
-        // ユーザー情報を取得.
-        $trnUser  = TrnUserService::findByAuthId($authUser?->id ?? 0);
-
         // TODO: 遅延評価が必要.
         return Inertia::render($component, array_merge(
             $props,
             [
                 'csrfToken'      => csrf_token(),
-                'authUser'       => $authUser?->toPayload(),
-                'trnUser'        => $trnUser?->toPayload(),
+                'authUser'       => fn () => $this->getAuthUser(),
+                'trnUser'        => fn () => $this->getTrnUser(),
                 'location'       => [
                     'current' => Request::url(),
                     'path'    => Request::path(),
                 ],
             ],
         ));
+    }
+
+    private function getAuthUser(): ?array
+    {
+        $authUser = Auth::user();
+
+        return $authUser?->toPayload();
+    }
+
+    private function getTrnUser(): ?array
+    {
+        $authUser = Auth::user();
+
+        // ユーザー情報を取得.
+        $trnUser  = TrnUserService::findByAuthId($authUser?->id ?? 0);
+
+        return $trnUser?->toPayload();
     }
 }
