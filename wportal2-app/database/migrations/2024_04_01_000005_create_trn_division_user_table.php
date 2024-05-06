@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Enum\App\EArchiveLevel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    const TABLE_NAME = 'trn_facility';
+    const TABLE_NAME = 'trn_division_user';
 
     /**
      * Run the migrations.
@@ -17,9 +18,9 @@ return new class extends Migration
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id');
-            $table->string('name');
-            $table->text('explain');
+            $table->integer('trn_division_id');
+            $table->integer('trn_user_id');
+            $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ export const E_PAGES = {
   SHOP: 'shop', // ショップ.
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
+  DIVISION: 'division', // 課一覧.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
   LOGIN: 'login', // ログイン.
@@ -26,6 +27,8 @@ export const getPagesHref = (page: EPages): string => {
   switch (page) {
     case E_PAGES.DASHBOARD:
       return '/dashboard';
+    case E_PAGES.DIVISION:
+      return '/division';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:
@@ -43,6 +46,8 @@ export const getPagesName = (page: EPages): string => {
   switch (page) {
     case E_PAGES.DASHBOARD:
       return 'ダッシュボード';
+    case E_PAGES.DIVISION:
+      return '課一覧';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '個人設定';
     case E_PAGES.PERSONAL_SETTING__EDIT:

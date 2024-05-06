@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/', EPages::DASHBOARD->getInvokePath());
     Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
+    Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
 

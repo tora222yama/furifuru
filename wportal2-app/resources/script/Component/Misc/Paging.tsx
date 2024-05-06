@@ -27,7 +27,7 @@ export const Paging: React.FC<IProps> = ({
   const isEnablePrev = index > 0;
 
   // 次ページに進めるかどうか.
-  const isEnableNext = (index + 1) * step <= total;
+  const isEnableNext = (index + 1) * step < total;
 
   return (
     <Box

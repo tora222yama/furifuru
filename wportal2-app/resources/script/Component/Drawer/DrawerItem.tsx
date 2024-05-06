@@ -11,7 +11,7 @@ import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { Icon } from '@/script/Component/Misc/Icon';
-import { E_PAGES } from '@/script/Enum/Server/App/EPages';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_ICON } from '@/script/Enum/EIcon';
 import { hasChildMenu, IMenu, MenuList } from '@/script/Enum/EMenu';
@@ -47,7 +47,7 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
           <Icon icon={open ? E_ICON.EXPAND_LESS : E_ICON.EXPAND_MORE} />
         </Box>
         <Collapse in={open}>
-          <List>
+          <List disablePadding>
             {MenuList.filter(v => v.pages !== E_PAGES.INVALID)
               .filter(v => v.parent === menu.menu)
               .map(menu => (
@@ -68,7 +68,7 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
       }}
       disablePadding
     >
-      <InertiaLink sx={{ width: '100%' }} href={menu.href}>
+      <InertiaLink sx={{ width: '100%' }} href={getPagesHref(menu.pages)}>
         <ListItemButton
           sx={{
             paddingLeft: depthPadding,

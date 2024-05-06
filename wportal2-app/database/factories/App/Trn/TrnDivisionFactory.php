@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Database\Factories\App\Trn;
 
+use App\Models\App\Trn\TrnDivision;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TrnFacilityFactory extends Factory
+class TrnDivisionFactory extends Factory
 {
+    protected $model = TrnDivision::class;
+
     /**
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
-            'name'    => fake()->company(),
-            'explain' => preg_replace('/。/', "。\n", fake()->realText(50)),
+            'name'    => $this->faker->colorName(),
+            'explain' => $this->faker->realText(50),
         ];
     }
 }
