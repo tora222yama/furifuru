@@ -14,7 +14,6 @@ enum EPages: string
     case DASHBOARD               = 'dashboard'; // ダッシュボード.
     case ATTENDANCE              = 'attendance'; // 勤怠共有.
     case SHOP                    = 'shop'; // ショップ.
-    case ATTENDANCE_ROOT         = 'attendance_root'; // 勤怠確認.
     case ATTENDANCE__EDIT        = 'attendance__edit'; // 勤怠修正.
     case ATTENDANCE__TABLE       = 'attendance__table'; // 勤怠一覧表.
     case PERSONAL_SETTING__SHOW  = 'personal_setting__show'; // 個人設定・閲覧.

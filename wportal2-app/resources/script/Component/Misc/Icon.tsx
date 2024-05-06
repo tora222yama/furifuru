@@ -3,6 +3,8 @@ import { styled } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import BuildIcon from '@mui/icons-material/Build';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {
   E_ICON,
@@ -45,6 +47,10 @@ export const Icon: React.FC<IProps> = ({ sx, icon, size, width, height }) => {
       return <BuildIcon sx={iconSx} />;
     case E_ICON.DASHBOARD:
       return <DashboardIcon sx={iconSx} />;
+    case E_ICON.EXPAND_LESS:
+      return <ExpandLess sx={iconSx} />;
+    case E_ICON.EXPAND_MORE:
+      return <ExpandMore sx={iconSx} />;
     case E_ICON.SHOP:
       return <ShoppingBasketIcon sx={iconSx} />;
     default:
