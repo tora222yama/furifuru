@@ -8,6 +8,7 @@ import { TypoSubTitle1 } from '@/script/Component/Typography/TypoSubTitle1';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { Paging } from '@/script/Component/Misc/Paging';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { Image } from '@/script/Component/Misc/Image';
 
 interface IProps extends IPropsBase {}
 export const DivisionList: React.FC<IProps> = ({ sx }) => {
@@ -92,7 +93,9 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
             }}
             key={division.id}
           >
-            <TypoSubTitle1>{division.name}</TypoSubTitle1>
+            <TypoSubTitle1>
+              [{division.id}]{division.name}
+            </TypoSubTitle1>
             <Box
               sx={{
                 marginTop: '5px',
@@ -103,7 +106,26 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
                 {division.explain}
               </TypoText>
             </Box>
-            <TypoText sx={{ marginTop: '5px' }}>メンバー</TypoText>
+            {division.trnDivisionUser?.map(trnDivisionUser => {
+              return (
+                <Box
+                  key={trnDivisionUser.id}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    sx={{ width: '32px', height: '32px' }}
+                    src={trnDivisionUser.trnUser?.faceImagePath ?? ''}
+                  />
+                  <TypoText>{trnDivisionUser.trnUser?.nickname}</TypoText>
+                </Box>
+              );
+            })}
+            <TypoText sx={{ marginTop: '5px' }}>
+              {division.trnDivisionUser?.length}
+            </TypoText>
           </Paper>
         );
       })}

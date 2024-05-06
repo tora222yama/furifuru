@@ -1,20 +1,32 @@
 import { ListBase } from '@/script/Models/ListBase';
+import {
+  IAppTrnDivisionUser,
+  parseAppTrnDivisionUserPayload,
+} from '@/script/Models/App/Trn/TrnDivisionUserList';
 
 export interface IAppTrnDivision {
   id: number;
   name: string;
   explain: string;
   displayOrder: number;
+
+  trnDivisionUser?: IAppTrnDivisionUser[];
 }
 
 export const parseAppTrnDivisionPayload = (
-  payload: IAppTrnDivision | any,
+  payload: IAppTrnDivision,
 ): IAppTrnDivision => {
   return {
     id: payload.id ? Number(payload.id) : 0,
     name: payload.name ? String(payload.name) : '',
     explain: payload.explain ? String(payload.explain) : '',
     displayOrder: payload.displayOrder ? Number(payload.displayOrder) : 0,
+
+    trnDivisionUser: payload.trnDivisionUser
+      ? payload.trnDivisionUser.map(trnDivisionUser =>
+          parseAppTrnDivisionUserPayload(trnDivisionUser),
+        )
+      : [],
   };
 };
 

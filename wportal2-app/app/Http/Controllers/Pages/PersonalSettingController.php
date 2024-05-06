@@ -57,6 +57,6 @@ class PersonalSettingController extends Controller
             return [];
         }
 
-        return $trnUser->TrnUserSlackProfile?->toPayload();
+        return $trnUser->TrnUserSlackProfile?->toPayload() ?? [];
     }
 }

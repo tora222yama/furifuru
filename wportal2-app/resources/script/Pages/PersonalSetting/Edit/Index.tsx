@@ -21,7 +21,7 @@ export const context = React.createContext<IndexContext>({
 export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {
-  trnUserSlackProfile?: [];
+  trnUserSlackProfile?: IAppTrnUserSlackProfile;
 }
 export const Index: React.FC<IProps> = ({ trnUserSlackProfile, ...props }) => {
   /**

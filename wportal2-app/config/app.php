@@ -183,6 +183,7 @@ return [
         App\Providers\Internal\PipeServiceProvider::class,
 
         // Models.Scat.Trn.
+        App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
@@ -208,6 +209,7 @@ return [
         'internal\pipe_service'                         => App\Facades\Internal\PipeService::class,
 
         // Models.App.Trn.
+        'models\app\trn\trn_division_service'           => App\Facades\Models\App\Trn\TrnDivisionService::class,
         'models\app\trn\trn_user_service'               => App\Facades\Models\App\Trn\TrnUserService::class,
         'models\app\trn\trn_user_slack_profile_service' => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 

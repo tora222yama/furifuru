@@ -9,7 +9,7 @@ export interface IAppTrnUserSlackProfile {
 }
 
 export const parseAppTrnUserSlackProfilePayload = (
-  payload: IAppTrnUserSlackProfile | any,
+  payload?: IAppTrnUserSlackProfile,
 ): IAppTrnUserSlackProfile => {
   return {
     id: payload?.id ? Number(payload.id) : 0,

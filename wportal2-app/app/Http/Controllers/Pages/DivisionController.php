@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Facades\Models\App\Trn\TrnDivisionService;
 use App\Http\Controllers\Controller;
-use App\Models\App\Trn\TrnDivision;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,20 +38,15 @@ class DivisionController extends Controller
         $pageIndex            = $request->input('index', 0);
         $pageStep             = $request->input('step', 5);
 
-        // TODO: 仮.
-        $trnDivisionList      = TrnDivision::query()
-            ->offset($pageIndex * $pageStep)
-            ->limit($pageStep)
-            ->get();
-
-        // TODO: 仮.
-        $trnDivisionListCount = TrnDivision::count();
-
-        return [
-            'list'  => $trnDivisionList->map(function (TrnDivision $trnDivision) {
-                return $trnDivision->toPayload();
-            })->toArray(),
-            'count' => $trnDivisionListCount,
-        ];
+        return TrnDivisionService::offsetPagination(
+            $pageIndex,
+            $pageStep,
+            [
+                'TrnDivisionUser',
+                'TrnDivisionUser' => [
+                    'TrnUser',
+                ],
+            ]
+        );
     }
 }

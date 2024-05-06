@@ -14,6 +14,9 @@ class TrnUser extends ModelBase
 
     protected $table = 'trn_user';
 
+    /**
+     *  リレーション:TrnUserSlackProfile
+     */
     public function TrnUserSlackProfile(): HasOne
     {
         return $this->hasOne(

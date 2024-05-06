@@ -7,9 +7,7 @@ export interface IAppTrnUser {
   faceImagePath: string;
 }
 
-export const parseAppTrnUserPayload = (
-  payload: IAppTrnUser | any,
-): IAppTrnUser => {
+export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
   return {
     id: payload?.id ? Number(payload.id) : 0,
     authId: payload?.authId ? Number(payload.authId) : 0,
