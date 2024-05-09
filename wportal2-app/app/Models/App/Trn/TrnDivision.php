@@ -31,16 +31,13 @@ class TrnDivision extends ModelBase
      */
     public function toPayload(array $with = []): array
     {
-        // TODO: リカーシブに値を確認する.
-        $existTrnDivisionUser = collect($with)->contains('TrnDivisionUser');
-
         return [
             'id'              => $this->id              ?? 0,
             'name'            => $this->name            ?? '',
             'explain'         => $this->explain         ?? '',
             'displayOrder'    => $this->display_order   ?? 0,
 
-            'trnDivisionUser' => $existTrnDivisionUser
+            'trnDivisionUser' => $this->isExistKeyInWith($with, 'TrnDivisionUser')
                 ? $this->TrnDivisionUser->map(function (TrnDivisionUser $trnDivisionUser) use ($with) {
                     return $trnDivisionUser->toPayload($with);
                 })->toArray()

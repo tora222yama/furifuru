@@ -29,7 +29,7 @@ class TrnUser extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(): array
+    public function toPayload(array $with = []): array
     {
         return [
             'id'              => $this->id                ?? 0,

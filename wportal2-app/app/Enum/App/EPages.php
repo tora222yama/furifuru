@@ -17,6 +17,7 @@ enum EPages: string
     case ATTENDANCE__EDIT        = 'attendance__edit'; // 勤怠修正.
     case ATTENDANCE__TABLE       = 'attendance__table'; // 勤怠一覧表.
     case DIVISION                = 'division'; // 課一覧.
+    case DIVISION__SHOW          = 'division__show'; // 課詳細.
     case PERSONAL_SETTING__SHOW  = 'personal_setting__show'; // 個人設定・閲覧.
     case PERSONAL_SETTING__EDIT  = 'personal_setting__edit'; // 個人設定・編集.
     case LOGIN                   = 'login'; // ログイン.
@@ -30,6 +31,7 @@ enum EPages: string
         return match ($this) {
             self::DASHBOARD              => '\App\Http\Controllers\Pages\DashboardController@invoke',
             self::DIVISION               => '\App\Http\Controllers\Pages\DivisionController@invoke',
+            self::DIVISION__SHOW         => '\App\Http\Controllers\Pages\DivisionController@show',
             self::PERSONAL_SETTING__SHOW => '\App\Http\Controllers\Pages\PersonalSettingController@show',
             self::PERSONAL_SETTING__EDIT => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
             self::LOGIN                  => '\App\Http\Controllers\Pages\LoginController@invoke',

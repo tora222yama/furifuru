@@ -8,6 +8,7 @@ export const E_COLOR = {
   GREY_LIGHT: '#F7F7F7',
   RED: '#F44336',
   RED_LIGHT: '#FFCDD2',
+  GREEN_LIGHT: '#C5E8E1',
 
   // 設定カラー.
   PRIMARY_LIGHT: '#d3ecf6',

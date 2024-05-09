@@ -30,6 +30,18 @@ class DivisionController extends Controller
     }
 
     /**
+     * @throws Exception
+     */
+    public function show(): Response
+    {
+        if (! Auth::check()) {
+            throw new Exception();
+        }
+
+        return $this->render('Division/Show/Index');
+    }
+
+    /**
      * ページネーション・課
      */
     private function getPaginationDivision(Request $request): array
