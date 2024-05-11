@@ -20,6 +20,7 @@ class TrnDivisionService extends ModelServiceBase
         // リスト取得.
         $trnDivisionList      = TrnDivision::query()
             ->with($with)
+            ->alive()
             ->offset($index * $step)
             ->limit($step)
             ->get();
@@ -33,5 +34,18 @@ class TrnDivisionService extends ModelServiceBase
             })->toArray(),
             'count' => $trnDivisionListCount,
         ];
+    }
+
+    /**
+     * Idによる検索(orFail)
+     */
+    public function findByIdOrFail(
+        int $id,
+        array $with = []
+    ): TrnDivision {
+        return TrnDivision::query()
+            ->with($with)
+            ->alive()
+            ->findOrFail($id);
     }
 }
