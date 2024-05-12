@@ -31,4 +31,28 @@ trait GraphQLVariablesHelper
 
         return $args[$key] ?? '';
     }
+
+    /**
+     * argumentsから数値の引数を取得.
+     */
+    protected function getArgAsIntArray(string $key, ?array $args = null): array
+    {
+        if ($args === null) {
+            $args = $this->args;
+        }
+
+        return array_map('intval', (array) $args[$key]) ?? [];
+    }
+
+    /**
+     * argumentsから文字列の引数を取得.
+     */
+    protected function getArgAsStringArray(string $key, ?array $args = null): array
+    {
+        if ($args === null) {
+            $args = $this->args;
+        }
+
+        return array_map('strval', (array) $args[$key]) ?? [];
+    }
 }

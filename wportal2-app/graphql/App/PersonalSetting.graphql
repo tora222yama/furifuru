@@ -1,5 +1,5 @@
 # App/PersonalSetting.graphql
-extend type Mutation {
+extend type Mutation @guard {
   # 個人設定の更新.
   AppPersonalSettingEditUpdate(
     trnUserId: Int!

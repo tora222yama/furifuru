@@ -44,8 +44,14 @@ export type AppTrnUser = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  AppDivisionUserUpdate?: Maybe<Response>;
   AppPersonalSettingEditUpdate?: Maybe<Response>;
   AppPersonalSettingShowAlignSlack?: Maybe<Response>;
+};
+
+export type MutationAppDivisionUserUpdateArgs = {
+  trnDivisionId: Scalars['Int']['input'];
+  trnUserIdList: Array<Scalars['Int']['input']>;
 };
 
 export type MutationAppPersonalSettingEditUpdateArgs = {
@@ -67,6 +73,21 @@ export type Response = {
   errors?: Maybe<Scalars['String']['output']>;
   statusCode: Scalars['Int']['output'];
   statusMessage: Scalars['String']['output'];
+};
+
+export type AppDivisionUserUpdateMutationVariables = Exact<{
+  trnDivisionId: Scalars['Int']['input'];
+  trnUserIdList: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+}>;
+
+export type AppDivisionUserUpdateMutation = {
+  __typename?: 'Mutation';
+  AppDivisionUserUpdate?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
 };
 
 export type AppPersonalSettingEditUpdateMutationVariables = Exact<{
@@ -115,6 +136,65 @@ export type AppTrnUserListQuery = {
   } | null>;
 };
 
+export const AppDivisionUserUpdateDocument = gql`
+  mutation AppDivisionUserUpdate(
+    $trnDivisionId: Int!
+    $trnUserIdList: [Int!]!
+  ) {
+    AppDivisionUserUpdate(
+      trnDivisionId: $trnDivisionId
+      trnUserIdList: $trnUserIdList
+    ) {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppDivisionUserUpdateMutationFn = Apollo.MutationFunction<
+  AppDivisionUserUpdateMutation,
+  AppDivisionUserUpdateMutationVariables
+>;
+
+/**
+ * __useAppDivisionUserUpdateMutation__
+ *
+ * To run a mutation, you first call `useAppDivisionUserUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppDivisionUserUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appDivisionUserUpdateMutation, { data, loading, error }] = useAppDivisionUserUpdateMutation({
+ *   variables: {
+ *      trnDivisionId: // value for 'trnDivisionId'
+ *      trnUserIdList: // value for 'trnUserIdList'
+ *   },
+ * });
+ */
+export function useAppDivisionUserUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppDivisionUserUpdateMutation,
+    AppDivisionUserUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppDivisionUserUpdateMutation,
+    AppDivisionUserUpdateMutationVariables
+  >(AppDivisionUserUpdateDocument, options);
+}
+export type AppDivisionUserUpdateMutationHookResult = ReturnType<
+  typeof useAppDivisionUserUpdateMutation
+>;
+export type AppDivisionUserUpdateMutationResult =
+  Apollo.MutationResult<AppDivisionUserUpdateMutation>;
+export type AppDivisionUserUpdateMutationOptions = Apollo.BaseMutationOptions<
+  AppDivisionUserUpdateMutation,
+  AppDivisionUserUpdateMutationVariables
+>;
 export const AppPersonalSettingEditUpdateDocument = gql`
   mutation AppPersonalSettingEditUpdate(
     $trnUserId: Int!

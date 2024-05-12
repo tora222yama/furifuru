@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { router } from '@inertiajs/react';
 import { Box, Divider, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
@@ -17,12 +18,17 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplaceTrnUser';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { useMutationAppDivisionUserUpdate } from '@/script/Hooks/App/Mutations/useMutationAppDivisionUserUpdate';
+import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
+  const { onStart, onFinish } = useProgressContext();
   const { trnDivisionList } = useIndexContext();
   const trnDivision = trnDivisionList.first();
   const [openReplace, setOpenReplace] = React.useState<boolean>(false);
+  const [, mutationUpdate] = useMutationAppDivisionUserUpdate();
 
   /**
    * メンバー入替を選択.
@@ -35,8 +41,29 @@ export const Show: React.FC<IProps> = () => {
    * メンバー入替の送信.
    */
   const handleSubmitReplace = (newValues: number[]) => {
-    console.log(newValues);
-    console.log('GraphQLを送信する');
+    onStart();
+    setOpenReplace(false);
+    mutationUpdate(
+      {
+        trnDivisionId: trnDivision.id,
+        trnUserIdList: newValues,
+      },
+      [],
+    ).then(res => {
+      onFinish();
+      switch (res.statusCode) {
+        case E_STATUS_CODE.OK:
+          router.reload({
+            preserveState: true,
+            replace: true,
+            onStart,
+            onFinish,
+          });
+          break;
+        default:
+          break;
+      }
+    });
   };
 
   return (

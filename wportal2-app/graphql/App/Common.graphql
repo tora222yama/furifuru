@@ -1,5 +1,5 @@
 # App/Common.graphql
-extend type Query {
+extend type Query @guard {
   # ユーザー一覧の取得.
   AppTrnUserList: [AppTrnUser]! @field(
     resolver: "App\\GraphQL\\App\\Queries\\AppTrnUserListQuery"
