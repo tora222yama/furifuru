@@ -4,11 +4,49 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EPipeKind;
+use App\Facades\Internal\PipeService;
+use App\GraphQL\App\Mutations\Pipe\PipeAppDivisionUpdate;
+use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnDivision;
 use App\Services\Models\ModelServiceBase;
+use Exception;
+use Throwable;
 
 class TrnDivisionService extends ModelServiceBase
 {
+    /**
+     * パイプによる更新.
+     *
+     * @throws Throwable
+     */
+    public function updateByPipe(): void
+    {
+        foreach (PipeService::getPipes(__CLASS__) as $pipe) {
+            $kind = $pipe->getKind();
+            match ($kind) {
+                EPipeKind::APP_DIVISION_UPDATE      => $this->execAppDivisionUpdate($pipe),
+                default                             => throw new Exception(),
+            };
+            $pipe->onUpdate(__CLASS__);
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function execAppDivisionUpdate(
+        PipeAppDivisionUpdate|PipeBase $pipe
+    ): void {
+        // 課基本情報の更新.
+        $trnDivision          = $this->findByIdOrFail($pipe->trnDivisionId);
+        $trnDivision->name    = $pipe->name;
+        $trnDivision->explain = $pipe->explain;
+
+        // 保存.
+        $this->updateOrFail($trnDivision);
+    }
+
     /**
      * オフセットページネーション情報の取得.
      */

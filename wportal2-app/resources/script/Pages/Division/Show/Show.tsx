@@ -89,7 +89,12 @@ export const Show: React.FC<IProps> = () => {
           {getPagesName(E_PAGES.DIVISION__SHOW)}[{trnDivision.id}]
         </TypoH1>
         <InertiaLink
-          href={getPagesHref(E_PAGES.DIVISION__SHOW, String(trnDivision.id))}
+          href={getPagesHref(E_PAGES.DIVISION__EDIT, [
+            {
+              target: '$divisionId',
+              value: String(trnDivision.id),
+            },
+          ])}
         >
           <ButtonGeneral
             sx={{

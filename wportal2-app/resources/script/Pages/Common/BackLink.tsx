@@ -10,34 +10,44 @@ import {
   getPagesBack,
   getPagesHref,
   getPagesName,
+  IPagesHrefReplace,
 } from '@/script/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {
   current: EPages;
+  replace?: IPagesHrefReplace[];
 }
-export const BackLink: React.FC<IProps> = ({ current }) => {
-  const back = getPagesBack(current);
+export const BackLink: React.FC<IProps> = ({ current, replace = [] }) => {
+  const backList = getPagesBack(current);
   return (
     <Box
       sx={{
         display: 'flex',
         alignItems: 'center',
         marginBottom: '8px',
+        gap: '10px',
       }}
     >
-      <ArrowBackIos sx={{ color: E_COLOR.BLACK }} />
-      <InertiaLink href={getPagesHref(back)}>
-        <TypoText
-          sx={{
-            textDecoration: 'underline',
-            '&:hover': {
-              color: E_COLOR.PRIMARY_DARK,
-            },
-          }}
-        >
-          {getPagesName(back)}
-        </TypoText>
-      </InertiaLink>
+      {backList.map(back => {
+        return (
+          <React.Fragment key={back}>
+            <ArrowBackIos sx={{ color: E_COLOR.BLACK }} />
+            <InertiaLink href={getPagesHref(back, replace)}>
+              <TypoText
+                sx={{
+                  textDecoration: 'underline',
+                  marginRight: '20px',
+                  '&:hover': {
+                    color: E_COLOR.PRIMARY_DARK,
+                  },
+                }}
+              >
+                {getPagesName(back)}
+              </TypoText>
+            </InertiaLink>
+          </React.Fragment>
+        );
+      })}
     </Box>
   );
 };

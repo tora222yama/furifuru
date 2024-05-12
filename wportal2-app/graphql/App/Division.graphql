@@ -1,10 +1,11 @@
 # App/Division.graphql
 extend type Mutation @guard {
   # メンバー情報の更新.
-  AppDivisionUserUpdate(
+  AppDivisionUpdate(
     trnDivisionId: Int!
-    trnUserIdList: [Int!]!
+    name: String!
+    explain: String
   ): Response @field(
-    resolver: "App\\GraphQL\\App\\Mutations\\AppDivisionUserUpdate"
+    resolver: "App\\GraphQL\\App\\Mutations\\AppDivisionUpdate"
   )
 }

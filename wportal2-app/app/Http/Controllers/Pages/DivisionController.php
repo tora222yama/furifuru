@@ -56,6 +56,27 @@ class DivisionController extends Controller
     }
 
     /**
+     * @throws Exception
+     */
+    public function edit(Request $request): Response
+    {
+        if (! Auth::check()) {
+            throw new Exception();
+        }
+
+        return $this->render('Division/Edit/Index', [
+
+            // 課情報.
+            'trnDivision' => fn () => $this->getDivision($request, [
+                'TrnDivisionUser',
+                'TrnDivisionUser' => [
+                    'TrnUser',
+                ],
+            ]),
+        ]);
+    }
+
+    /**
      * ページネーション・課
      */
     private function getPaginationDivision(Request $request, array $with = []): array

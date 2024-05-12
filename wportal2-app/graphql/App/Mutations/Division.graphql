@@ -1,11 +1,13 @@
 # メンバー情報の更新.
-mutation AppDivisionUserUpdate(
+mutation AppDivisionUpdate(
   $trnDivisionId: Int!
-  $trnUserIdList: [Int!]!
+  $name: String!
+  $explain: String
 ) {
-  AppDivisionUserUpdate(
+  AppDivisionUpdate(
     trnDivisionId: $trnDivisionId
-    trnUserIdList: $trnUserIdList
+    name: $name
+    explain: $explain
   ) {
     statusCode
     statusMessage

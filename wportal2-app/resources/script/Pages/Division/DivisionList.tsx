@@ -107,7 +107,12 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
                 [{division.id}]{division.name}
               </TypoSubTitle1>
               <InertiaLink
-                href={getPagesHref(E_PAGES.DIVISION__SHOW, String(division.id))}
+                href={getPagesHref(E_PAGES.DIVISION__SHOW, [
+                  {
+                    target: '$divisionId',
+                    value: String(division.id),
+                  },
+                ])}
               >
                 <ButtonGeneral label="詳細" />
               </InertiaLink>
