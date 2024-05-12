@@ -1,0 +1,14 @@
+# App/Common.graphql
+extend type Query {
+  # ユーザー一覧の取得.
+  AppTrnUserList: [AppTrnUser]! @field(
+    resolver: "App\\GraphQL\\App\\Queries\\AppTrnUserListQuery"
+  )
+}
+
+type AppTrnUser {
+  id: Int!
+  authId: Int!
+  nickname: String
+  faceImagePath: String
+}

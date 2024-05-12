@@ -14,23 +14,43 @@ import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Avatar } from '@/script/Pages/Common/Avatar';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { Log } from '@/script/Common/Log';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplaceTrnUser';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
   const { trnDivisionList } = useIndexContext();
   const trnDivision = trnDivisionList.first();
+  const [openReplace, setOpenReplace] = React.useState<boolean>(false);
 
   /**
    * メンバー入替を選択.
    */
   const handleClickReplace = () => {
-    Log.info('メンバー入替を選択');
+    setOpenReplace(true);
+  };
+
+  /**
+   * メンバー入替の送信.
+   */
+  const handleSubmitReplace = (newValues: number[]) => {
+    console.log(newValues);
+    console.log('GraphQLを送信する');
   };
 
   return (
     <Page>
+      <Closable open={openReplace}>
+        <DialogReplaceTrnUser
+          open={openReplace}
+          defaultUserIdList={
+            trnDivision.trnDivisionUser?.map(v => v.trnUserId) ?? []
+          }
+          handleSubmit={handleSubmitReplace}
+          handleClose={() => setOpenReplace(false)}
+        />
+      </Closable>
       <BackLink current={E_PAGES.DIVISION__SHOW} />
       <Box
         sx={{

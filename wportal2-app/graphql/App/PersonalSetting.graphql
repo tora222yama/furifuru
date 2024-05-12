@@ -1,10 +1,4 @@
 # App/PersonalSetting.graphql
-extend type Query {
-  Dummy: Int @field(
-    resolver: "App\\GraphQL\\App\\Queries\\Dummy"
-  )
-}
-
 extend type Mutation {
   # 個人設定の更新.
   AppPersonalSettingEditUpdate(

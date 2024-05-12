@@ -13,6 +13,7 @@ use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -61,6 +62,17 @@ class TrnUserService extends ModelServiceBase
 
         // 保存.
         $this->updateOrFail($trnUser);
+    }
+
+    /**
+     * 全て取得.
+     */
+    public function list(array $with = []): Collection
+    {
+        return TrnUser::query()
+            ->with($with)
+            ->alive()
+            ->get();
     }
 
     /**

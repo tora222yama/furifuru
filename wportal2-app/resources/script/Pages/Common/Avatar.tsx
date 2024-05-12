@@ -5,11 +5,13 @@ import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { getAuthorizedImagePath } from '@/script/Common/Image';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {
   trnUser?: IAppTrnUser;
+  handleClose?: (trnUser: IAppTrnUser) => void;
 }
-export const Avatar: React.FC<IProps> = ({ sx, trnUser }) => {
+export const Avatar: React.FC<IProps> = ({ sx, trnUser, handleClose }) => {
   /**
    * 画像表示.
    */
@@ -31,9 +33,24 @@ export const Avatar: React.FC<IProps> = ({ sx, trnUser }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
+          gap: '5px',
         }}
       >
         <TypoText>{trnUser?.nickname}</TypoText>
+        <Closable open={!!handleClose}>
+          <Box
+            sx={{
+              cursor: 'pointer',
+              borderLeft: `1px solid ${E_COLOR.GREY}`,
+              paddingLeft: '5px',
+            }}
+            onClick={() =>
+              handleClose ? handleClose(trnUser as IAppTrnUser) : undefined
+            }
+          >
+            <TypoText>×</TypoText>
+          </Box>
+        </Closable>
       </Box>
     );
   };

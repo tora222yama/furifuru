@@ -34,6 +34,14 @@ export type Scalars = {
   Upload: { input: any; output: any };
 };
 
+export type AppTrnUser = {
+  __typename?: 'AppTrnUser';
+  authId: Scalars['Int']['output'];
+  faceImagePath?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  nickname?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   AppPersonalSettingEditUpdate?: Maybe<Response>;
@@ -51,7 +59,7 @@ export type MutationAppPersonalSettingEditUpdateArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  Dummy?: Maybe<Scalars['Int']['output']>;
+  AppTrnUserList: Array<Maybe<AppTrnUser>>;
 };
 
 export type Response = {
@@ -92,6 +100,19 @@ export type AppPersonalSettingShowAlignSlackMutation = {
     statusMessage: string;
     errors?: string | null;
   } | null;
+};
+
+export type AppTrnUserListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AppTrnUserListQuery = {
+  __typename?: 'Query';
+  AppTrnUserList: Array<{
+    __typename?: 'AppTrnUser';
+    id: number;
+    authId: number;
+    nickname?: string | null;
+    faceImagePath?: string | null;
+  } | null>;
 };
 
 export const AppPersonalSettingEditUpdateDocument = gql`
@@ -219,3 +240,78 @@ export type AppPersonalSettingShowAlignSlackMutationOptions =
     AppPersonalSettingShowAlignSlackMutation,
     AppPersonalSettingShowAlignSlackMutationVariables
   >;
+export const AppTrnUserListDocument = gql`
+  query AppTrnUserList {
+    AppTrnUserList {
+      id
+      authId
+      nickname
+      faceImagePath
+    }
+  }
+`;
+
+/**
+ * __useAppTrnUserListQuery__
+ *
+ * To run a query within a React component, call `useAppTrnUserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppTrnUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppTrnUserListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppTrnUserListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AppTrnUserListQuery,
+    AppTrnUserListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AppTrnUserListQuery, AppTrnUserListQueryVariables>(
+    AppTrnUserListDocument,
+    options,
+  );
+}
+export function useAppTrnUserListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AppTrnUserListQuery,
+    AppTrnUserListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AppTrnUserListQuery, AppTrnUserListQueryVariables>(
+    AppTrnUserListDocument,
+    options,
+  );
+}
+export function useAppTrnUserListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AppTrnUserListQuery,
+    AppTrnUserListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AppTrnUserListQuery,
+    AppTrnUserListQueryVariables
+  >(AppTrnUserListDocument, options);
+}
+export type AppTrnUserListQueryHookResult = ReturnType<
+  typeof useAppTrnUserListQuery
+>;
+export type AppTrnUserListLazyQueryHookResult = ReturnType<
+  typeof useAppTrnUserListLazyQuery
+>;
+export type AppTrnUserListSuspenseQueryHookResult = ReturnType<
+  typeof useAppTrnUserListSuspenseQuery
+>;
+export type AppTrnUserListQueryResult = Apollo.QueryResult<
+  AppTrnUserListQuery,
+  AppTrnUserListQueryVariables
+>;
