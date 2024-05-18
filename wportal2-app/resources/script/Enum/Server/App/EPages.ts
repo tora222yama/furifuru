@@ -13,6 +13,9 @@ export const E_PAGES = {
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
+  PROJECT: 'project', // プロジェクト一覧.
+  PROJECT__SHOW: 'project__show', // プロジェクト詳細.
+  PROJECT__EDIT: 'project__edit', // プロジェクト編集.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
   LOGIN: 'login', // ログイン.
@@ -40,6 +43,12 @@ const getHref = (page: EPages): string => {
       return `/division/$divisionId/show`;
     case E_PAGES.DIVISION__EDIT:
       return `/division/$divisionId/edit`;
+    case E_PAGES.PROJECT:
+      return '/project';
+    case E_PAGES.PROJECT__SHOW:
+      return '/project/$projectId/show';
+    case E_PAGES.PROJECT__EDIT:
+      return '/project/$projectId/edit';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:
@@ -73,6 +82,12 @@ export const getPagesName = (page: EPages): string => {
       return '課詳細';
     case E_PAGES.DIVISION__EDIT:
       return '課編集';
+    case E_PAGES.PROJECT:
+      return 'プロジェクト一覧';
+    case E_PAGES.PROJECT__SHOW:
+      return 'プロジェクト詳細';
+    case E_PAGES.PROJECT__EDIT:
+      return 'プロジェクト編集';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '個人設定';
     case E_PAGES.PERSONAL_SETTING__EDIT:
@@ -92,6 +107,10 @@ export const getPagesBack = (pages: EPages): EPages[] => {
       return [E_PAGES.DIVISION];
     case E_PAGES.DIVISION__EDIT:
       return [E_PAGES.DIVISION, E_PAGES.DIVISION__SHOW];
+    case E_PAGES.PROJECT__SHOW:
+      return [E_PAGES.PROJECT];
+    case E_PAGES.PROJECT__EDIT:
+      return [E_PAGES.PROJECT, E_PAGES.PROJECT__SHOW];
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return [E_PAGES.PERSONAL_SETTING__SHOW];
     default:

@@ -24,6 +24,11 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('divisionId', '[0-9]+');
     Route::get('/division/{divisionId}/edit', EPages::DIVISION__EDIT->getInvokePath())
         ->where('divisionId', '[0-9]+');
+    Route::match(['get', 'post'], '/project', EPages::PROJECT->getInvokePath());
+    Route::get('/project/{projectId}/show', EPages::PROJECT__SHOW->getInvokePath())
+        ->where('projectId', '[0-9]+');
+    Route::get('/project/{projectId}/edit', EPages::PROJECT__EDIT->getInvokePath())
+        ->where('projectId', '[0-9]+');
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
 

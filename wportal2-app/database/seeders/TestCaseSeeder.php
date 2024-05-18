@@ -9,6 +9,8 @@ use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnDivisionUser;
+use App\Models\App\Trn\TrnProject;
+use App\Models\App\Trn\TrnProjectUser;
 use App\Models\App\Trn\TrnUser;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +36,8 @@ class TestCaseSeeder extends Seeder
         TrnUser::truncate();
         TrnDivision::truncate();
         TrnDivisionUser::truncate();
+        TrnProject::truncate();
+        TrnProjectUser::truncate();
 
         // メンバー作成.
         TrnUser::factory(400)->create()->each(static function (TrnUser $trnUser) {
@@ -55,6 +59,17 @@ class TestCaseSeeder extends Seeder
                 for ($i = (($trnDivision->id-1) * 20); $i < $trnDivision->id * 20; $i++) {
                     TrnDivisionUser::factory()->create([
                         'trn_division_id' => $trnDivision->id,
+                        'trn_user_id'     => $i + 1,
+                    ]);
+                }
+            });
+
+        // プロジェクト作成.
+        TrnProject::factory(20)
+            ->create()->each(function (TrnProject $trnProject) {
+                for ($i = (($trnProject->id-1) * 20); $i < $trnProject->id * 20; $i++) {
+                    TrnProjectUser::factory()->create([
+                        'trn_project_id'  => $trnProject->id,
                         'trn_user_id'     => $i + 1,
                     ]);
                 }

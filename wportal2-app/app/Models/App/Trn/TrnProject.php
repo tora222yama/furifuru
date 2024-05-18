@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models\App\Trn;
+
+use App\Models\App\ModelBase;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class TrnProject extends ModelBase
+{
+    use hasFactory;
+
+    protected $table = 'trn_project';
+
+    /**
+     * リレーション:TrnProjectUser
+     */
+    public function TrnProjectUser(): HasMany
+    {
+        return $this->hasMany(
+            TrnProjectUser::class,
+            'trn_project_id',
+            'id'
+        )->alive();
+    }
+
+    /**
+     * レコードをGraphQLなどでの受け渡し用に変換.
+     */
+    public function toPayload(array $with = []): array
+    {
+        return [
+            'id'              => $this->id              ?? 0,
+            'name'            => $this->name            ?? '',
+            'explain'         => $this->explain         ?? '',
+            'displayOrder'    => $this->display_order   ?? 0,
+
+            'trnProjectUser'  => $this->isExistKeyInWith($with, 'TrnProjectUser')
+                ? $this->TrnProjectUser->map(function (TrnProjectUser $trnProjectUser) use ($with) {
+                    return $trnProjectUser->toPayload($with);
+                })->toArray()
+                : [],
+        ];
+    }
+}

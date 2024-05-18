@@ -185,6 +185,8 @@ return [
         // Models.Scat.Trn.
         App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
@@ -212,6 +214,8 @@ return [
         // Models.App.Trn.
         'models\app\trn\trn_division_service'           => App\Facades\Models\App\Trn\TrnDivisionService::class,
         'models\app\trn\trn_division_user_service'      => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
+        'models\app\trn\trn_project_service'            => App\Facades\Models\App\Trn\TrnProjectService::class,
+        'models\app\trn\trn_project_user_service'       => App\Facades\Models\App\Trn\TrnProjectUserService::class,
         'models\app\trn\trn_user_service'               => App\Facades\Models\App\Trn\TrnUserService::class,
         'models\app\trn\trn_user_slack_profile_service' => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 

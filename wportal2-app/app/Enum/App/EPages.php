@@ -19,6 +19,9 @@ enum EPages: string
     case DIVISION                = 'division'; // 課一覧.
     case DIVISION__SHOW          = 'division__show'; // 課詳細.
     case DIVISION__EDIT          = 'division__edit'; // 課編集.
+    case PROJECT                 = 'project'; // プロジェクト一覧.
+    case PROJECT__SHOW           = 'project__show'; // プロジェクト詳細.
+    case PROJECT__EDIT           = 'project__edit'; // プロジェクト編集.
     case PERSONAL_SETTING__SHOW  = 'personal_setting__show'; // 個人設定・閲覧.
     case PERSONAL_SETTING__EDIT  = 'personal_setting__edit'; // 個人設定・編集.
     case LOGIN                   = 'login'; // ログイン.
@@ -34,6 +37,9 @@ enum EPages: string
             self::DIVISION               => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW         => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT         => '\App\Http\Controllers\Pages\DivisionController@edit',
+            self::PROJECT                => '\App\Http\Controllers\Pages\ProjectController@invoke',
+            self::PROJECT__SHOW          => '\App\Http\Controllers\Pages\ProjectController@show',
+            self::PROJECT__EDIT          => '\App\Http\Controllers\Pages\ProjectController@edit',
             self::PERSONAL_SETTING__SHOW => '\App\Http\Controllers\Pages\PersonalSettingController@show',
             self::PERSONAL_SETTING__EDIT => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
             self::LOGIN                  => '\App\Http\Controllers\Pages\LoginController@invoke',

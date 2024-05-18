@@ -108,7 +108,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.PROJECT,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.PROJECT,
     parent: E_MENU.PROJECT_ROOT,
     back: E_PAGES.INVALID,
     name: 'プロジェクト一覧',
