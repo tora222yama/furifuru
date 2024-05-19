@@ -48,6 +48,8 @@ export type Mutation = {
   AppDivisionUserUpdate?: Maybe<Response>;
   AppPersonalSettingEditUpdate?: Maybe<Response>;
   AppPersonalSettingShowAlignSlack?: Maybe<Response>;
+  AppProjectUpdate?: Maybe<Response>;
+  AppProjectUserUpdate?: Maybe<Response>;
 };
 
 export type MutationAppDivisionUpdateArgs = {
@@ -68,6 +70,17 @@ export type MutationAppPersonalSettingEditUpdateArgs = {
   slackUserName?: InputMaybe<Scalars['String']['input']>;
   trnUserId: Scalars['Int']['input'];
   upload?: InputMaybe<Scalars['Upload']['input']>;
+};
+
+export type MutationAppProjectUpdateArgs = {
+  explain?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  trnProjectId: Scalars['Int']['input'];
+};
+
+export type MutationAppProjectUserUpdateArgs = {
+  trnProjectId: Scalars['Int']['input'];
+  trnUserIdList: Array<Scalars['Int']['input']>;
 };
 
 export type Query = {
@@ -139,6 +152,37 @@ export type AppPersonalSettingShowAlignSlackMutationVariables = Exact<{
 export type AppPersonalSettingShowAlignSlackMutation = {
   __typename?: 'Mutation';
   AppPersonalSettingShowAlignSlack?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppProjectUpdateMutationVariables = Exact<{
+  trnProjectId: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  explain?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AppProjectUpdateMutation = {
+  __typename?: 'Mutation';
+  AppProjectUpdate?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppProjectUserUpdateMutationVariables = Exact<{
+  trnProjectId: Scalars['Int']['input'];
+  trnUserIdList: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+}>;
+
+export type AppProjectUserUpdateMutation = {
+  __typename?: 'Mutation';
+  AppProjectUserUpdate?: {
     __typename?: 'Response';
     statusCode: number;
     statusMessage: string;
@@ -405,6 +449,124 @@ export type AppPersonalSettingShowAlignSlackMutationOptions =
     AppPersonalSettingShowAlignSlackMutation,
     AppPersonalSettingShowAlignSlackMutationVariables
   >;
+export const AppProjectUpdateDocument = gql`
+  mutation AppProjectUpdate(
+    $trnProjectId: Int!
+    $name: String!
+    $explain: String
+  ) {
+    AppProjectUpdate(
+      trnProjectId: $trnProjectId
+      name: $name
+      explain: $explain
+    ) {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppProjectUpdateMutationFn = Apollo.MutationFunction<
+  AppProjectUpdateMutation,
+  AppProjectUpdateMutationVariables
+>;
+
+/**
+ * __useAppProjectUpdateMutation__
+ *
+ * To run a mutation, you first call `useAppProjectUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppProjectUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appProjectUpdateMutation, { data, loading, error }] = useAppProjectUpdateMutation({
+ *   variables: {
+ *      trnProjectId: // value for 'trnProjectId'
+ *      name: // value for 'name'
+ *      explain: // value for 'explain'
+ *   },
+ * });
+ */
+export function useAppProjectUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppProjectUpdateMutation,
+    AppProjectUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppProjectUpdateMutation,
+    AppProjectUpdateMutationVariables
+  >(AppProjectUpdateDocument, options);
+}
+export type AppProjectUpdateMutationHookResult = ReturnType<
+  typeof useAppProjectUpdateMutation
+>;
+export type AppProjectUpdateMutationResult =
+  Apollo.MutationResult<AppProjectUpdateMutation>;
+export type AppProjectUpdateMutationOptions = Apollo.BaseMutationOptions<
+  AppProjectUpdateMutation,
+  AppProjectUpdateMutationVariables
+>;
+export const AppProjectUserUpdateDocument = gql`
+  mutation AppProjectUserUpdate($trnProjectId: Int!, $trnUserIdList: [Int!]!) {
+    AppProjectUserUpdate(
+      trnProjectId: $trnProjectId
+      trnUserIdList: $trnUserIdList
+    ) {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppProjectUserUpdateMutationFn = Apollo.MutationFunction<
+  AppProjectUserUpdateMutation,
+  AppProjectUserUpdateMutationVariables
+>;
+
+/**
+ * __useAppProjectUserUpdateMutation__
+ *
+ * To run a mutation, you first call `useAppProjectUserUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppProjectUserUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appProjectUserUpdateMutation, { data, loading, error }] = useAppProjectUserUpdateMutation({
+ *   variables: {
+ *      trnProjectId: // value for 'trnProjectId'
+ *      trnUserIdList: // value for 'trnUserIdList'
+ *   },
+ * });
+ */
+export function useAppProjectUserUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppProjectUserUpdateMutation,
+    AppProjectUserUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppProjectUserUpdateMutation,
+    AppProjectUserUpdateMutationVariables
+  >(AppProjectUserUpdateDocument, options);
+}
+export type AppProjectUserUpdateMutationHookResult = ReturnType<
+  typeof useAppProjectUserUpdateMutation
+>;
+export type AppProjectUserUpdateMutationResult =
+  Apollo.MutationResult<AppProjectUserUpdateMutation>;
+export type AppProjectUserUpdateMutationOptions = Apollo.BaseMutationOptions<
+  AppProjectUserUpdateMutation,
+  AppProjectUserUpdateMutationVariables
+>;
 export const AppTrnUserListDocument = gql`
   query AppTrnUserList {
     AppTrnUserList {

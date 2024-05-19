@@ -58,3 +58,5 @@ type Response {
 #import App/Division.graphql
 #import App/DivisionUser.graphql
 #import App/PersonalSetting.graphql
+#import App/Project.graphql
+#import App/ProjectUser.graphql

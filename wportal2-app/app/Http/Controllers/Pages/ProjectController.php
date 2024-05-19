@@ -45,7 +45,28 @@ class ProjectController extends Controller
 
         return $this->render('Project/Show/Index', [
 
-            // 課情報.
+            // プロジェクト情報.
+            'trnProject' => fn () => $this->getProject($request, [
+                'TrnProjectUser',
+                'TrnProjectUser' => [
+                    'TrnUser',
+                ],
+            ]),
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function edit(Request $request): Response
+    {
+        if (! Auth::check()) {
+            throw new Exception();
+        }
+
+        return $this->render('Project/Edit/Index', [
+
+            // プロジェクト情報.
             'trnProject' => fn () => $this->getProject($request, [
                 'TrnProjectUser',
                 'TrnProjectUser' => [

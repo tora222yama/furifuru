@@ -6,7 +6,6 @@ import {
   parseAppTrnProjectPayload,
 } from '@/script/Models/App/Trn/TrnProjectList';
 import { IPropsBase } from '@/script/System/System';
-import { AppTrnDivisionList } from '@/script/Models/App/Trn/TrnDivisionList';
 import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import { Show } from '@/script/Pages/Project/Show/Show';
 
@@ -30,7 +29,7 @@ export const Index: React.FC<IProps> = ({ trnProject, ...props }) => {
    */
   const providerValue: IndexContext = useMemo(
     () => ({
-      trnProjectList: new AppTrnDivisionList([
+      trnProjectList: new AppTrnProjectList([
         parseAppTrnProjectPayload(trnProject),
       ]),
     }),

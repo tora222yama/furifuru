@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box, Divider, Paper } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
 import {
@@ -25,8 +26,8 @@ import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
-  const { trnDivisionList } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
+  const { trnDivisionList } = useIndexContext();
   const trnDivision = trnDivisionList.first();
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     id: trnDivision.id,
@@ -73,13 +74,18 @@ export const Edit: React.FC<IProps> = () => {
     ).then(res => {
       switch (res.statusCode) {
         case E_STATUS_CODE.OK:
-          // 画像の再読み込みが必要なためフルリロードを実施し、画面ロードは継続する.
-          window.location.href = getPagesHref(E_PAGES.DIVISION__SHOW, [
+          router.visit(
+            getPagesHref(E_PAGES.DIVISION__SHOW, [
+              {
+                target: '$divisionId',
+                value: String(trnDivision.id),
+              },
+            ]),
             {
-              target: '$divisionId',
-              value: String(trnDivision.id),
+              onStart,
+              onFinish,
             },
-          ]);
+          );
           break;
         default:
           onFinish();

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box, Divider, Paper } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
 import {
@@ -18,14 +19,16 @@ import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplace
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/Project/Show/Index';
-import { Log } from '@/script/Common/Log';
+import { useMutationAppProjectUserUpdate } from '@/script/Hooks/App/Mutations/useMutationAppProjectUserUpdate';
+import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
-  const { onStart } = useProgressContext();
+  const { onStart, onFinish } = useProgressContext();
   const { trnProjectList } = useIndexContext();
   const trnProject = trnProjectList.first();
   const [openReplace, setOpenReplace] = React.useState<boolean>(false);
+  const [, mutationUpdate] = useMutationAppProjectUserUpdate();
 
   /**
    * メンバー入替を選択.
@@ -40,7 +43,27 @@ export const Show: React.FC<IProps> = () => {
   const handleSubmitReplace = (newValues: number[]) => {
     onStart();
     setOpenReplace(false);
-    Log.info(newValues);
+    mutationUpdate(
+      {
+        trnProjectId: trnProject.id,
+        trnUserIdList: newValues,
+      },
+      [],
+    ).then(res => {
+      onFinish();
+      switch (res.statusCode) {
+        case E_STATUS_CODE.OK:
+          router.reload({
+            preserveState: true,
+            replace: true,
+            onStart,
+            onFinish,
+          });
+          break;
+        default:
+          break;
+      }
+    });
   };
 
   return (

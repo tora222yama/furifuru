@@ -29,5 +29,15 @@ export default defineConfig({
         noExternal: [
             "@apollo/client"
         ]
+    },
+    build: {
+        rollupOptions: {
+            onwarn: (warning, defaultHandler) => {
+                if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+                    return;
+                }
+                defaultHandler(warning);
+            },
+        }
     }
 });
