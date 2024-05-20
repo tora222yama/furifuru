@@ -24,7 +24,10 @@ class ModelBase extends Model
     protected function isExistKeyInWith(array $with, string $key): bool
     {
         // flatにして最後のピリオドから後ろを取得.
-        return collect($with)->flatten()
+        return collect($this->flatEagerLoad($with))
+            ->filter(function ($value) {
+                return is_string($value);
+            })
             ->map(function ($value) {
                 $pos = 0;
                 if ($existPeriod = strpos($value, '.')) {
@@ -34,5 +37,34 @@ class ModelBase extends Model
                 return substr($value, $pos, strlen($value));
             })
             ->contains($key);
+    }
+
+    /**
+     * eager-load情報をrecursiveにflatmapとする.
+     */
+    private function flatEagerLoad(array $with, array &$ret = []): array
+    {
+        foreach ($with as $key => $item) {
+            // 文字列の時は検索対象として終了.
+            if (is_string($item)) {
+                $ret[] = $item;
+
+                continue;
+            }
+
+            // 配列の時は再帰的に処理する.
+            if (is_array($item)) {
+                $this->flatEagerLoad($item, $ret);
+
+                continue;
+            }
+
+            // Closureなどの場合はキーを対象とする.
+            if (is_object($item)) {
+                $ret[] = $key;
+            }
+        }
+
+        return $ret;
     }
 }

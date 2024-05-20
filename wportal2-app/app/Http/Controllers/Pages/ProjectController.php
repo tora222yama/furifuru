@@ -27,9 +27,7 @@ class ProjectController extends Controller
             // プロジェクト情報.
             'paginationProject' => fn () => $this->getPaginationProject($request, [
                 'TrnProjectUser',
-                'TrnProjectUser' => [
-                    'TrnUser',
-                ],
+                'TrnProjectUser.TrnUser',
             ]),
         ]);
     }
