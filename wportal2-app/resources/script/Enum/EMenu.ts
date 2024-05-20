@@ -116,7 +116,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.USER_ROOT,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.INVALID,
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: 'メンバー',
@@ -124,7 +124,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.USER,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.USER,
     parent: E_MENU.USER_ROOT,
     back: E_PAGES.INVALID,
     name: 'メンバー一覧',

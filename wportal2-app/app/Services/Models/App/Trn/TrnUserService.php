@@ -65,6 +65,33 @@ class TrnUserService extends ModelServiceBase
     }
 
     /**
+     * オフセットページネーション情報の取得.
+     */
+    public function offsetPagination(
+        int $index,
+        int $step,
+        array $with = []
+    ): array {
+        // リスト取得.
+        $trnUserList      = TrnUser::query()
+            ->with($with)
+            ->alive()
+            ->offset($index * $step)
+            ->limit($step)
+            ->get();
+
+        // カウント取得.
+        $trnUserListCount = TrnUser::count();
+
+        return [
+            'list'  => $trnUserList->map(function (TrnUser $trnUser) use ($with) {
+                return $trnUser->toPayload($with);
+            })->toArray(),
+            'count' => $trnUserListCount,
+        ];
+    }
+
+    /**
      * 全て取得.
      */
     public function list(array $with = []): Collection
