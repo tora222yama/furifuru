@@ -5,20 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
     /**
-     * 認証ユーザーに対し、指定したS3の画像をページの一部として利用可能な形式で返す.
+     * 指定したS3の画像をページの一部として利用可能な形式で返す.
      */
     public function invoke(Request $request): object
     {
-        if (! Auth::check()) {
-            abort(404);
-        }
-
         // URIからパスを取得.
         $path     = $request->route('path');
 

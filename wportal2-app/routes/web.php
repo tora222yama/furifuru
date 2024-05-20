@@ -31,10 +31,10 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('projectId', '[0-9]+');
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
-
-    Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
-        ->where('path', '.*');
 });
+
+Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
+    ->where('path', '.*');
 
 Route::get('/login', EPages::LOGIN->getInvokePath())
     ->name('login');
