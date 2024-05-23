@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Facades\Models\App\Trn\TrnUserService;
+use App\Models\App\Auth\AuthUser;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -35,8 +35,9 @@ class Controller extends BaseController
             $props,
             [
                 'csrfToken'      => csrf_token(),
-                'authUser'       => fn () => $this->getAuthUser(),
-                'trnUser'        => fn () => $this->getTrnUser(),
+                'authUser'       => fn () => $this->getAuthUser([
+                    'TrnUser',
+                ]),
                 'location'       => [
                     'current' => Request::url(),
                     'path'    => Request::path(),
@@ -45,20 +46,12 @@ class Controller extends BaseController
         ));
     }
 
-    private function getAuthUser(): ?array
+    private function getAuthUser(array $with = []): ?array
     {
-        $authUser = Auth::user();
+        $authUser = AuthUser::query()
+            ->with($with)
+            ->findOrFail(Auth::id());
 
-        return $authUser?->toPayload();
-    }
-
-    private function getTrnUser(): ?array
-    {
-        $authUser = Auth::user();
-
-        // ユーザー情報を取得.
-        $trnUser  = TrnUserService::findByAuthId($authUser?->id ?? 0);
-
-        return $trnUser?->toPayload();
+        return $authUser?->toPayload($with);
     }
 }

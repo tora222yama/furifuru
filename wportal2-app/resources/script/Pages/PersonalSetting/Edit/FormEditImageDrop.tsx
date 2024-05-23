@@ -33,7 +33,7 @@ export const FormEditImageDrop: React.FC<IProps> = ({
   formEdit,
   handleUpdate,
 }) => {
-  const { trnUser } = useCommonIndexContext();
+  const { authUser } = useCommonIndexContext();
   const [files, setFiles] = React.useState<DropFile[]>([]);
 
   /**
@@ -115,7 +115,7 @@ export const FormEditImageDrop: React.FC<IProps> = ({
           width: '128px',
           height: '128px',
         }}
-        src={trnUser.faceImagePath}
+        src={String(authUser.trnUser?.faceImagePath)}
         alt="preview"
       />
     );

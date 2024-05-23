@@ -1,8 +1,14 @@
 import { ListBase } from '@/script/Models/ListBase';
+import {
+  IAppTrnUser,
+  parseAppTrnUserPayload,
+} from '@/script/Models/App/Trn/TrnUserList';
 
 export interface IAppAuthUser {
   id: number;
   name: string;
+
+  trnUser?: IAppTrnUser;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,6 +16,10 @@ export const parseAppAuthUserPayload = (payload: any): IAppAuthUser => {
   return {
     id: payload?.id ? Number(payload.id) : 0,
     name: payload?.name ? String(payload.name) : '',
+
+    trnUser: payload?.trnUser
+      ? parseAppTrnUserPayload(payload.trnUser)
+      : undefined,
   };
 };
 

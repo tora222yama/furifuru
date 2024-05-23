@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Models\App\Auth;
 
 use App\Models\App\EloquentBuilder;
+use App\Models\App\Trn\TrnUser;
+use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use JetBrains\PhpStorm\Pure;
 
 class AuthUser extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use EagerLoadHelper, HasFactory, Notifiable;
 
     protected $table    = 'auth_user';
 
@@ -57,13 +60,30 @@ class AuthUser extends Authenticatable
     }
 
     /**
+     * リレーション:TrnUser
+     */
+    public function TrnUser(): HasOne
+    {
+        return $this->hasOne(
+            TrnUser::class,
+            'auth_id',
+            'id'
+        )->alive();
+    }
+
+    /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(): array
+    public function toPayload(array $with = []): array
     {
         return [
             'id'          => $this->id,
             'name'        => $this->name        ?? '',
+
+            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser')
+                ? $this->TrnUser?->toPayload($with)
+                : null,
+
         ];
     }
 }

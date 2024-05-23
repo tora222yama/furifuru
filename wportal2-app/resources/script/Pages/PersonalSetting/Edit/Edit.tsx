@@ -26,13 +26,13 @@ import { useIndexContext } from '@/script/Pages/PersonalSetting/Edit/Index';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
-  const { authUser, trnUser } = useCommonIndexContext();
+  const { authUser } = useCommonIndexContext();
   const { trnUserSlackProfile } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
 
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     name: authUser.name,
-    nickname: trnUser.nickname,
+    nickname: authUser.trnUser?.nickname ?? '',
     slackUserId: trnUserSlackProfile.slackUserId,
     slackUserName: trnUserSlackProfile.slackUserName,
     slackTeamId: trnUserSlackProfile.slackTeamId,
@@ -70,7 +70,7 @@ export const Edit: React.FC<IProps> = () => {
     onStart();
     mutationUpdate(
       {
-        trnUserId: trnUser.id,
+        trnUserId: authUser.trnUser?.id ?? 0,
         nickname: formEdit.nickname,
         slackUserId: formEdit.slackUserId,
         slackUserName: formEdit.slackUserName,

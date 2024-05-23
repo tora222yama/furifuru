@@ -12,11 +12,6 @@ import {
   parseLocation,
 } from '@/script/Provider/ILocation';
 import {
-  AppTrnUserList,
-  IAppTrnUser,
-  parseAppTrnUserPayload,
-} from '@/script/Models/App/Trn/TrnUserList';
-import {
   AppAuthUserList,
   IAppAuthUser,
   parseAppAuthUserPayload,
@@ -38,13 +33,11 @@ const client = new ApolloClient({
 type CommonIndexContext = {
   csrfToken: string;
   authUser: IAppAuthUser;
-  trnUser: IAppTrnUser;
   location: ILocation;
 };
 export const context = React.createContext<CommonIndexContext>({
   csrfToken: '',
   authUser: AppAuthUserList.defaultInterface(),
-  trnUser: AppTrnUserList.defaultInterface(),
   location: getDefaultLocation(),
 });
 export const useCommonIndexContext = (): CommonIndexContext =>
@@ -54,7 +47,6 @@ interface IProps extends IPropsBase {}
 export const CommonIndexProvider: React.FC<IProps> = ({
   csrfToken,
   authUser,
-  trnUser,
   location,
   children,
 }) => {
@@ -65,10 +57,9 @@ export const CommonIndexProvider: React.FC<IProps> = ({
     () => ({
       csrfToken: csrfToken ?? '',
       authUser: parseAppAuthUserPayload(authUser),
-      trnUser: parseAppTrnUserPayload(trnUser),
       location: parseLocation(location),
     }),
-    [csrfToken, authUser, trnUser, location],
+    [csrfToken, authUser, location],
   );
 
   return (

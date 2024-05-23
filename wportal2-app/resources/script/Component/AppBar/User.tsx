@@ -12,7 +12,7 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 interface IProps extends IPropsBase {}
 
 export const User: React.FC<IProps> = ({ sx }) => {
-  const { trnUser } = useCommonIndexContext();
+  const { authUser } = useCommonIndexContext();
   const [anchor, setAnchor] = React.useState<HTMLElement | null>(null);
 
   /**
@@ -57,9 +57,11 @@ export const User: React.FC<IProps> = ({ sx }) => {
             height: '40px',
             background: E_COLOR.GREY_LIGHT,
           }}
-          src={trnUser.faceImagePath}
+          src={String(authUser.trnUser?.faceImagePath)}
         />
-        <TypoText sx={{ marginLeft: 'auto' }}>{trnUser.nickname}</TypoText>
+        <TypoText sx={{ marginLeft: 'auto' }}>
+          {String(authUser.trnUser?.nickname)}
+        </TypoText>
         <ExpandMoreTwoToneIcon sx={{ marginLeft: '10px' }} />
       </Box>
       <Menu

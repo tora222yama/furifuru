@@ -26,7 +26,7 @@ import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
-  const { authUser, trnUser } = useCommonIndexContext();
+  const { authUser } = useCommonIndexContext();
   const { trnUserSlackProfile } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
   const [processingAlignSlack, mutationAlignSlack] =
@@ -110,14 +110,14 @@ export const Show: React.FC<IProps> = () => {
               width: '120px',
               height: '120px',
             }}
-            src={trnUser.faceImagePath}
+            src={String(authUser.trnUser?.faceImagePath)}
           />
           <Box sx={{ width: '400px' }}>
             <LabelValue label="名前" value={authUser.name} />
             <LabelValue
               sx={{ marginTop: '10px' }}
               label="表示名"
-              value={trnUser.nickname}
+              value={String(authUser.trnUser?.nickname)}
             />
           </Box>
         </Box>

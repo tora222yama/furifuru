@@ -30,6 +30,24 @@ class UserController extends Controller
     }
 
     /**
+     * @throws Exception
+     */
+    public function show(Request $request): Response
+    {
+        if (! Auth::check()) {
+            throw new Exception();
+        }
+
+        return $this->render('User/Show/Index', [
+
+            // ユーザー情報.
+            'trnUser' => fn () => $this->getUser($request, [
+
+            ]),
+        ]);
+    }
+
+    /**
      * ページネーション・ユーザー
      */
     private function getPaginationUser(Request $request, array $with = []): array
@@ -43,5 +61,16 @@ class UserController extends Controller
             $pageStep,
             $with
         );
+    }
+
+    /**
+     * 単独取得・ユーザー.
+     */
+    private function getUser(Request $request, array $with = []): array
+    {
+        return TrnUserService::findByIdOrFail(
+            $request->route('userId'),
+            $with
+        )->toPayload($with);
     }
 }

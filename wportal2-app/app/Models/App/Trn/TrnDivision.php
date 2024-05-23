@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
+use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TrnDivision extends ModelBase
 {
-    use hasFactory;
+    use EagerLoadHelper, hasFactory;
 
     protected $table = 'trn_division';
 
