@@ -157,6 +157,20 @@ export const MenuList: IMenu[] = [
 ];
 
 /**
+ * 対象のメニューが表示対象かどうか.
+ */
+export const isActiveMenu = (menu: EMenu): boolean => {
+  switch (menu) {
+    case E_MENU.ADMIN_ROOT:
+    case E_MENU.ADMIN_COMMAND:
+    case E_MENU.ADMIN_DATA:
+      return false;
+    default:
+      return true;
+  }
+};
+
+/**
  * メニュー情報を取得.
  */
 export const findMenu = (menu: EMenu): IMenu | undefined => {

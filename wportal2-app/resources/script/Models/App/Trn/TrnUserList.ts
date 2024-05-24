@@ -1,10 +1,16 @@
 import { ListBase } from '@/script/Models/ListBase';
+import {
+  IAppTrnUserSlackProfile,
+  parseAppTrnUserSlackProfilePayload,
+} from '@/script/Models/App/Trn/TrnUserSlackProfileList';
 
 export interface IAppTrnUser {
   id: number;
   authId: number;
   nickname: string;
   faceImagePath: string;
+
+  trnUserSlackProfile?: IAppTrnUserSlackProfile;
 }
 
 export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
@@ -13,6 +19,10 @@ export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
     authId: payload?.authId ? Number(payload.authId) : 0,
     nickname: payload?.nickname ? String(payload.nickname) : '',
     faceImagePath: payload?.faceImagePath ? String(payload.faceImagePath) : '',
+
+    trnUserSlackProfile: payload?.trnUserSlackProfile
+      ? parseAppTrnUserSlackProfilePayload(payload.trnUserSlackProfile)
+      : undefined,
   };
 };
 

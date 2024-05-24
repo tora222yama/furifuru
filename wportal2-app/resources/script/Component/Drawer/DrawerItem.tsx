@@ -14,7 +14,12 @@ import { Icon } from '@/script/Component/Misc/Icon';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_ICON } from '@/script/Enum/EIcon';
-import { hasChildMenu, IMenu, MenuList } from '@/script/Enum/EMenu';
+import {
+  hasChildMenu,
+  IMenu,
+  isActiveMenu,
+  MenuList,
+} from '@/script/Enum/EMenu';
 
 interface IProps extends IPropsBase {
   menu: IMenu;
@@ -50,6 +55,7 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
           <List disablePadding>
             {MenuList.filter(v => v.pages !== E_PAGES.INVALID)
               .filter(v => v.parent === menu.menu)
+              .filter(v => isActiveMenu(v.menu))
               .map(menu => (
                 <DrawerItem key={menu.menu} menu={menu} depth={depth + 1} />
               ))}

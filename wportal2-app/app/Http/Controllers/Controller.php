@@ -50,7 +50,7 @@ class Controller extends BaseController
     {
         $authUser = AuthUser::query()
             ->with($with)
-            ->findOrFail(Auth::id());
+            ->find(Auth::id());
 
         return $authUser?->toPayload($with);
     }
