@@ -37,6 +37,7 @@ enum EPages: string
     {
         return match ($this) {
             self::DASHBOARD              => '\App\Http\Controllers\Pages\DashboardController@invoke',
+            self::ATTENDANCE             => '\App\Http\Controllers\Pages\AttendanceController@invoke',
             self::DIVISION               => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW         => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT         => '\App\Http\Controllers\Pages\DivisionController@edit',

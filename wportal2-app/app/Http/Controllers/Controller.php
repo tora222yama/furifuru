@@ -18,6 +18,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    protected ?AuthUser $authUser = null;
+
     /**
      * Inertiaを介してhtmlを作成
      *
@@ -32,7 +34,6 @@ class Controller extends BaseController
 
         // TODO: 遅延評価が必要.
         return Inertia::render($component, array_merge(
-            $props,
             [
                 'csrfToken'      => csrf_token(),
                 'authUser'       => fn () => $this->getAuthUser([
@@ -43,15 +44,16 @@ class Controller extends BaseController
                     'path'    => Request::path(),
                 ],
             ],
+            $props,
         ));
     }
 
     private function getAuthUser(array $with = []): ?array
     {
-        $authUser = AuthUser::query()
+        $this->authUser = AuthUser::query()
             ->with($with)
             ->find(Auth::id());
 
-        return $authUser?->toPayload($with);
+        return $this->authUser?->toPayload($with);
     }
 }

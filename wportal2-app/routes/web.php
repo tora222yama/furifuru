@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/', EPages::DASHBOARD->getInvokePath());
     Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
+    Route::get('/attendance', EPages::ATTENDANCE->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
     Route::get('/division/{divisionId}/show', EPages::DIVISION__SHOW->getInvokePath())
         ->where('divisionId', '[0-9]+');

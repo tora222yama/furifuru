@@ -40,6 +40,8 @@ const getHref = (page: EPages): string => {
   switch (page) {
     case E_PAGES.DASHBOARD:
       return '/dashboard';
+    case E_PAGES.ATTENDANCE:
+      return '/attendance';
     case E_PAGES.DIVISION:
       return '/division';
     case E_PAGES.DIVISION__SHOW:
@@ -85,6 +87,8 @@ export const getPagesName = (page: EPages): string => {
   switch (page) {
     case E_PAGES.DASHBOARD:
       return 'ダッシュボード';
+    case E_PAGES.ATTENDANCE:
+      return '勤怠共有';
     case E_PAGES.DIVISION:
       return '課一覧';
     case E_PAGES.DIVISION__SHOW:

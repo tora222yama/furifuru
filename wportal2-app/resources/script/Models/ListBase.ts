@@ -30,6 +30,14 @@ export abstract class ListBase<I extends IBase> {
   }
 
   /**
+   * 全件取得：逆順.
+   * 保持している配列を変更しない.
+   */
+  public reverse(): I[] {
+    return [...this.array].reverse();
+  }
+
+  /**
    * 全件取得(deep)
    */
   public slice(): I[] {
