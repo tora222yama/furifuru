@@ -6,6 +6,7 @@ import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { DateTime } from '@/script/Common/DateTime';
 import { Myself } from '@/script/Pages/Attendance/Myself/Myself';
+import { Action } from '@/script/Pages/Attendance/Action/Action';
 
 interface IProps extends IPropsBase {}
 export const Attendance: React.FC<IProps> = () => {
@@ -26,6 +27,7 @@ export const Attendance: React.FC<IProps> = () => {
           marginTop: '20px',
         }}
       />
+      <Action sx={{ marginTop: '20px' }} />
     </Page>
   );
 };

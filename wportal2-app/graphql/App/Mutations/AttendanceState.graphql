@@ -1,0 +1,12 @@
+# 出退勤状態の追加.
+mutation AppAttendanceStateCreate(
+  $eAttendanceState: Int!
+) {
+  AppAttendanceStateCreate(
+    eAttendanceState: $eAttendanceState
+  ) {
+    statusCode
+    statusMessage
+    errors
+  }
+}

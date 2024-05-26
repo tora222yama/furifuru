@@ -44,12 +44,17 @@ export type AppTrnUser = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  AppAttendanceStateCreate?: Maybe<Response>;
   AppDivisionUpdate?: Maybe<Response>;
   AppDivisionUserUpdate?: Maybe<Response>;
   AppPersonalSettingEditUpdate?: Maybe<Response>;
   AppPersonalSettingShowAlignSlack?: Maybe<Response>;
   AppProjectUpdate?: Maybe<Response>;
   AppProjectUserUpdate?: Maybe<Response>;
+};
+
+export type MutationAppAttendanceStateCreateArgs = {
+  eAttendanceState: Scalars['Int']['input'];
 };
 
 export type MutationAppDivisionUpdateArgs = {
@@ -93,6 +98,20 @@ export type Response = {
   errors?: Maybe<Scalars['String']['output']>;
   statusCode: Scalars['Int']['output'];
   statusMessage: Scalars['String']['output'];
+};
+
+export type AppAttendanceStateCreateMutationVariables = Exact<{
+  eAttendanceState: Scalars['Int']['input'];
+}>;
+
+export type AppAttendanceStateCreateMutation = {
+  __typename?: 'Mutation';
+  AppAttendanceStateCreate?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
 };
 
 export type AppDivisionUpdateMutationVariables = Exact<{
@@ -203,6 +222,59 @@ export type AppTrnUserListQuery = {
   } | null>;
 };
 
+export const AppAttendanceStateCreateDocument = gql`
+  mutation AppAttendanceStateCreate($eAttendanceState: Int!) {
+    AppAttendanceStateCreate(eAttendanceState: $eAttendanceState) {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppAttendanceStateCreateMutationFn = Apollo.MutationFunction<
+  AppAttendanceStateCreateMutation,
+  AppAttendanceStateCreateMutationVariables
+>;
+
+/**
+ * __useAppAttendanceStateCreateMutation__
+ *
+ * To run a mutation, you first call `useAppAttendanceStateCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppAttendanceStateCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appAttendanceStateCreateMutation, { data, loading, error }] = useAppAttendanceStateCreateMutation({
+ *   variables: {
+ *      eAttendanceState: // value for 'eAttendanceState'
+ *   },
+ * });
+ */
+export function useAppAttendanceStateCreateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppAttendanceStateCreateMutation,
+    AppAttendanceStateCreateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppAttendanceStateCreateMutation,
+    AppAttendanceStateCreateMutationVariables
+  >(AppAttendanceStateCreateDocument, options);
+}
+export type AppAttendanceStateCreateMutationHookResult = ReturnType<
+  typeof useAppAttendanceStateCreateMutation
+>;
+export type AppAttendanceStateCreateMutationResult =
+  Apollo.MutationResult<AppAttendanceStateCreateMutation>;
+export type AppAttendanceStateCreateMutationOptions =
+  Apollo.BaseMutationOptions<
+    AppAttendanceStateCreateMutation,
+    AppAttendanceStateCreateMutationVariables
+  >;
 export const AppDivisionUpdateDocument = gql`
   mutation AppDivisionUpdate(
     $trnDivisionId: Int!

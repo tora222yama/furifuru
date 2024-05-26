@@ -23,6 +23,34 @@ export type EAttendanceState =
 // #ENUM_DEFINE_END#
 
 /**
+ * 出退勤アクションのラベルを取得.
+ */
+export const getLabelAttendanceState = (
+  attendance: EAttendanceState,
+): string => {
+  switch (attendance) {
+    case E_ATTENDANCE_STATE.INVALID:
+      return '';
+    case E_ATTENDANCE_STATE.ATTENDANCE_OFFICE:
+      return 'オフィスへ出勤';
+    case E_ATTENDANCE_STATE.ATTENDANCE_TELEWORK:
+      return 'テレワーク出勤';
+    case E_ATTENDANCE_STATE.BEGIN_BREAK:
+      return '休憩開始';
+    case E_ATTENDANCE_STATE.END_BREAK:
+      return '勤務再開';
+    case E_ATTENDANCE_STATE.SWITCH_TO_OFFICE:
+      return 'オフィス勤務へ切替';
+    case E_ATTENDANCE_STATE.SWITCH_TO_TELEWORK:
+      return '在宅勤務へ切替';
+    case E_ATTENDANCE_STATE.LEAVING:
+      return '退勤';
+    default:
+      return '';
+  }
+};
+
+/**
  * アクションを勤務状態に変換.
  * @param attendance
  */

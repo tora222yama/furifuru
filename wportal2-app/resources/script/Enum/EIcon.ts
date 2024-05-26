@@ -10,6 +10,8 @@ export const E_ICON = {
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
   GOOGLE: 'google_icon.svg',
+  HOME: 'home',
+  OFFICE: 'office',
   SHOP: 'shop',
 } as const;
 export type EIcon = (typeof E_ICON)[keyof typeof E_ICON];
@@ -40,6 +42,10 @@ export const getIconWidth = (icon: EIcon): string => {
       return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.HOME:
+      return '20px';
+    case E_ICON.OFFICE:
+      return '20px';
     case E_ICON.SHOP:
       return '20px';
     default:
@@ -65,6 +71,10 @@ export const getIconHeight = (icon: EIcon): string => {
       return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.HOME:
+      return '20px';
+    case E_ICON.OFFICE:
+      return '20px';
     case E_ICON.SHOP:
       return '20px';
     default:

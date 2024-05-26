@@ -111,6 +111,35 @@
         "description": null,
         "fields": [
           {
+            "name": "AppAttendanceStateCreate",
+            "description": null,
+            "args": [
+              {
+                "name": "eAttendanceState",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Response",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "AppDivisionUpdate",
             "description": null,
             "args": [

@@ -1,0 +1,9 @@
+# App/AttendanceState.graphql
+extend type Mutation @guard {
+  # 出退勤状態の追加.
+  AppAttendanceStateCreate(
+    eAttendanceState: Int!
+  ): Response @field(
+    resolver: "App\\GraphQL\\App\\Mutations\\AppAttendanceStateCreate"
+  )
+}
