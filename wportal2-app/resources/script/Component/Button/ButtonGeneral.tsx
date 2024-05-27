@@ -51,7 +51,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
       endIcon={endIcon}
       onClick={onClick}
       href={href}
-      variant={variant ?? 'contained'}
+      variant={variant}
     >
       {children ?? label}
     </Button>

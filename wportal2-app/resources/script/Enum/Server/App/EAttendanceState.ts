@@ -2,10 +2,15 @@ import {
   E_WORKING_STATE,
   EWorkingState,
 } from '@/script/Enum/Server/App/EWorkingState';
+import {
+  E_WORKING_PLACE,
+  EWorkingPlace,
+} from '@/script/Enum/Server/App/EWorkingPlace';
 
 // #ENUM_DEFINE_START#
 /**
  * 出退勤ステータス
+ *
  * @note 値の変更禁止.
  */
 export const E_ATTENDANCE_STATE = {
@@ -72,5 +77,24 @@ export const attendanceToWorking = (
       return E_WORKING_STATE.NONE;
     default:
       return E_WORKING_STATE.NONE;
+  }
+};
+
+/**
+ * アクションを勤務場所に変換.
+ * @param attendance
+ */
+export const attendanceToPlace = (
+  attendance: EAttendanceState,
+): EWorkingPlace => {
+  switch (attendance) {
+    case E_ATTENDANCE_STATE.ATTENDANCE_OFFICE:
+    case E_ATTENDANCE_STATE.SWITCH_TO_OFFICE:
+      return E_WORKING_PLACE.OFFICE;
+    case E_ATTENDANCE_STATE.ATTENDANCE_TELEWORK:
+    case E_ATTENDANCE_STATE.SWITCH_TO_TELEWORK:
+      return E_WORKING_PLACE.HOME;
+    default:
+      return E_WORKING_PLACE.INVALID;
   }
 };

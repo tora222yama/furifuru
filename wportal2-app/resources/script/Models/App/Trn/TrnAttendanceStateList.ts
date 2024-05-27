@@ -1,4 +1,5 @@
 import {
+  attendanceToPlace,
   attendanceToWorking,
   E_ATTENDANCE_STATE,
   EAttendanceState,
@@ -8,11 +9,17 @@ import {
   E_WORKING_STATE,
   EWorkingState,
 } from '@/script/Enum/Server/App/EWorkingState';
+import {
+  E_WORKING_PLACE,
+  EWorkingPlace,
+} from '@/script/Enum/Server/App/EWorkingPlace';
 
 export interface IAppTrnAttendanceState {
   id: number;
   trnUserId: number;
   eAttendanceState: EAttendanceState;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const parseAppTrnAttendanceStatePayload = (
@@ -24,6 +31,8 @@ export const parseAppTrnAttendanceStatePayload = (
     eAttendanceState: payload.eAttendanceState
       ? (Number(payload.eAttendanceState) as EAttendanceState)
       : E_ATTENDANCE_STATE.INVALID,
+    createdAt: payload.createdAt ? String(payload.createdAt) : '',
+    updatedAt: payload.updatedAt ? String(payload.updatedAt) : '',
   };
 };
 
@@ -37,6 +46,8 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
       id: 0,
       trnUserId: 0,
       eAttendanceState: E_ATTENDANCE_STATE.INVALID,
+      createdAt: '',
+      updatedAt: '',
     };
   }
 
@@ -49,6 +60,13 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   getPrimary(value: IAppTrnAttendanceState): number {
     return value.id;
   }
+
+  /**
+   * 指定ユーザーIDの配列を取得.
+   */
+  public listByTrnUserId = (trnUserId?: number): IAppTrnAttendanceState[] => {
+    return this.array.filter(v => v.trnUserId === trnUserId);
+  };
 
   /**
    * 指定ユーザーIDの最新の勤務状態を取得.
@@ -64,5 +82,22 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
       return E_WORKING_STATE.NONE;
     }
     return attendanceToWorking(attendanceWithWorking.eAttendanceState);
+  };
+
+  /**
+   * 指定ユーザーIDの最新の勤務環境を取得.
+   */
+  public lastWorkingPlace = (trnUserId?: number): EWorkingPlace => {
+    const reverse = this.reverse();
+    const attendanceWithPlace = reverse
+      .filter(it => it.trnUserId === trnUserId)
+      .find(
+        it =>
+          attendanceToPlace(it.eAttendanceState) !== E_WORKING_PLACE.INVALID,
+      );
+    if (!attendanceWithPlace) {
+      return E_WORKING_PLACE.INVALID;
+    }
+    return attendanceToPlace(attendanceWithPlace.eAttendanceState);
   };
 }

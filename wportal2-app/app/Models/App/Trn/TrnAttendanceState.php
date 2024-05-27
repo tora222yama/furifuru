@@ -20,9 +20,11 @@ class TrnAttendanceState extends ModelBase
     public function toPayload(array $with = []): array
     {
         return [
-            'id'               => $this->id                 ?? 0,
-            'trnUserId'        => $this->trn_user_id        ?? 0,
-            'eAttendanceState' => $this->e_attendance_state ?? 0,
+            'id'               => $this->id                  ?? 0,
+            'trnUserId'        => $this->trn_user_id         ?? 0,
+            'eAttendanceState' => $this->e_attendance_state  ?? 0,
+            'createdAt'        => $this->created_at          ?? '',
+            'updatedAt'        => $this->updated_at          ?? '',
         ];
     }
 }
