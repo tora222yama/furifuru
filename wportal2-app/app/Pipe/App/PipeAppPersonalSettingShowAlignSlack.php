@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\App\Mutations\Pipe;
+namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Models\App\Trn\TrnUserService;

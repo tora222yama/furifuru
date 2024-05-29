@@ -7,9 +7,9 @@ import { useIndexContext } from '@/script/Pages/Attendance/Index';
 import { E_WORKING_STATE } from '@/script/Enum/Server/App/EWorkingState';
 import { ActionNone } from '@/script/Pages/Attendance/Action/ActionNone';
 import { EAttendanceState } from '@/script/Enum/Server/App/EAttendanceState';
-import { useMutationAppAttendanceStateCreate } from '@/script/Hooks/App/Mutations/useMutationAppAttendanceStateCreate';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { ActionWorking } from '@/script/Pages/Attendance/Action/ActionWorking';
 
 interface IProps extends IPropsBase {}
 export const Action: React.FC<IProps> = ({ sx }) => {
@@ -19,34 +19,19 @@ export const Action: React.FC<IProps> = ({ sx }) => {
   const lastWorkingState = trnAttendanceState.lastWorkingState(
     authUser.trnUser?.id,
   );
-  const [, mutationAttendanceStateCreate] =
-    useMutationAppAttendanceStateCreate();
 
   /**
    * いずれかのボタンを押されたとき.
    */
   const handleClick = (attendance: EAttendanceState) => {
     // 更新処理の実施.
-    onStart();
-    mutationAttendanceStateCreate(
-      {
+    router.visit(getPagesHref(E_PAGES.ATTENDANCE_CREATE), {
+      method: 'post',
+      onStart,
+      onFinish,
+      data: {
         eAttendanceState: attendance,
       },
-      [],
-    ).then(res => {
-      switch (res.statusCode) {
-        case E_STATUS_CODE.OK:
-          router.reload({
-            preserveScroll: true,
-            preserveState: true,
-            onStart,
-            onFinish,
-          });
-          break;
-        default:
-          onFinish();
-          break;
-      }
     });
   };
 
@@ -57,6 +42,8 @@ export const Action: React.FC<IProps> = ({ sx }) => {
     switch (lastWorkingState) {
       case E_WORKING_STATE.NONE:
         return <ActionNone handleClick={handleClick} />;
+      case E_WORKING_STATE.WORKING:
+        return <ActionWorking handleClick={handleClick} />;
       default:
         return null;
     }

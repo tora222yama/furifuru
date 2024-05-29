@@ -54,7 +54,6 @@ type Response {
 }
 
 # Query/Mutationの定義.
-#import App/AttendanceState.graphql
 #import App/Common.graphql
 #import App/Division.graphql
 #import App/DivisionUser.graphql

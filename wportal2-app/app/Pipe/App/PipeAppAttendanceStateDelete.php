@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\App\Mutations\Pipe;
+namespace App\Pipe\App;
 
-use App\Enum\App\EAttendanceState;
 use App\Enum\App\EPipeKind;
 use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
-final class PipeAppAttendanceStateCreate extends PipeBase
+final class PipeAppAttendanceStateDelete extends PipeBase
 {
-    public EAttendanceState $eAttendanceState = EAttendanceState::INVALID;
-
     public ?AuthUser $authUser;
 
     /**
@@ -21,7 +18,7 @@ final class PipeAppAttendanceStateCreate extends PipeBase
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::APP_ATTENDANCE_STATE_CREATE, $args);
+        parent::__construct(EPipeKind::APP_ATTENDANCE_STATE_DELETE, $args);
     }
 
     /**
@@ -29,10 +26,6 @@ final class PipeAppAttendanceStateCreate extends PipeBase
      */
     public function parse(): void
     {
-        $this->eAttendanceState = EAttendanceState::tryFrom(
-            $this->getArgAsInteger('eAttendanceState')
-        );
-
         // 認証ユーザー取得.
         $this->authUser         = Auth::user();
     }

@@ -6,9 +6,9 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppDivisionUserUpdate;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnDivisionUser;
+use App\Pipe\App\PipeAppDivisionUserUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Illuminate\Support\Facades\Log;

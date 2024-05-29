@@ -7,7 +7,7 @@ namespace App\GraphQL\App\Mutations;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Facades\Models\App\Trn\TrnUserSlackProfileService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppPersonalSettingEditUpdate;
+use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 

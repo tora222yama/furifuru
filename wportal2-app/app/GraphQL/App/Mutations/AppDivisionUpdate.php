@@ -6,7 +6,7 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnDivisionService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppDivisionUpdate;
+use App\Pipe\App\PipeAppDivisionUpdate;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 

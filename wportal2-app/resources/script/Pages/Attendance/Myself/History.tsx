@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box, Step, StepLabel, Stepper } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
@@ -10,10 +11,12 @@ import { TypoText } from '@/script/Component/Typography/TypoText';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { Closable } from '@/script/Component/Misc/Closable';
-import { Log } from '@/script/Common/Log';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const History: React.FC<IProps> = ({ sx }) => {
+  const { onStart, onFinish } = useProgressContext();
   const { authUser } = useCommonIndexContext();
   const { trnAttendanceState } = useIndexContext();
   const list = trnAttendanceState.listByTrnUserId(authUser.trnUser?.id);
@@ -23,7 +26,12 @@ export const History: React.FC<IProps> = ({ sx }) => {
    * 勤怠履歴を一つ削除する.
    */
   const handleDeleteAttendance = () => {
-    Log.info('勤怠履歴を一つ削除する.');
+    // 更新の実施.
+    router.visit(getPagesHref(E_PAGES.ATTENDANCE_DELETE), {
+      method: 'post',
+      onStart,
+      onFinish,
+    });
   };
 
   return (

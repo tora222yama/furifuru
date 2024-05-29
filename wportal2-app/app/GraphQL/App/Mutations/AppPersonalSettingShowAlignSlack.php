@@ -7,7 +7,7 @@ namespace App\GraphQL\App\Mutations;
 use App\Facades\External\SlackService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnUserSlackProfileService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppPersonalSettingShowAlignSlack;
+use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

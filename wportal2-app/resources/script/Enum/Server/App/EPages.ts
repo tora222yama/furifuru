@@ -7,6 +7,8 @@ export const E_PAGES = {
   INVALID: 'invalid', // 無効.
   DASHBOARD: 'dashboard', // ダッシュボード.
   ATTENDANCE: 'attendance', // 勤怠共有.
+  ATTENDANCE_CREATE: 'attendance_create', // 勤怠共有・追加.
+  ATTENDANCE_DELETE: 'attendance_delete', // 勤怠共有・削除.
   SHOP: 'shop', // ショップ.
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
@@ -42,6 +44,10 @@ const getHref = (page: EPages): string => {
       return '/dashboard';
     case E_PAGES.ATTENDANCE:
       return '/attendance';
+    case E_PAGES.ATTENDANCE_CREATE:
+      return '/attendance/create';
+    case E_PAGES.ATTENDANCE_DELETE:
+      return '/attendance/delete';
     case E_PAGES.DIVISION:
       return '/division';
     case E_PAGES.DIVISION__SHOW:

@@ -6,9 +6,9 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppDivisionUpdate;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnDivision;
+use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;

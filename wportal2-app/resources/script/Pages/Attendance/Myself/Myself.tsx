@@ -24,7 +24,6 @@ export const Myself: React.FC<IProps> = ({ sx }) => {
         return <MyselfNone />;
       case E_WORKING_STATE.WORKING:
         return <MyselfWorking />;
-        return null;
       default:
         return null;
     }

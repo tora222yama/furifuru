@@ -6,7 +6,7 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppAttendanceStateCreate;
+use App\Pipe\App\PipeAppAttendanceStateCreate;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 

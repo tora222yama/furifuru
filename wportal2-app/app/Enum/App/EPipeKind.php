@@ -12,6 +12,7 @@ enum EPipeKind: string
 
     // mutations.
     case APP_ATTENDANCE_STATE_CREATE           = 'app_attendance_state_create';
+    case APP_ATTENDANCE_STATE_DELETE           = 'app_attendance_state_delete';
     case APP_DIVISION_UPDATE                   = 'app_division_update';
     case APP_DIVISION_USER_UPDATE              = 'app_division_user_update';
     case APP_PROJECT_UPDATE                    = 'app_project_update';

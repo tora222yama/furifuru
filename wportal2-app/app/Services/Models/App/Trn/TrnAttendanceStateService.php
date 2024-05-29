@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\App\Mutations\Pipe\PipeAppAttendanceStateCreate;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnAttendanceState;
+use App\Pipe\App\PipeAppAttendanceStateCreate;
+use App\Pipe\App\PipeAppAttendanceStateDelete;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;
@@ -26,6 +28,7 @@ class TrnAttendanceStateService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_STATE_CREATE      => $this->execAppAttendanceStateCreate($pipe),
+                EPipeKind::APP_ATTENDANCE_STATE_DELETE      => $this->execAppAttendanceStateDelete($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -49,5 +52,31 @@ class TrnAttendanceStateService extends ModelServiceBase
 
         // 保存
         $this->insertOrFail($new);
+    }
+
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
+    private function execAppAttendanceStateDelete(
+        PipeAppAttendanceStateDelete|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->authUser)) {
+            throw new Exception('invalid auth user.');
+        }
+
+        // 対象データを取得.
+        /** @var TrnAttendanceState $target */
+        $target                  = TrnAttendanceState::query()
+            ->orderByDesc('created_at')
+            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $target->updateOrFail();
     }
 }

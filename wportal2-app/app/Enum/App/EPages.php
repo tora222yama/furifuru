@@ -13,6 +13,8 @@ enum EPages: string
     case INVALID                 = 'invalid';   // 無効.
     case DASHBOARD               = 'dashboard'; // ダッシュボード.
     case ATTENDANCE              = 'attendance'; // 勤怠共有.
+    case ATTENDANCE_CREATE       = 'attendance_create'; // 勤怠共有・追加.
+    case ATTENDANCE_DELETE       = 'attendance_delete'; // 勤怠共有・削除.
     case SHOP                    = 'shop'; // ショップ.
     case ATTENDANCE__EDIT        = 'attendance__edit'; // 勤怠修正.
     case ATTENDANCE__TABLE       = 'attendance__table'; // 勤怠一覧表.
@@ -38,6 +40,8 @@ enum EPages: string
         return match ($this) {
             self::DASHBOARD              => '\App\Http\Controllers\Pages\DashboardController@invoke',
             self::ATTENDANCE             => '\App\Http\Controllers\Pages\AttendanceController@invoke',
+            self::ATTENDANCE_CREATE      => '\App\Http\Controllers\Pages\AttendanceController@create',
+            self::ATTENDANCE_DELETE      => '\App\Http\Controllers\Pages\AttendanceController@delete',
             self::DIVISION               => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW         => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT         => '\App\Http\Controllers\Pages\DivisionController@edit',
