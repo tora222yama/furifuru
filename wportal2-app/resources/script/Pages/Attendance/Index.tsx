@@ -8,33 +8,78 @@ import {
   IAppTrnAttendanceState,
   parseAppTrnAttendanceStatePayload,
 } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import {
+  AppTrnProjectList,
+  IAppTrnProject,
+  parseAppTrnProjectPayload,
+} from '@/script/Models/App/Trn/TrnProjectList';
+import {
+  AppTrnUserList,
+  IAppTrnUser,
+  parseAppTrnUserPayload,
+} from '@/script/Models/App/Trn/TrnUserList';
+import { IAttendanceState } from '@/script/Pages/Attendance/IAttendanceState';
 
 /**
  * コントローラーからグローバルに受取保持する値.
  */
 type IndexContext = {
   trnAttendanceState: AppTrnAttendanceStateList;
+  trnProjectList: AppTrnProjectList;
+  trnUserList: AppTrnUserList;
+  stateList: IAttendanceState[];
 };
 export const context = React.createContext<IndexContext>({
   trnAttendanceState: new AppTrnAttendanceStateList(),
+  trnProjectList: new AppTrnProjectList(),
+  trnUserList: new AppTrnUserList(),
+  stateList: [],
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {
   trnAttendanceState: IAppTrnAttendanceState[];
+  trnProjectList: IAppTrnProject[];
+  trnUserList: IAppTrnUser[];
 }
-export const Index: React.FC<IProps> = ({ trnAttendanceState, ...props }) => {
+export const Index: React.FC<IProps> = ({
+  trnAttendanceState,
+  trnProjectList,
+  trnUserList,
+  ...props
+}) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const providerValue: IndexContext = useMemo(
-    () => ({
-      trnAttendanceState: new AppTrnAttendanceStateList(
-        trnAttendanceState.map(v => parseAppTrnAttendanceStatePayload(v)),
+  const providerValue: IndexContext = useMemo(() => {
+    const appTrnAttendanceStateList = new AppTrnAttendanceStateList(
+      trnAttendanceState.map(v => parseAppTrnAttendanceStatePayload(v)),
+    );
+
+    return {
+      trnAttendanceState: appTrnAttendanceStateList,
+      trnProjectList: new AppTrnProjectList(
+        trnProjectList.map(v => parseAppTrnProjectPayload(v)),
       ),
-    }),
-    [trnAttendanceState],
-  );
+      trnUserList: new AppTrnUserList(
+        trnUserList.map(v => parseAppTrnUserPayload(v)),
+      ),
+
+      // 初回取得時に各ユーザーの出勤状態を一括で取得しておく.
+      stateList: trnUserList.map(trnUser => {
+        return {
+          trnUser,
+          isWorking: appTrnAttendanceStateList.isWorking(trnUser.id),
+          isRest: appTrnAttendanceStateList.isRest(trnUser.id),
+          workingPlace: appTrnAttendanceStateList.lastWorkingPlace(trnUser.id),
+          workingState: appTrnAttendanceStateList.lastWorkingState(trnUser.id),
+          lastAttendanceState: appTrnAttendanceStateList.lastAttendanceState(
+            trnUser.id,
+          ),
+        };
+      }),
+    };
+  }, [trnAttendanceState, trnProjectList, trnUserList]);
 
   // noinspection TypeScriptValidateTypes
   return (

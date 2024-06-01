@@ -100,4 +100,45 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
     }
     return attendanceToPlace(attendanceWithPlace.eAttendanceState);
   };
+
+  /**
+   * 指定ユーザーIDが勤務状態かどうか.
+   */
+  public isWorking = (trnUserId: number): boolean => {
+    const state = this.lastWorkingState(trnUserId);
+    switch (state) {
+      case E_WORKING_STATE.NONE:
+      case E_WORKING_STATE.LEAVING:
+        return false;
+      default:
+        return true;
+    }
+  };
+
+  /**
+   * 指定ユーザーIDが休憩中かどうか.
+   */
+  public isRest = (trnUserId: number): boolean => {
+    const state = this.lastWorkingState(trnUserId);
+    switch (state) {
+      case E_WORKING_STATE.REST:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  /**
+   * 指定ユーザーの最新の出退勤アクションを取得.
+   */
+  public lastAttendanceState = (trnUserId?: number): IAppTrnAttendanceState => {
+    const reverse = this.reverse();
+    const attendanceState = reverse
+      .filter(it => it.trnUserId === trnUserId)
+      .find(_it => true);
+    if (attendanceState === undefined) {
+      return AppTrnAttendanceStateList.defaultInterface();
+    }
+    return attendanceState;
+  };
 }

@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
-import BusinessIcon from '@mui/icons-material/Business';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import BuildIcon from '@mui/icons-material/Build';
+import BusinessIcon from '@mui/icons-material/Business';
+import CachedIcon from '@mui/icons-material/Cached';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import HomeIcon from '@mui/icons-material/Home';
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {
   E_ICON,
   EIcon,
@@ -47,6 +49,10 @@ export const Icon: React.FC<IProps> = ({ sx, icon, size, width, height }) => {
       return <AccessTimeIcon sx={iconSx} />;
     case E_ICON.BUILD:
       return <BuildIcon sx={iconSx} />;
+    case E_ICON.CACHED:
+      return <CachedIcon sx={iconSx} />;
+    case E_ICON.CAFE:
+      return <LocalCafeIcon sx={iconSx} />;
     case E_ICON.DASHBOARD:
       return <DashboardIcon sx={iconSx} />;
     case E_ICON.EXPAND_LESS:

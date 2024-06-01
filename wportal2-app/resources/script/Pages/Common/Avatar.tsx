@@ -4,14 +4,45 @@ import { IPropsBase } from '@/script/System/System';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { getAuthorizedImagePath } from '@/script/Common/Image';
-import { E_COLOR } from '@/script/Enum/EColor';
+import { E_COLOR, EColor } from '@/script/Enum/EColor';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { E_ICON } from '@/script/Enum/EIcon';
 
 interface IProps extends IPropsBase {
   trnUser?: IAppTrnUser;
+  active?: boolean;
+  rest?: boolean;
+  handleSelect?: (trnUser?: IAppTrnUser) => void;
   handleClose?: (trnUser: IAppTrnUser) => void;
 }
-export const Avatar: React.FC<IProps> = ({ sx, trnUser, handleClose }) => {
+export const Avatar: React.FC<IProps> = ({
+  sx,
+  trnUser,
+  active = true,
+  rest,
+  handleClose,
+  handleSelect,
+}) => {
+  /**
+   * 表示カラーを取得.
+   */
+  const getColor = (): EColor => {
+    if (rest) {
+      return E_COLOR.GREY;
+    }
+    return active ? E_COLOR.GREEN_LIGHT : E_COLOR.GREY;
+  };
+
+  /**
+   * 選択時の処理指定があれば.
+   */
+  const onClick = (_event: React.MouseEvent<HTMLDivElement>) => {
+    if (handleSelect) {
+      handleSelect(trnUser);
+    }
+  };
+
   /**
    * 画像表示.
    */
@@ -37,6 +68,9 @@ export const Avatar: React.FC<IProps> = ({ sx, trnUser, handleClose }) => {
         }}
       >
         <TypoText>{trnUser?.nickname}</TypoText>
+        <Closable open={!!rest}>
+          <Icon icon={E_ICON.CAFE} />
+        </Closable>
         <Closable open={!!handleClose}>
           <Box
             sx={{
@@ -58,9 +92,10 @@ export const Avatar: React.FC<IProps> = ({ sx, trnUser, handleClose }) => {
   return (
     <Chip
       sx={{
-        backgroundColor: E_COLOR.GREEN_LIGHT,
+        backgroundColor: getColor(),
         ...sx,
       }}
+      onClick={onClick}
       avatar={nodeAvatar()}
       label={nodeLabel()}
     />

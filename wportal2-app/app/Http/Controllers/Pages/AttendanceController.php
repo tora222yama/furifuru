@@ -9,6 +9,8 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnAttendanceState;
+use App\Models\App\Trn\TrnProject;
+use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppAttendanceStateCreate;
 use App\Pipe\App\PipeAppAttendanceStateDelete;
 use Carbon\Carbon;
@@ -24,6 +26,14 @@ class AttendanceController extends Controller
     {
         return $this->render('Attendance/Index', [
             'trnAttendanceState' => fn () => $this->getAttendanceState(),
+
+            // プロジェクト情報.
+            'trnProjectList'     => fn () => $this->getProjectList([
+                'TrnProjectUser',
+            ]),
+
+            // ユーザー情報.
+            'trnUserList'        => fn () => $this->getUserList([]),
         ]);
     }
 
@@ -76,6 +86,7 @@ class AttendanceController extends Controller
      */
     private function getAttendanceState(array $with = []): array
     {
+        // TODO: サービスへ移動.
         $trnAttendanceStateList = TrnAttendanceState::query()
             ->with($with)
             //->where('trn_user_id', $this->authUser->TrnUser->id)
@@ -85,6 +96,38 @@ class AttendanceController extends Controller
 
         return $trnAttendanceStateList->map(function (TrnAttendanceState $trnAttendanceState) use ($with) {
             return $trnAttendanceState->toPayload($with);
+        })->toArray();
+    }
+
+    /**
+     * プロジェクト情報の取得.
+     */
+    private function getProjectList(array $with = []): array
+    {
+        // TODO: サービスへ移動.
+        $trnProjectList = TrnProject::query()
+            ->with($with)
+            ->alive()
+            ->get();
+
+        return $trnProjectList->map(function (TrnProject $trnProject) use ($with) {
+            return $trnProject->toPayload($with);
+        })->toArray();
+    }
+
+    /**
+     * ユーザー情報の取得.
+     */
+    private function getUserList(array $with = []): array
+    {
+        // TODO: サービスへ移動.
+        $trnUserList = TrnUser::query()
+            ->with($with)
+            ->alive()
+            ->get();
+
+        return $trnUserList->map(function (TrnUser $trnUser) use ($with) {
+            return $trnUser->toPayload($with);
         })->toArray();
     }
 }

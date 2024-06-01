@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/', EPages::DASHBOARD->getInvokePath());
     Route::get('/dashboard', EPages::DASHBOARD->getInvokePath());
-    Route::get('/attendance', EPages::ATTENDANCE->getInvokePath());
+    Route::match(['get', 'post'], '/attendance', EPages::ATTENDANCE->getInvokePath());
     Route::post('/attendance/create', EPages::ATTENDANCE_CREATE->getInvokePath());
     Route::post('/attendance/delete', EPages::ATTENDANCE_DELETE->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
