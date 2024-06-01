@@ -5,8 +5,9 @@ import { E_COLOR, EColor } from '@/script/Enum/EColor';
  */
 export const E_BUTTON_TYPE = {
   INVALID: 0,
-  PRIMARY: 1,
-  SECONDARY: 2,
+  CONTAINED_PRIMARY: 1,
+  CONTAINED_SECONDARY: 2,
+  OUTLINE_PRIMARY: 3,
 } as const;
 export type EButtonType = (typeof E_BUTTON_TYPE)[keyof typeof E_BUTTON_TYPE];
 
@@ -18,10 +19,12 @@ export const getButtonColorNormal = (type: EButtonType): EColor => {
   switch (type) {
     case E_BUTTON_TYPE.INVALID:
       return E_COLOR.WHITE;
-    case E_BUTTON_TYPE.PRIMARY:
+    case E_BUTTON_TYPE.CONTAINED_PRIMARY:
       return E_COLOR.PRIMARY_MAIN;
-    case E_BUTTON_TYPE.SECONDARY:
+    case E_BUTTON_TYPE.CONTAINED_SECONDARY:
       return E_COLOR.SECONDARY_MAIN;
+    case E_BUTTON_TYPE.OUTLINE_PRIMARY:
+      return E_COLOR.WHITE;
     default:
       throw new Error();
   }
@@ -35,10 +38,12 @@ export const getButtonColorHover = (type: EButtonType): EColor => {
   switch (type) {
     case E_BUTTON_TYPE.INVALID:
       return E_COLOR.WHITE;
-    case E_BUTTON_TYPE.PRIMARY:
+    case E_BUTTON_TYPE.CONTAINED_PRIMARY:
       return E_COLOR.PRIMARY_DARK;
-    case E_BUTTON_TYPE.SECONDARY:
+    case E_BUTTON_TYPE.CONTAINED_SECONDARY:
       return E_COLOR.SECONDARY_DARK;
+    case E_BUTTON_TYPE.OUTLINE_PRIMARY:
+      return E_COLOR.GREY_LIGHT;
     default:
       throw new Error();
   }
@@ -51,8 +56,9 @@ export const getButtonColorHover = (type: EButtonType): EColor => {
 export const getButtonColorDisabled = (type: EButtonType): EColor => {
   switch (type) {
     case E_BUTTON_TYPE.INVALID:
-    case E_BUTTON_TYPE.PRIMARY:
-    case E_BUTTON_TYPE.SECONDARY:
+    case E_BUTTON_TYPE.CONTAINED_PRIMARY:
+    case E_BUTTON_TYPE.OUTLINE_PRIMARY:
+    case E_BUTTON_TYPE.CONTAINED_SECONDARY:
       return E_COLOR.GREY;
     default:
       throw new Error();
@@ -67,10 +73,28 @@ export const getButtonColorText = (type: EButtonType): EColor => {
   switch (type) {
     case E_BUTTON_TYPE.INVALID:
       return E_COLOR.TEXT_PRIMARY;
-    case E_BUTTON_TYPE.PRIMARY:
+    case E_BUTTON_TYPE.CONTAINED_PRIMARY:
       return E_COLOR.WHITE;
-    case E_BUTTON_TYPE.SECONDARY:
+    case E_BUTTON_TYPE.CONTAINED_SECONDARY:
       return E_COLOR.TEXT_PRIMARY;
+    case E_BUTTON_TYPE.OUTLINE_PRIMARY:
+      return E_COLOR.PRIMARY_MAIN;
+    default:
+      throw new Error();
+  }
+};
+
+export const getButtonVariant = (
+  type: EButtonType,
+): 'text' | 'outlined' | 'contained' | undefined => {
+  switch (type) {
+    case E_BUTTON_TYPE.INVALID:
+      return 'text';
+    case E_BUTTON_TYPE.CONTAINED_PRIMARY:
+    case E_BUTTON_TYPE.CONTAINED_SECONDARY:
+      return 'contained';
+    case E_BUTTON_TYPE.OUTLINE_PRIMARY:
+      return 'outlined';
     default:
       throw new Error();
   }

@@ -62,11 +62,7 @@ export const DialogYesNo: React.FC<IProps> = ({
             justifyContent: 'space-between',
           }}
         >
-          <ButtonGeneral
-            variant="outlined"
-            label={labelCancel}
-            onClick={actions.close}
-          />
+          <ButtonGeneral label={labelCancel} onClick={actions.close} />
           <ButtonGeneral label={labelDecide} onClick={actions.submit} />
         </Box>
       </Box>

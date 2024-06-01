@@ -13,6 +13,8 @@ import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
+import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 
 interface IProps extends IPropsBase {}
 export const History: React.FC<IProps> = ({ sx }) => {
@@ -102,12 +104,20 @@ export const History: React.FC<IProps> = ({ sx }) => {
         }}
       >
         <ButtonGeneral
-          sx={{ width: 'fit-content' }}
+          buttonType={E_BUTTON_TYPE.OUTLINE_PRIMARY}
           label="直近の勤怠を取消"
-          variant="outlined"
           onClick={() => setOpenConfirm(true)}
         />
-        <TypoText>＞時刻修正</TypoText>
+        <InertiaLink href={getPagesHref(E_PAGES.ATTENDANCE__EDIT)}>
+          <TypoText
+            sx={{
+              textDecoration: 'underline',
+            }}
+            color={E_COLOR.TEXT_BLUE}
+          >
+            ＞時刻修正
+          </TypoText>
+        </InertiaLink>
       </Box>
     </>
   );

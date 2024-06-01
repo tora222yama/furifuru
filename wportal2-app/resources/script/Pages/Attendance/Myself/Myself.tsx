@@ -6,6 +6,8 @@ import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { E_WORKING_STATE } from '@/script/Enum/Server/App/EWorkingState';
 import { MyselfNone } from '@/script/Pages/Attendance/Myself/MyselfNone';
 import { MyselfWorking } from '@/script/Pages/Attendance/Myself/MyselfWorking';
+import { MyselfRest } from '@/script/Pages/Attendance/Myself/MyselfRest';
+import { MyselfLeaving } from '@/script/Pages/Attendance/Myself/MyselfLeaving';
 
 interface IProps extends IPropsBase {}
 export const Myself: React.FC<IProps> = ({ sx }) => {
@@ -24,6 +26,10 @@ export const Myself: React.FC<IProps> = ({ sx }) => {
         return <MyselfNone />;
       case E_WORKING_STATE.WORKING:
         return <MyselfWorking />;
+      case E_WORKING_STATE.REST:
+        return <MyselfRest />;
+      case E_WORKING_STATE.LEAVING:
+        return <MyselfLeaving />;
       default:
         return null;
     }

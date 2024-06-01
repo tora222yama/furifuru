@@ -7,6 +7,7 @@ import {
   getButtonColorHover,
   getButtonColorNormal,
   getButtonColorText,
+  getButtonVariant,
 } from '@/script/Component/Button/EButtonType';
 
 /**
@@ -16,13 +17,12 @@ interface IProps extends IPropsButton {}
 export const ButtonGeneral: React.FC<IProps> = ({
   sx,
   id,
-  buttonType = E_BUTTON_TYPE.PRIMARY,
+  buttonType = E_BUTTON_TYPE.CONTAINED_PRIMARY,
   type,
   disabled,
   label,
   startIcon,
   endIcon,
-  variant,
   onClick,
   href,
   children,
@@ -51,7 +51,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
       endIcon={endIcon}
       onClick={onClick}
       href={href}
-      variant={variant}
+      variant={getButtonVariant(buttonType)}
     >
       {children ?? label}
     </Button>

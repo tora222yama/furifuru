@@ -10,6 +10,8 @@ import { EAttendanceState } from '@/script/Enum/Server/App/EAttendanceState';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { ActionWorking } from '@/script/Pages/Attendance/Action/ActionWorking';
+import { ActionRest } from '@/script/Pages/Attendance/Action/ActionRest';
+import { ActionLeaving } from '@/script/Pages/Attendance/Action/ActionLeaving';
 
 interface IProps extends IPropsBase {}
 export const Action: React.FC<IProps> = ({ sx }) => {
@@ -44,6 +46,10 @@ export const Action: React.FC<IProps> = ({ sx }) => {
         return <ActionNone handleClick={handleClick} />;
       case E_WORKING_STATE.WORKING:
         return <ActionWorking handleClick={handleClick} />;
+      case E_WORKING_STATE.REST:
+        return <ActionRest handleClick={handleClick} />;
+      case E_WORKING_STATE.LEAVING:
+        return <ActionLeaving handleClick={handleClick} />;
       default:
         return null;
     }
