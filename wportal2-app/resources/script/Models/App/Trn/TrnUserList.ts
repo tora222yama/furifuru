@@ -3,12 +3,18 @@ import {
   IAppTrnUserSlackProfile,
   parseAppTrnUserSlackProfilePayload,
 } from '@/script/Models/App/Trn/TrnUserSlackProfileList';
+import {
+  IAppTrnAttendanceState,
+  parseAppTrnAttendanceStatePayload,
+} from '@/script/Models/App/Trn/TrnAttendanceStateList';
 
 export interface IAppTrnUser {
   id: number;
   authId: number;
   nickname: string;
   faceImagePath: string;
+
+  trnAttendanceState?: IAppTrnAttendanceState[];
 
   trnUserSlackProfile?: IAppTrnUserSlackProfile;
 }
@@ -19,6 +25,12 @@ export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
     authId: payload?.authId ? Number(payload.authId) : 0,
     nickname: payload?.nickname ? String(payload.nickname) : '',
     faceImagePath: payload?.faceImagePath ? String(payload.faceImagePath) : '',
+
+    trnAttendanceState: payload?.trnAttendanceState
+      ? payload.trnAttendanceState.map(v =>
+          parseAppTrnAttendanceStatePayload(v),
+        )
+      : [],
 
     trnUserSlackProfile: payload?.trnUserSlackProfile
       ? parseAppTrnUserSlackProfilePayload(payload.trnUserSlackProfile)

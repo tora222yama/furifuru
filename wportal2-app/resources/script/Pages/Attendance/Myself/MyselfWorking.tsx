@@ -11,13 +11,15 @@ import {
 } from '@/script/Enum/Server/App/EWorkingPlace';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { History } from '@/script/Pages/Attendance/Myself/History';
+import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 
 interface IProps extends IPropsBase {}
 export const MyselfWorking: React.FC<IProps> = ({ sx }) => {
   const { authUser } = useCommonIndexContext();
-  const { trnAttendanceState } = useIndexContext();
-  const lastWorkingPlace = trnAttendanceState.lastWorkingPlace(
-    authUser.trnUser?.id,
+  const { trnUserList } = useIndexContext();
+  const trnUser = trnUserList.findByPrimary(authUser.trnUser?.id);
+  const lastWorkingPlace = AppTrnAttendanceStateList.lastWorkingPlace(
+    trnUser.trnAttendanceState,
   );
 
   return (

@@ -71,13 +71,16 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   /**
    * 指定ユーザーIDの最新の勤務状態を取得.
    */
-  public lastWorkingState = (trnUserId?: number): EWorkingState => {
-    const reverse = this.reverse();
-    const attendanceWithWorking = reverse
-      .filter(it => it.trnUserId === trnUserId)
-      .find(
-        it => attendanceToWorking(it.eAttendanceState) !== E_WORKING_STATE.NONE,
-      );
+  public static lastWorkingState = (
+    list?: IAppTrnAttendanceState[],
+  ): EWorkingState => {
+    if (!list) {
+      return E_WORKING_STATE.INVALID;
+    }
+    const reverse = list.reverse();
+    const attendanceWithWorking = reverse.find(
+      it => attendanceToWorking(it.eAttendanceState) !== E_WORKING_STATE.NONE,
+    );
     if (attendanceWithWorking === undefined) {
       return E_WORKING_STATE.NONE;
     }
@@ -87,14 +90,16 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   /**
    * 指定ユーザーIDの最新の勤務環境を取得.
    */
-  public lastWorkingPlace = (trnUserId?: number): EWorkingPlace => {
-    const reverse = this.reverse();
-    const attendanceWithPlace = reverse
-      .filter(it => it.trnUserId === trnUserId)
-      .find(
-        it =>
-          attendanceToPlace(it.eAttendanceState) !== E_WORKING_PLACE.INVALID,
-      );
+  public static lastWorkingPlace = (
+    list?: IAppTrnAttendanceState[],
+  ): EWorkingPlace => {
+    if (!list) {
+      return E_WORKING_PLACE.INVALID;
+    }
+    const reverse = list.reverse();
+    const attendanceWithPlace = reverse.find(
+      it => attendanceToPlace(it.eAttendanceState) !== E_WORKING_PLACE.INVALID,
+    );
     if (!attendanceWithPlace) {
       return E_WORKING_PLACE.INVALID;
     }
@@ -104,8 +109,8 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   /**
    * 指定ユーザーIDが勤務状態かどうか.
    */
-  public isWorking = (trnUserId: number): boolean => {
-    const state = this.lastWorkingState(trnUserId);
+  public static isWorking = (list?: IAppTrnAttendanceState[]): boolean => {
+    const state = this.lastWorkingState(list);
     switch (state) {
       case E_WORKING_STATE.NONE:
       case E_WORKING_STATE.LEAVING:
@@ -118,8 +123,8 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   /**
    * 指定ユーザーIDが休憩中かどうか.
    */
-  public isRest = (trnUserId: number): boolean => {
-    const state = this.lastWorkingState(trnUserId);
+  public static isRest = (list?: IAppTrnAttendanceState[]): boolean => {
+    const state = this.lastWorkingState(list);
     switch (state) {
       case E_WORKING_STATE.REST:
         return true;
@@ -131,11 +136,14 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
   /**
    * 指定ユーザーの最新の出退勤アクションを取得.
    */
-  public lastAttendanceState = (trnUserId?: number): IAppTrnAttendanceState => {
-    const reverse = this.reverse();
-    const attendanceState = reverse
-      .filter(it => it.trnUserId === trnUserId)
-      .find(_it => true);
+  public static lastAttendanceState = (
+    list?: IAppTrnAttendanceState[],
+  ): IAppTrnAttendanceState => {
+    if (!list) {
+      return AppTrnAttendanceStateList.defaultInterface();
+    }
+    const reverse = list.reverse();
+    const attendanceState = reverse.find(_it => true);
     if (attendanceState === undefined) {
       return AppTrnAttendanceStateList.defaultInterface();
     }

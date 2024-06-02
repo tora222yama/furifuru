@@ -6,6 +6,7 @@ import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { Avatar } from '@/script/Pages/Common/Avatar';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { DialogUser } from '@/script/Pages/Attendance/DialogUser';
 
 interface IProps extends IPropsBase {
   label: string;
@@ -32,7 +33,12 @@ export const AttendanceState: React.FC<IProps> = ({ sx, label, stateList }) => {
         ...sx,
       }}
     >
-      <Closable open={!!selectedUser}>TODO: ダイアログ</Closable>
+      <Closable open={!!selectedUser}>
+        <DialogUser
+          trnUser={selectedUser}
+          handleClose={() => setSelectedUser(undefined)}
+        />
+      </Closable>
       <TypoH2
         sx={{
           display: 'flex',

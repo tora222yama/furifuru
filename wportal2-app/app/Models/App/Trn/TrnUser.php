@@ -7,6 +7,7 @@ namespace App\Models\App\Trn;
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TrnUser extends ModelBase
@@ -14,6 +15,18 @@ class TrnUser extends ModelBase
     use EagerLoadHelper, HasFactory;
 
     protected $table = 'trn_user';
+
+    /**
+     * リレーション:TrnAttendanceState
+     */
+    public function TrnAttendanceState(): HasMany
+    {
+        return $this->hasMany(
+            TrnAttendanceState::class,
+            'trn_user_id',
+            'id'
+        )->alive();
+    }
 
     /**
      *  リレーション:TrnUserSlackProfile
@@ -33,10 +46,20 @@ class TrnUser extends ModelBase
     public function toPayload(array $with = []): array
     {
         return [
-            'id'              => $this->id                ?? 0,
-            'authId'          => $this->auth_id           ?? 0,
-            'nickname'        => $this->nickname          ?? '',
-            'faceImagePath'   => $this->face_image_path   ?? '',
+            'id'                  => $this->id                ?? 0,
+            'authId'              => $this->auth_id           ?? 0,
+            'nickname'            => $this->nickname          ?? '',
+            'faceImagePath'       => $this->face_image_path   ?? '',
+
+            'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState')
+                ? $this->TrnAttendanceState->map(function (TrnAttendanceState $trnAttendanceState) use ($with) {
+                    return $trnAttendanceState->toPayload($with);
+                })->toArray()
+                : [],
+
+            'trnUserSlackProfile' => $this->isExistKeyInWith($with, 'TrnUserSlackProfile')
+                ? $this->TrnUserSlackProfile?->toPayload($with)
+                : null,
         ];
     }
 }

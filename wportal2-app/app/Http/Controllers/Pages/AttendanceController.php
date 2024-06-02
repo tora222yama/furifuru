@@ -8,7 +8,6 @@ use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Http\Controllers\Controller;
-use App\Models\App\Trn\TrnAttendanceState;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppAttendanceStateCreate;
@@ -25,15 +24,17 @@ class AttendanceController extends Controller
     public function invoke(): Response
     {
         return $this->render('Attendance/Index', [
-            'trnAttendanceState' => fn () => $this->getAttendanceState(),
-
             // プロジェクト情報.
             'trnProjectList'     => fn () => $this->getProjectList([
                 'TrnProjectUser',
             ]),
 
             // ユーザー情報.
-            'trnUserList'        => fn () => $this->getUserList([]),
+            'trnUserList'        => fn () => $this->getUserList([
+                'TrnAttendanceState' => function ($query) {
+                    $query->whereDate('updated_at', Carbon::now());
+                },
+            ]),
         ]);
     }
 
@@ -79,24 +80,6 @@ class AttendanceController extends Controller
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());
-    }
-
-    /**
-     * 出退勤情報の取得.
-     */
-    private function getAttendanceState(array $with = []): array
-    {
-        // TODO: サービスへ移動.
-        $trnAttendanceStateList = TrnAttendanceState::query()
-            ->with($with)
-            //->where('trn_user_id', $this->authUser->TrnUser->id)
-            ->whereDate('updated_at', Carbon::now())
-            ->alive()
-            ->get();
-
-        return $trnAttendanceStateList->map(function (TrnAttendanceState $trnAttendanceState) use ($with) {
-            return $trnAttendanceState->toPayload($with);
-        })->toArray();
     }
 
     /**

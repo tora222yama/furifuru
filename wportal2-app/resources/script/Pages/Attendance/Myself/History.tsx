@@ -20,8 +20,8 @@ interface IProps extends IPropsBase {}
 export const History: React.FC<IProps> = ({ sx }) => {
   const { onStart, onFinish } = useProgressContext();
   const { authUser } = useCommonIndexContext();
-  const { trnAttendanceState } = useIndexContext();
-  const list = trnAttendanceState.listByTrnUserId(authUser.trnUser?.id);
+  const { trnUserList } = useIndexContext();
+  const trnUser = trnUserList.findByPrimary(authUser.trnUser?.id);
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   /**
@@ -66,10 +66,10 @@ export const History: React.FC<IProps> = ({ sx }) => {
       >
         <Stepper
           sx={{ width: '100%' }}
-          activeStep={list.length}
+          activeStep={trnUser.trnAttendanceState?.length}
           alternativeLabel
         >
-          {list.map(trnAttendanceState => {
+          {trnUser.trnAttendanceState?.map(trnAttendanceState => {
             return (
               <Step
                 key={trnAttendanceState.id}

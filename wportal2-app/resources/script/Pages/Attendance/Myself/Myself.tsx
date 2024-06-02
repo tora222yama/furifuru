@@ -8,13 +8,15 @@ import { MyselfNone } from '@/script/Pages/Attendance/Myself/MyselfNone';
 import { MyselfWorking } from '@/script/Pages/Attendance/Myself/MyselfWorking';
 import { MyselfRest } from '@/script/Pages/Attendance/Myself/MyselfRest';
 import { MyselfLeaving } from '@/script/Pages/Attendance/Myself/MyselfLeaving';
+import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 
 interface IProps extends IPropsBase {}
 export const Myself: React.FC<IProps> = ({ sx }) => {
   const { authUser } = useCommonIndexContext();
-  const { trnAttendanceState } = useIndexContext();
-  const lastWorkingState = trnAttendanceState.lastWorkingState(
-    authUser.trnUser?.id,
+  const { trnUserList } = useIndexContext();
+  const trnUser = trnUserList.findByPrimary(authUser.trnUser?.id);
+  const lastWorkingState = AppTrnAttendanceStateList.lastWorkingState(
+    trnUser.trnAttendanceState,
   );
 
   /**

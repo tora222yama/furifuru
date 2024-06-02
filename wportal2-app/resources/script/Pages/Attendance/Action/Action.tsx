@@ -12,14 +12,16 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { ActionWorking } from '@/script/Pages/Attendance/Action/ActionWorking';
 import { ActionRest } from '@/script/Pages/Attendance/Action/ActionRest';
 import { ActionLeaving } from '@/script/Pages/Attendance/Action/ActionLeaving';
+import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 
 interface IProps extends IPropsBase {}
 export const Action: React.FC<IProps> = ({ sx }) => {
   const { onStart, onFinish } = useProgressContext();
   const { authUser } = useCommonIndexContext();
-  const { trnAttendanceState } = useIndexContext();
-  const lastWorkingState = trnAttendanceState.lastWorkingState(
-    authUser.trnUser?.id,
+  const { trnUserList } = useIndexContext();
+  const trnUser = trnUserList.findByPrimary(authUser.trnUser?.id);
+  const lastWorkingState = AppTrnAttendanceStateList.lastWorkingState(
+    trnUser.trnAttendanceState,
   );
 
   /**

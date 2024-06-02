@@ -58,7 +58,10 @@ export abstract class ListBase<I extends IBase> {
    * IDによる検索.
    * @param primaryValue
    */
-  public findByPrimary(primaryValue: number | string): I {
+  public findByPrimary(primaryValue?: number | string): I {
+    if (!primaryValue) {
+      return this.default();
+    }
     // ハッシュマップからインデックスを参照し、直接取得する.
     return this.array[this.hash[primaryValue]] ?? this.default();
   }
