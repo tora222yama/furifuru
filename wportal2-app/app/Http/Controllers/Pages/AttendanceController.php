@@ -27,6 +27,12 @@ class AttendanceController extends Controller
             // プロジェクト情報.
             'trnProjectList'     => fn () => $this->getProjectList([
                 'TrnProjectUser',
+                'TrnUserProjectPriority' => function ($query) {
+                    return $query->where(
+                        'trn_user_id',
+                        $this->authUser->TrnUser->id,
+                    );
+                },
             ]),
 
             // ユーザー情報.

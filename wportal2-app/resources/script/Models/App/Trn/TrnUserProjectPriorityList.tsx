@@ -1,0 +1,46 @@
+import { ListBase } from '@/script/Models/ListBase';
+
+export interface IAppTrnUserProjectPriority {
+  id: number;
+  trnUserId: number;
+  trnProjectId: number;
+  projectPriority: number;
+}
+
+export const parseAppTrnUserProjectPriorityPayload = (
+  payload: IAppTrnUserProjectPriority,
+): IAppTrnUserProjectPriority => {
+  return {
+    id: payload.id ? Number(payload.id) : 0,
+    trnUserId: payload.trnUserId ? Number(payload.trnUserId) : 0,
+    trnProjectId: payload.trnProjectId ? Number(payload.trnProjectId) : 0,
+    projectPriority: payload.projectPriority
+      ? Number(payload.projectPriority)
+      : 0,
+  };
+};
+
+export class AppTrnUserProjectPriorityList extends ListBase<IAppTrnUserProjectPriority> {
+  constructor(data: IAppTrnUserProjectPriority[] = []) {
+    super(data);
+  }
+
+  static defaultInterface(): IAppTrnUserProjectPriority {
+    return {
+      id: 0,
+      trnProjectId: 0,
+      trnUserId: 0,
+      projectPriority: 0,
+    };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  default = (): IAppTrnUserProjectPriority => {
+    return AppTrnUserProjectPriorityList.defaultInterface();
+  };
+
+  // eslint-disable-next-line class-methods-use-this
+  getPrimary(value: IAppTrnUserProjectPriority): number {
+    return value.id;
+  }
+}

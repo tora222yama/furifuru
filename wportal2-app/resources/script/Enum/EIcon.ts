@@ -15,6 +15,8 @@ export const E_ICON = {
   HOME: 'home',
   OFFICE: 'office',
   SHOP: 'shop',
+  STAR: 'star',
+  STAR_OUTLINE: 'star_outline',
 } as const;
 export type EIcon = (typeof E_ICON)[keyof typeof E_ICON];
 
@@ -54,6 +56,10 @@ export const getIconWidth = (icon: EIcon): string => {
       return '20px';
     case E_ICON.SHOP:
       return '20px';
+    case E_ICON.STAR:
+      return '20px';
+    case E_ICON.STAR_OUTLINE:
+      return '20px';
     default:
       return '0px';
   }
@@ -86,6 +92,10 @@ export const getIconHeight = (icon: EIcon): string => {
     case E_ICON.OFFICE:
       return '20px';
     case E_ICON.SHOP:
+      return '20px';
+    case E_ICON.STAR:
+      return '20px';
+    case E_ICON.STAR_OUTLINE:
       return '20px';
     default:
       return '0px';

@@ -28,19 +28,37 @@ class TrnProject extends ModelBase
     }
 
     /**
+     * リレーション:TrnUserProjectPriority
+     */
+    public function TrnUserProjectPriority(): HasMany
+    {
+        return $this->hasMany(
+            TrnUserProjectPriority::class,
+            'trn_project_id',
+            'id'
+        )->alive();
+    }
+
+    /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
     public function toPayload(array $with = []): array
     {
         return [
-            'id'              => $this->id              ?? 0,
-            'name'            => $this->name            ?? '',
-            'explain'         => $this->explain         ?? '',
-            'displayOrder'    => $this->display_order   ?? 0,
+            'id'                     => $this->id              ?? 0,
+            'name'                   => $this->name            ?? '',
+            'explain'                => $this->explain         ?? '',
+            'displayOrder'           => $this->display_order   ?? 0,
 
-            'trnProjectUser'  => $this->isExistKeyInWith($with, 'TrnProjectUser')
+            'trnProjectUser'         => $this->isExistKeyInWith($with, 'TrnProjectUser')
                 ? $this->TrnProjectUser->map(function (TrnProjectUser $trnProjectUser) use ($with) {
                     return $trnProjectUser->toPayload($with);
+                })->toArray()
+                : [],
+
+            'trnUserProjectPriority' => $this->isExistKeyInWith($with, 'TrnUserProjectPriority')
+                ? $this->TrnUserProjectPriority->map(function (TrnUserProjectPriority $trnUserProjectPriority) use ($with) {
+                    return $trnUserProjectPriority->toPayload($with);
                 })->toArray()
                 : [],
         ];

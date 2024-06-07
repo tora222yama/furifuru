@@ -7,6 +7,7 @@ import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { AttendanceState } from '@/script/Pages/Attendance/AttendanceState';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
 import { E_WORKING_PLACE } from '@/script/Enum/Server/App/EWorkingPlace';
+import { ProjectPriority } from '@/script/Pages/Attendance/Member/TabProject/ProjectPriority';
 
 interface IProps extends IPropsBase {
   trnProject: IAppTrnProject;
@@ -30,6 +31,7 @@ export const ProjectBlock: React.FC<IProps> = ({ sx, trnProject }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
+          gap: '20px',
         }}
       >
         <Box
@@ -42,7 +44,7 @@ export const ProjectBlock: React.FC<IProps> = ({ sx, trnProject }) => {
         >
           <TypoH2>{trnProject.name}</TypoH2>
         </Box>
-        <Box>TODO:PRIORITY</Box>
+        <ProjectPriority trnProject={trnProject} />
       </Box>
       <AttendanceState
         sx={{ marginTop: '10px' }}

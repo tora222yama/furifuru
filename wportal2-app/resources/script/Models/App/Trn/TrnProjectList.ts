@@ -3,6 +3,10 @@ import {
   IAppTrnProjectUser,
   parseAppTrnProjectUserPayload,
 } from '@/script/Models/App/Trn/TrnProjectUserList';
+import {
+  IAppTrnUserProjectPriority,
+  parseAppTrnUserProjectPriorityPayload,
+} from '@/script/Models/App/Trn/TrnUserProjectPriorityList';
 
 export interface IAppTrnProject {
   id: number;
@@ -11,6 +15,8 @@ export interface IAppTrnProject {
   displayOrder: number;
 
   trnProjectUser?: IAppTrnProjectUser[];
+
+  trnUserProjectPriority?: IAppTrnUserProjectPriority[];
 }
 
 export const parseAppTrnProjectPayload = (
@@ -25,6 +31,12 @@ export const parseAppTrnProjectPayload = (
     trnProjectUser: payload.trnProjectUser
       ? payload.trnProjectUser.map(trnProjectUser =>
           parseAppTrnProjectUserPayload(trnProjectUser),
+        )
+      : [],
+
+    trnUserProjectPriority: payload.trnUserProjectPriority
+      ? payload.trnUserProjectPriority.map(trnUserProjectPriority =>
+          parseAppTrnUserProjectPriorityPayload(trnUserProjectPriority),
         )
       : [],
   };

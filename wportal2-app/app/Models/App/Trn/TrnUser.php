@@ -41,6 +41,30 @@ class TrnUser extends ModelBase
     }
 
     /**
+     *  リレーション:TrnUserDivisionPriority
+     */
+    public function TrnUserDivisionPriority(): HasMany
+    {
+        return $this->hasMany(
+            TrnUserDivisionPriority::class,
+            'trn_user_id',
+            'id'
+        )->alive();
+    }
+
+    /**
+     *  リレーション:TrnUserProjectPriority
+     */
+    public function TrnUserProjectPriority(): HasMany
+    {
+        return $this->hasMany(
+            TrnUserProjectPriority::class,
+            'trn_division_id',
+            'id'
+        )->alive();
+    }
+
+    /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
     public function toPayload(array $with = []): array
