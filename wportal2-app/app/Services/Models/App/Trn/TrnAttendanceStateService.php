@@ -9,8 +9,8 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnAttendanceState;
-use App\Pipe\App\PipeAppAttendanceStateCreate;
-use App\Pipe\App\PipeAppAttendanceStateDelete;
+use App\Pipe\App\PipeAppAttendanceCreate;
+use App\Pipe\App\PipeAppAttendanceDelete;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;
@@ -27,8 +27,8 @@ class TrnAttendanceStateService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
-                EPipeKind::APP_ATTENDANCE_STATE_CREATE      => $this->execAppAttendanceStateCreate($pipe),
-                EPipeKind::APP_ATTENDANCE_STATE_DELETE      => $this->execAppAttendanceStateDelete($pipe),
+                EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
+                EPipeKind::APP_ATTENDANCE_DELETE            => $this->execAppAttendanceStateDelete($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -39,7 +39,7 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateCreate(
-        PipeAppAttendanceStateCreate|PipeBase $pipe
+        PipeAppAttendanceCreate|PipeBase $pipe
     ): void {
         if (is_null($pipe->authUser)) {
             throw new Exception('invalid auth user.');
@@ -59,7 +59,7 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateDelete(
-        PipeAppAttendanceStateDelete|PipeBase $pipe
+        PipeAppAttendanceDelete|PipeBase $pipe
     ): void {
         if (is_null($pipe->authUser)) {
             throw new Exception('invalid auth user.');

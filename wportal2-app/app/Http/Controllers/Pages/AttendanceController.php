@@ -7,11 +7,13 @@ namespace App\Http\Controllers\Pages;
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
+use App\Facades\Models\App\Trn\TrnUserProjectPriorityService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnUser;
-use App\Pipe\App\PipeAppAttendanceStateCreate;
-use App\Pipe\App\PipeAppAttendanceStateDelete;
+use App\Pipe\App\PipeAppAttendanceCreate;
+use App\Pipe\App\PipeAppAttendanceDelete;
+use App\Pipe\App\PipeAppAttendanceProjectPriority;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -53,7 +55,7 @@ class AttendanceController extends Controller
     {
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeAppAttendanceStateCreate($request->toArray())
+            new PipeAppAttendanceCreate($request->toArray())
         );
 
         // 更新処理.
@@ -76,13 +78,34 @@ class AttendanceController extends Controller
     {
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeAppAttendanceStateDelete($request->toArray())
+            new PipeAppAttendanceDelete($request->toArray())
         );
 
         // 更新処理.
         DB::transaction(static function (): void {
             // 出退勤状態の削除.
             TrnAttendanceStateService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
+    }
+
+    /**
+     * プロジェクト優先度変更.
+     *
+     * @throws Throwable
+     */
+    public function project_priority(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppAttendanceProjectPriority($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // プロジェクト優先度の変更.
+            TrnUserProjectPriorityService::updateByPipe();
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());

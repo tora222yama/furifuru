@@ -43,4 +43,14 @@ export class AppTrnUserProjectPriorityList extends ListBase<IAppTrnUserProjectPr
   getPrimary(value: IAppTrnUserProjectPriority): number {
     return value.id;
   }
+
+  /**
+   * 最初に見つかった優先度を取得.
+   */
+  public static getPriority(list?: IAppTrnUserProjectPriority[]): number {
+    if (!list?.length) {
+      return 1;
+    }
+    return list[0].projectPriority;
+  }
 }

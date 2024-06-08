@@ -6,7 +6,7 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
-use App\Pipe\App\PipeAppAttendanceStateCreate;
+use App\Pipe\App\PipeAppAttendanceCreate;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -22,7 +22,7 @@ final class AppAttendanceStateCreate
 
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeAppAttendanceStateCreate($args)
+            new PipeAppAttendanceCreate($args)
         );
 
         // バリデーションチェック.

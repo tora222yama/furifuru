@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::match(['get', 'post'], '/attendance', EPages::ATTENDANCE->getInvokePath());
     Route::post('/attendance/create', EPages::ATTENDANCE_CREATE->getInvokePath());
     Route::post('/attendance/delete', EPages::ATTENDANCE_DELETE->getInvokePath());
+    Route::post('/attendance/project_priority', EPages::ATTENDANCE_PROJECT_PRIORITY->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
     Route::get('/division/{divisionId}/show', EPages::DIVISION__SHOW->getInvokePath())
         ->where('divisionId', '[0-9]+');

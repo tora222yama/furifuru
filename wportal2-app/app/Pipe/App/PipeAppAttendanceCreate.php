@@ -10,7 +10,7 @@ use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use Auth;
 
-final class PipeAppAttendanceStateCreate extends PipeBase
+final class PipeAppAttendanceCreate extends PipeBase
 {
     public EAttendanceState $eAttendanceState = EAttendanceState::INVALID;
 
@@ -21,7 +21,7 @@ final class PipeAppAttendanceStateCreate extends PipeBase
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::APP_ATTENDANCE_STATE_CREATE, $args);
+        parent::__construct(EPipeKind::APP_ATTENDANCE_CREATE, $args);
     }
 
     /**

@@ -9,16 +9,20 @@ use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use Illuminate\Support\Facades\Auth;
 
-final class PipeAppAttendanceStateDelete extends PipeBase
+final class PipeAppAttendanceProjectPriority extends PipeBase
 {
     public ?AuthUser $authUser;
+
+    public int $projectId = 0;
+
+    public int $priority  = 0;
 
     /**
      * constructor.
      */
     public function __construct(array $args)
     {
-        parent::__construct(EPipeKind::APP_ATTENDANCE_STATE_DELETE, $args);
+        parent::__construct(EPipeKind::APP_ATTENDANCE_PROJECT_PRIORITY, $args);
     }
 
     /**
@@ -28,6 +32,9 @@ final class PipeAppAttendanceStateDelete extends PipeBase
     {
         // 認証ユーザー取得.
         $this->authUser         = Auth::user();
+
+        $this->projectId        = $this->getArgAsInteger('projectId');
+        $this->priority         = $this->getArgAsInteger('priority');
     }
 
     /**
