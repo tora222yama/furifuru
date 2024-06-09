@@ -9,6 +9,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Facades\Models\App\Trn\TrnUserProjectPriorityService;
 use App\Http\Controllers\Controller;
+use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppAttendanceCreate;
@@ -30,6 +31,17 @@ class AttendanceController extends Controller
             'trnProjectList'     => fn () => $this->getProjectList([
                 'TrnProjectUser',
                 'TrnUserProjectPriority' => function ($query) {
+                    return $query->where(
+                        'trn_user_id',
+                        $this->authUser->TrnUser->id,
+                    );
+                },
+            ]),
+
+            // 課情報.
+            'trnDivisionList'    => fn () => $this->getDivisionList([
+                'TrnDivisionUser',
+                'TrnUserDivisionPriority' => function ($query) {
                     return $query->where(
                         'trn_user_id',
                         $this->authUser->TrnUser->id,
@@ -124,6 +136,22 @@ class AttendanceController extends Controller
 
         return $trnProjectList->map(function (TrnProject $trnProject) use ($with) {
             return $trnProject->toPayload($with);
+        })->toArray();
+    }
+
+    /**
+     * 課情報の取得.
+     */
+    private function getDivisionList(array $with = []): array
+    {
+        // TODO: サービスへ移動.
+        $trnDivisionList = TrnDivision::query()
+            ->with($with)
+            ->alive()
+            ->get();
+
+        return $trnDivisionList->map(function (TrnDivision $trnDivision) use ($with) {
+            return $trnDivision->toPayload($with);
         })->toArray();
     }
 

@@ -3,6 +3,10 @@ import {
   IAppTrnDivisionUser,
   parseAppTrnDivisionUserPayload,
 } from '@/script/Models/App/Trn/TrnDivisionUserList';
+import {
+  IAppTrnUserDivisionPriority,
+  parseAppTrnUserDivisionPriorityPayload,
+} from '@/script/Models/App/Trn/TrnUserDivisionPriorityList';
 
 export interface IAppTrnDivision {
   id: number;
@@ -11,6 +15,8 @@ export interface IAppTrnDivision {
   displayOrder: number;
 
   trnDivisionUser?: IAppTrnDivisionUser[];
+
+  trnUserDivisionPriority?: IAppTrnUserDivisionPriority[];
 }
 
 export const parseAppTrnDivisionPayload = (
@@ -25,6 +31,12 @@ export const parseAppTrnDivisionPayload = (
     trnDivisionUser: payload.trnDivisionUser
       ? payload.trnDivisionUser.map(trnDivisionUser =>
           parseAppTrnDivisionUserPayload(trnDivisionUser),
+        )
+      : [],
+
+    trnUserDivisionPriority: payload.trnUserDivisionPriority
+      ? payload.trnUserDivisionPriority.map(trnUserDivisionPriority =>
+          parseAppTrnUserDivisionPriorityPayload(trnUserDivisionPriority),
         )
       : [],
   };

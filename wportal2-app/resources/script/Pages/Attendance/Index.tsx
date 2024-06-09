@@ -15,17 +15,24 @@ import {
   parseAppTrnUserPayload,
 } from '@/script/Models/App/Trn/TrnUserList';
 import { IAttendanceState } from '@/script/Pages/Attendance/IAttendanceState';
+import {
+  AppTrnDivisionList,
+  IAppTrnDivision,
+  parseAppTrnDivisionPayload,
+} from '@/script/Models/App/Trn/TrnDivisionList';
 
 /**
  * コントローラーからグローバルに受取保持する値.
  */
 type IndexContext = {
   trnProjectList: AppTrnProjectList;
+  trnDivisionList: AppTrnDivisionList;
   trnUserList: AppTrnUserList;
   stateList: IAttendanceState[];
 };
 export const context = React.createContext<IndexContext>({
   trnProjectList: new AppTrnProjectList(),
+  trnDivisionList: new AppTrnDivisionList(),
   trnUserList: new AppTrnUserList(),
   stateList: [],
 });
@@ -33,10 +40,12 @@ export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {
   trnProjectList: IAppTrnProject[];
+  trnDivisionList: IAppTrnDivision[];
   trnUserList: IAppTrnUser[];
 }
 export const Index: React.FC<IProps> = ({
   trnProjectList,
+  trnDivisionList,
   trnUserList,
   ...props
 }) => {
@@ -47,6 +56,9 @@ export const Index: React.FC<IProps> = ({
     return {
       trnProjectList: new AppTrnProjectList(
         trnProjectList.map(v => parseAppTrnProjectPayload(v)),
+      ),
+      trnDivisionList: new AppTrnDivisionList(
+        trnDivisionList.map(v => parseAppTrnDivisionPayload(v)),
       ),
       trnUserList: new AppTrnUserList(
         trnUserList.map(v => parseAppTrnUserPayload(v)),
@@ -73,7 +85,7 @@ export const Index: React.FC<IProps> = ({
         };
       }),
     };
-  }, [trnProjectList, trnUserList]);
+  }, [trnDivisionList, trnProjectList, trnUserList]);
 
   // noinspection TypeScriptValidateTypes
   return (

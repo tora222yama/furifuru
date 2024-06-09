@@ -15,6 +15,7 @@ enum EPages: string
     case ATTENDANCE                      = 'attendance'; // 勤怠共有.
     case ATTENDANCE_CREATE               = 'attendance_create'; // 勤怠共有・追加.
     case ATTENDANCE_DELETE               = 'attendance_delete'; // 勤怠共有・削除.
+    case ATTENDANCE_DIVISION_PRIORITY    = 'attendance_division_priority'; // 課優先度変更.
     case ATTENDANCE_PROJECT_PRIORITY     = 'attendance_project_priority'; // プロジェクト優先度変更.
     case SHOP                            = 'shop'; // ショップ.
     case ATTENDANCE__EDIT                = 'attendance__edit'; // 勤怠修正.
@@ -39,25 +40,26 @@ enum EPages: string
     public function getInvokePath(): string
     {
         return match ($this) {
-            self::DASHBOARD                   => '\App\Http\Controllers\Pages\DashboardController@invoke',
-            self::ATTENDANCE                  => '\App\Http\Controllers\Pages\AttendanceController@invoke',
-            self::ATTENDANCE_CREATE           => '\App\Http\Controllers\Pages\AttendanceController@create',
-            self::ATTENDANCE_DELETE           => '\App\Http\Controllers\Pages\AttendanceController@delete',
-            self::ATTENDANCE_PROJECT_PRIORITY => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
-            self::DIVISION                    => '\App\Http\Controllers\Pages\DivisionController@invoke',
-            self::DIVISION__SHOW              => '\App\Http\Controllers\Pages\DivisionController@show',
-            self::DIVISION__EDIT              => '\App\Http\Controllers\Pages\DivisionController@edit',
-            self::PROJECT                     => '\App\Http\Controllers\Pages\ProjectController@invoke',
-            self::PROJECT__SHOW               => '\App\Http\Controllers\Pages\ProjectController@show',
-            self::PROJECT__EDIT               => '\App\Http\Controllers\Pages\ProjectController@edit',
-            self::USER                        => '\App\Http\Controllers\Pages\UserController@invoke',
-            self::USER__SHOW                  => '\App\Http\Controllers\Pages\UserController@show',
-            self::USER__EDIT                  => '\App\Http\Controllers\Pages\UserController@edit',
-            self::PERSONAL_SETTING__SHOW      => '\App\Http\Controllers\Pages\PersonalSettingController@show',
-            self::PERSONAL_SETTING__EDIT      => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
-            self::LOGIN                       => '\App\Http\Controllers\Pages\LoginController@invoke',
-            self::NOT_FOUND                   => '\App\Http\Controllers\Pages\NotFoundController@invoke',
-            default                           => '',
+            self::DASHBOARD                    => '\App\Http\Controllers\Pages\DashboardController@invoke',
+            self::ATTENDANCE                   => '\App\Http\Controllers\Pages\AttendanceController@invoke',
+            self::ATTENDANCE_CREATE            => '\App\Http\Controllers\Pages\AttendanceController@create',
+            self::ATTENDANCE_DELETE            => '\App\Http\Controllers\Pages\AttendanceController@delete',
+            self::ATTENDANCE_DIVISION_PRIORITY => '\App\Http\Controllers\Pages\AttendanceController@division_priority',
+            self::ATTENDANCE_PROJECT_PRIORITY  => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
+            self::DIVISION                     => '\App\Http\Controllers\Pages\DivisionController@invoke',
+            self::DIVISION__SHOW               => '\App\Http\Controllers\Pages\DivisionController@show',
+            self::DIVISION__EDIT               => '\App\Http\Controllers\Pages\DivisionController@edit',
+            self::PROJECT                      => '\App\Http\Controllers\Pages\ProjectController@invoke',
+            self::PROJECT__SHOW                => '\App\Http\Controllers\Pages\ProjectController@show',
+            self::PROJECT__EDIT                => '\App\Http\Controllers\Pages\ProjectController@edit',
+            self::USER                         => '\App\Http\Controllers\Pages\UserController@invoke',
+            self::USER__SHOW                   => '\App\Http\Controllers\Pages\UserController@show',
+            self::USER__EDIT                   => '\App\Http\Controllers\Pages\UserController@edit',
+            self::PERSONAL_SETTING__SHOW       => '\App\Http\Controllers\Pages\PersonalSettingController@show',
+            self::PERSONAL_SETTING__EDIT       => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
+            self::LOGIN                        => '\App\Http\Controllers\Pages\LoginController@invoke',
+            self::NOT_FOUND                    => '\App\Http\Controllers\Pages\NotFoundController@invoke',
+            default                            => '',
         };
     }
 }
