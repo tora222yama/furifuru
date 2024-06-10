@@ -34,7 +34,7 @@ export abstract class ListBase<I extends IBase> {
    * 保持している配列を変更しない.
    */
   public reverse(): I[] {
-    return [...this.array].reverse();
+    return this.array.toReversed();
   }
 
   /**

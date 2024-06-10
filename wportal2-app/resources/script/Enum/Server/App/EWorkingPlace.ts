@@ -39,6 +39,6 @@ export const getIconWorkingPlace = (place: EWorkingPlace): EIcon => {
     case E_WORKING_PLACE.HOME:
       return E_ICON.HOME;
     default:
-      return E_ICON.BUILD;
+      return E_ICON.INVALID;
   }
 };

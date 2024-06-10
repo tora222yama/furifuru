@@ -10,6 +10,7 @@ import { Icon } from '@/script/Component/Misc/Icon';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { TabProject } from '@/script/Pages/Attendance/Member/TabProject/TabProject';
 import { TabDivision } from '@/script/Pages/Attendance/Member/TabDivision/TabDivision';
+import { TabMember } from '@/script/Pages/Attendance/Member/TabMember/TabMember';
 
 const E_TAB = {
   PROJECT: 0,
@@ -54,7 +55,7 @@ export const Member: React.FC<IProps> = ({ sx }) => {
       case E_TAB.DIVISION:
         return <TabDivision />;
       case E_TAB.MEMBER:
-        return null;
+        return <TabMember />;
       default:
         return null;
     }
