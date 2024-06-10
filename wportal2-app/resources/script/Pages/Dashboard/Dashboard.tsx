@@ -1,0 +1,12 @@
+import * as React from 'react';
+import { IPropsBase } from '@/script/System/System';
+import { Page } from '@/script/Pages/Page';
+
+interface IProps extends IPropsBase {}
+export const Dashboard: React.FC<IProps> = () => {
+  return (
+    <Page>
+      長いメッセージ長いメッセージ長いメッセージ長いメッセージ長いメッセージ
+    </Page>
+  );
+};

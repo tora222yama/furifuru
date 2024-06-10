@@ -1,4 +1,4 @@
-# laravel-inertia-template
+# wportal2
 Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 
 - [利用パッケージについて](document/PACKAGE.md)
@@ -30,11 +30,11 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 ## サンプル環境のセットアップ
 
 - ディレクトリを作成
-  - 例 ```/home/user-name/dev/laravel-inertia-template```
+  - 例 ```/home/user-name/dev/wportal2```
 - 上記ディレクトリをIntellij Ideaで開く
   - 以下、構築手順はIntellij Ideaの下側のTerminalタブで実施可能ですが、Windowsターミナルなどから実施してもOKです
 - Gitからコード取得
-  - URL: ```https://github.com/quick-wpd/laravel-inertia-template```
+  - URL: ```https://github.com/quick-wpd/wportal2```
 - dockerディレクトリ以下に```CRLF```ファイルがあるとビルドに失敗します
   - CTRL+選択した状態でCTRL+SHIFT+Aでアクションを実施→```LF - Unix and MacOS```を実施すると一括でLFに変更できます
 
@@ -60,11 +60,11 @@ $ git push --mirror https://github.com/quick-wpd/new_project.git
   - 事故に気を付けつつCTRL+SHIFT+Rの一括置換でも問題ありません
   - そのままでも利用は可能ですが、諸々利用PJにあわせた最適化を推奨します
   - ディレクトリ名の修正
-    - ```laravel-inertia-template-app``` -> ```newp-app```
+    - ```wportal2-app``` -> ```newp-app```
   - ファイル内の宣言の修正
-    - ```laravel-inertia-template-app``` -> ```newp-app```
-    - ```laravel-inertia-template``` -> ```newp```
-    - ```template_``` -> ```newp_```
+    - ```wportal2-app``` -> ```newp-app```
+    - ```wportal2``` -> ```newp```
+    - ```wportal2_``` -> ```newp_```
       - 主にdocker-composeの宣言が修正されます
 
 ### セットアップ手順
@@ -73,14 +73,14 @@ $ git push --mirror https://github.com/quick-wpd/new_project.git
 - 例）```sudo chown {name}:{group} -R {target_dir}```
 
 ```
-cd laravel-inertia-template-app
+cd wportal2-app
 cp .env.local .env
 cd ..
 docker-compose build
 docker-compose up -d
 
 # webコンテナにログインしてcomposerとnpmのインストール
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 > composer install
 > npm ci
 
@@ -88,16 +88,16 @@ docker exec -it template_web bash
 > php artisan migrate
 > (php artisan migrate:refresh // 再初期化する場合)
 
-# precommitの設定（Ubuntu上など、ターミナル側のlaravel-inertia-template-app直下で実施する）
+# precommitの設定（Ubuntu上など、ターミナル側のwportal2-app直下で実施する）
 (> exit)
 npm run prepare
 (husky - Git hooks installed と表示されればOK)
 
-# ログファイルの権限を修正（Ubuntu上など、ターミナル側のlaravel-inertia-template-app直下で実施する）
+# ログファイルの権限を修正（Ubuntu上など、ターミナル側のwportal2-app直下で実施する）
 sudo chmod 777 -R storage/
 
 # webコンテナでビルドテスト
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 > npm run build
 ※念のため画面が表示されるかチェック http://localhost:9190/first_page
 ```
@@ -111,14 +111,14 @@ docker exec -it template_web bash
 seederを利用してテストデータを投入する
 
 ```
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 > php artisan db:seed --class=TestCaseSeeder
 ```
 
 ### コミット動作テスト
 
 - テスト用ブランチを作成する
-- ```laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
+- ```wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
 
 ```
 const i = 0; // 追加箇所
@@ -127,7 +127,7 @@ const i = 0; // 追加箇所
 - 下記のコマンドを実施して、error表示がされることを確認する
 
 ```
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 git add .
 npm run lefthook
 ```
@@ -135,7 +135,7 @@ npm run lefthook
 - 表示されるエラーの例
 
 ```
-/var/www/html/laravel-inertia-template-app/resources/script/Pages/MvcValue/MvcValue.tsx
+/var/www/html/wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx
   10:9  error  'i' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 ✖ 1 problem (1 error, 0 warnings)
@@ -148,7 +148,7 @@ npm run lefthook
 - 実際に開発を行う場合は下記を実施してください
 
 ```
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 npm run dev
 ```
 
@@ -161,7 +161,7 @@ npm run dev
 - ビルドは下記で行います
 
 ```
-docker exec -it template_web bash
+docker exec -it wportal2_web bash
 npm run build
 
 ※2024/03時点では大量のwarningが出ますが、無視してください

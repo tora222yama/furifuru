@@ -4,7 +4,8 @@
 /public/storage
 /storage/*.key
 /vendor
-laravel-next-template-app/.env
+/local-s3/*
+wportal2-app/.env
 .env.backup
 .phpunit.result.cache
 .php-cs-fixer.cache

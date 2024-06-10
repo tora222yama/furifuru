@@ -1,4 +1,4 @@
-# laravel-inertia-template
+# wportal2
 Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 利用パッケージについて
 

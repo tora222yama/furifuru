@@ -1,0 +1,14 @@
+# メンバー情報の更新.
+mutation AppProjectUserUpdate(
+  $trnProjectId: Int!
+  $trnUserIdList: [Int!]!
+) {
+  AppProjectUserUpdate(
+    trnProjectId: $trnProjectId
+    trnUserIdList: $trnUserIdList
+  ) {
+    statusCode
+    statusMessage
+    errors
+  }
+}
