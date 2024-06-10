@@ -21,7 +21,7 @@ export const Paging: React.FC<IProps> = ({
 }) => {
   // ページの開始番号と終了番号.
   const start = index * step + 1;
-  const end = (index + 1) * step;
+  const end = Math.min((index + 1) * step, total);
 
   // 前ページに戻れるかどうか.
   const isEnablePrev = index > 0;
