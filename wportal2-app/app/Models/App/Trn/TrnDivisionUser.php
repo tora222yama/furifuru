@@ -30,15 +30,15 @@ class TrnDivisionUser extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'            => $this->id              ?? 0,
             'trnDivisionId' => $this->trn_division_id ?? 0,
             'trnUserId'     => $this->trn_user_id     ?? 0,
 
-            'trnUser'       => $this->isExistKeyInWith($with, 'TrnUser')
-                ? $this->TrnUser->toPayload($with)
+            'trnUser'       => $this->isExistKeyInWith($with, 'TrnUser', $history)
+                ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
         ];
     }
