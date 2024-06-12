@@ -42,7 +42,7 @@ class TrnProject extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'                     => $this->id              ?? 0,
@@ -50,16 +50,16 @@ class TrnProject extends ModelBase
             'explain'                => $this->explain         ?? '',
             'displayOrder'           => $this->display_order   ?? 0,
 
-            'trnProjectUser'         => $this->isExistKeyInWith($with, 'TrnProjectUser')
-                ? $this->TrnProjectUser->map(function (TrnProjectUser $trnProjectUser) use ($with) {
-                    return $trnProjectUser->toPayload($with);
-                })->toArray()
+            'trnProjectUser'         => $this->isExistKeyInWith($with, 'TrnProjectUser', $history)
+                ? $this->TrnProjectUser->map(
+                    fn (TrnProjectUser $trnProjectUser) => $trnProjectUser->toPayload($with, [...$history, 'TrnProjectUser'])
+                )
                 : [],
 
-            'trnUserProjectPriority' => $this->isExistKeyInWith($with, 'TrnUserProjectPriority')
-                ? $this->TrnUserProjectPriority->map(function (TrnUserProjectPriority $trnUserProjectPriority) use ($with) {
-                    return $trnUserProjectPriority->toPayload($with);
-                })->toArray()
+            'trnUserProjectPriority' => $this->isExistKeyInWith($with, 'TrnUserProjectPriority', $history)
+                ? $this->TrnUserProjectPriority->map(
+                    fn (TrnUserProjectPriority $trnUserProjectPriority) => $trnUserProjectPriority->toPayload($with, [...$history, 'TrnUserProjectPriority'])
+                )
                 : [],
         ];
     }
