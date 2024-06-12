@@ -42,7 +42,7 @@ class TrnDivision extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'                      => $this->id              ?? 0,
@@ -51,14 +51,14 @@ class TrnDivision extends ModelBase
             'displayOrder'            => $this->display_order   ?? 0,
 
             'trnDivisionUser'         => $this->isExistKeyInWith($with, 'TrnDivisionUser')
-                ? $this->TrnDivisionUser->map(function (TrnDivisionUser $trnDivisionUser) use ($with) {
-                    return $trnDivisionUser->toPayload($with);
+                ? $this->TrnDivisionUser->map(function (TrnDivisionUser $trnDivisionUser) use ($with, $history) {
+                    return $trnDivisionUser->toPayload($with, [...$history, 'TrnDivisionUser']);
                 })->toArray()
                 : [],
 
             'trnUserDivisionPriority' => $this->isExistKeyInWith($with, 'TrnUserDivisionPriority')
-                ? $this->TrnUserDivisionPriority->map(function (TrnUserDivisionPriority $trnUserDivisionPriority) use ($with) {
-                    return $trnUserDivisionPriority->toPayload($with);
+                ? $this->TrnUserDivisionPriority->map(function (TrnUserDivisionPriority $trnUserDivisionPriority) use ($with, $history) {
+                    return $trnUserDivisionPriority->toPayload($with, [...$history, 'TrnUserDivisionPriority']);
                 })->toArray()
                 : [],
         ];

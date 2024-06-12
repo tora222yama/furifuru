@@ -59,7 +59,7 @@ class TrnUser extends ModelBase
     {
         return $this->hasMany(
             TrnUserProjectPriority::class,
-            'trn_division_id',
+            'trn_user_id',
             'id'
         )->alive();
     }
@@ -67,7 +67,7 @@ class TrnUser extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'                  => $this->id                ?? 0,
@@ -75,14 +75,14 @@ class TrnUser extends ModelBase
             'nickname'            => $this->nickname          ?? '',
             'faceImagePath'       => $this->face_image_path   ?? '',
 
-            'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState')
-                ? $this->TrnAttendanceState->map(function (TrnAttendanceState $trnAttendanceState) use ($with) {
-                    return $trnAttendanceState->toPayload($with);
+            'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState', $history)
+                ? $this->TrnAttendanceState->map(function (TrnAttendanceState $trnAttendanceState) use ($with, $history) {
+                    return $trnAttendanceState->toPayload($with, [...$history, 'TrnAttendanceState']);
                 })->toArray()
                 : [],
 
             'trnUserSlackProfile' => $this->isExistKeyInWith($with, 'TrnUserSlackProfile')
-                ? $this->TrnUserSlackProfile?->toPayload($with)
+                ? $this->TrnUserSlackProfile?->toPayload($with, [...$history, 'TrnUserSlackProfile'])
                 : null,
         ];
     }
