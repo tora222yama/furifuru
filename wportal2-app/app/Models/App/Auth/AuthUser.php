@@ -80,7 +80,7 @@ class AuthUser extends Authenticatable
             'id'          => $this->id,
             'name'        => $this->name        ?? '',
 
-            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser')
+            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser', $history)
                 ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
 

@@ -81,7 +81,7 @@ class TrnUser extends ModelBase
                 })->toArray()
                 : [],
 
-            'trnUserSlackProfile' => $this->isExistKeyInWith($with, 'TrnUserSlackProfile')
+            'trnUserSlackProfile' => $this->isExistKeyInWith($with, 'TrnUserSlackProfile', $history)
                 ? $this->TrnUserSlackProfile?->toPayload($with, [...$history, 'TrnUserSlackProfile'])
                 : null,
         ];

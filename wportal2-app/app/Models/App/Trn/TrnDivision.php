@@ -50,13 +50,13 @@ class TrnDivision extends ModelBase
             'explain'                 => $this->explain         ?? '',
             'displayOrder'            => $this->display_order   ?? 0,
 
-            'trnDivisionUser'         => $this->isExistKeyInWith($with, 'TrnDivisionUser')
+            'trnDivisionUser'         => $this->isExistKeyInWith($with, 'TrnDivisionUser', $history)
                 ? $this->TrnDivisionUser->map(function (TrnDivisionUser $trnDivisionUser) use ($with, $history) {
                     return $trnDivisionUser->toPayload($with, [...$history, 'TrnDivisionUser']);
                 })->toArray()
                 : [],
 
-            'trnUserDivisionPriority' => $this->isExistKeyInWith($with, 'TrnUserDivisionPriority')
+            'trnUserDivisionPriority' => $this->isExistKeyInWith($with, 'TrnUserDivisionPriority', $history)
                 ? $this->TrnUserDivisionPriority->map(function (TrnUserDivisionPriority $trnUserDivisionPriority) use ($with, $history) {
                     return $trnUserDivisionPriority->toPayload($with, [...$history, 'TrnUserDivisionPriority']);
                 })->toArray()
