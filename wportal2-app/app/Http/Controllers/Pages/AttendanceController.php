@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pages;
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
+use App\Facades\Models\App\Trn\TrnUserDivisionPriorityService;
 use App\Facades\Models\App\Trn\TrnUserProjectPriorityService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnDivision;
@@ -14,6 +15,7 @@ use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppAttendanceDelete;
+use App\Pipe\App\PipeAppAttendanceDivisionPriority;
 use App\Pipe\App\PipeAppAttendanceProjectPriority;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -118,6 +120,27 @@ class AttendanceController extends Controller
         DB::transaction(static function (): void {
             // プロジェクト優先度の変更.
             TrnUserProjectPriorityService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
+    }
+
+    /**
+     * 課優先度変更.
+     *
+     * @throws Throwable
+     */
+    public function division_priority(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppAttendanceDivisionPriority($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 課優先度の変更.
+            TrnUserDivisionPriorityService::updateByPipe();
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());

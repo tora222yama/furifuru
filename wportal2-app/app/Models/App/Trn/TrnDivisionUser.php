@@ -38,7 +38,7 @@ class TrnDivisionUser extends ModelBase
             'trnUserId'     => $this->trn_user_id     ?? 0,
 
             'trnUser'       => $this->isExistKeyInWith($with, 'TrnUser', $history)
-                ? $this->TrnUser->toPayload($with, [...$history, 'TrnUser'])
+                ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
         ];
     }

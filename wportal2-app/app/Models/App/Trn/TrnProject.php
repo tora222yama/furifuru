@@ -51,15 +51,15 @@ class TrnProject extends ModelBase
             'displayOrder'           => $this->display_order   ?? 0,
 
             'trnProjectUser'         => $this->isExistKeyInWith($with, 'TrnProjectUser', $history)
-                ? $this->TrnProjectUser->map(function (TrnProjectUser $trnProjectUser) use ($with, $history) {
-                    return $trnProjectUser->toPayload($with, [...$history, 'TrnProjectUser']);
-                })->toArray()
+                ? $this->TrnProjectUser->map(
+                    fn (TrnProjectUser $trnProjectUser) => $trnProjectUser->toPayload($with, [...$history, 'TrnProjectUser'])
+                )
                 : [],
 
             'trnUserProjectPriority' => $this->isExistKeyInWith($with, 'TrnUserProjectPriority', $history)
-                ? $this->TrnUserProjectPriority->map(function (TrnUserProjectPriority $trnUserProjectPriority) use ($with, $history) {
-                    return $trnUserProjectPriority->toPayload($with, [...$history, 'TrnUserProjectPriority']);
-                })->toArray()
+                ? $this->TrnUserProjectPriority->map(
+                    fn (TrnUserProjectPriority $trnUserProjectPriority) => $trnUserProjectPriority->toPayload($with, [...$history, 'TrnUserProjectPriority'])
+                )
                 : [],
         ];
     }

@@ -76,9 +76,9 @@ class TrnUser extends ModelBase
             'faceImagePath'       => $this->face_image_path   ?? '',
 
             'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState', $history)
-                ? $this->TrnAttendanceState->map(function (TrnAttendanceState $trnAttendanceState) use ($with, $history) {
-                    return $trnAttendanceState->toPayload($with, [...$history, 'TrnAttendanceState']);
-                })->toArray()
+                ? $this->TrnAttendanceState->map(
+                    fn (TrnAttendanceState $trnAttendanceState) => $trnAttendanceState->toPayload($with, [...$history, 'TrnAttendanceState'])
+                )
                 : [],
 
             'trnUserSlackProfile' => $this->isExistKeyInWith($with, 'TrnUserSlackProfile', $history)
