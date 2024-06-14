@@ -147,9 +147,11 @@ class Performance
      */
     private function printResult(): void
     {
-        $sql    = $this->querySqlList->map(
-            fn ($sql) => substr($sql, 0, strpos($sql, 'where')).'...'
-        )->implode("\n");
+        $sql    = $this->querySqlList->map(function ($sql) {
+            $pos = strpos($sql, 'where');
+
+            return $pos ? substr($sql, 0, strpos($sql, 'where')).'...' : $sql;
+        })->implode("\n");
 
         $result = <<<EOF
 ### パフォーマンス計測 ###
