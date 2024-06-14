@@ -33,4 +33,17 @@ class ModelServiceBase
         }
         $model->saveOrFail();
     }
+
+    /**
+     * 削除処理（orFail）
+     *
+     * @throws Exception
+     */
+    public function deleteOrFail(object $model): void
+    {
+        if (empty($model->id)) {
+            throw new Exception('invalid primary key.');
+        }
+        $model->deleteOrFail();
+    }
 }
