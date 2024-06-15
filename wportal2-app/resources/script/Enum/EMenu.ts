@@ -1,5 +1,7 @@
 import { E_ICON, EIcon } from '@/script/Enum/EIcon';
 import { E_PAGES, EPages } from '@/script/Enum/Server/App/EPages';
+import { AppTrnUserAuthorityList } from '@/script/Models/App/Trn/TrnUserAuthorityList';
+import { E_USER_AUTHORITY } from '@/script/Enum/Server/App/EUserAuthority';
 
 export const E_MENU = {
   INVALID: 'invalid', // 無効.
@@ -148,7 +150,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.ADMIN_COMMAND,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.ADMIN__COMMAND,
     parent: E_MENU.ADMIN_ROOT,
     back: E_PAGES.INVALID,
     name: 'コマンド',
@@ -159,12 +161,18 @@ export const MenuList: IMenu[] = [
 /**
  * 対象のメニューが表示対象かどうか.
  */
-export const isActiveMenu = (menu: EMenu): boolean => {
+export const isActiveMenu = (
+  menu: EMenu,
+  authorityList: AppTrnUserAuthorityList,
+): boolean => {
   switch (menu) {
     case E_MENU.ADMIN_ROOT:
     case E_MENU.ADMIN_COMMAND:
     case E_MENU.ADMIN_DATA:
-      return false;
+      return authorityList.hasAuthority([
+        E_USER_AUTHORITY.ADMIN_PRIVILEGE,
+        E_USER_AUTHORITY.ADMIN_COMMAND,
+      ]);
     default:
       return true;
   }

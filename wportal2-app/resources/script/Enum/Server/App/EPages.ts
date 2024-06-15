@@ -25,6 +25,7 @@ export const E_PAGES = {
   USER__EDIT: 'user__edit', // メンバー編集.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
+  ADMIN__COMMAND: 'admin__command', // artisanコマンド実行.
   LOGIN: 'login', // ログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
@@ -76,6 +77,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return '/personal_setting/edit';
+    case E_PAGES.ADMIN__COMMAND:
+      return '/admin/command';
     default:
       return '/';
   }
@@ -123,6 +126,8 @@ export const getPagesName = (page: EPages): string => {
       return '個人設定';
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return '個人設定編集';
+    case E_PAGES.ADMIN__COMMAND:
+      return '管理コマンド';
     default:
       return '';
   }
