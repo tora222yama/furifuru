@@ -44,17 +44,7 @@ export type AppTrnUser = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  AppPersonalSettingEditUpdate?: Maybe<Response>;
   AppPersonalSettingShowAlignSlack?: Maybe<Response>;
-};
-
-export type MutationAppPersonalSettingEditUpdateArgs = {
-  nickname: Scalars['String']['input'];
-  slackTeamId?: InputMaybe<Scalars['String']['input']>;
-  slackUserId?: InputMaybe<Scalars['String']['input']>;
-  slackUserName?: InputMaybe<Scalars['String']['input']>;
-  trnUserId: Scalars['Int']['input'];
-  upload?: InputMaybe<Scalars['Upload']['input']>;
 };
 
 export type Query = {
@@ -67,25 +57,6 @@ export type Response = {
   errors?: Maybe<Scalars['String']['output']>;
   statusCode: Scalars['Int']['output'];
   statusMessage: Scalars['String']['output'];
-};
-
-export type AppPersonalSettingEditUpdateMutationVariables = Exact<{
-  trnUserId: Scalars['Int']['input'];
-  nickname: Scalars['String']['input'];
-  slackUserId?: InputMaybe<Scalars['String']['input']>;
-  slackUserName?: InputMaybe<Scalars['String']['input']>;
-  slackTeamId?: InputMaybe<Scalars['String']['input']>;
-  upload?: InputMaybe<Scalars['Upload']['input']>;
-}>;
-
-export type AppPersonalSettingEditUpdateMutation = {
-  __typename?: 'Mutation';
-  AppPersonalSettingEditUpdate?: {
-    __typename?: 'Response';
-    statusCode: number;
-    statusMessage: string;
-    errors?: string | null;
-  } | null;
 };
 
 export type AppPersonalSettingShowAlignSlackMutationVariables = Exact<{
@@ -115,78 +86,6 @@ export type AppTrnUserListQuery = {
   } | null>;
 };
 
-export const AppPersonalSettingEditUpdateDocument = gql`
-  mutation AppPersonalSettingEditUpdate(
-    $trnUserId: Int!
-    $nickname: String!
-    $slackUserId: String
-    $slackUserName: String
-    $slackTeamId: String
-    $upload: Upload
-  ) {
-    AppPersonalSettingEditUpdate(
-      trnUserId: $trnUserId
-      nickname: $nickname
-      slackUserId: $slackUserId
-      slackUserName: $slackUserName
-      slackTeamId: $slackTeamId
-      upload: $upload
-    ) {
-      statusCode
-      statusMessage
-      errors
-    }
-  }
-`;
-export type AppPersonalSettingEditUpdateMutationFn = Apollo.MutationFunction<
-  AppPersonalSettingEditUpdateMutation,
-  AppPersonalSettingEditUpdateMutationVariables
->;
-
-/**
- * __useAppPersonalSettingEditUpdateMutation__
- *
- * To run a mutation, you first call `useAppPersonalSettingEditUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAppPersonalSettingEditUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [appPersonalSettingEditUpdateMutation, { data, loading, error }] = useAppPersonalSettingEditUpdateMutation({
- *   variables: {
- *      trnUserId: // value for 'trnUserId'
- *      nickname: // value for 'nickname'
- *      slackUserId: // value for 'slackUserId'
- *      slackUserName: // value for 'slackUserName'
- *      slackTeamId: // value for 'slackTeamId'
- *      upload: // value for 'upload'
- *   },
- * });
- */
-export function useAppPersonalSettingEditUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AppPersonalSettingEditUpdateMutation,
-    AppPersonalSettingEditUpdateMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    AppPersonalSettingEditUpdateMutation,
-    AppPersonalSettingEditUpdateMutationVariables
-  >(AppPersonalSettingEditUpdateDocument, options);
-}
-export type AppPersonalSettingEditUpdateMutationHookResult = ReturnType<
-  typeof useAppPersonalSettingEditUpdateMutation
->;
-export type AppPersonalSettingEditUpdateMutationResult =
-  Apollo.MutationResult<AppPersonalSettingEditUpdateMutation>;
-export type AppPersonalSettingEditUpdateMutationOptions =
-  Apollo.BaseMutationOptions<
-    AppPersonalSettingEditUpdateMutation,
-    AppPersonalSettingEditUpdateMutationVariables
-  >;
 export const AppPersonalSettingShowAlignSlackDocument = gql`
   mutation AppPersonalSettingShowAlignSlack {
     AppPersonalSettingShowAlignSlack {

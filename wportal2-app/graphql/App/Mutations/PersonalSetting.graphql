@@ -1,26 +1,3 @@
-# 個人設定の更新.
-mutation AppPersonalSettingEditUpdate(
-  $trnUserId: Int!
-  $nickname: String!
-  $slackUserId: String
-  $slackUserName: String
-  $slackTeamId: String
-  $upload: Upload
-) {
-  AppPersonalSettingEditUpdate(
-    trnUserId: $trnUserId,
-    nickname: $nickname,
-    slackUserId: $slackUserId
-    slackUserName: $slackUserName
-    slackTeamId: $slackTeamId
-    upload: $upload
-  ) {
-    statusCode
-    statusMessage
-    errors
-  }
-}
-
 # Slack連携の実施.
 mutation AppPersonalSettingShowAlignSlack {
   AppPersonalSettingShowAlignSlack {

@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
+use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnUserService;
+use App\Facades\Models\App\Trn\TrnUserSlackProfileService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class PersonalSettingController extends Controller
 {
@@ -42,6 +50,35 @@ class PersonalSettingController extends Controller
         return $this->render('PersonalSetting/Edit/Index', [
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
+    }
+
+    /**
+     * 課の更新.
+     *
+     * @throws Throwable
+     */
+    public function update(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppPersonalSettingEditUpdate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 個人設定の更新.
+            TrnUserService::updateByPipe();
+
+            // Slack情報の更新.
+            TrnUserSlackProfileService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     }
 
     /**

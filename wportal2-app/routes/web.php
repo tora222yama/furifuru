@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('userId', '[0-9]+');
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
+    Route::post('/personal_setting/update', EPages::PERSONAL_SETTING__UPDATE->getInvokePath());
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')

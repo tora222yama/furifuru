@@ -29,6 +29,7 @@ export const E_PAGES = {
   USER__EDIT: 'user__edit', // メンバー編集.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
+  PERSONAL_SETTING__UPDATE: 'personal_setting__update', // 個人設定・更新.
   LOGIN: 'login', // ログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
@@ -88,6 +89,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return '/personal_setting/edit';
+    case E_PAGES.PERSONAL_SETTING__UPDATE:
+      return '/personal_setting/update';
     default:
       return '/';
   }
