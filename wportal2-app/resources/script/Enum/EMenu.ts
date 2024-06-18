@@ -148,14 +148,6 @@ export const MenuList: IMenu[] = [
     name: 'データ',
     icon: E_ICON.BUILD,
   },
-  {
-    menu: E_MENU.ADMIN_COMMAND,
-    pages: E_PAGES.ADMIN__COMMAND,
-    parent: E_MENU.ADMIN_ROOT,
-    back: E_PAGES.INVALID,
-    name: 'コマンド',
-    icon: E_ICON.BUILD,
-  },
 ];
 
 /**

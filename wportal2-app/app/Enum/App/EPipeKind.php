@@ -11,7 +11,6 @@ enum EPipeKind: string
     // queries.
 
     // mutations.
-    case APP_ADMIN_COMMAND_UPDATE               = 'app_admin_command_update';
     case APP_ATTENDANCE_CREATE                  = 'app_attendance_create';
     case APP_ATTENDANCE_DELETE                  = 'app_attendance_delete';
     case APP_ATTENDANCE_PROJECT_PRIORITY        = 'app_attendance_project_priority';

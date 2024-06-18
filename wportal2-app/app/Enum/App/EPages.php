@@ -31,8 +31,6 @@ enum EPages: string
     case USER__EDIT                      = 'user__edit'; // メンバー編集.
     case PERSONAL_SETTING__SHOW          = 'personal_setting__show'; // 個人設定・閲覧.
     case PERSONAL_SETTING__EDIT          = 'personal_setting__edit'; // 個人設定・編集.
-    case ADMIN__COMMAND                  = 'admin__command'; // artisanコマンド.
-    case ADMIN__COMMAND__UPDATE          = 'admin__command__update'; // artisanコマンド実行.
     case LOGIN                           = 'login'; // ログイン.
     case NOT_FOUND                       = 'not_found'; // ページが見つからない.
 
@@ -59,8 +57,6 @@ enum EPages: string
             self::USER__EDIT                   => '\App\Http\Controllers\Pages\UserController@edit',
             self::PERSONAL_SETTING__SHOW       => '\App\Http\Controllers\Pages\PersonalSettingController@show',
             self::PERSONAL_SETTING__EDIT       => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
-            self::ADMIN__COMMAND               => '\App\Http\Controllers\Pages\AdminController@show',
-            self::ADMIN__COMMAND__UPDATE       => '\App\Http\Controllers\Pages\AdminController@update',
             self::LOGIN                        => '\App\Http\Controllers\Pages\LoginController@invoke',
             self::NOT_FOUND                    => '\App\Http\Controllers\Pages\NotFoundController@invoke',
             default                            => '',
