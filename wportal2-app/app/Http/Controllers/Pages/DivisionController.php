@@ -75,12 +75,15 @@ class DivisionController extends Controller
         return $this->render('Division/Edit/Index', [
 
             // 課情報.
-            'trnDivision' => fn () => $this->getDivision($request, [
+            'trnDivision'         => fn () => $this->getDivision($request, [
                 'TrnDivisionUser',
                 'TrnDivisionUser' => [
                     'TrnUser',
                 ],
             ]),
+
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation'    => fn () => session('serverValidation') ?? null,
         ]);
     }
 
@@ -99,8 +102,10 @@ class DivisionController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
+            return redirect()->action(EPages::DIVISION__EDIT->getInvokePath(), [
                 'divisionId' => $pipe->trnDivisionId,
+            ])->with([
+                'serverValidation' => PipeService::getValidationResult(),
             ]);
         }
 

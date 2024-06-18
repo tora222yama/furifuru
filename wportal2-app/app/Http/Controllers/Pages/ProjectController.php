@@ -73,12 +73,15 @@ class ProjectController extends Controller
         return $this->render('Project/Edit/Index', [
 
             // プロジェクト情報.
-            'trnProject' => fn () => $this->getProject($request, [
+            'trnProject'          => fn () => $this->getProject($request, [
                 'TrnProjectUser',
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
             ]),
+
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation'    => fn () => session('serverValidation') ?? null,
         ]);
     }
 
@@ -97,8 +100,10 @@ class ProjectController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
+            return redirect()->action(EPages::PROJECT__EDIT->getInvokePath(), [
                 'projectId' => $pipe->trnProjectId,
+            ])->with([
+                'serverValidation' => PipeService::getValidationResult(),
             ]);
         }
 

@@ -14,26 +14,20 @@ import { Page } from '@/script/Pages/Page';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Avatar } from '@/script/Pages/Common/Avatar';
 import { FormEdit, IFormEdit } from '@/script/Pages/Project/Edit/FormEdit';
-import {
-  IFormEditValidationResult,
-  initialResult,
-  validateAll,
-} from '@/script/Pages/Project/Edit/FormEditValidation';
+import { validateAll } from '@/script/Pages/Project/Edit/FormEditValidation';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
-  const { trnProjectList } = useIndexContext();
+  const { trnProjectList, validation, setValidation } = useIndexContext();
   const trnProject = trnProjectList.first();
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     id: trnProject.id,
     name: trnProject.name,
     explain: trnProject.explain,
   });
-  const [validation, setValidation] =
-    React.useState<IFormEditValidationResult>(initialResult);
 
   /**
    * 値の更新.
@@ -61,6 +55,8 @@ export const Edit: React.FC<IProps> = () => {
     // 更新処理の実施.
     router.visit(getPagesHref(E_PAGES.PROJECT__UPDATE), {
       method: 'post',
+      preserveState: true,
+      preserveScroll: true,
       data: {
         trnProjectId: formEdit.id,
         name: formEdit.name,
