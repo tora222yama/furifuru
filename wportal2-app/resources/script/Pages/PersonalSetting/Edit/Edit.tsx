@@ -15,19 +15,15 @@ import {
   FormEdit,
   IFormEdit,
 } from '@/script/Pages/PersonalSetting/Edit/FormEdit';
-import {
-  IFormEditValidationResult,
-  initialResult,
-  validateAll,
-} from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
+import { validateAll } from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/PersonalSetting/Edit/Index';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
   const { authUser } = useCommonIndexContext();
-  const { trnUserSlackProfile } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
+  const { trnUserSlackProfile, validation, setValidation } = useIndexContext();
 
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     name: authUser.name,
@@ -36,8 +32,6 @@ export const Edit: React.FC<IProps> = () => {
     slackUserName: trnUserSlackProfile.slackUserName,
     slackTeamId: trnUserSlackProfile.slackTeamId,
   });
-  const [validation, setValidation] =
-    React.useState<IFormEditValidationResult>(initialResult);
 
   /**
    * 値の更新.
@@ -65,6 +59,8 @@ export const Edit: React.FC<IProps> = () => {
     // 更新処理の実施.
     router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__UPDATE), {
       method: 'post',
+      preserveState: true,
+      preserveScroll: true,
       data: {
         trnUserId: authUser.trnUser?.id ?? 0,
         nickname: formEdit.nickname,

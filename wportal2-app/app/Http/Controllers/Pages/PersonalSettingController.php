@@ -49,6 +49,9 @@ class PersonalSettingController extends Controller
 
         return $this->render('PersonalSetting/Edit/Index', [
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
+
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation'    => fn () => session('serverValidation') ?? null,
         ]);
     }
 
@@ -66,7 +69,12 @@ class PersonalSettingController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());
+            // エラーがある場合は入力ページにリダイレクトする.
+            // バリデーション情報はセッションに保存.
+            return redirect()->action(EPages::PERSONAL_SETTING__EDIT->getInvokePath())
+                ->with([
+                    'serverValidation' => PipeService::getValidationResult(),
+                ]);
         }
 
         // 更新処理.
