@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
+use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnDivisionService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppDivisionUpdate;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class DivisionController extends Controller
 {
@@ -73,6 +79,37 @@ class DivisionController extends Controller
                     'TrnUser',
                 ],
             ]),
+        ]);
+    }
+
+    /**
+     * 課の更新.
+     *
+     * @throws Throwable
+     */
+    public function update(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppDivisionUpdate $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppDivisionUpdate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
+                'divisionId' => $pipe->trnDivisionId,
+            ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 課情報の更新.
+            TrnDivisionService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
+            'divisionId' => $pipe->trnDivisionId,
         ]);
     }
 

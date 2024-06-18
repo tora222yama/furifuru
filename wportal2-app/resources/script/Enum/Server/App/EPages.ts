@@ -15,6 +15,7 @@ export const E_PAGES = {
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   DIVISION: 'division', // 課一覧.
+  DIVISION__UPDATE: 'division__update', // 課更新.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
   PROJECT: 'project', // プロジェクト一覧.
@@ -56,6 +57,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/project_priority';
     case E_PAGES.DIVISION:
       return '/division';
+    case E_PAGES.DIVISION__UPDATE:
+      return '/division/update';
     case E_PAGES.DIVISION__SHOW:
       return `/division/$divisionId/show`;
     case E_PAGES.DIVISION__EDIT:

@@ -21,8 +21,6 @@ import {
   validateAll,
 } from '@/script/Pages/Division/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
-import { useMutationAppDivisionUpdate } from '@/script/Hooks/App/Mutations/useMutationAppDivisionUpdate';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -36,8 +34,6 @@ export const Edit: React.FC<IProps> = () => {
   });
   const [validation, setValidation] =
     React.useState<IFormEditValidationResult>(initialResult);
-  const [processingUpdate, mutationUpdate] = useMutationAppDivisionUpdate();
-  const loading = processingUpdate;
 
   /**
    * 値の更新.
@@ -63,34 +59,15 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    onStart();
-    mutationUpdate(
-      {
+    router.visit(getPagesHref(E_PAGES.DIVISION__UPDATE), {
+      method: 'post',
+      data: {
         trnDivisionId: formEdit.id,
         name: formEdit.name,
         explain: formEdit.explain,
       },
-      [],
-    ).then(res => {
-      switch (res.statusCode) {
-        case E_STATUS_CODE.OK:
-          router.visit(
-            getPagesHref(E_PAGES.DIVISION__SHOW, [
-              {
-                target: '$divisionId',
-                value: String(trnDivision.id),
-              },
-            ]),
-            {
-              onStart,
-              onFinish,
-            },
-          );
-          break;
-        default:
-          onFinish();
-          break;
-      }
+      onStart,
+      onFinish,
     });
   };
 
@@ -155,7 +132,6 @@ export const Edit: React.FC<IProps> = () => {
           }}
           label="更新"
           onClick={handleSubmit}
-          disabled={loading}
         />
       </Paper>
     </Page>

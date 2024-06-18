@@ -55,7 +55,6 @@ type Response {
 
 # Query/Mutationの定義.
 #import App/Common.graphql
-#import App/Division.graphql
 #import App/DivisionUser.graphql
 #import App/PersonalSetting.graphql
 #import App/Project.graphql
