@@ -3,7 +3,6 @@ import { Box, Chip, Avatar as MuiAvatar } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { TypoText } from '@/script/Component/Typography/TypoText';
-import { getAuthorizedImagePath } from '@/script/Common/Image';
 import { E_COLOR, EColor } from '@/script/Enum/EColor';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { Icon } from '@/script/Component/Misc/Icon';
@@ -47,12 +46,7 @@ export const Avatar: React.FC<IProps> = ({
    * 画像表示.
    */
   const nodeAvatar = () => {
-    return (
-      <MuiAvatar
-        alt={trnUser?.nickname}
-        src={getAuthorizedImagePath(trnUser?.faceImagePath)}
-      />
-    );
+    return <MuiAvatar alt={trnUser?.nickname} src={trnUser?.faceImagePath} />;
   };
 
   /**

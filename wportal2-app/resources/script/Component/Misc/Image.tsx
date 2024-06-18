@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { getAuthorizedImagePath } from '@/script/Common/Image';
 
 const StyledImage = styled('img')({});
 
@@ -16,7 +15,7 @@ export const Image: React.FC<IProps> = ({ sx, alt, src }) => {
         ...sx,
       }}
       alt={alt}
-      src={getAuthorizedImagePath(src)}
+      src={src}
     />
   );
 };
