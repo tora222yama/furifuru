@@ -1,17 +1,5 @@
 # App/PersonalSetting.graphql
 extend type Mutation @guard {
-  # 個人設定の更新.
-  AppPersonalSettingEditUpdate(
-    trnUserId: Int!
-    nickname: String!
-    slackUserId: String
-    slackUserName: String
-    slackTeamId: String
-    upload: Upload
-  ): Response @field(
-    resolver: "App\\GraphQL\\App\\Mutations\\AppPersonalSettingEditUpdate"
-  )
-
   # Slack連携の実施.
   AppPersonalSettingShowAlignSlack
     : Response @field(
