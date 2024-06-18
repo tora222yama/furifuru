@@ -15,13 +15,15 @@ export const E_PAGES = {
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   DIVISION: 'division', // 課一覧.
-  DIVISION__UPDATE: 'division__update', // 課更新.
-  DIVISION__UPDATE_USER: 'division__update_user', // 課メンバー更新.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
+  DIVISION__UPDATE: 'division__update', // 課更新.
+  DIVISION__UPDATE_USER: 'division__update_user', // 課メンバー更新.
   PROJECT: 'project', // プロジェクト一覧.
   PROJECT__SHOW: 'project__show', // プロジェクト詳細.
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
+  PROJECT__UPDATE: 'project__update', // プロジェクト更新.
+  PROJECT__UPDATE_USER: 'project__update_user', // プロジェクトメンバー更新.
   USER: 'user', // メンバー一覧.
   USER__SHOW: 'user__show', // メンバー詳細.
   USER__EDIT: 'user__edit', // メンバー編集.
@@ -58,20 +60,24 @@ const getHref = (page: EPages): string => {
       return '/attendance/project_priority';
     case E_PAGES.DIVISION:
       return '/division';
-    case E_PAGES.DIVISION__UPDATE:
-      return '/division/update';
-    case E_PAGES.DIVISION__UPDATE_USER:
-      return '/division/update_user';
     case E_PAGES.DIVISION__SHOW:
       return `/division/$divisionId/show`;
     case E_PAGES.DIVISION__EDIT:
       return `/division/$divisionId/edit`;
+    case E_PAGES.DIVISION__UPDATE:
+      return '/division/update';
+    case E_PAGES.DIVISION__UPDATE_USER:
+      return '/division/update_user';
     case E_PAGES.PROJECT:
       return '/project';
     case E_PAGES.PROJECT__SHOW:
       return '/project/$projectId/show';
     case E_PAGES.PROJECT__EDIT:
       return '/project/$projectId/edit';
+    case E_PAGES.PROJECT__UPDATE:
+      return '/project/update';
+    case E_PAGES.PROJECT__UPDATE_USER:
+      return '/project/update_user';
     case E_PAGES.USER:
       return '/user';
     case E_PAGES.USER__SHOW:

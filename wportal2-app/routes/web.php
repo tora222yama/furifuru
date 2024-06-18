@@ -25,17 +25,19 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/attendance/project_priority', EPages::ATTENDANCE_PROJECT_PRIORITY->getInvokePath());
     Route::post('/attendance/division_priority', EPages::ATTENDANCE_DIVISION_PRIORITY->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
-    Route::post('/division/update', EPages::DIVISION__UPDATE->getInvokePath());
-    Route::post('/division/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
     Route::get('/division/{divisionId}/show', EPages::DIVISION__SHOW->getInvokePath())
         ->where('divisionId', '[0-9]+');
     Route::get('/division/{divisionId}/edit', EPages::DIVISION__EDIT->getInvokePath())
         ->where('divisionId', '[0-9]+');
+    Route::post('/division/update', EPages::DIVISION__UPDATE->getInvokePath());
+    Route::post('/division/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
     Route::match(['get', 'post'], '/project', EPages::PROJECT->getInvokePath());
     Route::get('/project/{projectId}/show', EPages::PROJECT__SHOW->getInvokePath())
         ->where('projectId', '[0-9]+');
     Route::get('/project/{projectId}/edit', EPages::PROJECT__EDIT->getInvokePath())
         ->where('projectId', '[0-9]+');
+    Route::post('/project/update', EPages::PROJECT__UPDATE->getInvokePath());
+    Route::post('/project/update_user', EPages::PROJECT__UPDATE_USER->getInvokePath());
     ROUTE::match(['get', 'post'], '/user', EPages::USER->getInvokePath());
     Route::get('/user/{userId}/show', EPages::USER__SHOW->getInvokePath())
         ->where('userId', '[0-9]+');
