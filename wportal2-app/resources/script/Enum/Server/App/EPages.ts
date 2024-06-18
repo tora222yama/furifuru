@@ -17,14 +17,19 @@ export const E_PAGES = {
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
+  DIVISION__UPDATE: 'division__update', // 課更新.
+  DIVISION__UPDATE_USER: 'division__update_user', // 課メンバー更新.
   PROJECT: 'project', // プロジェクト一覧.
   PROJECT__SHOW: 'project__show', // プロジェクト詳細.
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
+  PROJECT__UPDATE: 'project__update', // プロジェクト更新.
+  PROJECT__UPDATE_USER: 'project__update_user', // プロジェクトメンバー更新.
   USER: 'user', // メンバー一覧.
   USER__SHOW: 'user__show', // メンバー詳細.
   USER__EDIT: 'user__edit', // メンバー編集.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
+  PERSONAL_SETTING__UPDATE: 'personal_setting__update', // 個人設定・更新.
   LOGIN: 'login', // ログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
@@ -60,12 +65,20 @@ const getHref = (page: EPages): string => {
       return `/division/$divisionId/show`;
     case E_PAGES.DIVISION__EDIT:
       return `/division/$divisionId/edit`;
+    case E_PAGES.DIVISION__UPDATE:
+      return '/division/update';
+    case E_PAGES.DIVISION__UPDATE_USER:
+      return '/division/update_user';
     case E_PAGES.PROJECT:
       return '/project';
     case E_PAGES.PROJECT__SHOW:
       return '/project/$projectId/show';
     case E_PAGES.PROJECT__EDIT:
       return '/project/$projectId/edit';
+    case E_PAGES.PROJECT__UPDATE:
+      return '/project/update';
+    case E_PAGES.PROJECT__UPDATE_USER:
+      return '/project/update_user';
     case E_PAGES.USER:
       return '/user';
     case E_PAGES.USER__SHOW:
@@ -76,6 +89,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return '/personal_setting/edit';
+    case E_PAGES.PERSONAL_SETTING__UPDATE:
+      return '/personal_setting/update';
     default:
       return '/';
   }

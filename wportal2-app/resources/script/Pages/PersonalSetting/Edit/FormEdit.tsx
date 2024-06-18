@@ -21,7 +21,6 @@ export interface IFormEdit {
 }
 
 interface IProps extends IPropsBase {
-  loading: boolean;
   formEdit: IFormEdit;
   validation: IFormEditValidationResult;
   handleUpdate: (newValues: Partial<IFormEdit>) => void;
@@ -29,7 +28,6 @@ interface IProps extends IPropsBase {
 }
 export const FormEdit: React.FC<IProps> = ({
   sx,
-  loading,
   formEdit,
   validation,
   handleUpdate,
@@ -111,7 +109,6 @@ export const FormEdit: React.FC<IProps> = ({
         }}
         label="更新"
         onClick={handleSubmit}
-        disabled={loading}
       />
     </FormControl>
   );

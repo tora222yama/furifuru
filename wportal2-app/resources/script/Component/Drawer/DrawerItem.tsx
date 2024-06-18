@@ -20,6 +20,7 @@ import {
   isActiveMenu,
   MenuList,
 } from '@/script/Enum/EMenu';
+import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 
 interface IProps extends IPropsBase {
   menu: IMenu;
@@ -27,6 +28,7 @@ interface IProps extends IPropsBase {
 }
 
 export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
+  const { trnUserAuthorityList } = useCommonIndexContext();
   const [open, setOpen] = React.useState<boolean>(false);
   const depthPadding = `${depth * 10 + 20}px`;
 
@@ -55,7 +57,7 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
           <List disablePadding>
             {MenuList.filter(v => v.pages !== E_PAGES.INVALID)
               .filter(v => v.parent === menu.menu)
-              .filter(v => isActiveMenu(v.menu))
+              .filter(v => isActiveMenu(v.menu, trnUserAuthorityList))
               .map(menu => (
                 <DrawerItem key={menu.menu} menu={menu} depth={depth + 1} />
               ))}

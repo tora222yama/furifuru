@@ -14,30 +14,20 @@ import { Page } from '@/script/Pages/Page';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Avatar } from '@/script/Pages/Common/Avatar';
 import { FormEdit, IFormEdit } from '@/script/Pages/Project/Edit/FormEdit';
-import {
-  IFormEditValidationResult,
-  initialResult,
-  validateAll,
-} from '@/script/Pages/Project/Edit/FormEditValidation';
+import { validateAll } from '@/script/Pages/Project/Edit/FormEditValidation';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { useMutationAppProjectUpdate } from '@/script/Hooks/App/Mutations/useMutationAppProjectUpdate';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
-  const { trnProjectList } = useIndexContext();
+  const { trnProjectList, validation, setValidation } = useIndexContext();
   const trnProject = trnProjectList.first();
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     id: trnProject.id,
     name: trnProject.name,
     explain: trnProject.explain,
   });
-  const [validation, setValidation] =
-    React.useState<IFormEditValidationResult>(initialResult);
-  const [processingUpdate, mutationUpdate] = useMutationAppProjectUpdate();
-  const loading = processingUpdate;
 
   /**
    * 値の更新.
@@ -63,34 +53,17 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    onStart();
-    mutationUpdate(
-      {
+    router.visit(getPagesHref(E_PAGES.PROJECT__UPDATE), {
+      method: 'post',
+      preserveState: true,
+      preserveScroll: true,
+      data: {
         trnProjectId: formEdit.id,
         name: formEdit.name,
         explain: formEdit.explain,
       },
-      [],
-    ).then(res => {
-      switch (res.statusCode) {
-        case E_STATUS_CODE.OK:
-          router.visit(
-            getPagesHref(E_PAGES.PROJECT__SHOW, [
-              {
-                target: '$projectId',
-                value: String(trnProject.id),
-              },
-            ]),
-            {
-              onStart,
-              onFinish,
-            },
-          );
-          break;
-        default:
-          onFinish();
-          break;
-      }
+      onStart,
+      onFinish,
     });
   };
 
@@ -155,7 +128,6 @@ export const Edit: React.FC<IProps> = () => {
           }}
           label="更新"
           onClick={handleSubmit}
-          disabled={loading}
         />
       </Paper>
     </Page>
