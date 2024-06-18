@@ -7,8 +7,10 @@ namespace App\Http\Controllers\Pages;
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnDivisionService;
+use App\Facades\Models\App\Trn\TrnDivisionUserService;
 use App\Http\Controllers\Controller;
 use App\Pipe\App\PipeAppDivisionUpdate;
+use App\Pipe\App\PipeAppDivisionUserUpdate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -106,6 +108,37 @@ class DivisionController extends Controller
         DB::transaction(static function (): void {
             // 課情報の更新.
             TrnDivisionService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
+            'divisionId' => $pipe->trnDivisionId,
+        ]);
+    }
+
+    /**
+     * 課メンバーの更新.
+     *
+     * @throws Throwable
+     */
+    public function update_user(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppDivisionUserUpdate $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppDivisionUserUpdate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
+                'divisionId' => $pipe->trnDivisionId,
+            ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 所属メンバーの更新.
+            TrnDivisionUserService::updateByPipe();
         });
 
         return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [

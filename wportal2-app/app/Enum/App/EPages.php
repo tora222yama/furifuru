@@ -22,6 +22,7 @@ enum EPages: string
     case ATTENDANCE__TABLE               = 'attendance__table'; // 勤怠一覧表.
     case DIVISION                        = 'division'; // 課一覧.
     case DIVISION__UPDATE                = 'division__update'; // 課更新.
+    case DIVISION__UPDATE_USER           = 'division__update_user'; // 課メンバー更新.
     case DIVISION__SHOW                  = 'division__show'; // 課詳細.
     case DIVISION__EDIT                  = 'division__edit'; // 課編集.
     case PROJECT                         = 'project'; // プロジェクト一覧.
@@ -49,6 +50,7 @@ enum EPages: string
             self::ATTENDANCE_PROJECT_PRIORITY  => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
             self::DIVISION                     => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__UPDATE             => '\App\Http\Controllers\Pages\DivisionController@update',
+            self::DIVISION__UPDATE_USER        => '\App\Http\Controllers\Pages\DivisionController@update_user',
             self::DIVISION__SHOW               => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT               => '\App\Http\Controllers\Pages\DivisionController@edit',
             self::PROJECT                      => '\App\Http\Controllers\Pages\ProjectController@invoke',
