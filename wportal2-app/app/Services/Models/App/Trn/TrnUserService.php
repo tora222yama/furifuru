@@ -12,13 +12,21 @@ use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Services\Models\ModelServiceBase;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class TrnUserService extends ModelServiceBase
 {
+    const IMAGE_CACHE_URL_KEY     = 'image_url_';
+
+    const IMAGE_CACHE_HOUR        = 1;
+
+    const IMAGE_CACHE_TTL         = self::IMAGE_CACHE_HOUR * 60 * 60;
+
     /**
      * パイプによる更新.
      *
@@ -132,6 +140,45 @@ class TrnUserService extends ModelServiceBase
             ->where('auth_id', $authId)
             ->alive()
             ->firstOrFail();
+    }
+
+    /**
+     * ユーザーの画像URLを取得する.
+     */
+    public function getImageUrl(TrnUser $trnUser): string
+    {
+        // キャッシュから取得する.
+        $cacheKey = $this->getCacheKeyFaceImage($trnUser);
+
+        return Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
+            // URLを発行.
+            return $this->createProfileImageTemporaryUrl($trnUser, self::IMAGE_CACHE_HOUR);
+        });
+    }
+
+    /**
+     * 画像パスを保存するキャッシュのキー.
+     */
+    private function getCacheKeyFaceImage(TrnUser $trnUser): string
+    {
+        return self::IMAGE_CACHE_URL_KEY.$trnUser->id;
+    }
+
+    /**
+     * プロフィール画像用の一時アクセス用URLを作成する.
+     */
+    public function createProfileImageTemporaryUrl(TrnUser $trnUser, int $hour): string
+    {
+        $imagePath  = $trnUser->face_image_path;
+        $expiration = Carbon::now()->addHours($hour);
+        $url        = Storage::disk('storage')
+            ->temporaryUrl(
+                $imagePath,
+                $expiration
+            );
+
+        // 想定より早く期限が切れるため確認用のログ.
+        return $url;
     }
 
     /**

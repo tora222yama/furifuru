@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\App\Trn;
 
+use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -73,7 +74,7 @@ class TrnUser extends ModelBase
             'id'                  => $this->id                ?? 0,
             'authId'              => $this->auth_id           ?? 0,
             'nickname'            => $this->nickname          ?? '',
-            'faceImagePath'       => $this->face_image_path   ?? '',
+            'faceImagePath'       => TrnUserService::getImageUrl($this),
 
             'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState', $history)
                 ? $this->TrnAttendanceState->map(
