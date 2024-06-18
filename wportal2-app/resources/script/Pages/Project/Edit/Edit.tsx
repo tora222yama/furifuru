@@ -23,8 +23,11 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useMutationAppProjectUpdate } from '@/script/Hooks/App/Mutations/useMutationAppProjectUpdate';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {}
+
 export const Edit: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
   const { trnProjectList } = useIndexContext();
@@ -38,6 +41,7 @@ export const Edit: React.FC<IProps> = () => {
     React.useState<IFormEditValidationResult>(initialResult);
   const [processingUpdate, mutationUpdate] = useMutationAppProjectUpdate();
   const loading = processingUpdate;
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   /**
    * 値の更新.
@@ -94,8 +98,38 @@ export const Edit: React.FC<IProps> = () => {
     });
   };
 
+  // にすみん自作エリア、プロジェクト削除用関数
+  function deleteProjectNis(): void {
+    // 更新の実施.
+    router.visit(
+      getPagesHref(E_PAGES.PROJECT__DELETE, [
+        {
+          target: '$projectId',
+          value: String(trnProject.id),
+        },
+      ]),
+      {
+        method: 'post',
+        onStart,
+        onFinish,
+      },
+    );
+  }
+
   return (
     <Page>
+      <Closable open={openConfirm}>
+        <DialogYesNo
+          open={openConfirm}
+          labels={{
+            content: '現在開いているプロジェクトを削除しますか？',
+          }}
+          actions={{
+            submit: deleteProjectNis,
+            close: () => setOpenConfirm(false),
+          }}
+        />
+      </Closable>
       <BackLink
         current={E_PAGES.PROJECT__EDIT}
         replace={[
@@ -105,9 +139,25 @@ export const Edit: React.FC<IProps> = () => {
           },
         ]}
       />
-      <TypoH1>
-        {getPagesName(E_PAGES.PROJECT__EDIT)}[{trnProject.id}]
-      </TypoH1>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <TypoH1>
+          {getPagesName(E_PAGES.PROJECT__EDIT)}[{trnProject.id}]
+        </TypoH1>
+        <ButtonGeneral
+          sx={{
+            width: '200px',
+          }}
+          label="プロジェクトを削除"
+          onClick={() => setOpenConfirm(true)}
+          disabled={loading}
+        />
+      </Box>
       <Paper
         sx={{
           marginTop: '20px',

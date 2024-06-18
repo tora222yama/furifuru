@@ -100,4 +100,25 @@ class ProjectController extends Controller
             $with,
         )->toPayload($with);
     }
+
+    /**
+     * 直近の出退勤情報を削除.
+     *
+     * @throws Throwable
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppAttendanceDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 出退勤状態の削除.
+            TrnAttendanceStateService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
+    }
 }
