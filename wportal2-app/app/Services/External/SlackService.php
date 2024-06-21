@@ -8,6 +8,7 @@ use App\Enum\App\EPipeKind;
 use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
+use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
 use App\Trait\SlackApi;
 use Exception;
@@ -31,10 +32,17 @@ class SlackService
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_ATTENDANCE_CREATE                 => $this->execAppAttendanceCreate($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
                 default                                          => throw new Exception("invalid pipe:$kind->name")
             };
         }
+    }
+
+    private function execAppAttendanceCreate(
+        PipeAppAttendanceCreate|PipeBase $pipe
+    ): void {
+        Log::info('プロジェクト通知の作成');
     }
 
     private function execAppPersonalSettingShowAlignSlack(

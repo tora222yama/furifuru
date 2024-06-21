@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
+use App\Facades\External\SlackService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Facades\Models\App\Trn\TrnUserDivisionPriorityService;
@@ -77,7 +78,8 @@ class AttendanceController extends Controller
             // 出退勤状態の削除.
             TrnAttendanceStateService::updateByPipe();
 
-            // TODO: Slackへの通知.
+            // Slackへの通知.
+            SlackService::updateByPipe();
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());

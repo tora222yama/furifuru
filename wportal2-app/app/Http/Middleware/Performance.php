@@ -151,7 +151,16 @@ class Performance
             $pos = strpos($sql, 'where');
 
             return $pos ? substr($sql, 0, strpos($sql, 'where')).'...' : $sql;
-        })->implode("\n");
+        })->map(function ($sql) {
+            $pos = strpos($sql, 'values');
+
+            return $pos ? substr($sql, 0, strpos($sql, 'values')).'...' : $sql;
+        })->map(function ($sql) {
+            $pos = strpos($sql, 'set');
+
+            return $pos ? substr($sql, 0, strpos($sql, 'set')).'...' : $sql;
+        })
+            ->implode("\n");
 
         $result = <<<EOF
 ### パフォーマンス計測 ###

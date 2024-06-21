@@ -78,6 +78,7 @@ class ProjectController extends Controller
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
+                'TrnProjectNotification',
             ]),
 
             // セッションにバリデーション情報があれば取得する.
