@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import BuildIcon from '@mui/icons-material/Build';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -9,6 +10,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -55,6 +57,8 @@ export const Icon: React.FC<IProps> = ({
 
   // 組み込みアイコンの場合.
   switch (icon) {
+    case E_ICON.ADD:
+      return <AddIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ATTENDANCE:
       return <AccessTimeIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.BUILD:
@@ -73,6 +77,8 @@ export const Icon: React.FC<IProps> = ({
       return <HomeIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.OFFICE:
       return <BusinessIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.REMOVE:
+      return <RemoveIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.SHOP:
       return <ShoppingBasketIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.STAR:

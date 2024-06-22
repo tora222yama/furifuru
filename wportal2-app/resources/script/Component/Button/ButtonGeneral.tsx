@@ -17,6 +17,7 @@ interface IProps extends IPropsButton {}
 export const ButtonGeneral: React.FC<IProps> = ({
   sx,
   id,
+  className,
   buttonType = E_BUTTON_TYPE.CONTAINED_PRIMARY,
   type,
   disabled,
@@ -30,6 +31,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
   return (
     <Button
       id={id}
+      className={className}
       sx={{
         backgroundColor: getButtonColorNormal(buttonType),
         color: getButtonColorText(buttonType),

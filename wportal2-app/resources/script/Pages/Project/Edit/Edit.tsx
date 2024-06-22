@@ -61,6 +61,7 @@ export const Edit: React.FC<IProps> = () => {
         trnProjectId: formEdit.id,
         name: formEdit.name,
         explain: formEdit.explain,
+        notificationList: formEdit.notificationList as [],
       },
       onStart,
       onFinish,
