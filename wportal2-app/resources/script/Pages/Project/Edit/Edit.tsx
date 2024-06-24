@@ -26,7 +26,15 @@ export const Edit: React.FC<IProps> = () => {
     name: trnProject.name,
     explain: trnProject.explain,
     editNotification: false,
-    notificationList: [],
+    notificationList:
+      trnProject.trnProjectNotification?.map(notification => {
+        return {
+          id: notification.id,
+          trnProjectId: notification.trnProjectId,
+          notificationType: notification.notificationType,
+          notificationValue: notification.notificationValue,
+        };
+      }) ?? [],
   });
 
   /**
@@ -61,7 +69,8 @@ export const Edit: React.FC<IProps> = () => {
         trnProjectId: formEdit.id,
         name: formEdit.name,
         explain: formEdit.explain,
-        notificationList: formEdit.notificationList as [],
+        editNotification: formEdit.editNotification,
+        notificationListJson: JSON.stringify(formEdit.notificationList),
       },
       onStart,
       onFinish,

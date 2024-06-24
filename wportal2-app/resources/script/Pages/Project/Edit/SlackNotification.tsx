@@ -99,7 +99,14 @@ export const SlackNotification: React.FC<IProps> = ({
   }
 
   return (
-    <Box sx={sx}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        ...sx,
+      }}
+    >
       {formEdit.notificationList.map(notification => {
         return (
           <Box

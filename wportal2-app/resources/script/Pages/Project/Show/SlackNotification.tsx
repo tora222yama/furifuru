@@ -14,9 +14,17 @@ export const SlackNotification: React.FC<IProps> = ({ sx }) => {
       return <TypoText>なし</TypoText>;
     }
 
-    return trnProject.trnProjectNotification?.map(notification => {
-      return <TypoText>{notification.notificationValue}</TypoText>;
-    });
+    return (
+      <Box>
+        {trnProject.trnProjectNotification?.map(notification => {
+          return (
+            <TypoText key={notification.id}>
+              {notification.notificationValue}
+            </TypoText>
+          );
+        })}
+      </Box>
+    );
   };
 
   return (

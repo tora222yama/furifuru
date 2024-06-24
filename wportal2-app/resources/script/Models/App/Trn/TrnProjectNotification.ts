@@ -18,7 +18,7 @@ export const parseAppTrnProjectNotification = (
     id: payload.id ? Number(payload.id) : 0,
     trnProjectId: payload.trnProjectId ? Number(payload.trnProjectId) : 0,
     notificationType: payload.notificationType
-      ? (Number(payload.notificationValue) as ENotificationType)
+      ? (Number(payload.notificationType) as ENotificationType)
       : E_NOTIFICATION_TYPE.INVALID,
     notificationValue: payload.notificationValue
       ? String(payload.notificationValue)
