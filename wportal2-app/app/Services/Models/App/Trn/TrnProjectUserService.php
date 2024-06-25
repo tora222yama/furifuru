@@ -11,6 +11,7 @@ use App\Models\App\Trn\TrnProjectUser;
 use App\Pipe\App\PipeAppProjectUserUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -66,5 +67,16 @@ class TrnProjectUserService extends ModelServiceBase
         $delLog      = json_encode($delUserList->toArray());
         $addLog      = json_encode($addUserList->toArray());
         Log::info("execAppProjectUserUpdate del:$delLog add:$addLog");
+    }
+
+    /**
+     * ユーザーID指定でリスト取得.
+     */
+    public function listByTrnUserId(int $trnUserId): Collection
+    {
+        return TrnProjectUser::query()
+            ->where('trn_user_id', $trnUserId)
+            ->alive()
+            ->get();
     }
 }

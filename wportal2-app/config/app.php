@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'timezone'            => 'UTC',
+    'timezone'            => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ return [
     |
     */
 
-    'locale'              => 'en',
+    'locale'              => 'ja',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,6 +189,7 @@ return [
         App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnProjectNotificationServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
@@ -222,6 +223,7 @@ return [
         'models\app\trn\trn_division_service'               => App\Facades\Models\App\Trn\TrnDivisionService::class,
         'models\app\trn\trn_division_user_service'          => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
         'models\app\trn\trn_project_service'                => App\Facades\Models\App\Trn\TrnProjectService::class,
+        'models\app\trn\trn_project_notification_service'   => App\Facades\Models\App\Trn\TrnProjectNotificationService::class,
         'models\app\trn\trn_project_user_service'           => App\Facades\Models\App\Trn\TrnProjectUserService::class,
         'models\app\trn\trn_user_authority_service'         => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
         'models\app\trn\trn_user_division_priority_service' => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,

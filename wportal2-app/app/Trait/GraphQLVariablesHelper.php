@@ -33,6 +33,18 @@ trait GraphQLVariablesHelper
     }
 
     /**
+     * argumentsから真偽値の引数を取得
+     */
+    protected function getArgAsBoolean(string $key, ?array $args = null): bool
+    {
+        if ($args === null) {
+            $args = $this->args;
+        }
+
+        return $args[$key] ?? false;
+    }
+
+    /**
      * argumentsから数値の引数を取得.
      */
     protected function getArgAsIntArray(string $key, ?array $args = null): array

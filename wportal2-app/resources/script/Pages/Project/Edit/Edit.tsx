@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { router } from '@inertiajs/react';
-import { Box, Divider, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { BackLink } from '@/script/Pages/Common/BackLink';
 import {
@@ -11,8 +11,6 @@ import {
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { useIndexContext } from '@/script/Pages/Project/Edit/Index';
 import { Page } from '@/script/Pages/Page';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { Avatar } from '@/script/Pages/Common/Avatar';
 import { FormEdit, IFormEdit } from '@/script/Pages/Project/Edit/FormEdit';
 import { validateAll } from '@/script/Pages/Project/Edit/FormEditValidation';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
@@ -30,6 +28,16 @@ export const Edit: React.FC<IProps> = () => {
     id: trnProject.id,
     name: trnProject.name,
     explain: trnProject.explain,
+    editNotification: false,
+    notificationList:
+      trnProject.trnProjectNotification?.map(notification => {
+        return {
+          id: notification.id,
+          trnProjectId: notification.trnProjectId,
+          notificationType: notification.notificationType,
+          notificationValue: notification.notificationValue,
+        };
+      }) ?? [],
   });
   const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
@@ -65,6 +73,8 @@ export const Edit: React.FC<IProps> = () => {
         trnProjectId: formEdit.id,
         name: formEdit.name,
         explain: formEdit.explain,
+        editNotification: formEdit.editNotification,
+        notificationListJson: JSON.stringify(formEdit.notificationList),
       },
       onStart,
       onFinish,
@@ -139,33 +149,6 @@ export const Edit: React.FC<IProps> = () => {
           validation={validation}
           handleUpdate={handleUpdate}
         />
-        <Box>
-          <Box sx={{ display: 'flex' }}>
-            <Box>
-              <TypoText sx={{ minWidth: '200px', width: '200px' }}>
-                メンバー
-              </TypoText>
-            </Box>
-            <Box
-              sx={{
-                marginTop: '10px',
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '10px',
-              }}
-            >
-              {trnProject.trnProjectUser?.map(trnProjectUser => {
-                return (
-                  <Avatar
-                    key={trnProjectUser.id}
-                    trnUser={trnProjectUser.trnUser}
-                  />
-                );
-              })}
-            </Box>
-          </Box>
-          <Divider sx={{ marginTop: '6px' }} />
-        </Box>
         <ButtonGeneral
           sx={{
             width: '200px',

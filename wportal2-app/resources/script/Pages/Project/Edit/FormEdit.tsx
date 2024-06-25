@@ -1,16 +1,31 @@
 import * as React from 'react';
-import { Box, FormControl } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Tooltip,
+} from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { IFormEditValidationResult } from '@/script/Pages/Project/Edit/FormEditValidation';
 import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InputField } from '@/script/Component/Form/InputField';
 import { InputFieldMultiline } from '@/script/Component/Form/InputFieldMultiline';
+import { Avatar } from '@/script/Pages/Common/Avatar';
+import { useIndexContext } from '@/script/Pages/Project/Edit/Index';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { E_ICON } from '@/script/Enum/EIcon';
+import { Closable } from '@/script/Component/Misc/Closable';
+import { SlackNotification } from '@/script/Pages/Project/Edit/SlackNotification';
+import { IAppTrnProjectNotification } from '@/script/Models/App/Trn/TrnProjectNotification';
 
 export interface IFormEdit {
   id: number;
   name: string;
   explain: string;
+  editNotification: boolean;
+  notificationList: IAppTrnProjectNotification[];
 }
 
 interface IProps extends IPropsBase {
@@ -24,6 +39,8 @@ export const FormEdit: React.FC<IProps> = ({
   validation,
   handleUpdate,
 }) => {
+  const { trnProjectList } = useIndexContext();
+  const trnProject = trnProjectList.first();
   return (
     <FormControl
       sx={{
@@ -72,6 +89,85 @@ export const FormEdit: React.FC<IProps> = ({
           errors={validation.data.explain?.errors}
           rows={5}
         />
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+          <TypoText sx={{ minWidth: '200px', width: '200px' }}>
+            メンバー
+          </TypoText>
+        </Box>
+        <Box
+          sx={{
+            marginTop: '10px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px',
+          }}
+        >
+          {trnProject.trnProjectUser?.map(trnProjectUser => {
+            return (
+              <Avatar
+                key={trnProjectUser.id}
+                trnUser={trnProjectUser.trnUser}
+              />
+            );
+          })}
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+        }}
+      >
+        <TypoText
+          sx={{
+            marginTop: '10px',
+            minWidth: '200px',
+            width: '200px',
+          }}
+        >
+          Slack通知
+        </TypoText>
+        <Box>
+          <Box sx={{ display: 'flex' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={formEdit.editNotification}
+                  onChange={v =>
+                    handleUpdate({ editNotification: v.target.checked })
+                  }
+                />
+              }
+              label={<TypoText>Slack通知を登録/編集する</TypoText>}
+            />
+            <Tooltip
+              placement="top"
+              title={
+                <Box>
+                  <TypoText>勤怠時に特定チャンネルに通知</TypoText>
+                  <TypoText>SlackのチャンネルIDを入力</TypoText>
+                </Box>
+              }
+            >
+              <Box
+                component="span"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Icon icon={E_ICON.STAR} />
+              </Box>
+            </Tooltip>
+          </Box>
+          <Closable open={formEdit.editNotification}>
+            <SlackNotification
+              formEdit={formEdit}
+              onChange={notificationList => handleUpdate({ notificationList })}
+            />
+          </Closable>
+        </Box>
       </Box>
     </FormControl>
   );

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Trn\TrnProjectNotificationService;
 use App\Facades\Models\App\Trn\TrnProjectService;
 use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Http\Controllers\Controller;
@@ -58,6 +59,7 @@ class ProjectController extends Controller
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
+                'TrnProjectNotification',
             ]),
         ]);
     }
@@ -79,6 +81,7 @@ class ProjectController extends Controller
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
+                'TrnProjectNotification',
             ]),
 
             // セッションにバリデーション情報があれば取得する.
@@ -112,6 +115,9 @@ class ProjectController extends Controller
         DB::transaction(static function (): void {
             // プロジェクト情報の更新.
             TrnProjectService::updateByPipe();
+
+            // プロジェクト通知の更新.
+            TrnProjectNotificationService::updateByPipe();
         });
 
         return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
