@@ -194,6 +194,6 @@ class ProjectController extends Controller
             TrnProjectService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath());
+        return redirect()->action(EPages::PROJECT->getInvokePath());
     }
 }

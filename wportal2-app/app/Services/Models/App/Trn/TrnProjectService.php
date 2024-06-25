@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
@@ -40,16 +41,10 @@ class TrnProjectService extends ModelServiceBase
     private function execAppProjectDelete(
         PipeAppProjectDelete|PipeBase $pipe
     ): void {
-        // 多分いらない
-        //        if (is_null($pipe->authUser)) {
-        //            throw new Exception('invalid auth user.');
-        //        }
-
         // 対象データを取得.
         /** @var TrnProject $target */
         $target                  = TrnProject::query()
-            ->orderByDesc('created_at')
-            ->where('id', $pipe->authUser->TrnUser->id)
+            ->where('id', $pipe->trnProjectId)
             ->alive()
             ->firstOrFail();
 

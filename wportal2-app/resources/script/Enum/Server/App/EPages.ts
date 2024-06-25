@@ -81,7 +81,7 @@ const getHref = (page: EPages): string => {
     case E_PAGES.PROJECT__UPDATE_USER:
       return '/project/update_user';
     case E_PAGES.PROJECT__DELETE:
-      return '/project/$projectId/delete';
+      return '/project/delete';
     case E_PAGES.USER:
       return '/user';
     case E_PAGES.USER__SHOW:

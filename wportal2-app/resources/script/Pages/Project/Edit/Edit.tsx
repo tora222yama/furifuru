@@ -74,19 +74,14 @@ export const Edit: React.FC<IProps> = () => {
   // にすみん自作エリア、プロジェクト削除用関数
   function deleteProjectNis(): void {
     // 更新の実施.
-    router.visit(
-      getPagesHref(E_PAGES.PROJECT__DELETE, [
-        {
-          target: '$projectId',
-          value: String(trnProject.id),
-        },
-      ]),
-      {
-        method: 'post',
-        onStart,
-        onFinish,
+    router.visit(getPagesHref(E_PAGES.PROJECT__DELETE), {
+      method: 'post',
+      data: {
+        trnProjectId: String(trnProject.id),
       },
-    );
+      onStart,
+      onFinish,
+    });
   }
 
   return (

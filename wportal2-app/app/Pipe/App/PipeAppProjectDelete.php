@@ -6,12 +6,10 @@ namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
 use App\GraphQL\PipeBase;
-use App\Models\App\Auth\AuthUser;
-use Illuminate\Support\Facades\Auth;
 
 final class PipeAppProjectDelete extends PipeBase
 {
-    public ?AuthUser $authUser;
+    public int $trnProjectId = 0;
 
     /**
      * constructor.
@@ -26,8 +24,7 @@ final class PipeAppProjectDelete extends PipeBase
      */
     public function parse(): void
     {
-        // 認証ユーザー取得.
-        $this->authUser         = Auth::user();
+        $this->trnProjectId  = $this->getArgAsInteger('trnProjectId');
     }
 
     /**
