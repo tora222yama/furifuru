@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Paper } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import {
@@ -14,21 +15,15 @@ import {
   FormEdit,
   IFormEdit,
 } from '@/script/Pages/PersonalSetting/Edit/FormEdit';
-import {
-  IFormEditValidationResult,
-  initialResult,
-  validateAll,
-} from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
-import { useMutationAppPersonalSettingEditUpdate } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingEditUpdate';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { validateAll } from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/PersonalSetting/Edit/Index';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
   const { authUser } = useCommonIndexContext();
-  const { trnUserSlackProfile } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
+  const { trnUserSlackProfile, validation, setValidation } = useIndexContext();
 
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     name: authUser.name,
@@ -37,11 +32,6 @@ export const Edit: React.FC<IProps> = () => {
     slackUserName: trnUserSlackProfile.slackUserName,
     slackTeamId: trnUserSlackProfile.slackTeamId,
   });
-  const [validation, setValidation] =
-    React.useState<IFormEditValidationResult>(initialResult);
-  const [processingUpdate, mutationUpdate] =
-    useMutationAppPersonalSettingEditUpdate();
-  const loading = processingUpdate;
 
   /**
    * 値の更新.
@@ -67,9 +57,11 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    onStart();
-    mutationUpdate(
-      {
+    router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__UPDATE), {
+      method: 'post',
+      preserveState: true,
+      preserveScroll: true,
+      data: {
         trnUserId: authUser.trnUser?.id ?? 0,
         nickname: formEdit.nickname,
         slackUserId: formEdit.slackUserId,
@@ -77,18 +69,8 @@ export const Edit: React.FC<IProps> = () => {
         slackTeamId: formEdit.slackTeamId,
         upload: formEdit.upload,
       },
-      [],
-    ).then(res => {
-      switch (res.statusCode) {
-        case E_STATUS_CODE.OK:
-          // 個人設定ページに移動.
-          // 画像の再読み込みが必要なためフルリロードを実施し、画面ロードは継続する.
-          window.location.href = getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW);
-          break;
-        default:
-          onFinish();
-          break;
-      }
+      onStart,
+      onFinish,
     });
   };
 
@@ -103,7 +85,6 @@ export const Edit: React.FC<IProps> = () => {
         }}
       >
         <FormEdit
-          loading={loading}
           formEdit={formEdit}
           validation={validation}
           handleUpdate={handleUpdate}

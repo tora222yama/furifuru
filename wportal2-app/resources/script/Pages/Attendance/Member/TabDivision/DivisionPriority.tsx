@@ -44,7 +44,7 @@ export const DivisionPriority: React.FC<IProps> = ({ sx, trnDivision }) => {
     router.post(
       getPagesHref(E_PAGES.ATTENDANCE_DIVISION_PRIORITY),
       {
-        projectId: trnDivision.id,
+        divisionId: trnDivision.id,
         priority: star.priority,
       },
       {

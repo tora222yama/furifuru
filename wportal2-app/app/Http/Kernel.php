@@ -25,6 +25,9 @@ class Kernel extends HttpKernel
 
         // 空文字を自動でnull値に変換する
         // \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+
+        // アプリ実行部分のパフォーマンス計測.
+        \App\Http\Middleware\Performance::class,
     ];
 
     /**

@@ -17,7 +17,7 @@ class TrnAttendanceState extends ModelBase
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'               => $this->id                  ?? 0,

@@ -9,50 +9,42 @@ trait EagerLoadHelper
     /**
      * eager-load指定に特定のキーが存在するかどうか.
      */
-    protected function isExistKeyInWith(array $with, string $key): bool
+    protected function isExistKeyInWith(array $with, string $key, array $history = []): bool
     {
-        // flatにして最後のピリオドから後ろを取得.
-        return collect($this->flatEagerLoad($with))
-            ->filter(function ($value) {
-                return is_string($value);
-            })
-            ->map(function ($value) {
-                $pos = 0;
-                if ($existPeriod = strpos($value, '.')) {
-                    $pos = $existPeriod + 1;
-                }
+        // .連結の場合の特定のキー検索.
+        // .連結した値がキーか値に存在する.
+        $withKey = count($history)
+            ? implode('.', $history).'.'.$key
+            : $key;
+        if (array_key_exists($withKey, $with) || in_array($withKey, $with, true)) {
+            return true;
+        }
 
-                return substr($value, $pos, strlen($value));
-            })
-            ->contains($key);
-    }
-
-    /**
-     * eager-load情報をrecursiveにflatmapとする.
-     */
-    private function flatEagerLoad(array $with, array &$ret = []): array
-    {
-        foreach ($with as $key => $item) {
-            // 文字列の時は検索対象として終了.
-            if (is_string($item)) {
-                $ret[] = $item;
-
-                continue;
-            }
-
-            // 配列の時は再帰的に処理する.
-            if (is_array($item)) {
-                $this->flatEagerLoad($item, $ret);
-
-                continue;
-            }
-
-            // Closureなどの場合はキーを対象とする.
-            if (is_object($item)) {
-                $ret[] = $key;
+        // array指定のwith対策.
+        // Historyの分だけarrayを探索し、そのarrayのキーかバリューにある.
+        if (count($history) !== 0) {
+            $withArray = $this->historyToArray($with, $history);
+            if (array_key_exists($key, $withArray) || in_array($key, $withArray, true)) {
+                return true;
             }
         }
 
-        return $ret;
+        return false;
+    }
+
+    /**
+     * historyをarrayに変換.
+     */
+    private function historyToArray(array $with, array $history): array
+    {
+        $withArray = $with;
+        foreach ($history as $historyKey) {
+            $withArray = $withArray[$historyKey] ?? null;
+            if (! is_array($withArray)) {
+                return [];
+            }
+        }
+
+        return $withArray;
     }
 }

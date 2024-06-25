@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'name'            => env('APP_NAME', 'Laravel'),
+    'name'                => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'env'             => env('APP_ENV', 'production'),
+    'env'                 => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +44,9 @@ return [
     |
     */
 
-    'debug'           => (bool) env('APP_DEBUG', false),
+    'debug'               => (bool) env('APP_DEBUG', false),
+
+    'performance_measure' => (bool) env('APP_PERFORMANCE_MEASURE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,9 +59,9 @@ return [
     |
     */
 
-    'url'             => env('APP_URL', 'http://localhost'),
+    'url'                 => env('APP_URL', 'http://localhost'),
 
-    'asset_url'       => env('ASSET_URL'),
+    'asset_url'           => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,7 +74,7 @@ return [
     |
     */
 
-    'timezone'        => 'UTC',
+    'timezone'            => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +87,7 @@ return [
     |
     */
 
-    'locale'          => 'en',
+    'locale'              => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -98,7 +100,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale'     => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -112,7 +114,7 @@ return [
     */
 
     //'faker_locale'    => 'en_US',
-    'faker_locale'    => 'ja_JP',
+    'faker_locale'        => 'ja_JP',
 
     /*
     |--------------------------------------------------------------------------
@@ -125,9 +127,9 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY'),
+    'key'                 => env('APP_KEY'),
 
-    'cipher'          => 'AES-256-CBC',
+    'cipher'              => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
@@ -142,7 +144,7 @@ return [
     |
     */
 
-    'maintenance'     => [
+    'maintenance'         => [
         'driver' => 'file',
         // 'store' => 'redis',
     ],
@@ -158,7 +160,7 @@ return [
     |
     */
 
-    'providers'       => ServiceProvider::defaultProviders()->merge([
+    'providers'           => ServiceProvider::defaultProviders()->merge([
         /*
          * Package Service Providers...
          */
@@ -188,6 +190,7 @@ return [
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
@@ -206,7 +209,7 @@ return [
     |
     */
 
-    'aliases'         => Facade::defaultAliases()->merge([
+    'aliases'             => Facade::defaultAliases()->merge([
 
         // External.
         'external\slack_service'                            => App\Facades\External\SlackService::class,
@@ -220,6 +223,7 @@ return [
         'models\app\trn\trn_division_user_service'          => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
         'models\app\trn\trn_project_service'                => App\Facades\Models\App\Trn\TrnProjectService::class,
         'models\app\trn\trn_project_user_service'           => App\Facades\Models\App\Trn\TrnProjectUserService::class,
+        'models\app\trn\trn_user_authority_service'         => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
         'models\app\trn\trn_user_division_priority_service' => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'  => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
         'models\app\trn\trn_user_service'                   => App\Facades\Models\App\Trn\TrnUserService::class,

@@ -25,7 +25,7 @@ class UserController extends Controller
         return $this->render('User/Index', [
 
             // ユーザー情報.
-            'paginationUser' => fn () => $this->getPaginationUser($request),
+            'paginationUser' => fn () => $this->getPaginationUser($request, []),
         ]);
     }
 

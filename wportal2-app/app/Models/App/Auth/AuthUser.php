@@ -74,14 +74,14 @@ class AuthUser extends Authenticatable
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
-    public function toPayload(array $with = []): array
+    public function toPayload(array $with = [], array $history = []): array
     {
         return [
             'id'          => $this->id,
             'name'        => $this->name        ?? '',
 
-            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser')
-                ? $this->TrnUser?->toPayload($with)
+            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser', $history)
+                ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
 
         ];

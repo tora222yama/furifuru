@@ -19,8 +19,6 @@ import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplace
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/Project/Show/Index';
-import { useMutationAppProjectUserUpdate } from '@/script/Hooks/App/Mutations/useMutationAppProjectUserUpdate';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 
 interface IProps extends IPropsBase {}
 
@@ -29,7 +27,6 @@ export const Show: React.FC<IProps> = () => {
   const { trnProjectList } = useIndexContext();
   const trnProject = trnProjectList.first();
   const [openReplace, setOpenReplace] = React.useState<boolean>(false);
-  const [, mutationUpdate] = useMutationAppProjectUserUpdate();
 
   /**
    * メンバー入替を選択.
@@ -42,28 +39,17 @@ export const Show: React.FC<IProps> = () => {
    * メンバー入替の送信.
    */
   const handleSubmitReplace = (newValues: number[]) => {
-    onStart();
     setOpenReplace(false);
-    mutationUpdate(
-      {
+
+    // 更新処理の実施.
+    router.visit(getPagesHref(E_PAGES.PROJECT__UPDATE_USER), {
+      method: 'post',
+      data: {
         trnProjectId: trnProject.id,
         trnUserIdList: newValues,
       },
-      [],
-    ).then(res => {
-      onFinish();
-      switch (res.statusCode) {
-        case E_STATUS_CODE.OK:
-          router.reload({
-            preserveState: true,
-            replace: true,
-            onStart,
-            onFinish,
-          });
-          break;
-        default:
-          break;
-      }
+      onStart,
+      onFinish,
     });
   };
 

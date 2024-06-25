@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\App\Auth\AuthUser;
+use App\Models\App\Trn\TrnUserAuthority;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -32,22 +33,22 @@ class Controller extends BaseController
         // ローカルで処理が早すぎないように調整する.
         localSleep();
 
-        // TODO: 遅延評価が必要.
         return Inertia::render($component, array_merge(
             [
-                'csrfToken'      => csrf_token(),
-                'authUser'       => fn () => $this->getAuthUser([
+                'csrfToken'            => csrf_token(),
+                'authUser'             => fn () => $this->getAuthUser([
                     'TrnUser',
                 ]),
-                'location'       => [
-                    'current' => Request::url(),
-                    'path'    => Request::path(),
-                ],
+                'location'             => fn () => $this->getLocation(),
+                'trnUserAuthorityList' => fn () => $this->getUserAuthorityList(),
             ],
             $props,
         ));
     }
 
+    /**
+     * 認証ユーザー情報の取得.
+     */
     private function getAuthUser(array $with = []): ?array
     {
         $this->authUser = AuthUser::query()
@@ -55,5 +56,34 @@ class Controller extends BaseController
             ->find(Auth::id());
 
         return $this->authUser?->toPayload($with);
+    }
+
+    /**
+     * ロケーションの取得.
+     */
+    private function getLocation(): ?array
+    {
+        return [
+            'current' => Request::url(),
+            'path'    => Request::path(),
+        ];
+    }
+
+    private function getUserAuthorityList(array $with = []): array
+    {
+        if (is_null($this->authUser)) {
+            return [];
+        }
+
+        // サービスへ移動.
+        $trnUserAuthorityList = TrnUserAuthority::query()
+            ->with($with)
+            ->where('trn_user_id', $this->authUser->TrnUser->id)
+            ->alive()
+            ->get();
+
+        return $trnUserAuthorityList->map(
+            fn (TrnUserAuthority $trnUserAuthority) => $trnUserAuthority->toPayload($with)
+        )->toArray();
     }
 }

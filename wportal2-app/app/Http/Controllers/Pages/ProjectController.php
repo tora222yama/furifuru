@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnProjectService;
+use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Http\Controllers\Controller;
 use App\Pipe\App\PipeAppProjectDelete;
+use App\Pipe\App\PipeAppProjectUpdate;
+use App\Pipe\App\PipeAppProjectUserUpdate;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class ProjectController extends Controller
 {
@@ -68,12 +74,79 @@ class ProjectController extends Controller
         return $this->render('Project/Edit/Index', [
 
             // プロジェクト情報.
-            'trnProject' => fn () => $this->getProject($request, [
+            'trnProject'          => fn () => $this->getProject($request, [
                 'TrnProjectUser',
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
             ]),
+
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation'    => fn () => session('serverValidation') ?? null,
+        ]);
+    }
+
+    /**
+     * プロジェクトの更新.
+     *
+     * @throws Throwable
+     */
+    public function update(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppProjectUpdate $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppProjectUpdate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::PROJECT__EDIT->getInvokePath(), [
+                'projectId' => $pipe->trnProjectId,
+            ])->with([
+                'serverValidation' => PipeService::getValidationResult(),
+            ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // プロジェクト情報の更新.
+            TrnProjectService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
+            'projectId' => $pipe->trnProjectId,
+        ]);
+    }
+
+    /**
+     * プロジェクトの更新.
+     *
+     * @throws Throwable
+     */
+    public function update_user(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppProjectUserUpdate $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppProjectUserUpdate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
+                'projectId' => $pipe->trnProjectId,
+            ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 所属メンバーの更新.
+            TrnProjectUserService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
+            'projectId' => $pipe->trnProjectId,
         ]);
     }
 
