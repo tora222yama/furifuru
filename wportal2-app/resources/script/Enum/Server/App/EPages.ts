@@ -24,6 +24,7 @@ export const E_PAGES = {
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
   PROJECT__UPDATE: 'project__update', // プロジェクト更新.
   PROJECT__UPDATE_USER: 'project__update_user', // プロジェクトメンバー更新.
+  PROJECT__DELETE: 'project__delete', // プロジェクト編集.
   USER: 'user', // メンバー一覧.
   USER__SHOW: 'user__show', // メンバー詳細.
   USER__EDIT: 'user__edit', // メンバー編集.
@@ -79,6 +80,8 @@ const getHref = (page: EPages): string => {
       return '/project/update';
     case E_PAGES.PROJECT__UPDATE_USER:
       return '/project/update_user';
+    case E_PAGES.PROJECT__DELETE:
+      return '/project/delete';
     case E_PAGES.USER:
       return '/user';
     case E_PAGES.USER__SHOW:

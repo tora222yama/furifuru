@@ -21,6 +21,7 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/Project/Show/Index';
 
 interface IProps extends IPropsBase {}
+
 export const Show: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
   const { trnProjectList } = useIndexContext();
@@ -65,6 +66,7 @@ export const Show: React.FC<IProps> = () => {
         />
       </Closable>
       <BackLink current={E_PAGES.PROJECT__SHOW} />
+
       <Box
         sx={{
           display: 'flex',

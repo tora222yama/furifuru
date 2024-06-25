@@ -9,6 +9,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnProjectService;
 use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
 use App\Pipe\App\PipeAppProjectUserUpdate;
 use Exception;
@@ -174,5 +175,24 @@ class ProjectController extends Controller
             $request->route('projectId'),
             $with,
         )->toPayload($with);
+    }
+
+    /**
+     * プロジェクト削除処理
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppProjectDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // プロジェクトの削除.
+            TrnProjectService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PROJECT->getInvokePath());
     }
 }
