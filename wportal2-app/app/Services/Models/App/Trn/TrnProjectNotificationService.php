@@ -12,6 +12,7 @@ use App\Pipe\App\Input\InputNotification;
 use App\Pipe\App\PipeAppProjectUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Throwable;
 
 class TrnProjectNotificationService extends ModelServiceBase
@@ -102,5 +103,16 @@ class TrnProjectNotificationService extends ModelServiceBase
             ->with($with)
             ->alive()
             ->findOrFail($id);
+    }
+
+    /**
+     * ID配列指定によるリスト取得.
+     */
+    public function listByTrnProjectId(array $projectIdList): Collection
+    {
+        return TrnProjectNotification::query()
+            ->whereIn('trn_project_id', $projectIdList)
+            ->alive()
+            ->get();
     }
 }
