@@ -71,8 +71,8 @@ export const Edit: React.FC<IProps> = () => {
     });
   };
 
-  // にすみん自作エリア、プロジェクト削除用関数
-  function deleteProjectNis(): void {
+  // プロジェクト削除用関数
+  const handleDelete = () => {
     // 更新の実施.
     router.visit(getPagesHref(E_PAGES.PROJECT__DELETE), {
       method: 'post',
@@ -82,7 +82,7 @@ export const Edit: React.FC<IProps> = () => {
       onStart,
       onFinish,
     });
-  }
+  };
 
   return (
     <Page>
@@ -93,7 +93,7 @@ export const Edit: React.FC<IProps> = () => {
             content: '現在開いているプロジェクトを削除しますか？',
           }}
           actions={{
-            submit: deleteProjectNis,
+            submit: handleDelete,
             close: () => setOpenConfirm(false),
           }}
         />

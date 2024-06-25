@@ -79,12 +79,12 @@ class TrnProjectService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
-        $trnProjectList      = TrnProject::query() //モデル「TrnProject」にてクエリ(呼び出し)を発行
-            ->with($with) //withメソッド：モデルで定義したリレーションメソッド名を文字列で指定
-            ->alive() //生きてるやつのみ（詳細不明、？）
-            ->offset($index * $step) //結果レコードの取得開始位置（何件目から取得するか）を指定
-            ->limit($step) //取得レコード数を制限
-            ->get(); //実行
+        $trnProjectList      = TrnProject::query()
+            ->with($with)
+            ->alive()
+            ->offset($index * $step)
+            ->limit($step)
+            ->get();
 
         // カウント取得.
         $trnProjectListCount = TrnProject::count();

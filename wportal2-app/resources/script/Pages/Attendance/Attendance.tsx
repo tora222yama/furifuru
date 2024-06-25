@@ -29,7 +29,6 @@ export const Attendance: React.FC<IProps> = () => {
           marginTop: '20px',
         }}
       />
-
       <Action sx={{ marginTop: '20px' }} />
       <TypoH2 sx={{ marginTop: '20px' }}>他メンバーの状況</TypoH2>
       <Member sx={{ marginTop: '20px' }} />

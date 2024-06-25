@@ -178,8 +178,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * にすみ - プロジェクト削除機能実装箇所
-     * (直近の出退勤情報を削除. のコピペ)
+     * プロジェクト削除処理
      */
     public function delete(Request $request): RedirectResponse
     {
