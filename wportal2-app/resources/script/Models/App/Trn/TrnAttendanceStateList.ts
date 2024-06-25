@@ -77,7 +77,7 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
     if (!list) {
       return E_WORKING_STATE.INVALID;
     }
-    const reverse = list.reverse();
+    const reverse = list.toReversed();
     const attendanceWithWorking = reverse.find(
       it => attendanceToWorking(it.eAttendanceState) !== E_WORKING_STATE.NONE,
     );
@@ -96,7 +96,7 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
     if (!list) {
       return E_WORKING_PLACE.INVALID;
     }
-    const reverse = list.reverse();
+    const reverse = list.toReversed();
     const attendanceWithPlace = reverse.find(
       it => attendanceToPlace(it.eAttendanceState) !== E_WORKING_PLACE.INVALID,
     );
@@ -142,7 +142,7 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
     if (!list) {
       return AppTrnAttendanceStateList.defaultInterface();
     }
-    const reverse = list.reverse();
+    const reverse = list.toReversed();
     const attendanceState = reverse.find(_it => true);
     if (attendanceState === undefined) {
       return AppTrnAttendanceStateList.defaultInterface();
