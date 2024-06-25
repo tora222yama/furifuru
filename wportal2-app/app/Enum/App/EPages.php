@@ -26,7 +26,7 @@ enum EPages: string
     case PROJECT                          = 'project'; // プロジェクト一覧.
     case PROJECT__SHOW                    = 'project__show'; // プロジェクト詳細.
     case PROJECT__EDIT                    = 'project__edit'; // プロジェクト編集.
-    case PROJECT_DELETE                   = 'project__delete'; // プロジェクト削除.
+    case PROJECT__DELETE                  = 'project__delete'; // プロジェクト削除.
     case USER                             = 'user'; // メンバー一覧.
     case USER__SHOW                       = 'user__show'; // メンバー詳細.
     case USER__EDIT                       = 'user__edit'; // メンバー編集.
@@ -53,6 +53,7 @@ enum EPages: string
             self::PROJECT                        => '\App\Http\Controllers\Pages\ProjectController@invoke',
             self::PROJECT__SHOW                  => '\App\Http\Controllers\Pages\ProjectController@show',
             self::PROJECT__EDIT                  => '\App\Http\Controllers\Pages\ProjectController@edit',
+            self::PROJECT__DELETE                => '\App\Http\Controllers\Pages\ProjectController@delete',
             self::USER                           => '\App\Http\Controllers\Pages\UserController@invoke',
             self::USER__SHOW                     => '\App\Http\Controllers\Pages\UserController@show',
             self::USER__EDIT                     => '\App\Http\Controllers\Pages\UserController@edit',

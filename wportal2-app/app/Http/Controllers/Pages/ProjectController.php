@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnProjectService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppProjectDelete;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class ProjectController extends Controller
@@ -102,23 +105,22 @@ class ProjectController extends Controller
     }
 
     /**
-     * 直近の出退勤情報を削除.
-     *
-     * @throws Throwable
+     * にすみ - プロジェクト削除機能実装箇所
+     * (直近の出退勤情報を削除. のコピペ)
      */
     public function delete(Request $request): RedirectResponse
     {
         // パイプ作成.
         PipeService::insertNewPipe(
-            new PipeAppAttendanceDelete($request->toArray())
+            new PipeAppProjectDelete($request->toArray())
         );
 
         // 更新処理.
         DB::transaction(static function (): void {
-            // 出退勤状態の削除.
-            TrnAttendanceStateService::updateByPipe();
+            // プロジェクトの削除.
+            TrnProjectService::updateByPipe();
         });
 
-        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
+        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath());
     }
 }

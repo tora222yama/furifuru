@@ -8,6 +8,7 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProject;
+use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
@@ -26,10 +27,37 @@ class TrnProjectService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_PROJECT_UPDATE       => $this->execAppProjectUpdate($pipe),
+                EPipeKind::APP_PROJECT_DELETE       => $this->execAppProjectDelete($pipe),
                 default                             => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    /**
+     * にすみ - プロジェクトの削除用
+     */
+    private function execAppProjectDelete(
+        PipeAppProjectDelete|PipeBase $pipe
+    ): void {
+        // 多分いらない
+        //        if (is_null($pipe->authUser)) {
+        //            throw new Exception('invalid auth user.');
+        //        }
+
+        // 対象データを取得.
+        /** @var TrnProject $target */
+        $target                  = TrnProject::query()
+            ->orderByDesc('created_at')
+            ->where('id', $pipe->authUser->TrnUser->id)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $target->updateOrFail();
     }
 
     /**
