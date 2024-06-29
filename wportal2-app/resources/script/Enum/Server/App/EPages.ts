@@ -28,6 +28,7 @@ export const E_PAGES = {
   USER: 'user', // メンバー一覧.
   USER__SHOW: 'user__show', // メンバー詳細.
   USER__EDIT: 'user__edit', // メンバー編集.
+  USER__UPDATE: 'user__update', // メンバー更新.
   PERSONAL_SETTING__SHOW: 'personal_setting__show', // 個人設定・閲覧.
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
   PERSONAL_SETTING__UPDATE: 'personal_setting__update', // 個人設定・更新.
@@ -88,6 +89,8 @@ const getHref = (page: EPages): string => {
       return '/user/$userId/show';
     case E_PAGES.USER__EDIT:
       return '/user/$userId/edit';
+    case E_PAGES.USER__UPDATE:
+      return '/user/update';
     case E_PAGES.PERSONAL_SETTING__SHOW:
       return '/personal_setting/show';
     case E_PAGES.PERSONAL_SETTING__EDIT:

@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
+use App\Enum\App\EStatusCode;
+use App\Enum\App\EUserAuthority;
+use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppUserUpdate;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
@@ -18,10 +25,6 @@ class UserController extends Controller
      */
     public function invoke(Request $request): Response
     {
-        if (! Auth::check()) {
-            throw new Exception();
-        }
-
         return $this->render('User/Index', [
 
             // ユーザー情報.
@@ -29,21 +32,59 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * @throws Exception
-     */
     public function show(Request $request): Response
     {
-        if (! Auth::check()) {
-            throw new Exception();
-        }
-
         return $this->render('User/Show/Index', [
 
             // ユーザー情報.
             'trnUser' => fn () => $this->getUser($request, [
                 'AuthUser',
             ]),
+        ]);
+    }
+
+    public function edit(Request $request): Response
+    {
+        // 管理特権が必用.
+        $authUser = Auth::user();
+        if (! TrnUserAuthorityService::hasAuthority(
+            $authUser->TrnUser->id,
+            collect([EUserAuthority::ADMIN_PRIVILEGE])
+        )) {
+            abort(EStatusCode::NOT_FOUND->value);
+        }
+
+        return $this->render('User/Edit/Index', [
+            // ユーザー情報.
+            'trnUser' => fn () => $this->getUser($request, [
+                'AuthUser',
+            ]),
+        ]);
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        // 管理特権が必用.
+        $authUser = Auth::user();
+        if (! TrnUserAuthorityService::hasAuthority(
+            $authUser->TrnUser->id,
+            collect([EUserAuthority::ADMIN_PRIVILEGE])
+        )) {
+            abort(EStatusCode::NOT_FOUND->value);
+        }
+
+        // パイプ作成.
+        /** @var PipeAppUserUpdate $pipe */
+        $pipe     = PipeService::insertNewPipe(
+            new PipeAppUserUpdate($request->toArray())
+        );
+
+        // TODO: バリデーションチェック.
+
+        // TODO: 更新処理.
+
+        return redirect()->action(EPages::USER__SHOW->getInvokePath(), [
+            'userId' => $pipe->trnUserId,
         ]);
     }
 

@@ -34,6 +34,7 @@ enum EPages: string
     case USER                             = 'user'; // メンバー一覧.
     case USER__SHOW                       = 'user__show'; // メンバー詳細.
     case USER__EDIT                       = 'user__edit'; // メンバー編集.
+    case USER__UPDATE                     = 'user__update'; // メンバー更新.
     case PERSONAL_SETTING__SHOW           = 'personal_setting__show'; // 個人設定・閲覧.
     case PERSONAL_SETTING__EDIT           = 'personal_setting__edit'; // 個人設定・編集.
     case PERSONAL_SETTING__UPDATE         = 'personal_setting__update'; // 個人設定・更新.
@@ -66,6 +67,7 @@ enum EPages: string
             self::USER                           => '\App\Http\Controllers\Pages\UserController@invoke',
             self::USER__SHOW                     => '\App\Http\Controllers\Pages\UserController@show',
             self::USER__EDIT                     => '\App\Http\Controllers\Pages\UserController@edit',
+            self::USER__UPDATE                   => '\App\Http\Controllers\Pages\UserController@update',
             self::PERSONAL_SETTING__SHOW         => '\App\Http\Controllers\Pages\PersonalSettingController@show',
             self::PERSONAL_SETTING__EDIT         => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
             self::PERSONAL_SETTING__UPDATE       => '\App\Http\Controllers\Pages\PersonalSettingController@update',
