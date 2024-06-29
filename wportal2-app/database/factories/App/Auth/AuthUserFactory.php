@@ -15,6 +15,9 @@ class AuthUserFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'email_verified_at' => now(),
+            'name'              => $this->faker->name,
+        ];
     }
 }

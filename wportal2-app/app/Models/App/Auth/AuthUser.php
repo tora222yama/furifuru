@@ -77,10 +77,11 @@ class AuthUser extends Authenticatable
     public function toPayload(array $with = [], array $history = []): array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name        ?? '',
+            'id'                 => $this->id,
+            'name'               => $this->name                  ?? '',
+            'eEnableLegacyLogin' => $this->e_enable_legacy_login ?? 0,
 
-            'trnUser'     => $this->isExistKeyInWith($with, 'TrnUser', $history)
+            'trnUser'            => $this->isExistKeyInWith($with, 'TrnUser', $history)
                 ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
 

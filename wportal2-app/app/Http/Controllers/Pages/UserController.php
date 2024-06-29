@@ -42,7 +42,7 @@ class UserController extends Controller
 
             // ユーザー情報.
             'trnUser' => fn () => $this->getUser($request, [
-
+                'AuthUser',
             ]),
         ]);
     }

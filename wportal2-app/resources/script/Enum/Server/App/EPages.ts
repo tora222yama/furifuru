@@ -24,7 +24,7 @@ export const E_PAGES = {
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
   PROJECT__UPDATE: 'project__update', // プロジェクト更新.
   PROJECT__UPDATE_USER: 'project__update_user', // プロジェクトメンバー更新.
-  PROJECT__DELETE: 'project__delete', // プロジェクト編集.
+  PROJECT__DELETE: 'project__delete', // プロジェクト削除.
   USER: 'user', // メンバー一覧.
   USER__SHOW: 'user__show', // メンバー詳細.
   USER__EDIT: 'user__edit', // メンバー編集.

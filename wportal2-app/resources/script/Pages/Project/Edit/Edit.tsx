@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { router } from '@inertiajs/react';
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { BackLink } from '@/script/Pages/Common/BackLink';
 import {

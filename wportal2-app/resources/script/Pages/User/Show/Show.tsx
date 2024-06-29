@@ -129,14 +129,14 @@ export const Show: React.FC<IProps> = () => {
               marginTop: '10px',
             }}
             label="Auth User ID"
-            value="----"
+            value={String(trnUser.authUser?.id ?? '')}
           />
           <LabelValue
             sx={{
               marginTop: '10px',
             }}
             label="レガシーログインの許可"
-            value="----"
+            value={trnUser.authUser?.eEnableLegacyLogin ? 'Yes' : 'No'}
           />
         </Closable>
       </Paper>

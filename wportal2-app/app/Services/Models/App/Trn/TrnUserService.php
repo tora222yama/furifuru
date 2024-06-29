@@ -113,9 +113,10 @@ class TrnUserService extends ModelServiceBase
     /**
      * IDで検索(orFail).
      */
-    public function findByIdOrFail(int $id): ?TrnUser
+    public function findByIdOrFail(int $id, array $with = []): ?TrnUser
     {
         return TrnUser::query()
+            ->with($with)
             ->alive()
             ->findOrFail($id);
     }
