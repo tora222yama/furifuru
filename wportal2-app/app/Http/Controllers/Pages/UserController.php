@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Throwable;
 
@@ -96,6 +97,37 @@ class UserController extends Controller
         return redirect()->action(EPages::USER__SHOW->getInvokePath(), [
             'userId' => $pipe->trnUserId,
         ]);
+    }
+
+    public function new(Request $request): Response
+    {
+        // 管理特権が必用.
+        $authUser = Auth::user();
+        if (! TrnUserAuthorityService::hasAuthority(
+            $authUser->TrnUser->id,
+            collect([EUserAuthority::ADMIN_PRIVILEGE])
+        )) {
+            abort(EStatusCode::NOT_FOUND->value);
+        }
+
+        return $this->render('User/Create/Index', []);
+    }
+
+    public function create(Request $request): RedirectResponse
+    {
+        // 管理特権が必用.
+        $authUser = Auth::user();
+        if (! TrnUserAuthorityService::hasAuthority(
+            $authUser->TrnUser->id,
+            collect([EUserAuthority::ADMIN_PRIVILEGE])
+        )) {
+            abort(EStatusCode::NOT_FOUND->value);
+        }
+
+        // TODO: パイプとか.
+        Log::info('次はここから');
+
+        return redirect()->action(EPages::USER->getInvokePath());
     }
 
     /**

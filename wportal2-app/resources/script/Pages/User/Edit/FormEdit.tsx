@@ -49,6 +49,11 @@ export const FormEdit: React.FC<IProps> = ({
         <Box sx={{ width: '100%' }}>
           <LabelValue
             sx={{ marginTop: '10px' }}
+            label="名前"
+            value={String(trnUser?.authUser?.name)}
+          />
+          <LabelValue
+            sx={{ marginTop: '10px' }}
             label="表示名"
             value={String(trnUser?.nickname)}
           />
