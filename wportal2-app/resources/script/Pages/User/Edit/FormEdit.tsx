@@ -46,11 +46,16 @@ export const FormEdit: React.FC<IProps> = ({
           }}
           src={trnUser.faceImagePath}
         />
-        <Box sx={{ width: '400px' }}>
+        <Box sx={{ width: '100%' }}>
           <LabelValue
             sx={{ marginTop: '10px' }}
             label="表示名"
             value={String(trnUser?.nickname)}
+          />
+          <LabelValue
+            sx={{ marginTop: '10px' }}
+            label="E-Mail"
+            value={String(trnUser?.authUser?.email)}
           />
         </Box>
       </Box>

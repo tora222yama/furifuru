@@ -79,6 +79,7 @@ class AuthUser extends Authenticatable
         return [
             'id'                 => $this->id,
             'name'               => $this->name                  ?? '',
+            'email'              => $this->email                 ?? '',
             'eEnableLegacyLogin' => $this->e_enable_legacy_login ?? 0,
 
             'trnUser'            => $this->isExistKeyInWith($with, 'TrnUser', $history)

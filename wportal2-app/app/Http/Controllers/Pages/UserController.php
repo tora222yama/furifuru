@@ -8,6 +8,7 @@ use App\Enum\App\EPages;
 use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Auth\AuthUserService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,9 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -62,6 +65,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function update(Request $request): RedirectResponse
     {
         // 管理特権が必用.
@@ -81,7 +87,11 @@ class UserController extends Controller
 
         // TODO: バリデーションチェック.
 
-        // TODO: 更新処理.
+        // 更新処理.
+        DB::transaction(function (): void {
+            // 認証情報の更新.
+            AuthUserService::updateByPipe();
+        });
 
         return redirect()->action(EPages::USER__SHOW->getInvokePath(), [
             'userId' => $pipe->trnUserId,

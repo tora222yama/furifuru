@@ -74,6 +74,9 @@ export const Edit: React.FC<IProps> = () => {
         }}
       >
         <FormEdit
+          sx={{
+            width: '100%',
+          }}
           formEdit={formEdit}
           handleUpdate={handleUpdate}
           handleSubmit={handleSubmit}
