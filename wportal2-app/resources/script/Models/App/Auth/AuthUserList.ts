@@ -7,6 +7,8 @@ import {
 export interface IAppAuthUser {
   id: number;
   name: string;
+  email: string;
+  eEnableLegacyLogin: number;
 
   trnUser?: IAppTrnUser;
 }
@@ -16,6 +18,10 @@ export const parseAppAuthUserPayload = (payload: any): IAppAuthUser => {
   return {
     id: payload?.id ? Number(payload.id) : 0,
     name: payload?.name ? String(payload.name) : '',
+    email: payload?.email ? String(payload.email) : '',
+    eEnableLegacyLogin: payload?.eEnableLegacyLogin
+      ? Number(payload.eEnableLegacyLogin)
+      : 0,
 
     trnUser: payload?.trnUser
       ? parseAppTrnUserPayload(payload.trnUser)
@@ -32,6 +38,8 @@ export class AppAuthUserList extends ListBase<IAppAuthUser> {
     return {
       id: 0,
       name: '',
+      email: '',
+      eEnableLegacyLogin: 0,
     };
   }
 

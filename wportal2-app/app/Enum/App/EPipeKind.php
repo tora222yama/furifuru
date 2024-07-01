@@ -22,4 +22,8 @@ enum EPipeKind: string
     case APP_PROJECT_DELETE                     = 'app_project_delete';
     case APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK  = 'app_personal_setting_show_align_slack';
     case APP_PERSONAL_SETTING_EDIT_UPDATE       = 'app_personal_setting_edit_update';
+
+    case APP_USER_CREATE                        = 'app_user_create';
+
+    case APP_USER_UPDATE                        = 'app_user_update';
 }
