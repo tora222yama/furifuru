@@ -11,6 +11,7 @@ use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
+use App\Pipe\App\PipeAppUserCreate;
 use App\Services\Models\ModelServiceBase;
 use Carbon\Carbon;
 use Exception;
@@ -21,11 +22,11 @@ use Throwable;
 
 class TrnUserService extends ModelServiceBase
 {
-    const IMAGE_CACHE_URL_KEY     = 'image_url_';
+    const string IMAGE_CACHE_URL_KEY     = 'image_url_';
 
-    const IMAGE_CACHE_HOUR        = 1;
+    const int IMAGE_CACHE_HOUR           = 1;
 
-    const IMAGE_CACHE_TTL         = self::IMAGE_CACHE_HOUR * 60 * 60;
+    const int IMAGE_CACHE_TTL            = self::IMAGE_CACHE_HOUR * 60 * 60;
 
     /**
      * パイプによる更新.
@@ -38,6 +39,7 @@ class TrnUserService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
+                EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -70,6 +72,24 @@ class TrnUserService extends ModelServiceBase
 
         // 保存.
         $this->updateOrFail($trnUser);
+    }
+
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
+    private function execAppUserCreate(
+        PipeAppUserCreate|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->createdAuthUser)) {
+            throw new Exception('invalid auth user');
+        }
+
+        // ユーザーの作成.
+        $this->createNewUser(
+            $pipe->createdAuthUser,
+            $pipe->nickname,
+        );
     }
 
     /**
@@ -172,14 +192,12 @@ class TrnUserService extends ModelServiceBase
     {
         $imagePath  = $trnUser->face_image_path;
         $expiration = Carbon::now()->addHours($hour);
-        $url        = Storage::disk('storage')
+
+        return Storage::disk('storage')
             ->temporaryUrl(
                 $imagePath,
                 $expiration
             );
-
-        // 想定より早く期限が切れるため確認用のログ.
-        return $url;
     }
 
     /**

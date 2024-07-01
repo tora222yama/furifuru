@@ -12,13 +12,13 @@ use App\Facades\Models\App\Auth\AuthUserService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserUpdate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Throwable;
 
@@ -110,9 +110,15 @@ class UserController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        return $this->render('User/Create/Index', []);
+        return $this->render('User/Create/Index', [
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation'    => fn () => session('serverValidation') ?? null,
+        ]);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function create(Request $request): RedirectResponse
     {
         // 管理特権が必用.
@@ -124,8 +130,27 @@ class UserController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        // TODO: パイプとか.
-        Log::info('次はここから');
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppUserCreate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::USER__NEW->getInvokePath())
+                ->with([
+                    'serverValidation' => PipeService::getValidationResult(),
+                ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 認証情報の更新.
+            AuthUserService::updateByPipe();
+
+            // ユーザー情報の更新.
+            TrnUserService::updateByPipe();
+        });
 
         return redirect()->action(EPages::USER->getInvokePath());
     }

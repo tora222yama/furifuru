@@ -9,6 +9,7 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserUpdate;
 use App\Services\Models\ModelServiceBase;
 use Exception;
@@ -26,11 +27,31 @@ class AuthUserService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_UPDATE                  => $this->execAppUserUpdate($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppUserCreate(
+        PipeAppUserCreate|PipeBase $pipe
+    ): void {
+        // 新規認証ユーザーを追加.
+        $new                   = new AuthUser();
+        $new->name             = $pipe->name;
+        $new->email            = $pipe->email;
+        $new->password         = substr(bin2hex(random_bytes(16)), 0, 16);
+        $new->google_id        = '';
+
+        $this->insertOrFail($new);
+
+        // 作成した認証ユーザーをパイプに保存.
+        $pipe->createdAuthUser = $new;
     }
 
     /**
