@@ -41,6 +41,7 @@ enum EPages: string
     case PERSONAL_SETTING__EDIT           = 'personal_setting__edit'; // 個人設定・編集.
     case PERSONAL_SETTING__UPDATE         = 'personal_setting__update'; // 個人設定・更新.
     case LOGIN                            = 'login'; // ログイン.
+    case LEGACY_LOGIN                     = 'legacy_login'; // ワンタイムパスワードの発行.
     case NOT_FOUND                        = 'not_found'; // ページが見つからない.
 
     /**
@@ -76,6 +77,7 @@ enum EPages: string
             self::PERSONAL_SETTING__EDIT         => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
             self::PERSONAL_SETTING__UPDATE       => '\App\Http\Controllers\Pages\PersonalSettingController@update',
             self::LOGIN                          => '\App\Http\Controllers\Pages\LoginController@invoke',
+            self::LEGACY_LOGIN                   => '\App\Http\Controllers\Pages\LoginController@legacy_login',
             self::NOT_FOUND                      => '\App\Http\Controllers\Pages\NotFoundController@invoke',
             default                              => '',
         };

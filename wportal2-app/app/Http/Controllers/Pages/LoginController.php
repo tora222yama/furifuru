@@ -22,6 +22,18 @@ class LoginController extends Controller
         return $this->render('Login/Index');
     }
 
+    public function legacy_login(): Response
+    {
+        // TODO: 入力パラメータ取得.
+
+        // TODO: ログイン、できなければthrow.
+
+        // TODO: ワンタイムパスワード発行.
+
+        // ワンタイムパスワード入力ページをPost経由のまま表示.
+        return $this->render('Login/OnetimePasswordIndex');
+    }
+
     public function getGoogleAuth(): RedirectResponse
     {
         return Socialite::driver('google')

@@ -35,6 +35,7 @@ export const E_PAGES = {
   PERSONAL_SETTING__EDIT: 'personal_setting__edit', // 個人設定・編集.
   PERSONAL_SETTING__UPDATE: 'personal_setting__update', // 個人設定・更新.
   LOGIN: 'login', // ログイン.
+  LEGACY_LOGIN: 'legacy_login', // ワンタイムパスワードの発行.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
@@ -103,6 +104,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/edit';
     case E_PAGES.PERSONAL_SETTING__UPDATE:
       return '/personal_setting/update';
+    case E_PAGES.LEGACY_LOGIN:
+      return '/legacy_login';
     default:
       return '/';
   }
