@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
 |--------------------------------------------------------------------------
-| Create The Application
+| New The Application
 |--------------------------------------------------------------------------
 |
 | The first thing we will do is create a new Laravel application instance
