@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EEnableFlag;
+use App\Enum\App\EPages;
+use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\App\PipeAppOnetimePasswordLogin;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +28,9 @@ class LoginController extends Controller
         return $this->render('Login/Index');
     }
 
+    /**
+     * ワンタイムパスワードの発行.
+     */
     public function legacy_login(): Response
     {
         // TODO: 入力パラメータ取得.
@@ -31,7 +40,43 @@ class LoginController extends Controller
         // TODO: ワンタイムパスワード発行.
 
         // ワンタイムパスワード入力ページをPost経由のまま表示.
-        return $this->render('Login/OnetimePasswordIndex');
+        return $this->render('Login/OnetimePasswordIndex', [
+            'email'  => 'temp@919.jp',
+            'authId' => 999,
+        ]);
+    }
+
+    /**
+     * ワンタイムパスワードによるログイン
+     */
+    public function onetime_password_login(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppOnetimePasswordLogin $pipe */
+        $pipe     = PipeService::insertNewPipe(
+            new PipeAppOnetimePasswordLogin($request->toArray())
+        );
+
+        // id,メルアド,パスワードが一致するレガシーログイン可能な認証ユーザーを確認.
+        $authUser = AuthUser::query()
+            ->where('id', $pipe->authId)
+            ->where('email', $pipe->email)
+            ->where('e_enable_legacy_login', EEnableFlag::ENABLE)
+            ->where('onetime_password', $pipe->onetimePassword)
+            ->where('onetime_password_expired', '>', Carbon::now())
+            ->first();
+
+        // 確認できない場合はログ出力してログイン画面へ.
+        if (is_null($authUser)) {
+            Log::error("invalid onetime password id:$pipe->authId email:$pipe->email pass:$pipe->onetimePassword");
+
+            return redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+
+        // ログイン処理を実施
+        Auth::login($authUser, true);
+
+        return redirect()->action(EPages::DASHBOARD->getInvokePath());
     }
 
     public function getGoogleAuth(): RedirectResponse

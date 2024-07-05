@@ -36,6 +36,7 @@ export const E_PAGES = {
   PERSONAL_SETTING__UPDATE: 'personal_setting__update', // 個人設定・更新.
   LOGIN: 'login', // ログイン.
   LEGACY_LOGIN: 'legacy_login', // ワンタイムパスワードの発行.
+  ONETIME_PASSWORD_LOGIN: 'onetime_password_login', // ワンタイムパスワードログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
@@ -106,6 +107,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/update';
     case E_PAGES.LEGACY_LOGIN:
       return '/legacy_login';
+    case E_PAGES.ONETIME_PASSWORD_LOGIN:
+      return '/onetime_password_login';
     default:
       return '/';
   }
