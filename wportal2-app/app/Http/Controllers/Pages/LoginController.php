@@ -6,15 +6,20 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
+use App\Facades\External\SesService;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Auth\AuthUserService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\App\PipeAppLegacyLogin;
 use App\Pipe\App\PipeAppOnetimePasswordLogin;
+use App\Services\External\SesService\SesParameter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Laravel\Socialite\Facades\Socialite;
@@ -30,19 +35,49 @@ class LoginController extends Controller
 
     /**
      * ワンタイムパスワードの発行.
+     *
+     * @throws Throwable
      */
-    public function legacy_login(): Response
+    public function legacy_login(Request $request): Response
     {
-        // TODO: 入力パラメータ取得.
+        // パイプ作成.
+        /** @var PipeAppLegacyLogin $pipe */
+        $pipe                 = PipeService::insertNewPipe(
+            new PipeAppLegacyLogin($request->toArray())
+        );
 
-        // TODO: ログイン、できなければthrow.
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return $this->render('Login/Index');
+        }
 
-        // TODO: ワンタイムパスワード発行.
+        // TODO: recaptchaのチェック.
+
+        // 一致する認証ユーザーを取得.
+        $pipe->targetAuthUser = AuthUser::query()
+            ->where('e_enable_legacy_login', EEnableFlag::ENABLE)
+            ->where('email', $pipe->email)
+            ->first();
+        if (is_null($pipe->targetAuthUser) || ! Hash::check($pipe->password, $pipe->targetAuthUser->password)) {
+            return $this->render('Login/Index');
+        }
+
+        // 更新処理.
+        DB::transaction(function () use ($pipe) {
+            // ワンタイムパスワードの更新.
+            AuthUserService::updateByPipe();
+
+            // パスワード情報の送信.
+            $this->sendOnetimePassword(
+                $pipe->targetAuthUser->email,
+                $pipe->targetAuthUser->onetime_password,
+            );
+        });
 
         // ワンタイムパスワード入力ページをPost経由のまま表示.
         return $this->render('Login/OnetimePasswordIndex', [
-            'email'  => 'temp@919.jp',
-            'authId' => 999,
+            'email'  => $pipe->targetAuthUser->email,
+            'authId' => $pipe->targetAuthUser->id,
         ]);
     }
 
@@ -168,5 +203,35 @@ class LoginController extends Controller
 
             return $authUser;
         });
+    }
+
+    /**
+     * ワンタイムパスワード情報を送信
+     */
+    private function sendOnetimePassword(string $to, string $password): void
+    {
+        // タイトルの作成.
+        $subject = '【Web本部ポータル】ワンタイムパスワードのお知らせ';
+
+        // 本文の作成.
+        $message = <<< EOF
+以下のワンタイムパスワードを10分以内に入力してください。
+
+[$password]
+
+※本メールは送信専用です。返信はできません。
+※本メールにお心当たりのない場合は、管理者までご連絡お願いいたします。
+管理者連絡先 <miki-yoji@919.jp>
+EOF;
+
+        // 送信パラメータの作成.
+        $param   = new SesParameter();
+        $param->setFrom('no-reply@wportal.org');
+        $param->setTo($to);
+        $param->setSubject($subject);
+        $param->setMessageBody($message);
+
+        // 送信の実施.
+        SesService::sendMail($param);
     }
 }

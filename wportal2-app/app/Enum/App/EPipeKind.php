@@ -27,5 +27,6 @@ enum EPipeKind: string
 
     case APP_USER_UPDATE                        = 'app_user_update';
 
+    case APP_LEGACY_LOGIN                       = 'app_legacy_login';
     case APP_ONETIME_PASSWORD_LOGIN             = 'app_onetime_password_login';
 }

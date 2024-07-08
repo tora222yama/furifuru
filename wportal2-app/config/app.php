@@ -179,6 +179,7 @@ return [
          */
 
         // External.
+        App\Providers\External\SesServiceProvider::class,
         App\Providers\External\SlackServiceProvider::class,
 
         // Internal.
@@ -216,6 +217,7 @@ return [
     'aliases'             => Facade::defaultAliases()->merge([
 
         // External.
+        'external\ses_service'                               => App\Facades\External\SesService::class,
         'external\slack_service'                             => App\Facades\External\SlackService::class,
 
         // Internal.

@@ -9,9 +9,11 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\App\PipeAppLegacyLogin;
 use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserUpdate;
 use App\Services\Models\ModelServiceBase;
+use Carbon\Carbon;
 use Exception;
 use Throwable;
 
@@ -29,6 +31,7 @@ class AuthUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_UPDATE                  => $this->execAppUserUpdate($pipe),
+                EPipeKind::APP_LEGACY_LOGIN                 => $this->execAppLegacyLogin($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -73,6 +76,30 @@ class AuthUserService extends ModelServiceBase
 
         // 更新の実施.
         $this->updateOrFail($authUser);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppLegacyLogin(
+        PipeAppLegacyLogin|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->targetAuthUser)) {
+            throw new Exception();
+        }
+
+        // ワンタイムパスワードの作成(6桁数値).
+        $max                                            = 10** 6 - 1;
+        $min                                            = 10** 5;
+        $onetimePassword                                = (string) random_int($min, $max);
+
+        // ワンタイムパスワードの有効期限.
+        $expired                                        = Carbon::now()->addMinutes(10);
+
+        // ワンタイムパスワード&期限の更新.
+        $pipe->targetAuthUser->onetime_password         = $onetimePassword;
+        $pipe->targetAuthUser->onetime_password_expired = $expired;
+        $this->updateOrFail($pipe->targetAuthUser);
     }
 
     /**

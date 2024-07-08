@@ -40,7 +40,9 @@ export const CardLegacyLogin: React.FC<IProps> = () => {
       method: 'post',
       preserveState: true,
       preserveScroll: true,
-      data: {},
+      data: {
+        ...formLegacyLogin,
+      },
       onStart,
       onFinish,
     });
