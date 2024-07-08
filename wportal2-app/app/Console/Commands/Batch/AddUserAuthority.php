@@ -27,7 +27,7 @@ class AddUserAuthority extends Command
     protected $description = '指定IDのユーザーに指定権利を付与する';
 
     /**
-     * Create a new command instance.
+     * New a new command instance.
      *
      * @return void
      */

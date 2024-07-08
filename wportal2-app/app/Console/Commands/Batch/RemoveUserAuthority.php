@@ -26,7 +26,7 @@ class RemoveUserAuthority extends Command
     protected $description = '指定IDのユーザーの指定権利を削除する';
 
     /**
-     * Create a new command instance.
+     * New a new command instance.
      *
      * @return void
      */
