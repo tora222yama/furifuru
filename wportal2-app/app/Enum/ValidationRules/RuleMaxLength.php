@@ -12,7 +12,7 @@ class RuleMaxLength implements ValidationRule
     public int $max = 0;
 
     /**
-     * Create a new rule instance.
+     * New a new rule instance.
      *
      * @return void
      */

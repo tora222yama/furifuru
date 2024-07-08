@@ -22,6 +22,8 @@ export const E_PAGES = {
   PROJECT: 'project', // プロジェクト一覧.
   PROJECT__SHOW: 'project__show', // プロジェクト詳細.
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
+  PROJECT__NEW: 'project__new', // プロジェクト新規作成.
+  PROJECT__CREATE: 'project__create', // プロジェクト新規登録.
   PROJECT__UPDATE: 'project__update', // プロジェクト更新.
   PROJECT__UPDATE_USER: 'project__update_user', // プロジェクトメンバー更新.
   PROJECT__DELETE: 'project__delete', // プロジェクト削除.
@@ -40,6 +42,7 @@ export const E_PAGES = {
   NOT_FOUND: 'not_found', // ページが見つからない.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
+
 // #ENUM_DEFINE_END#
 
 /**
@@ -51,6 +54,7 @@ export interface IPagesHrefReplace {
   target: string;
   value: string;
 }
+
 const getHref = (page: EPages): string => {
   switch (page) {
     case E_PAGES.DASHBOARD:
@@ -81,6 +85,10 @@ const getHref = (page: EPages): string => {
       return '/project/$projectId/show';
     case E_PAGES.PROJECT__EDIT:
       return '/project/$projectId/edit';
+    case E_PAGES.PROJECT__NEW:
+      return '/project/new';
+    case E_PAGES.PROJECT__CREATE:
+      return '/project/create';
     case E_PAGES.PROJECT__UPDATE:
       return '/project/update';
     case E_PAGES.PROJECT__UPDATE_USER:
@@ -146,6 +154,8 @@ export const getPagesName = (page: EPages): string => {
       return 'プロジェクト詳細';
     case E_PAGES.PROJECT__EDIT:
       return 'プロジェクト編集';
+    case E_PAGES.PROJECT__NEW:
+      return 'プロジェクト追加';
     case E_PAGES.USER:
       return 'メンバー一覧';
     case E_PAGES.USER__SHOW:
@@ -177,6 +187,8 @@ export const getPagesBack = (pages: EPages): EPages[] => {
       return [E_PAGES.PROJECT];
     case E_PAGES.PROJECT__EDIT:
       return [E_PAGES.PROJECT, E_PAGES.PROJECT__SHOW];
+    case E_PAGES.PROJECT__NEW:
+      return [E_PAGES.PROJECT];
     case E_PAGES.USER__SHOW:
       return [E_PAGES.USER];
     case E_PAGES.USER__EDIT:

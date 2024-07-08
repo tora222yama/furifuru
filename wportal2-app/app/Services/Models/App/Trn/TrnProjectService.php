@@ -9,6 +9,7 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProject;
+use App\Pipe\App\PipeAppProjectCreate;
 use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
 use App\Services\Models\ModelServiceBase;
@@ -27,12 +28,23 @@ class TrnProjectService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
-                EPipeKind::APP_PROJECT_UPDATE       => $this->execAppProjectUpdate($pipe),
-                EPipeKind::APP_PROJECT_DELETE       => $this->execAppProjectDelete($pipe),
-                default                             => throw new Exception(),
+                EPipeKind::APP_PROJECT_UPDATE => $this->execAppProjectUpdate($pipe),
+                EPipeKind::APP_PROJECT_DELETE => $this->execAppProjectDelete($pipe),
+                EPipeKind::APP_PROJECT_CREATE => $this->execAppProjectCreate($pipe),
+                default                       => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    private function execAppProjectCreate(
+        PipeAppProjectCreate|PipeBase $pipe
+    ): void {
+        // プロジェクトの作成.
+        $this->createNewProject(
+            $pipe->name,
+            $pipe->explain,
+        );
     }
 
     /**
@@ -53,6 +65,21 @@ class TrnProjectService extends ModelServiceBase
 
         // 削除を保存.
         $target->updateOrFail();
+    }
+
+    /**
+     * にすみ - プロジェクトの新規追加
+     */
+    public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
+    {
+        // ユーザーを作成.
+        $trnProject                  = new TrnProject();
+        if ($id !== 0) {
+            $trnProject->id   = $id;
+        }
+        $trnProject->name            = $projectName;
+        $trnProject->explain         = $projectExplain;
+        $trnProject->saveOrFail();
     }
 
     /**

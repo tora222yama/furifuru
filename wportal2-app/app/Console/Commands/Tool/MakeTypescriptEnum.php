@@ -26,7 +26,7 @@ class MakeTypescriptEnum extends Command
     protected $description = 'phpに定義されているenumをtypescriptに出力する';
 
     /**
-     * Create a new command instance.
+     * New a new command instance.
      *
      * @return void
      */

@@ -28,6 +28,8 @@ enum EPages: string
     case PROJECT                          = 'project'; // プロジェクト一覧.
     case PROJECT__SHOW                    = 'project__show'; // プロジェクト詳細.
     case PROJECT__EDIT                    = 'project__edit'; // プロジェクト編集.
+    case PROJECT__NEW                     = 'project__new'; // プロジェクト新規作成.
+    case PROJECT__CREATE                  = 'project__create'; // プロジェクト新規登録.
     case PROJECT__UPDATE                  = 'project__update'; // プロジェクト更新.
     case PROJECT__UPDATE_USER             = 'project__update_user'; // プロジェクトメンバー更新.
     case PROJECT__DELETE                  = 'project__delete'; // プロジェクト削除.
@@ -65,6 +67,8 @@ enum EPages: string
             self::PROJECT                        => '\App\Http\Controllers\Pages\ProjectController@invoke',
             self::PROJECT__SHOW                  => '\App\Http\Controllers\Pages\ProjectController@show',
             self::PROJECT__EDIT                  => '\App\Http\Controllers\Pages\ProjectController@edit',
+            self::PROJECT__NEW                   => '\App\Http\Controllers\Pages\ProjectController@new',
+            self::PROJECT__CREATE                => '\App\Http\Controllers\Pages\ProjectController@create',
             self::PROJECT__UPDATE                => '\App\Http\Controllers\Pages\ProjectController@update',
             self::PROJECT__UPDATE_USER           => '\App\Http\Controllers\Pages\ProjectController@update_user',
             self::PROJECT__DELETE                => '\App\Http\Controllers\Pages\ProjectController@delete',
