@@ -179,6 +179,7 @@ return [
          */
 
         // External.
+        App\Providers\External\RecaptchaServiceProvider::class,
         App\Providers\External\SesServiceProvider::class,
         App\Providers\External\SlackServiceProvider::class,
 
@@ -217,6 +218,7 @@ return [
     'aliases'             => Facade::defaultAliases()->merge([
 
         // External.
+        'external\recaptcha_service'                         => App\Facades\External\RecaptchaService::class,
         'external\ses_service'                               => App\Facades\External\SesService::class,
         'external\slack_service'                             => App\Facades\External\SlackService::class,
 

@@ -14,6 +14,8 @@ final class PipeAppLegacyLogin extends PipeBase
 
     public string $password          = '';
 
+    public string $recaptchaToken    = '';
+
     public ?AuthUser $targetAuthUser = null;
 
     /**
@@ -29,8 +31,9 @@ final class PipeAppLegacyLogin extends PipeBase
      */
     public function parse(): void
     {
-        $this->email    = $this->getArgAsString('email');
-        $this->password = $this->getArgAsString('password');
+        $this->email          = $this->getArgAsString('email');
+        $this->password       = $this->getArgAsString('password');
+        $this->recaptchaToken = $this->getArgAsString('recaptchaToken');
     }
 
     /**

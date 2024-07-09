@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IPropsBase } from '@/script/System/System';
 import {
@@ -13,6 +14,7 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 interface IProps extends IPropsBase {}
 export const CardLegacyLogin: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [formLegacyLogin, setFormLegacyLogin] =
     React.useState<IFormLegacyLogin>({
       email: '',
@@ -32,8 +34,14 @@ export const CardLegacyLogin: React.FC<IProps> = () => {
   /**
    * 値の送信.
    */
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // TODO: バリデーションが必要であれば.
+
+    // recaptchaのtoken取得.
+    if (!executeRecaptcha) {
+      return;
+    }
+    const recaptchaToken = await executeRecaptcha('guest_login');
 
     // 更新処理の実装.
     router.visit(getPagesHref(E_PAGES.LEGACY_LOGIN), {
@@ -42,6 +50,7 @@ export const CardLegacyLogin: React.FC<IProps> = () => {
       preserveScroll: true,
       data: {
         ...formLegacyLogin,
+        recaptchaToken,
       },
       onStart,
       onFinish,

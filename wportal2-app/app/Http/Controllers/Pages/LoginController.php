@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
+use App\Facades\External\RecaptchaService;
 use App\Facades\External\SesService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
@@ -51,7 +52,10 @@ class LoginController extends Controller
             return $this->render('Login/Index');
         }
 
-        // TODO: recaptchaのチェック.
+        // recaptchaのチェック.
+        if (! RecaptchaService::isValidToken($pipe->recaptchaToken)) {
+            return $this->render('Login/Index');
+        }
 
         // 一致する認証ユーザーを取得.
         $pipe->targetAuthUser = AuthUser::query()
