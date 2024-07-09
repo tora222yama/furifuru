@@ -16,6 +16,7 @@ export const E_VALIDATION_TYPE = {
   LENGTH: 'length', // 文字数がmax以下.
   PHONE: 'phone', // 電話番号.
   EMAIL: 'email', // Eメール.
+  UNIQUE_AUTH_EMAIL: 'unique_auth_email', // 認証メールユニーク確認.
 } as const;
 export type EValidationType =
   (typeof E_VALIDATION_TYPE)[keyof typeof E_VALIDATION_TYPE];

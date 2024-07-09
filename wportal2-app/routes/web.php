@@ -59,6 +59,8 @@ Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
 
 Route::get('/login', EPages::LOGIN->getInvokePath())
     ->name('login');
+Route::post('/legacy_login', EPages::LEGACY_LOGIN->getInvokePath());
+Route::post('/onetime_password_login', EPages::ONETIME_PASSWORD_LOGIN->getInvokePath());
 Route::get('/auth/google', '\App\Http\Controllers\Pages\LoginController@getGoogleAuth');
 Route::get('/login/googleCallback', '\App\Http\Controllers\Pages\LoginController@authGoogleCallback');
 Route::get('/logout', '\App\Http\Controllers\Pages\LoginController@logout');
