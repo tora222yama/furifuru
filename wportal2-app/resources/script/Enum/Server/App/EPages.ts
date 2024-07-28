@@ -19,6 +19,7 @@ export const E_PAGES = {
   DIVISION__EDIT: 'division__edit', // 課編集.
   DIVISION__UPDATE: 'division__update', // 課更新.
   DIVISION__UPDATE_USER: 'division__update_user', // 課メンバー更新.
+  DIVISION__DELETE: 'division__delete', // 課削除.
   PROJECT: 'project', // プロジェクト一覧.
   PROJECT__SHOW: 'project__show', // プロジェクト詳細.
   PROJECT__EDIT: 'project__edit', // プロジェクト編集.
@@ -79,6 +80,8 @@ const getHref = (page: EPages): string => {
       return '/division/update';
     case E_PAGES.DIVISION__UPDATE_USER:
       return '/division/update_user';
+    case E_PAGES.DIVISION__DELETE:
+      return '/division/delete';
     case E_PAGES.PROJECT:
       return '/project';
     case E_PAGES.PROJECT__SHOW:
@@ -148,6 +151,8 @@ export const getPagesName = (page: EPages): string => {
       return '課詳細';
     case E_PAGES.DIVISION__EDIT:
       return '課編集';
+    case E_PAGES.DIVISION__DELETE:
+      return '課削除';
     case E_PAGES.PROJECT:
       return 'プロジェクト一覧';
     case E_PAGES.PROJECT__SHOW:

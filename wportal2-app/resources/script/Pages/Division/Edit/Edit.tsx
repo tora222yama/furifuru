@@ -8,6 +8,7 @@ import {
   getPagesHref,
   getPagesName,
 } from '@/script/Enum/Server/App/EPages';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { BackLink } from '@/script/Pages/Common/BackLink';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { useIndexContext } from '@/script/Pages/Division/Edit/Index';
@@ -17,6 +18,8 @@ import { Avatar } from '@/script/Pages/Common/Avatar';
 import { FormEdit, IFormEdit } from '@/script/Pages/Division/Edit/FormEdit';
 import { validateAll } from '@/script/Pages/Division/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -28,6 +31,8 @@ export const Edit: React.FC<IProps> = () => {
     name: trnDivision.name,
     explain: trnDivision.explain,
   });
+
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   /**
    * 値の更新.
@@ -53,7 +58,7 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    router.visit(getPagesHref(E_PAGES.DIVISION__UPDATE), {
+    router.visit(getPagesHref(E_PAGES.DIVISION__DELETE), {
       method: 'post',
       preserveState: true,
       preserveScroll: true,
@@ -67,8 +72,31 @@ export const Edit: React.FC<IProps> = () => {
     });
   };
 
+  // 課の削除
+  const handleDelete = () => {
+    router.visit(getPagesHref(E_PAGES.DIVISION__DELETE), {
+      method: 'post',
+      data: {
+        trnDivisionId: String(trnDivision.id),
+      },
+      onStart,
+      onFinish,
+    });
+  };
   return (
     <Page>
+      <Closable open={openConfirm}>
+        <DialogYesNo
+          open={openConfirm}
+          labels={{
+            content: 'この課を削除しますか？',
+          }}
+          actions={{
+            submit: handleDelete,
+            close: () => setOpenConfirm(false),
+          }}
+        />
+      </Closable>
       <BackLink
         current={E_PAGES.DIVISION__EDIT}
         replace={[
@@ -78,9 +106,26 @@ export const Edit: React.FC<IProps> = () => {
           },
         ]}
       />
-      <TypoH1>
-        {getPagesName(E_PAGES.DIVISION__EDIT)}[{trnDivision.id}]
-      </TypoH1>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <TypoH1>
+          {getPagesName(E_PAGES.DIVISION__EDIT)}[{trnDivision.id}]
+        </TypoH1>
+
+        <ButtonGeneral
+          sx={{
+            width: '150px',
+            color: 'white',
+          }}
+          buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
+          label="課を削除"
+          onClick={() => setOpenConfirm(true)}
+        />
+      </Box>
       <Paper
         sx={{
           marginTop: '20px',

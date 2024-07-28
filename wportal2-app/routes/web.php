@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('divisionId', '[0-9]+');
     Route::post('/division/update', EPages::DIVISION__UPDATE->getInvokePath());
     Route::post('/division/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
+    Route::post('/division/delete', EPages::DIVISION__DELETE->getInvokePath());
     Route::match(['get', 'post'], '/project', EPages::PROJECT->getInvokePath());
     Route::get('/project/{projectId}/show', EPages::PROJECT__SHOW->getInvokePath())
         ->where('projectId', '[0-9]+');
