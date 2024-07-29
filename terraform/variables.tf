@@ -18,7 +18,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      app = "wportal2"
+      app = "wportal"
     }
   }
 }
