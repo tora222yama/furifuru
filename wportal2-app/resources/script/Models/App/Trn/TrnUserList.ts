@@ -16,6 +16,7 @@ export interface IAppTrnUser {
   id: number;
   authId: number;
   nickname: string;
+  birthDate: string;
   faceImagePath: string;
 
   trnAttendanceState?: IAppTrnAttendanceState[];
@@ -30,6 +31,7 @@ export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
     id: payload?.id ? Number(payload.id) : 0,
     authId: payload?.authId ? Number(payload.authId) : 0,
     nickname: payload?.nickname ? String(payload.nickname) : '',
+    birthDate: payload?.birthDate ? String(payload.birthDate) : '',
     faceImagePath: payload?.faceImagePath ? String(payload.faceImagePath) : '',
 
     authUser: payload?.authUser
@@ -58,6 +60,7 @@ export class AppTrnUserList extends ListBase<IAppTrnUser> {
       id: 0,
       authId: 0,
       nickname: '',
+      birthDate: '',
       faceImagePath: '',
     };
   }

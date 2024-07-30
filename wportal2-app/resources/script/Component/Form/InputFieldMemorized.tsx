@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Box, TextField } from '@mui/material';
-import { IInputFieldProps } from '@/script/Component/Form/IInputFieldProps';
+import {
+  IInputFieldProps,
+  InputFieldType,
+} from '@/script/Component/Form/IInputFieldProps';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { InputError } from '@/script/Component/Form/InputError';
 import { E_COLOR } from '@/script/Enum/EColor';

@@ -12,17 +12,19 @@ use Illuminate\Http\UploadedFile;
 
 final class PipeAppPersonalSettingEditUpdate extends PipeBase
 {
-    public int $trnUserId        = 0;
+    public int $trnUserId         = 0;
 
-    public string $nickname      = '';
+    public string $nickname       = '';
 
-    public string $slackUserId   = '';
+    public ?string $birthDate     = null;
 
-    public string $slackUserName = '';
+    public string $slackUserId    = '';
 
-    public string $slackTeamId   = '';
+    public string $slackUserName  = '';
 
-    public ?UploadedFile $upload = null;
+    public string $slackTeamId    = '';
+
+    public ?UploadedFile $upload  = null;
 
     /**
      * constructor.
@@ -39,6 +41,10 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
     {
         $this->trnUserId     = $this->getArgAsInteger('trnUserId');
         $this->nickname      = $this->getArgAsString('nickname');
+        $this->birthDate     = $this->getArgAsString('birthDate');
+        if (empty($this->birthDate)) {
+            $this->birthDate = null; // 空文字の場合にnullに変換
+        }
         $this->slackUserId   = $this->getArgAsString('slackUserId');
         $this->slackUserName = $this->getArgAsString('slackUserName');
         $this->slackTeamId   = $this->getArgAsString('slackTeamId');

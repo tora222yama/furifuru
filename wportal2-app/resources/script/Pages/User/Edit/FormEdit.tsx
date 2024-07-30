@@ -62,6 +62,11 @@ export const FormEdit: React.FC<IProps> = ({
             label="E-Mail"
             value={String(trnUser?.authUser?.email)}
           />
+          {/* <LabelValue */}
+          {/*  sx={{ marginTop: '10px' }} */}
+          {/*  label="生年月日" */}
+          {/*  value={String(trnUser?.birthDate)} */}
+          {/* /> */}
         </Box>
       </Box>
       <Box

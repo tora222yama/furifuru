@@ -14,6 +14,7 @@ import {
 export interface IFormEdit {
   name: string;
   nickname: string;
+  birthDate: string | null;
   slackUserId: string;
   slackUserName: string;
   slackTeamId: string;
@@ -33,6 +34,7 @@ export const FormEdit: React.FC<IProps> = ({
   handleUpdate,
   handleSubmit,
 }) => {
+  console.log('formEdit:', formEdit);
   return (
     <FormControl
       sx={{
@@ -57,6 +59,19 @@ export const FormEdit: React.FC<IProps> = ({
           onChange={nickname => handleUpdate({ nickname })}
           visibleError
           errors={validation.data.nickname?.errors}
+        />
+
+        {/* 生年月日入力フィールド */}
+        <TypoText sx={{ minWidth: '90px', marginLeft: '90px' }}>
+          生年月日
+        </TypoText>
+        <InputField
+          id="form-personal-setting-birth-date"
+          inputValue={formEdit.birthDate ?? ''}
+          onChange={birthDate => handleUpdate({ birthDate })}
+          visibleError
+          errors={validation.data.birthDate?.errors}
+          type="date"
         />
       </Box>
       <FormEditImageDrop

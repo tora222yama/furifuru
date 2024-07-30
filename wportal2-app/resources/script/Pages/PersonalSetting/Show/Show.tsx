@@ -33,6 +33,8 @@ export const Show: React.FC<IProps> = () => {
     useMutationAppPersonalSettingShowAlignSlack();
   const loading = processingAlignSlack;
 
+  console.log(authUser);
+
   /**
    * SlackIdの有効化を実行.
    */
@@ -118,6 +120,11 @@ export const Show: React.FC<IProps> = () => {
               sx={{ marginTop: '10px' }}
               label="表示名"
               value={String(authUser.trnUser?.nickname)}
+            />
+            <LabelValue
+              sx={{ marginTop: '10px' }}
+              label="生年月日"
+              value={String(authUser.trnUser?.birthDate)}
             />
           </Box>
         </Box>

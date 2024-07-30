@@ -31,7 +31,10 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
+        $user = Auth::user();
+
         return $this->render('PersonalSetting/Show/Index', [
+            'user'                => $user,
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
     }
@@ -47,9 +50,11 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
+        $user = Auth::user();
+
         return $this->render('PersonalSetting/Edit/Index', [
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
-
+            'user'                => $user, // ユーザー情報をビューに渡す
             // セッションにバリデーション情報があれば取得する.
             'serverValidation'    => fn () => session('serverValidation') ?? null,
         ]);
@@ -63,6 +68,8 @@ class PersonalSettingController extends Controller
     public function update(Request $request): RedirectResponse
     {
         // パイプ作成.
+        // PipeAppPersonalSettingEditUpdateを使用して新しいパイプラインを作成
+        // リクエストデータを処理, 入力データの変換やバリデーションの実施
         PipeService::insertNewPipe(
             new PipeAppPersonalSettingEditUpdate($request->toArray())
         );
@@ -78,6 +85,7 @@ class PersonalSettingController extends Controller
         }
 
         // 更新処理.
+        // パイプラインから取得したデータを使用して更新を実施
         DB::transaction(static function (): void {
             // 個人設定の更新.
             TrnUserService::updateByPipe();
@@ -86,8 +94,11 @@ class PersonalSettingController extends Controller
             TrnUserSlackProfileService::updateByPipe();
         });
 
+        // 更新処理が成功：ユーザーを個人設定の詳細ページにリダイレクトする
         return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     }
+
+    //
 
     /**
      * TrnUserSlackProfileの取得.

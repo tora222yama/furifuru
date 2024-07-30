@@ -9,7 +9,6 @@ export interface IAppAuthUser {
   name: string;
   email: string;
   eEnableLegacyLogin: number;
-
   trnUser?: IAppTrnUser;
 }
 

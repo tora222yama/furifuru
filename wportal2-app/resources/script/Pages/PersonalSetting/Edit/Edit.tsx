@@ -28,6 +28,7 @@ export const Edit: React.FC<IProps> = () => {
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     name: authUser.name,
     nickname: authUser.trnUser?.nickname ?? '',
+    birthDate: authUser.trnUser?.birthDate ?? '',
     slackUserId: trnUserSlackProfile.slackUserId,
     slackUserName: trnUserSlackProfile.slackUserName,
     slackTeamId: trnUserSlackProfile.slackTeamId,
@@ -56,6 +57,8 @@ export const Edit: React.FC<IProps> = () => {
       return;
     }
 
+    const birthDate = formEdit.birthDate === '' ? null : formEdit.birthDate;
+
     // 更新処理の実施.
     router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__UPDATE), {
       method: 'post',
@@ -64,6 +67,7 @@ export const Edit: React.FC<IProps> = () => {
       data: {
         trnUserId: authUser.trnUser?.id ?? 0,
         nickname: formEdit.nickname,
+        birthDate: formEdit.birthDate,
         slackUserId: formEdit.slackUserId,
         slackUserName: formEdit.slackUserName,
         slackTeamId: formEdit.slackTeamId,

@@ -53,8 +53,9 @@ class TrnUserService extends ModelServiceBase
         PipeAppPersonalSettingEditUpdate|PipeBase $pipe
     ): void {
         // 個人設定の更新.
-        $trnUser           = $this->findByIdOrFail($pipe->trnUserId);
-        $trnUser->nickname = $pipe->nickname;
+        $trnUser             = $this->findByIdOrFail($pipe->trnUserId);
+        $trnUser->nickname   = $pipe->nickname;
+        $trnUser->birth_date = $pipe->birthDate;
 
         // 画像の更新.
         if ($pipe->upload !== null) {

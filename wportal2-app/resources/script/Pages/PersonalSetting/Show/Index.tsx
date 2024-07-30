@@ -23,7 +23,11 @@ export const useIndexContext = (): IndexContext => useContext(context);
 interface IProps extends IPropsBase {
   trnUserSlackProfile?: IAppTrnUserSlackProfile;
 }
-export const Index: React.FC<IProps> = ({ trnUserSlackProfile, ...props }) => {
+export const Index: React.FC<IProps> = ({
+  trnUser,
+  trnUserSlackProfile,
+  ...props
+}) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
