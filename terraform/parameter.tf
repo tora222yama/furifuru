@@ -1,177 +1,245 @@
-#/**
-# *  KMSによるパラメータ
-# */
-#
-#/**
-# *  DBホスト.
-# */
-#resource "aws_ssm_parameter" "wportal2_db_host" {
-#  name  = "/wportal2/db/host"
-#  type  = "String"
-#  value = aws_rds_cluster.wportal2_rds_cluster.endpoint
+/**
+ *  KMSによるパラメータ
+ */
+
+/**
+ *  DBホスト.
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_db_host
+#  id = "/wportal/db/host"
 #}
-#
-#/**
-# *  DBユーザー.
-# */
-#resource "aws_ssm_parameter" "wportal2_db_username" {
-#  name        = "/wportal2/db/username"
-#  type        = "String"
-#  value       = "wportal2"
-#  description = "データベースの接続ユーザー"
+resource "aws_ssm_parameter" "wportal_db_host" {
+  name  = "/wportal/db/host"
+  type  = "String"
+  value = aws_rds_cluster.wportal_rds_cluster.endpoint
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  DBユーザー.
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_db_username
+#  id = "/wportal/db/username"
 #}
-#
-#/**
-# *  DBパスワード.
-# */
-#resource "aws_ssm_parameter" "wportal2_db_password" {
-#  name        = "/wportal2/db/password"
-#  type        = "SecureString"
-#  value       = "uninitialized"
-#  description = "データベースの接続パスワード"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_db_username" {
+  name        = "/wportal/db/username"
+  type        = "String"
+  value       = "wportal"
+  description = "データベースの接続ユーザー"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  DBパスワード.
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_db_password
+#  id = "/wportal/db/password"
 #}
-#
-#/**
-# *  Redisホスト
-# */
-#resource "aws_ssm_parameter" "wportal2_redis_host" {
-#  name  = "/wportal2/redis/host"
-#  type  = "String"
-#  value = aws_elasticache_replication_group.wportal2_elasticache_rg.primary_endpoint_address
+resource "aws_ssm_parameter" "wportal_db_password" {
+  name        = "/wportal/db/password"
+  type        = "SecureString"
+  value       = "uninitialized"
+  description = "データベースの接続パスワード"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  Redisホスト
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_redis_host
+#  id = "/wportal/redis/host"
 #}
-#
-#/**
-# *  GOOGLE_CLIENT_ID
-# */
-#resource "aws_ssm_parameter" "wportal2_google_client_id" {
-#  name        = "/wportal2/google_client_id"
-#  type        = "SecureString"
-#  value       = "uninitialized"
-#  description = "GOOGLE_CLIENT_ID"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_redis_host" {
+  name  = "/wportal/redis/host"
+  type  = "String"
+  value = aws_elasticache_replication_group.wportal_elasticache_rg.primary_endpoint_address
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  GOOGLE_CLIENT_ID
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_google_client_id
+#  id = "/wportal/google_client_id"
 #}
-#
-#/**
-# *  GOOGLE_CLIENT_SECRET
-# */
-#resource "aws_ssm_parameter" "wportal2_google_client_secret" {
-#  name        = "/wportal2/google_client_secret"
-#  type        = "SecureString"
-#  value       = "uninitialized"
-#  description = "GOOGLE_CLIENT_SECRET"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_google_client_id" {
+  name        = "/wportal/google_client_id"
+  type        = "SecureString"
+  value       = "uninitialized"
+  description = "GOOGLE_CLIENT_ID"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  GOOGLE_CLIENT_SECRET
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_google_client_secret
+#  id = "/wportal/google_client_secret"
 #}
-#
-#/**
-# *  SLACK_APP_TOKEN
-# */
-#resource "aws_ssm_parameter" "wportal2_slack_app_token" {
-#  name  = "/wportal2/slack_app_token"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_google_client_secret" {
+  name        = "/wportal/google_client_secret"
+  type        = "SecureString"
+  value       = "uninitialized"
+  description = "GOOGLE_CLIENT_SECRET"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  SLACK_APP_TOKEN
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_slack_app_token
+#  id = "/wportal/slack_app_token"
 #}
-#
-#/**
-# *  SLACK_BOT_USER_OAUTH_TOKEN
-# */
-#resource "aws_ssm_parameter" "wportal2_slack_bot_user_oauth_token" {
-#  name  = "/wportal2/slack_bot_user_oauth_token"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_slack_app_token" {
+  name  = "/wportal/slack_app_token"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  SLACK_BOT_USER_OAUTH_TOKEN
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_slack_bot_user_oauth_token
+#  id = "/wportal/slack_bot_user_oauth_token"
 #}
-#
-#/**
-# *  SLACK_URL_NOTICE
-# */
-#resource "aws_ssm_parameter" "wportal2_slack_url_notice" {
-#  name  = "/wportal2/slack_url_notice"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_slack_bot_user_oauth_token" {
+  name  = "/wportal/slack_bot_user_oauth_token"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  SLACK_URL_NOTICE
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_slack_url_notice
+#  id = "/wportal/slack_url_notice"
 #}
-#
-#/**
-# *  RECAPTCHA_SECRET_KEY
-# */
-#resource "aws_ssm_parameter" "wportal2_recaptcha_secret_key" {
-#  name  = "/wportal2/recaptcha_secret_key"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_slack_url_notice" {
+  name  = "/wportal/slack_url_notice"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  RECAPTCHA_SECRET_KEY
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_recaptcha_secret_key
+#  id = "/wportal/recaptcha_secret_key"
 #}
-#
-#/**
-# *  VITE_RECAPTCHA_SITE_KEY
-# */
-#resource "aws_ssm_parameter" "wportal2_vite_recaptcha_site_key" {
-#  name  = "/wportal2/vite_recaptcha_site_key"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_recaptcha_secret_key" {
+  name  = "/wportal/recaptcha_secret_key"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  VITE_RECAPTCHA_SITE_KEY
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_vite_recaptcha_site_key
+#  id = "/wportal/vite_recaptcha_site_key"
 #}
-#
-#/**
-# *  APP_AWS_ACCESS_KEY_ID
-# */
-#resource "aws_ssm_parameter" "wportal2_app_aws_access_key_id" {
-#  name  = "/wportal2/app_aws_access_key_id"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_vite_recaptcha_site_key" {
+  name  = "/wportal/vite_recaptcha_site_key"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  APP_AWS_ACCESS_KEY_ID
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_app_aws_access_key_id
+#  id = "/wportal/app_aws_access_key_id"
 #}
-#
-#/**
-# *  APP_AWS_SECRET_ACCESS_KEY
-# */
-#resource "aws_ssm_parameter" "wportal2_app_aws_secret_access_key" {
-#  name  = "/wportal2/app_aws_secret_access_key"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_app_aws_access_key_id" {
+  name  = "/wportal/app_aws_access_key_id"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  APP_AWS_SECRET_ACCESS_KEY
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_app_aws_secret_access_key
+#  id = "/wportal/app_aws_secret_access_key"
 #}
-#
-#/**
-# *  APP_AWS_REGION
-# */
-#resource "aws_ssm_parameter" "wportal2_app_aws_region" {
-#  name  = "/wportal2/app_aws_region"
-#  type  = "SecureString"
-#  value = "uninitialized"
-#
-#  lifecycle {
-#    ignore_changes = [value]
-#  }
+resource "aws_ssm_parameter" "wportal_app_aws_secret_access_key" {
+  name  = "/wportal/app_aws_secret_access_key"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
+ *  APP_AWS_REGION
+ */
+#import {
+#  to = aws_ssm_parameter.wportal_app_aws_region
+#  id = "/wportal/app_aws_region"
 #}
+resource "aws_ssm_parameter" "wportal_app_aws_region" {
+  name  = "/wportal/app_aws_region"
+  type  = "SecureString"
+  value = "uninitialized"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
