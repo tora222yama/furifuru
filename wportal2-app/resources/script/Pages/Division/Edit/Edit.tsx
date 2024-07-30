@@ -58,7 +58,7 @@ export const Edit: React.FC<IProps> = () => {
     }
 
     // 更新処理の実施.
-    router.visit(getPagesHref(E_PAGES.DIVISION__DELETE), {
+    router.visit(getPagesHref(E_PAGES.DIVISION__UPDATE), {
       method: 'post',
       preserveState: true,
       preserveScroll: true,
