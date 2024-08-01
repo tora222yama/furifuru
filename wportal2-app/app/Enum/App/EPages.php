@@ -25,6 +25,7 @@ enum EPages: string
     case DIVISION__EDIT                   = 'division__edit'; // 課編集.
     case DIVISION__UPDATE                 = 'division__update'; // 課更新.
     case DIVISION__UPDATE_USER            = 'division__update_user'; // 課メンバー更新.
+    case DIVISION__DELETE                 = 'division__delete'; // 課削除.
     case PROJECT                          = 'project'; // プロジェクト一覧.
     case PROJECT__SHOW                    = 'project__show'; // プロジェクト詳細.
     case PROJECT__EDIT                    = 'project__edit'; // プロジェクト編集.
@@ -63,6 +64,7 @@ enum EPages: string
             self::DIVISION__SHOW                 => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT                 => '\App\Http\Controllers\Pages\DivisionController@edit',
             self::DIVISION__UPDATE               => '\App\Http\Controllers\Pages\DivisionController@update',
+            self::DIVISION__DELETE               => '\App\Http\Controllers\Pages\DivisionController@delete',
             self::DIVISION__UPDATE_USER          => '\App\Http\Controllers\Pages\DivisionController@update_user',
             self::PROJECT                        => '\App\Http\Controllers\Pages\ProjectController@invoke',
             self::PROJECT__SHOW                  => '\App\Http\Controllers\Pages\ProjectController@show',
