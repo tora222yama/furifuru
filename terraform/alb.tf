@@ -1,7 +1,10 @@
 /**
  *  アプリケーションロードバランサ
  */
-
+#import {
+#  to = aws_alb.wportal_alb
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:loadbalancer/app/wportal-alb/a71bca8434e305e6"
+#}
 resource "aws_alb" "wportal_alb" {
   name                       = "wportal-alb"
   load_balancer_type         = "application"
@@ -37,6 +40,10 @@ output "alb_dns_name" {
 /**
  *  HTTPリスナー
  */
+#import {
+#  to = aws_alb_listener.http_listener
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:listener/app/wportal-alb/a71bca8434e305e6/da3ebc2011c1d9bc"
+#}
 resource "aws_alb_listener" "http_listener" {
   load_balancer_arn = aws_alb.wportal_alb.arn
   port              = "80"
@@ -63,6 +70,10 @@ data "aws_route53_zone" "wportal" {
 /**
  *  ホストゾーン
  */
+#import {
+#    to = aws_route53_zone.app_wportal
+#    id = "Z0073710LR6OQP9ZR0NX"
+#}
 resource "aws_route53_zone" "app_wportal" {
   name = "app.wportal.com"
 
@@ -74,6 +85,10 @@ resource "aws_route53_zone" "app_wportal" {
 /**
  *  DNSレコード
  */
+#import {
+#  to = aws_route53_record.app
+#  id = "Z010452446PHWCZNVO30_wportal.org_A"
+#}
 resource "aws_route53_record" "app" {
   name    = data.aws_route53_zone.wportal.name
   type    = "A"
@@ -89,6 +104,10 @@ resource "aws_route53_record" "app" {
 /**
  *  SSL証明書定義
  */
+#import {
+#  to = aws_acm_certificate.app_certificate
+#  id = "arn:aws:acm:ap-northeast-1:979109089196:certificate/fd338d1f-d006-4ab4-b84a-c770c77c28b2"
+#}
 resource "aws_acm_certificate" "app_certificate" {
   domain_name               = data.aws_route53_zone.wportal.name
   subject_alternative_names = []
@@ -132,6 +151,10 @@ resource "aws_acm_certificate_validation" "app_certificate_validation" {
 /**
  *  HTTPSリスナー
  */
+#import {
+#  to = aws_alb_listener.https
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:listener/app/wportal-alb/a71bca8434e305e6/8f6ff6399b1f01c1"
+#}
 resource "aws_alb_listener" "https" {
   load_balancer_arn = aws_alb.wportal_alb.arn
   port              = "443"
@@ -156,6 +179,10 @@ resource "aws_alb_listener" "https" {
 /**
 * HTTP->HTTPSリダイレクトリスナー
 */
+#import {
+#  to = aws_alb_listener.redirect_http_to_https
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:listener/app/wportal-alb/a71bca8434e305e6/9a67c053353676a4"
+#}
 resource "aws_alb_listener" "redirect_http_to_https" {
   load_balancer_arn = aws_alb.wportal_alb.arn
   port              = "8080"
@@ -174,6 +201,10 @@ resource "aws_alb_listener" "redirect_http_to_https" {
 /**
  *  転送先のターゲットグループ.
  */
+#import {
+#  to = aws_alb_target_group.alb_target_group
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:targetgroup/alb-target-group/bb3f69b01a6c5a88"
+#}
 resource "aws_alb_target_group" "alb_target_group" {
   name                 = "alb-target-group"
   vpc_id               = aws_vpc.aws_vpc_wportal.id
@@ -195,6 +226,10 @@ resource "aws_alb_target_group" "alb_target_group" {
 /**
  *  リスナールール.
  */
+#import {
+#  to = aws_alb_listener_rule.alb_listener_rule
+#  id = "arn:aws:elasticloadbalancing:ap-northeast-1:979109089196:listener-rule/app/wportal-alb/a71bca8434e305e6/8f6ff6399b1f01c1/af6cfda5e1597d65"
+#}
 resource "aws_alb_listener_rule" "alb_listener_rule" {
   listener_arn = aws_alb_listener.https.arn
   priority     = 100
