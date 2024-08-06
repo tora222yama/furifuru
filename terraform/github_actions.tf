@@ -1,0 +1,52 @@
+/**
+ *  GitHubActionsから接続するための情報.
+ */
+
+/**
+ * IDプロバイダ.
+ */
+resource "aws_iam_openid_connect_provider" "wportal2_github_actions" {
+  url = "https://token.actions.githubusercontent.com"
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1",
+    "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
+  ]
+}
+
+/**
+ * 接続用ロール
+ */
+data "aws_iam_policy_document" "wportal2_deploy_assume_role_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::979109089196:oidc-provider/token.actions.githubusercontent.com"] # ID プロバイダの ARN
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    # 特定のリポジトリの特定のブランチからのみ認証を許可する
+    condition {
+      test     = "StringEquals"
+      variable = "githum.com/_services/token:sub"
+      values   = ["repo:quick-wpd/wportal2:*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "wportal2_deploy_iam_role" {
+  name = "wportal2_deploy_iam_role"
+  assume_role_policy = data.aws_iam_policy_document.wportal2_deploy_assume_role_policy.json
+}
+
+# 任意のポリシーをアタッチする
+resource "aws_iam_role_policy_attachment" "wportal2_deploy_policy_attachment" {
+  role       = aws_iam_role.wportal2_deploy_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
