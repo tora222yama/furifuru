@@ -223,8 +223,7 @@ export const getPagesName = (page: EPages): string => {
     case E_PAGES.SAMPLE_PAGINATION:
       return 'ページネーション';
     case E_PAGES.SAMPLE_INTERN:
-      return 'インターン';
-
+      return 'コンポーネント';
     default:
       return '';
   }
