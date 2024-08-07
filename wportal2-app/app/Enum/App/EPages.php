@@ -60,6 +60,7 @@ enum EPages: string
     case SAMPLE_SLACK_LOG                 = 'sample_slack_log'; // Slackログ通知.
     case SAMPLE_PAGINATION                = 'sample_pagination'; // ページネーション.
     case SAMPLE_INTERN                    = 'sample_intern'; // インターン.
+    case SAMPLE_INERTIA_DATA              = 'sample_inertia_data'; // Inertiaデータ.
 
     /**
      * routing時のinvokeパスの取得.
@@ -113,6 +114,7 @@ enum EPages: string
             self::SAMPLE_SLACK_LOG               => '\App\Http\Controllers\Pages\Sample\SlackLogController@invoke',
             self::SAMPLE_PAGINATION              => '\App\Http\Controllers\Pages\Sample\PaginationController@invoke',
             self::SAMPLE_INTERN                  => '\App\Http\Controllers\Pages\Sample\InternController@invoke',
+            self::SAMPLE_INERTIA_DATA            => '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke',
 
             default                              => '',
         };

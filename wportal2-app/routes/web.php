@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/sample/slack_log', EPages::SAMPLE_SLACK_LOG->getInvokePath());
     Route::match(['get', 'post'], '/sample/pagination', EPages::SAMPLE_PAGINATION->getInvokePath());
     Route::get('/sample/intern', EPages::SAMPLE_INTERN->getInvokePath());
+    Route::get('/sample/inertia_data', EPages::SAMPLE_INERTIA_DATA->getInvokePath());
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')

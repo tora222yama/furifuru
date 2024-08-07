@@ -50,6 +50,7 @@ export const E_PAGES = {
   SAMPLE_SLACK_LOG: 'sample_slack_log', // Slackログ通知.
   SAMPLE_PAGINATION: 'sample_pagination', // ページネーション.
   SAMPLE_INTERN: 'sample_intern', // インターン.
+  SAMPLE_INERTIA_DATA: 'sample_inertia_data', // Inertiaデータ.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
 // #ENUM_DEFINE_END#
@@ -150,6 +151,8 @@ const getHref = (page: EPages): string => {
       return '/sample/pagination';
     case E_PAGES.SAMPLE_INTERN:
       return '/sample/intern';
+    case E_PAGES.SAMPLE_INERTIA_DATA:
+      return '/sample/inertia_data';
 
     default:
       return '/';
@@ -224,6 +227,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ページネーション';
     case E_PAGES.SAMPLE_INTERN:
       return 'コンポーネント';
+    case E_PAGES.SAMPLE_INERTIA_DATA:
+      return 'データ受信';
     default:
       return '';
   }

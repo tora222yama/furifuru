@@ -27,6 +27,7 @@ export const E_MENU = {
   SAMPLE_INTERN_SLACK_LOG: 'sample_intern_slack_log',
   SAMPLE_INTERN_PAGINATION: 'sample_intern_pagination',
   SAMPLE_INTERN_INTERN: 'sample_intern_intern',
+  SAMPLE_INTERN_INERTIA_DATA: 'sample_intern_inertia_data',
 } as const;
 export type EMenu = (typeof E_MENU)[keyof typeof E_MENU];
 
@@ -209,6 +210,14 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.SAMPLE_INTERN_ROOT,
     back: E_PAGES.INVALID,
     name: 'コンポーネント',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_INERTIA_DATA,
+    pages: E_PAGES.SAMPLE_INERTIA_DATA,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'データ受信',
     icon: E_ICON.BUILD,
   },
 ];
