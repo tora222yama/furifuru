@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace App\Services\External;
 
+use App\Enum\App\ENotificationType;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
+use App\Facades\Models\App\Trn\TrnProjectNotificationService;
+use App\Facades\Models\App\Trn\TrnProjectUserService;
+use App\Models\App\Trn\TrnProjectNotification;
+use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
+use App\Pipe\PipeBase;
 use App\Trait\SlackApi;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -31,10 +37,34 @@ class SlackService
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_ATTENDANCE_CREATE                 => $this->execAppAttendanceCreate($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
                 default                                          => throw new Exception("invalid pipe:$kind->name")
             };
         }
+    }
+
+    private function execAppAttendanceCreate(
+        PipeAppAttendanceCreate|PipeBase $pipe
+    ): void {
+        // 表示メッセージの作成.
+        $localeDate          = Carbon::now()->format('Y-m-d H:i:s');
+        $nickName            = $pipe->authUser->TrnUser->nickname;
+        $stateLabel          = $pipe->eAttendanceState->getStateLabel();
+        $message             = "${localeDate} ${nickName}さんが${stateLabel}";
+
+        // ユーザーの所属するPJのID配列を特定.
+        $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser->TrnUser->id)
+            ->pluck('trn_project_id')
+            ->toArray();
+
+        // 各PJのSlack通知チャンネルを取得し、それぞれに処理する.
+        TrnProjectNotificationService::listByTrnProjectId($targetProjectIdList)
+            // 通知タイプがSlackのものを抽出.
+            ->where('notification_type', ENotificationType::SLACK_CHANNEL->value)
+            ->each(function (TrnProjectNotification $trnProjectNotification) use ($message) {
+                $this->slackApiPostMessage($trnProjectNotification->notification_value, $message);
+            });
     }
 
     private function execAppPersonalSettingShowAlignSlack(

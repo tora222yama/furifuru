@@ -4,6 +4,7 @@
 export const E_ICON = {
   INVALID: 'invalid',
 
+  ADD: 'add',
   ATTENDANCE: 'attendance',
   BUILD: 'build',
   CACHED: 'cached',
@@ -12,8 +13,10 @@ export const E_ICON = {
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
   GOOGLE: 'google_icon.svg',
+  HELP: 'help',
   HOME: 'home',
   OFFICE: 'office',
+  REMOVE: 'remove',
   SHOP: 'shop',
   STAR: 'star',
   STAR_OUTLINE: 'star_outline',
@@ -34,6 +37,8 @@ export const getIconPath = (icon: EIcon): string => {
  */
 export const getIconWidth = (icon: EIcon): string => {
   switch (icon) {
+    case E_ICON.ADD:
+      return '20px';
     case E_ICON.ATTENDANCE:
       return '20px';
     case E_ICON.BUILD:
@@ -50,9 +55,13 @@ export const getIconWidth = (icon: EIcon): string => {
       return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.HELP:
+      return '20px';
     case E_ICON.HOME:
       return '20px';
     case E_ICON.OFFICE:
+      return '20px';
+    case E_ICON.REMOVE:
       return '20px';
     case E_ICON.SHOP:
       return '20px';
@@ -71,6 +80,8 @@ export const getIconWidth = (icon: EIcon): string => {
  */
 export const getIconHeight = (icon: EIcon): string => {
   switch (icon) {
+    case E_ICON.ADD:
+      return '20px';
     case E_ICON.ATTENDANCE:
       return '20px';
     case E_ICON.BUILD:
@@ -87,9 +98,13 @@ export const getIconHeight = (icon: EIcon): string => {
       return '20px';
     case E_ICON.GOOGLE:
       return '18px';
+    case E_ICON.HELP:
+      return '20px';
     case E_ICON.HOME:
       return '20px';
     case E_ICON.OFFICE:
+      return '20px';
+    case E_ICON.REMOVE:
       return '20px';
     case E_ICON.SHOP:
       return '20px';

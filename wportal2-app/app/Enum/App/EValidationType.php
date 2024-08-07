@@ -28,6 +28,7 @@ enum EValidationType: string
     case LENGTH            = 'length'; // 文字数がmax以下.
     case PHONE             = 'phone'; // 電話番号.
     case EMAIL             = 'email'; // Eメール.
+    case UNIQUE_AUTH_EMAIL = 'unique_auth_email'; // 認証メールユニーク確認.
 
     /**
      * バリデーション指定の情報を作成.
@@ -119,6 +120,7 @@ enum EValidationType: string
             self::LENGTH            => collect([new RuleMaxLength($value1)]),
             self::PHONE             => collect(['regex:/^[0-9-]{10,13}$/']),
             self::EMAIL             => collect(["regex:/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/"]),
+            self::UNIQUE_AUTH_EMAIL => collect(['unique:auth_user,email']),
             default                 => collect(),
         };
     }
@@ -138,16 +140,17 @@ enum EValidationType: string
 
         return match ($this) {
             self::REQUIRED,
-            self::REQUIRED_NOT_ZERO => "${columnName}は必須項目です",
-            self::NUMBER            => "${columnName}が数値ではありません",
-            self::NUMBER_HYPHEN     => "${columnName}は数値とハイフンのみで入力してください",
-            self::NUMBER_PLUS       => "${columnName}が正の数値ではありません",
-            self::NUMBER_MAX        => "${columnName}は${value1}以下の整数で入力してください",
-            self::NUMBER_RANGE      => "${columnName}は[$value1-$value2]の範囲で入力してください",
-            self::MAX_DIGIT         => "${columnName}は${value1}桁以下の整数で入力してください",
+            self::REQUIRED_NOT_ZERO => "{$columnName}は必須項目です",
+            self::NUMBER            => "{$columnName}が数値ではありません",
+            self::NUMBER_HYPHEN     => "{$columnName}は数値とハイフンのみで入力してください",
+            self::NUMBER_PLUS       => "{$columnName}が正の数値ではありません",
+            self::NUMBER_MAX        => "{$columnName}は{$value1}以下の整数で入力してください",
+            self::NUMBER_RANGE      => "{$columnName}は[$value1-$value2]の範囲で入力してください",
+            self::MAX_DIGIT         => "{$columnName}は{$value1}桁以下の整数で入力してください",
             // self::LENGTH => '', カスタムルール.
-            self::PHONE             => "${columnName}は10〜13字の半角数字及び\"-\"で入力してください",
-            self::EMAIL             => "${columnName}はメールアドレス形式で入力してください",
+            self::PHONE             => "{$columnName}は10〜13字の半角数字及び\"-\"で入力してください",
+            self::EMAIL             => "{$columnName}はメールアドレス形式で入力してください",
+            self::UNIQUE_AUTH_EMAIL => "{$columnName}が既存登録メールと重複しています",
             default                 => '',
         };
     }

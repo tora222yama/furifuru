@@ -17,7 +17,9 @@ use App\Models\App\Trn\TrnUserProjectPriority;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Random\RandomException;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Throwable;
 
 class TestCaseSeeder extends Seeder
 {
@@ -27,6 +29,9 @@ class TestCaseSeeder extends Seeder
 
     /**
      * ローカル/テストケース向けの初期データを用意する.
+     *
+     * @throws RandomException
+     * @throws Throwable
      */
     public function run(): void
     {
@@ -47,11 +52,44 @@ class TestCaseSeeder extends Seeder
         TrnProject::truncate();
         TrnProjectUser::truncate();
 
-        $instance = $this;
+        $instance     = $this;
 
-        // メンバー作成.
-        $this->beginFactory('TrnUser', 400);
-        TrnUser::factory(400)->create()->each(static function (TrnUser $trnUser) use ($instance) {
+        // 認証ユーザー作成.
+        $this->beginFactory('AuthUser', 150);
+        AuthUser::factory(150)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $count = $sequence->index + 1;
+                $instance->advanceFactory();
+
+                return [
+                    'email' => "wportal2-dummy-$count@919.jp",
+                ];
+            })
+            ->create([
+                'password'  => substr(bin2hex(random_bytes(16)), 0, 16),
+                'google_id' => '',
+            ]);
+        $this->endFactory();
+
+        // ユーザー作成.
+        $this->beginFactory('TrnUser', 150);
+        $authUserList = AuthUser::query()->get();
+        $authUserList->each(function (AuthUser $authUser) use ($instance) {
+            // 対応するユーザーを作成.
+            TrnUser::factory()
+                ->create([
+                    'nickname' => $authUser->name,
+                    'auth_id'  => $authUser->id,
+                ]);
+
+            $instance->advanceFactory();
+        });
+        $this->endFactory();
+
+        // ユーザー画像更新.
+        $this->beginFactory('fix face image', 150);
+        $trnUserList  = TrnUser::query()->get();
+        $trnUserList->each(function (TrnUser $trnUser) use ($instance) {
             // 初期画像を保存.
             $defaultPath              = TrnUserService::createDefaultFaceImagePath();
             $file                     = Storage::disk('local')->get($defaultPath);
@@ -63,6 +101,13 @@ class TestCaseSeeder extends Seeder
             $trnUser->face_image_path = $path;
             $trnUser->saveOrFail();
 
+            $instance->advanceFactory();
+        });
+        $instance->endFactory();
+
+        // プロジェクト・課優先度.
+        $instance->beginFactory('priority', 150);
+        $trnUserList->each(function (TrnUser $trnUser) use ($instance) {
             // プロジェクト優先度作成.
             TrnUserProjectPriority::factory(10)
                 ->sequence(function (Sequence $sequence) {
@@ -87,8 +132,7 @@ class TestCaseSeeder extends Seeder
 
             $instance->advanceFactory();
         });
-
-        $this->endFactory();
+        $instance->endFactory();
 
         // 課作成.
         $this->beginFactory('TrnDivision', 20);
@@ -137,9 +181,9 @@ class TestCaseSeeder extends Seeder
     /**
      * 生成ブロックの進行.
      */
-    private function advanceFactory(int $step = 1): void
+    private function advanceFactory(): void
     {
-        $this->pb?->advance($step);
+        $this->pb?->advance();
     }
 
     /**

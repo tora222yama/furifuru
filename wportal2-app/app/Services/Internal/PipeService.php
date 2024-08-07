@@ -6,7 +6,7 @@ namespace App\Services\Internal;
 
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EStatusCode;
-use App\GraphQL\PipeBase;
+use App\Pipe\PipeBase;
 use Exception;
 
 /**

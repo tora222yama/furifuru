@@ -19,8 +19,10 @@ import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplace
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/Project/Show/Index';
+import { SlackNotification } from '@/script/Pages/Project/Show/SlackNotification';
 
 interface IProps extends IPropsBase {}
+
 export const Show: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
   const { trnProjectList } = useIndexContext();
@@ -65,6 +67,7 @@ export const Show: React.FC<IProps> = () => {
         />
       </Closable>
       <BackLink current={E_PAGES.PROJECT__SHOW} />
+
       <Box
         sx={{
           display: 'flex',
@@ -108,40 +111,39 @@ export const Show: React.FC<IProps> = () => {
           label="説明"
           value={trnProject.explain}
         />
-        <Box>
-          <Box sx={{ display: 'flex' }}>
-            <Box>
-              <TypoText sx={{ minWidth: '200px', width: '200px' }}>
-                メンバー
-              </TypoText>
-              <ButtonGeneral
-                sx={{
-                  marginTop: '10px',
-                }}
-                label="入替"
-                onClick={handleClickReplace}
-              />
-            </Box>
-            <Box
+        <Box sx={{ display: 'flex' }}>
+          <Box>
+            <TypoText sx={{ minWidth: '200px', width: '200px' }}>
+              メンバー
+            </TypoText>
+            <ButtonGeneral
               sx={{
                 marginTop: '10px',
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '10px',
               }}
-            >
-              {trnProject.trnProjectUser?.map(trnProjectUser => {
-                return (
-                  <Avatar
-                    key={trnProjectUser.id}
-                    trnUser={trnProjectUser.trnUser}
-                  />
-                );
-              })}
-            </Box>
+              label="入替"
+              onClick={handleClickReplace}
+            />
           </Box>
-          <Divider sx={{ marginTop: '6px' }} />
+          <Box
+            sx={{
+              marginTop: '10px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '10px',
+            }}
+          >
+            {trnProject.trnProjectUser?.map(trnProjectUser => {
+              return (
+                <Avatar
+                  key={trnProjectUser.id}
+                  trnUser={trnProjectUser.trnUser}
+                />
+              );
+            })}
+          </Box>
         </Box>
+        <Divider sx={{ marginTop: '6px' }} />
+        <SlackNotification />
       </Paper>
     </Page>
   );

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProject;
+use App\Pipe\App\PipeAppProjectCreate;
+use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;
@@ -25,11 +28,58 @@ class TrnProjectService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
-                EPipeKind::APP_PROJECT_UPDATE       => $this->execAppProjectUpdate($pipe),
-                default                             => throw new Exception(),
+                EPipeKind::APP_PROJECT_UPDATE => $this->execAppProjectUpdate($pipe),
+                EPipeKind::APP_PROJECT_DELETE => $this->execAppProjectDelete($pipe),
+                EPipeKind::APP_PROJECT_CREATE => $this->execAppProjectCreate($pipe),
+                default                       => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    private function execAppProjectCreate(
+        PipeAppProjectCreate|PipeBase $pipe
+    ): void {
+        // プロジェクトの作成.
+        $this->createNewProject(
+            $pipe->name,
+            $pipe->explain,
+        );
+    }
+
+    /**
+     * にすみ - プロジェクトの削除用
+     */
+    private function execAppProjectDelete(
+        PipeAppProjectDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        /** @var TrnProject $target */
+        $target                  = TrnProject::query()
+            ->where('id', $pipe->trnProjectId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $target->updateOrFail();
+    }
+
+    /**
+     * にすみ - プロジェクトの新規追加
+     */
+    public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
+    {
+        // ユーザーを作成.
+        $trnProject                  = new TrnProject();
+        if ($id !== 0) {
+            $trnProject->id   = $id;
+        }
+        $trnProject->name            = $projectName;
+        $trnProject->explain         = $projectExplain;
+        $trnProject->saveOrFail();
     }
 
     /**

@@ -6,9 +6,12 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Trn\TrnProjectNotificationService;
 use App\Facades\Models\App\Trn\TrnProjectService;
 use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppProjectCreate;
+use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
 use App\Pipe\App\PipeAppProjectUserUpdate;
 use Exception;
@@ -57,6 +60,7 @@ class ProjectController extends Controller
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
+                'TrnProjectNotification',
             ]),
         ]);
     }
@@ -73,15 +77,16 @@ class ProjectController extends Controller
         return $this->render('Project/Edit/Index', [
 
             // プロジェクト情報.
-            'trnProject'          => fn () => $this->getProject($request, [
+            'trnProject'       => fn () => $this->getProject($request, [
                 'TrnProjectUser',
                 'TrnProjectUser' => [
                     'TrnUser',
                 ],
+                'TrnProjectNotification',
             ]),
 
             // セッションにバリデーション情報があれば取得する.
-            'serverValidation'    => fn () => session('serverValidation') ?? null,
+            'serverValidation' => fn () => session('serverValidation') ?? null,
         ]);
     }
 
@@ -111,11 +116,49 @@ class ProjectController extends Controller
         DB::transaction(static function (): void {
             // プロジェクト情報の更新.
             TrnProjectService::updateByPipe();
+
+            // プロジェクト通知の更新.
+            TrnProjectNotificationService::updateByPipe();
         });
 
         return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
             'projectId' => $pipe->trnProjectId,
         ]);
+    }
+
+    public function new(Request $request): Response
+    {
+        return $this->render('Project/New/Index', [
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation' => fn () => session('serverValidation') ?? null,
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function create(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppProjectCreate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::PROJECT__NEW->getInvokePath())
+                ->with([
+                    'serverValidation' => PipeService::getValidationResult(),
+                ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // ユーザー情報の更新.
+            TrnProjectService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PROJECT->getInvokePath());
     }
 
     /**
@@ -174,5 +217,24 @@ class ProjectController extends Controller
             $request->route('projectId'),
             $with,
         )->toPayload($with);
+    }
+
+    /**
+     * プロジェクト削除処理
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppProjectDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // プロジェクトの削除.
+            TrnProjectService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::PROJECT->getInvokePath());
     }
 }

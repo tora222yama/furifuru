@@ -18,9 +18,12 @@ import { E_ICON } from '@/script/Enum/EIcon';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
+import { E_USER_AUTHORITY } from '@/script/Enum/Server/App/EUserAuthority';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
+  const { trnUserAuthorityList } = useCommonIndexContext();
   const { trnUser } = useIndexContext();
 
   return (
@@ -35,7 +38,11 @@ export const Show: React.FC<IProps> = () => {
         <TypoH1>
           {getPagesName(E_PAGES.USER__SHOW)}[{trnUser.id}]
         </TypoH1>
-        <Closable open={false}>
+        <Closable
+          open={trnUserAuthorityList.hasAuthority([
+            E_USER_AUTHORITY.ADMIN_PRIVILEGE,
+          ])}
+        >
           <InertiaLink
             href={getPagesHref(E_PAGES.USER__EDIT, [
               {
@@ -68,11 +75,21 @@ export const Show: React.FC<IProps> = () => {
             }}
             src={trnUser.faceImagePath}
           />
-          <Box sx={{ width: '400px' }}>
+          <Box sx={{ width: '100%' }}>
+            <LabelValue
+              sx={{ marginTop: '10px' }}
+              label="名前"
+              value={String(trnUser?.authUser?.name)}
+            />
             <LabelValue
               sx={{ marginTop: '10px' }}
               label="表示名"
               value={String(trnUser?.nickname)}
+            />
+            <LabelValue
+              sx={{ marginTop: '10px' }}
+              label="E-Mail"
+              value={String(trnUser?.authUser?.email)}
             />
           </Box>
         </Box>
@@ -129,14 +146,14 @@ export const Show: React.FC<IProps> = () => {
               marginTop: '10px',
             }}
             label="Auth User ID"
-            value="----"
+            value={String(trnUser.authUser?.id ?? '')}
           />
           <LabelValue
             sx={{
               marginTop: '10px',
             }}
             label="レガシーログインの許可"
-            value="----"
+            value={trnUser.authUser?.eEnableLegacyLogin ? 'Yes' : 'No'}
           />
         </Closable>
       </Paper>

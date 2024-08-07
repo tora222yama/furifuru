@@ -7,21 +7,28 @@ namespace App\Pipe\App;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
-use App\GraphQL\PipeBase;
+use App\Pipe\App\Input\InputNotification;
+use App\Pipe\PipeBase;
+use Illuminate\Support\Collection;
 
 final class PipeAppProjectUpdate extends PipeBase
 {
-    public int $trnProjectId  = 0;
+    public int $trnProjectId      = 0;
 
-    public string $name       = '';
+    public string $name           = '';
 
-    public string $explain    = '';
+    public string $explain        = '';
+
+    public bool $editNotification = false;
+
+    public Collection $notificationList;
 
     /**
      * constructor.
      */
     public function __construct(array $args)
     {
+        $this->notificationList = collect();
         parent::__construct(EPipeKind::APP_PROJECT_UPDATE, $args);
     }
 
@@ -30,9 +37,20 @@ final class PipeAppProjectUpdate extends PipeBase
      */
     public function parse(): void
     {
-        $this->trnProjectId  = $this->getArgAsInteger('trnProjectId');
-        $this->name          = $this->getArgAsString('name');
-        $this->explain       = $this->getArgAsString('explain');
+        $this->trnProjectId     = $this->getArgAsInteger('trnProjectId');
+        $this->name             = $this->getArgAsString('name');
+        $this->explain          = $this->getArgAsString('explain');
+
+        // チャンネル通知.
+        $this->editNotification = $this->getArgAsBoolean('editNotification');
+        $notificationListJson   = $this->getArgAsString('notificationListJson');
+        $notificationList       = json_decode($notificationListJson);
+        if ($this->editNotification && is_array($notificationList)) {
+            array_map(function ($notification) {
+                $new = InputNotification::create($notification);
+                $this->notificationList->add($new);
+            }, $notificationList);
+        }
     }
 
     /**

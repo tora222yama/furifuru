@@ -7,6 +7,10 @@ import {
   IAppTrnAttendanceState,
   parseAppTrnAttendanceStatePayload,
 } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import {
+  IAppAuthUser,
+  parseAppAuthUserPayload,
+} from '@/script/Models/App/Auth/AuthUserList';
 
 export interface IAppTrnUser {
   id: number;
@@ -17,6 +21,8 @@ export interface IAppTrnUser {
   trnAttendanceState?: IAppTrnAttendanceState[];
 
   trnUserSlackProfile?: IAppTrnUserSlackProfile;
+
+  authUser?: IAppAuthUser;
 }
 
 export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
@@ -25,6 +31,10 @@ export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
     authId: payload?.authId ? Number(payload.authId) : 0,
     nickname: payload?.nickname ? String(payload.nickname) : '',
     faceImagePath: payload?.faceImagePath ? String(payload.faceImagePath) : '',
+
+    authUser: payload?.authUser
+      ? parseAppAuthUserPayload(payload.authUser)
+      : undefined,
 
     trnAttendanceState: payload?.trnAttendanceState
       ? payload.trnAttendanceState.map(v =>

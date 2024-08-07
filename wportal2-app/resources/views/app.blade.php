@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/app.css">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP|Roboto&display=swap&subset=japanese" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow,noarchive">
     @vite('resources/script/app.tsx')
     @inertiaHead
 </head>

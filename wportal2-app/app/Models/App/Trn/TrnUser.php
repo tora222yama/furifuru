@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\App\Trn;
 
+use App\Facades\Models\App\Trn\TrnUserService;
+use App\Models\App\Auth\AuthUser;
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +17,18 @@ class TrnUser extends ModelBase
     use EagerLoadHelper, HasFactory;
 
     protected $table = 'trn_user';
+
+    /**
+     * リレーション:AuthUser
+     */
+    public function AuthUser(): HasOne
+    {
+        return $this->hasOne(
+            AuthUser::class,
+            'id',
+            'auth_id'
+        );
+    }
 
     /**
      * リレーション:TrnAttendanceState
@@ -73,7 +87,10 @@ class TrnUser extends ModelBase
             'id'                  => $this->id                ?? 0,
             'authId'              => $this->auth_id           ?? 0,
             'nickname'            => $this->nickname          ?? '',
-            'faceImagePath'       => $this->face_image_path   ?? '',
+            'faceImagePath'       => TrnUserService::getImageUrl($this),
+
+            'authUser'            => $this->isExistKeyInWith($with, 'AuthUser', $history)
+                ? $this->AuthUser?->toPayload($with, [...$history, 'AuthUser']) : null,
 
             'trnAttendanceState'  => $this->isExistKeyInWith($with, 'TrnAttendanceState', $history)
                 ? $this->TrnAttendanceState->map(

@@ -6,9 +6,9 @@ namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Models\App\Trn\TrnUserService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
+use App\Pipe\PipeBase;
 use Illuminate\Support\Facades\Auth;
 
 final class PipeAppPersonalSettingShowAlignSlack extends PipeBase

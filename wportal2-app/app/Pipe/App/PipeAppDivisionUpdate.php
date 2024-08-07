@@ -7,7 +7,7 @@ namespace App\Pipe\App;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
-use App\GraphQL\PipeBase;
+use App\Pipe\PipeBase;
 
 final class PipeAppDivisionUpdate extends PipeBase
 {

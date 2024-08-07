@@ -24,7 +24,7 @@ class SendSlack extends Command
     protected $description = 'Slackへの送信テストを行う';
 
     /**
-     * Create a new command instance.
+     * New a new command instance.
      *
      * @return void
      */

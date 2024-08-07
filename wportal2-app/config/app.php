@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'timezone'            => 'UTC',
+    'timezone'            => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ return [
     |
     */
 
-    'locale'              => 'en',
+    'locale'              => 'ja',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,16 +179,22 @@ return [
          */
 
         // External.
+        App\Providers\External\RecaptchaServiceProvider::class,
+        App\Providers\External\SesServiceProvider::class,
         App\Providers\External\SlackServiceProvider::class,
 
         // Internal.
         App\Providers\Internal\PipeServiceProvider::class,
 
-        // Models.Scat.Trn.
+        // Models.App.Auth.
+        App\Providers\Models\App\Auth\AuthUserServiceProvider::class,
+
+        // Models.App.Trn.
         App\Providers\Models\App\Trn\TrnAttendanceStateServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnProjectNotificationServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
@@ -212,22 +218,28 @@ return [
     'aliases'             => Facade::defaultAliases()->merge([
 
         // External.
-        'external\slack_service'                            => App\Facades\External\SlackService::class,
+        'external\recaptcha_service'                         => App\Facades\External\RecaptchaService::class,
+        'external\ses_service'                               => App\Facades\External\SesService::class,
+        'external\slack_service'                             => App\Facades\External\SlackService::class,
 
         // Internal.
-        'internal\pipe_service'                             => App\Facades\Internal\PipeService::class,
+        'internal\pipe_service'                              => App\Facades\Internal\PipeService::class,
+
+        // Models.App.Auth.
+        'models\app\trn\auth_user_service'                   => App\Facades\Models\App\Auth\AuthUserService::class,
 
         // Models.App.Trn.
-        'models\app\trn\trn_attendance_state_service'       => App\Facades\Models\App\Trn\TrnAttendanceStateService::class,
-        'models\app\trn\trn_division_service'               => App\Facades\Models\App\Trn\TrnDivisionService::class,
-        'models\app\trn\trn_division_user_service'          => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
-        'models\app\trn\trn_project_service'                => App\Facades\Models\App\Trn\TrnProjectService::class,
-        'models\app\trn\trn_project_user_service'           => App\Facades\Models\App\Trn\TrnProjectUserService::class,
-        'models\app\trn\trn_user_authority_service'         => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
-        'models\app\trn\trn_user_division_priority_service' => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
-        'models\app\trn\trn_user_project_priority_service'  => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
-        'models\app\trn\trn_user_service'                   => App\Facades\Models\App\Trn\TrnUserService::class,
-        'models\app\trn\trn_user_slack_profile_service'     => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
+        'models\app\trn\trn_attendance_state_service'        => App\Facades\Models\App\Trn\TrnAttendanceStateService::class,
+        'models\app\trn\trn_division_service'                => App\Facades\Models\App\Trn\TrnDivisionService::class,
+        'models\app\trn\trn_division_user_service'           => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
+        'models\app\trn\trn_project_service'                 => App\Facades\Models\App\Trn\TrnProjectService::class,
+        'models\app\trn\trn_project_notification_service'    => App\Facades\Models\App\Trn\TrnProjectNotificationService::class,
+        'models\app\trn\trn_project_user_service'            => App\Facades\Models\App\Trn\TrnProjectUserService::class,
+        'models\app\trn\trn_user_authority_service'          => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
+        'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
+        'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
+        'models\app\trn\trn_user_service'                    => App\Facades\Models\App\Trn\TrnUserService::class,
+        'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 
     ])->toArray(),
 

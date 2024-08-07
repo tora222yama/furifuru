@@ -8,6 +8,7 @@ import { IAppTrnUserAuthority } from '@/script/Models/App/Trn/TrnUserAuthorityLi
 export interface IPropsBase {
   sx?: SxProps<Theme>;
   id?: string;
+  className?: string;
   children?: React.ReactNode;
   csrfToken?: string;
   authUser?: IAppAuthUser;

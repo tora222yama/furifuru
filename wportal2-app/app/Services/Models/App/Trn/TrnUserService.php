@@ -7,18 +7,27 @@ namespace App\Services\Models\App\Trn;
 use App\Constant;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
+use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class TrnUserService extends ModelServiceBase
 {
+    const string IMAGE_CACHE_URL_KEY     = 'image_url_';
+
+    const int IMAGE_CACHE_HOUR           = 1;
+
+    const int IMAGE_CACHE_TTL            = self::IMAGE_CACHE_HOUR * 60 * 60;
+
     /**
      * パイプによる更新.
      *
@@ -30,6 +39,7 @@ class TrnUserService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
+                EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -62,6 +72,24 @@ class TrnUserService extends ModelServiceBase
 
         // 保存.
         $this->updateOrFail($trnUser);
+    }
+
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
+    private function execAppUserCreate(
+        PipeAppUserCreate|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->createdAuthUser)) {
+            throw new Exception('invalid auth user');
+        }
+
+        // ユーザーの作成.
+        $this->createNewUser(
+            $pipe->createdAuthUser,
+            $pipe->nickname,
+        );
     }
 
     /**
@@ -105,9 +133,10 @@ class TrnUserService extends ModelServiceBase
     /**
      * IDで検索(orFail).
      */
-    public function findByIdOrFail(int $id): ?TrnUser
+    public function findByIdOrFail(int $id, array $with = []): ?TrnUser
     {
         return TrnUser::query()
+            ->with($with)
             ->alive()
             ->findOrFail($id);
     }
@@ -132,6 +161,43 @@ class TrnUserService extends ModelServiceBase
             ->where('auth_id', $authId)
             ->alive()
             ->firstOrFail();
+    }
+
+    /**
+     * ユーザーの画像URLを取得する.
+     */
+    public function getImageUrl(TrnUser $trnUser): string
+    {
+        // キャッシュから取得する.
+        $cacheKey = $this->getCacheKeyFaceImage($trnUser);
+
+        return Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
+            // URLを発行.
+            return $this->createProfileImageTemporaryUrl($trnUser, self::IMAGE_CACHE_HOUR);
+        });
+    }
+
+    /**
+     * 画像パスを保存するキャッシュのキー.
+     */
+    private function getCacheKeyFaceImage(TrnUser $trnUser): string
+    {
+        return self::IMAGE_CACHE_URL_KEY.$trnUser->id;
+    }
+
+    /**
+     * プロフィール画像用の一時アクセス用URLを作成する.
+     */
+    public function createProfileImageTemporaryUrl(TrnUser $trnUser, int $hour): string
+    {
+        $imagePath  = $trnUser->face_image_path;
+        $expiration = Carbon::now()->addHours($hour);
+
+        return Storage::disk('storage')
+            ->temporaryUrl(
+                $imagePath,
+                $expiration
+            );
     }
 
     /**
