@@ -54,16 +54,19 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
     Route::post('/personal_setting/update', EPages::PERSONAL_SETTING__UPDATE->getInvokePath());
 
-    Route::get('/sample/dashboard', EPages::SAMPLE_DASHBOARD->getInvokePath());
-    Route::get('/sample/mvc_value', EPages::SAMPLE_MVC_VALUE->getInvokePath());
-    Route::get('/sample/input_form', EPages::SAMPLE_INPUT_FORM->getInvokePath());
-    Route::post('/sample/input_form/create', EPages::SAMPLE_INPUT_FORM__CREATE->getInvokePath());
-    Route::get('/sample/redis', EPages::SAMPLE_REDIS->getInvokePath());
-    Route::post('/sample/redis_post_result', EPages::SAMPLE_REDIS_POST_RESULT->getInvokePath());
-    Route::get('/sample/slack_log', EPages::SAMPLE_SLACK_LOG->getInvokePath());
-    Route::match(['get', 'post'], '/sample/pagination', EPages::SAMPLE_PAGINATION->getInvokePath());
-    Route::get('/sample/intern', EPages::SAMPLE_INTERN->getInvokePath());
-    Route::get('/sample/inertia_data', EPages::SAMPLE_INERTIA_DATA->getInvokePath());
+    /**
+     * サンプルページ用.
+     */
+    Route::get('/sample/dashboard', '\App\Http\Controllers\Pages\Sample\DashboardController@invoke');
+    Route::get('/sample/mvc_value', '\App\Http\Controllers\Pages\Sample\MvcValueController@invoke');
+    Route::get('/sample/input_form', '\App\Http\Controllers\Pages\Sample\InputFormController@invoke');
+    Route::post('/sample/input_form/create', '\App\Http\Controllers\Pages\Sample\InputFormController@create');
+    Route::get('/sample/redis', '\App\Http\Controllers\Pages\Sample\RedisController@invoke');
+    Route::post('/sample/redis_post_result', '\App\Http\Controllers\Pages\Sample\RedisPostResultController@invoke');
+    Route::get('/sample/slack_log', '\App\Http\Controllers\Pages\Sample\SlackLogController@invoke');
+    Route::match(['get', 'post'], '/sample/pagination', '\App\Http\Controllers\Pages\Sample\PaginationController@invoke');
+    Route::get('/sample/intern', '\App\Http\Controllers\Pages\Sample\InternController@invoke');
+    Route::get('/sample/inertia_data', '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke');
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
