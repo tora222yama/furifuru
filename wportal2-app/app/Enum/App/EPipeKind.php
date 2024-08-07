@@ -31,4 +31,13 @@ enum EPipeKind: string
 
     case APP_LEGACY_LOGIN                       = 'app_legacy_login';
     case APP_ONETIME_PASSWORD_LOGIN             = 'app_onetime_password_login';
+
+    // sample-queries.
+    case SAMPLE_PAGINATION_QUERY                = 'sample_pagination_query';
+    case SAMPLE_REDIS_QUERY                     = 'sample_redis_query';
+
+    // sample-mutations.
+    case SAMPLE_INPUT_FORM_UPDATE               = 'sample_input_form_update';
+    case SAMPLE_REDIS_UPDATE                    = 'sample_redis_update';
+    case SAMPLE_LOGIN_FORM_LOGIN                = 'sample_login_form_login';
 }

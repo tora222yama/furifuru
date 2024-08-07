@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
-use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\PipeBase;
 
 final class PipeAppLegacyLogin extends PipeBase
 {

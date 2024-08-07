@@ -6,8 +6,8 @@ namespace App\Pipe\App;
 
 use App\Enum\App\EAttendanceState;
 use App\Enum\App\EPipeKind;
-use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
+use App\Pipe\PipeBase;
 use Auth;
 
 final class PipeAppAttendanceCreate extends PipeBase
