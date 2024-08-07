@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL;
+namespace App\Pipe;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;

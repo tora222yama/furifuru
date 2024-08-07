@@ -6,10 +6,10 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnUserSlackProfile;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;

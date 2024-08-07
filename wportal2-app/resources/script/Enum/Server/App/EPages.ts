@@ -41,9 +41,18 @@ export const E_PAGES = {
   LEGACY_LOGIN: 'legacy_login', // ワンタイムパスワードの発行.
   ONETIME_PASSWORD_LOGIN: 'onetime_password_login', // ワンタイムパスワードログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
+  SAMPLE_DASHBOARD: 'sample_dashboard', // ダッシュボード.
+  SAMPLE_MVC_VALUE: 'sample_mvc_value', // MVC値渡し.
+  SAMPLE_INPUT_FORM: 'sample_input_form', // 入力フォーム.
+  SAMPLE_INPUT_FORM__CREATE: 'sample_input_form__create', // 入力フォームPost更新.
+  SAMPLE_REDIS: 'sample_redis', // Redis操作.
+  SAMPLE_REDIS_POST_RESULT: 'sample_redis_post_result', // RedisをPostで更新.
+  SAMPLE_SLACK_LOG: 'sample_slack_log', // Slackログ通知.
+  SAMPLE_PAGINATION: 'sample_pagination', // ページネーション.
+  SAMPLE_INTERN: 'sample_intern', // インターン.
+  SAMPLE_INERTIA_DATA: 'sample_inertia_data', // Inertiaデータ.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
-
 // #ENUM_DEFINE_END#
 
 /**
@@ -120,6 +129,31 @@ const getHref = (page: EPages): string => {
       return '/legacy_login';
     case E_PAGES.ONETIME_PASSWORD_LOGIN:
       return '/onetime_password_login';
+
+    /**
+     * サンプル用.
+     */
+    case E_PAGES.SAMPLE_DASHBOARD:
+      return '/sample/dashboard';
+    case E_PAGES.SAMPLE_MVC_VALUE:
+      return '/sample/mvc_value';
+    case E_PAGES.SAMPLE_INPUT_FORM:
+      return '/sample/input_form';
+    case E_PAGES.SAMPLE_INPUT_FORM__CREATE:
+      return '/sample/input_form/create';
+    case E_PAGES.SAMPLE_REDIS:
+      return '/sample/redis';
+    case E_PAGES.SAMPLE_REDIS_POST_RESULT:
+      return '/sample/redis_post_result';
+    case E_PAGES.SAMPLE_SLACK_LOG:
+      return '/sample/slack_log';
+    case E_PAGES.SAMPLE_PAGINATION:
+      return '/sample/pagination';
+    case E_PAGES.SAMPLE_INTERN:
+      return '/sample/intern';
+    case E_PAGES.SAMPLE_INERTIA_DATA:
+      return '/sample/inertia_data';
+
     default:
       return '/';
   }
@@ -173,6 +207,28 @@ export const getPagesName = (page: EPages): string => {
       return '個人設定';
     case E_PAGES.PERSONAL_SETTING__EDIT:
       return '個人設定編集';
+
+    /**
+     * サンプル用.
+     */
+    case E_PAGES.SAMPLE_DASHBOARD:
+      return 'ダッシュボード';
+    case E_PAGES.SAMPLE_MVC_VALUE:
+      return 'MVC値渡し';
+    case E_PAGES.SAMPLE_INPUT_FORM:
+      return '入力フォーム';
+    case E_PAGES.SAMPLE_REDIS:
+      return 'Redis/GraphQL';
+    case E_PAGES.SAMPLE_REDIS_POST_RESULT:
+      return 'Redis - Postによる更新結果';
+    case E_PAGES.SAMPLE_SLACK_LOG:
+      return 'Slack通知・Log出力';
+    case E_PAGES.SAMPLE_PAGINATION:
+      return 'ページネーション';
+    case E_PAGES.SAMPLE_INTERN:
+      return 'コンポーネント';
+    case E_PAGES.SAMPLE_INERTIA_DATA:
+      return 'データ受信';
     default:
       return '';
   }
