@@ -56,3 +56,8 @@ type Response {
 # Query/Mutationの定義.
 #import App/Common.graphql
 #import App/PersonalSetting.graphql
+
+# Sample-Query/Mutationの定義.
+#import Sample/InputForm.graphql
+#import Sample/Pagination.graphql
+#import Sample/Redis.graphql

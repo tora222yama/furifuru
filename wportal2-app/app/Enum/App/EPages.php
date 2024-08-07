@@ -25,6 +25,7 @@ enum EPages: string
     case DIVISION__EDIT                   = 'division__edit'; // 課編集.
     case DIVISION__UPDATE                 = 'division__update'; // 課更新.
     case DIVISION__UPDATE_USER            = 'division__update_user'; // 課メンバー更新.
+    case DIVISION__DELETE                 = 'division__delete'; // 課削除.
     case PROJECT                          = 'project'; // プロジェクト一覧.
     case PROJECT__SHOW                    = 'project__show'; // プロジェクト詳細.
     case PROJECT__EDIT                    = 'project__edit'; // プロジェクト編集.
@@ -48,6 +49,20 @@ enum EPages: string
     case NOT_FOUND                        = 'not_found'; // ページが見つからない.
 
     /**
+     * 以下、標準環境と同等のサンプルページ.
+     */
+    case SAMPLE_DASHBOARD                 = 'sample_dashboard'; // ダッシュボード.
+    case SAMPLE_MVC_VALUE                 = 'sample_mvc_value'; // MVC値渡し.
+    case SAMPLE_INPUT_FORM                = 'sample_input_form'; // 入力フォーム.
+    case SAMPLE_INPUT_FORM__CREATE        = 'sample_input_form__create'; // 入力フォームPost更新.
+    case SAMPLE_REDIS                     = 'sample_redis'; // Redis操作.
+    case SAMPLE_REDIS_POST_RESULT         = 'sample_redis_post_result'; // RedisをPostで更新.
+    case SAMPLE_SLACK_LOG                 = 'sample_slack_log'; // Slackログ通知.
+    case SAMPLE_PAGINATION                = 'sample_pagination'; // ページネーション.
+    case SAMPLE_INTERN                    = 'sample_intern'; // インターン.
+    case SAMPLE_INERTIA_DATA              = 'sample_inertia_data'; // Inertiaデータ.
+
+    /**
      * routing時のinvokeパスの取得.
      */
     public function getInvokePath(): string
@@ -63,6 +78,7 @@ enum EPages: string
             self::DIVISION__SHOW                 => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT                 => '\App\Http\Controllers\Pages\DivisionController@edit',
             self::DIVISION__UPDATE               => '\App\Http\Controllers\Pages\DivisionController@update',
+            self::DIVISION__DELETE               => '\App\Http\Controllers\Pages\DivisionController@delete',
             self::DIVISION__UPDATE_USER          => '\App\Http\Controllers\Pages\DivisionController@update_user',
             self::PROJECT                        => '\App\Http\Controllers\Pages\ProjectController@invoke',
             self::PROJECT__SHOW                  => '\App\Http\Controllers\Pages\ProjectController@show',
@@ -85,6 +101,21 @@ enum EPages: string
             self::LEGACY_LOGIN                   => '\App\Http\Controllers\Pages\LoginController@legacy_login',
             self::ONETIME_PASSWORD_LOGIN         => '\App\Http\Controllers\Pages\LoginController@onetime_password_login',
             self::NOT_FOUND                      => '\App\Http\Controllers\Pages\NotFoundController@invoke',
+
+            /**
+             * 以下、標準環境と同等のサンプルページ.
+             */
+            self::SAMPLE_DASHBOARD               => '\App\Http\Controllers\Pages\Sample\DashboardController@invoke',
+            self::SAMPLE_MVC_VALUE               => '\App\Http\Controllers\Pages\Sample\MvcValueController@invoke',
+            self::SAMPLE_INPUT_FORM              => '\App\Http\Controllers\Pages\Sample\InputFormController@invoke',
+            self::SAMPLE_INPUT_FORM__CREATE      => '\App\Http\Controllers\Pages\Sample\InputFormController@create',
+            self::SAMPLE_REDIS                   => '\App\Http\Controllers\Pages\Sample\RedisController@invoke',
+            self::SAMPLE_REDIS_POST_RESULT       => '\App\Http\Controllers\Pages\Sample\RedisPostResultController@invoke',
+            self::SAMPLE_SLACK_LOG               => '\App\Http\Controllers\Pages\Sample\SlackLogController@invoke',
+            self::SAMPLE_PAGINATION              => '\App\Http\Controllers\Pages\Sample\PaginationController@invoke',
+            self::SAMPLE_INTERN                  => '\App\Http\Controllers\Pages\Sample\InternController@invoke',
+            self::SAMPLE_INERTIA_DATA            => '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke',
+
             default                              => '',
         };
     }

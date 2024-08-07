@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnDivision;
+use App\Pipe\App\PipeAppDivisionDelete;
 use App\Pipe\App\PipeAppDivisionUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;
@@ -26,6 +28,7 @@ class TrnDivisionService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_DIVISION_UPDATE      => $this->execAppDivisionUpdate($pipe),
+                EPipeKind::APP_DIVISION_DELETE      => $this->execAppDivisionDelete($pipe),
                 default                             => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -45,6 +48,26 @@ class TrnDivisionService extends ModelServiceBase
 
         // 保存.
         $this->updateOrFail($trnDivision);
+    }
+
+    /**
+     * 課の削除
+     */
+    private function execAppDivisionDelete(
+        PipeAppDivisionDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        /** @var TrnDivision $target */
+        $target                  = TrnDivision::query()
+            ->where('id', $pipe->trnDivisionId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $target->updateOrFail();
     }
 
     /**

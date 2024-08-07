@@ -6,9 +6,9 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProjectUser;
 use App\Pipe\App\PipeAppProjectUserUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Illuminate\Support\Collection;

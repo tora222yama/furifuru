@@ -7,8 +7,8 @@ namespace App\Pipe\App;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
-use App\GraphQL\PipeBase;
 use App\Pipe\App\Input\InputNotification;
+use App\Pipe\PipeBase;
 use Illuminate\Support\Collection;
 
 final class PipeAppProjectUpdate extends PipeBase
