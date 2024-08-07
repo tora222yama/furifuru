@@ -1,22 +1,27 @@
 import * as React from 'react';
 import { Box, Button, Paper } from '@mui/material';
-import { useMvcValueContext } from '@/script/Pages/Sample/MvcValue/Index';
 import { Page } from '@/script/Pages/Page';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { Log } from '@/script/Common/Log';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
 import { TypoText } from '@/script/Component/Typography/TypoText';
-import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { IPropsBase } from '@/script/System/System';
-import { Facility } from '@/script/Pages/Sample/MvcValue/Facility';
+import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 
-interface IPros extends IPropsBase {}
-export const MvcValue: React.FC<IPros> = () => {
-  const { location } = useCommonIndexContext();
-  const { numberValue, stringValue, arrayValue, trnUserList } =
-    useMvcValueContext();
+interface IPros extends IPropsBase {
+  numberValue: number;
+  stringValue: string;
+  arrayValue: number[];
 
+  trnUserList: IAppTrnUser[];
+}
+export const MvcValue: React.FC<IPros> = ({
+  numberValue,
+  stringValue,
+  arrayValue,
+  trnUserList,
+}) => {
   const handleClick = () => {
     Log.info('クリックされた');
   };
@@ -50,15 +55,6 @@ export const MvcValue: React.FC<IPros> = () => {
           return <Box key={v}>{v}</Box>;
         })}
       </Paper>
-      <Paper
-        sx={{
-          marginTop: '10px',
-          padding: '5px',
-        }}
-      >
-        <TypoText>location: {location.current}</TypoText>
-        <TypoText>path: {location.path}</TypoText>
-      </Paper>
       <Button
         sx={{
           marginTop: '10px',
@@ -86,14 +82,29 @@ export const MvcValue: React.FC<IPros> = () => {
           gap: '5px',
         }}
       >
-        {trnUserList.list().map(trnUser => (
-          <Facility
+        {trnUserList.map(trnUser => (
+          <Paper
             sx={{
+              padding: '20px',
               width: 'calc(50% - 5px)',
             }}
             key={trnUser.id}
-            trnUser={trnUser}
-          />
+          >
+            <TypoText>
+              [{trnUser.id}]{trnUser.nickname}
+            </TypoText>
+            <Box
+              sx={{
+                border: '1px solid',
+                marginTop: '10px',
+                padding: '5px',
+              }}
+            >
+              <TypoText sx={{ whiteSpace: 'pre-wrap' }}>
+                {trnUser.nickname}
+              </TypoText>
+            </Box>
+          </Paper>
         ))}
       </Box>
     </Page>
