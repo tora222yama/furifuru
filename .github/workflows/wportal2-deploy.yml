@@ -2,6 +2,8 @@ name: wportal2-deploy
 
 on:
   push:
+    branches:
+      - release
 
 permissions:  
   id-token: write
