@@ -18,13 +18,24 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::979109089196:role/wportal2_deploy_iam_role
           aws-region: ap-northeast-1
+
+      # Source step
       - name: Source step - gitからコード取得
         uses: actions/checkout@v2
       - name: Source step - List files
         run: |
           ls -l
 
-      - name: Build step
-        run: echo "Build step (env設定とnpm run buildの実行、ECRに保存する？)"
+      # Build step
+      - name: Build step -
+        run: |
+          echo "実行場所のイメージがまだ定まっていない"
+          echo "Build step (Dockerイメージを作成し、ECRに保存する)"
+          echo "以下イメージ"
+          echo "専用のdocker-composeでwebコンテナをビルド"
+          echo "コンテナに入る？"
+          echo "ディレクトリ変更？"
+          echo "[composer install]以降の実行"
+          echo "docker build -t $IMAGEのようにイメージを作成してECRに送る"
       - name: Deploy step
         run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
