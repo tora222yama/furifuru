@@ -12,6 +12,11 @@ class MvcValueController extends Controller
 {
     public function invoke(): Response
     {
+        // DBからのデータ取得サンプル.
+        $userList = TrnUser::query()
+            ->limit(10)
+            ->get();
+
         return $this->render('Sample/MvcValue/Index', [
             'numberValue'     => 919,
             'stringValue'     => 'This message was provided from PHP Controller.',
@@ -22,24 +27,7 @@ class MvcValueController extends Controller
                 44,
             ],
 
-            // DBから値をReactへ. 値がnullなどが混在する可能性があり、専用のarray関数が望ましい.
-            'trnUserList'     => fn () => $this->getUserList(),
+            'trnUserList'     => $userList->toArray(),
         ]);
-    }
-
-    /**
-     * 施設データリスト取得.
-     */
-    private function getUserList(array $with = []): array
-    {
-        // DBからのデータ取得サンプル.
-        $userList = TrnUser::query()
-            ->with($with)
-            ->limit(10)
-            ->get();
-
-        return $userList->map(function (TrnUser $trnUser) use ($with) {
-            return $trnUser->toPayload($with);
-        })->toArray();
     }
 }
