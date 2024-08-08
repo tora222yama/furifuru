@@ -18,9 +18,13 @@ resource "aws_iam_openid_connect_provider" "wportal2_github_actions" {
  * 接続用ロール
  */
 data "aws_iam_policy_document" "wportal2_deploy_assume_role_policy" {
+
+  // for GitHubActions.
   statement {
     effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
+    actions = [
+      "sts:AssumeRoleWithWebIdentity",
+    ]
     principals {
       type        = "Federated"
       identifiers = ["arn:aws:iam::979109089196:oidc-provider/token.actions.githubusercontent.com"] # ID プロバイダの ARN
@@ -49,4 +53,31 @@ resource "aws_iam_role" "wportal2_deploy_iam_role" {
 resource "aws_iam_role_policy_attachment" "wportal2_deploy_policy_attachment" {
   role       = aws_iam_role.wportal2_deploy_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
+
+# ECRログイン用.
+data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
+    statement {
+      sid = "AllowPush"
+      effect = "Allow"
+      actions = [
+        "ecr:GetAuthorizationToken",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:BatchCheckLayerAvailability"
+      ]
+      resources = ["*"]
+    }
+}
+
+resource "aws_iam_policy" "wportal2_ecr_policy" {
+  name   = "wportal2_deploy_policy"
+  policy = data.aws_iam_policy_document.wportal2_ecr_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "wportal2_ecr_policy_attachment" {
+  role       = aws_iam_role.wportal2_deploy_iam_role.name
+  policy_arn = aws_iam_policy.wportal2_ecr_policy.arn
 }

@@ -42,7 +42,14 @@ jobs:
           echo "[composer install]以降の実行"
           echo "docker build -t $IMAGEのようにイメージを作成してECRに送る"
 
-      # TODO:キャッシュ対応.
+      # キャッシュ対応.
+      - name: Cache step
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       # ビルド設定.
       - name: Build step - setup buildx
@@ -56,7 +63,11 @@ jobs:
 
       # TODO: ビルドとプッシュ.
 
-      # TODO: キャッシュ削除.
+      # キャッシュ削除.
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy step
         run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
