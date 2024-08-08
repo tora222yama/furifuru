@@ -18,5 +18,9 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::979109089196:role/wportal2_deploy_iam_role
           aws-region: ap-northeast-1
-      - name: OIDC test
-        run: aws s3 ls
+      - name: Source step
+        run: echo "Source step (gitからコードを取得すれば良いか)"
+      - name: Build step
+        run: echo "Build step (env設定とnpm run buildの実行、ECRに保存する？)"
+      - name: Deploy step
+        run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
