@@ -18,11 +18,10 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::979109089196:role/wportal2_deploy_iam_role
           aws-region: ap-northeast-1
-      - name: Source step
+      - name: Source step - gitからコード取得
         uses: actions/checkout@v2
+      - name: Source step - List files
         run: |
-          echo "Source step (gitからコードを取得すれば良いか)"
-          echo "コードの取得"
           ls -l
 
       - name: Build step
