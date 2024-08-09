@@ -73,6 +73,7 @@ data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
         "ecs:ListTasks",
         "ecs:RegisterTaskDefinition",
         "ecs:UpdateService",
+        "ecs:TagResource",
         "iam:PassRole",
       ]
       resources = ["*"]

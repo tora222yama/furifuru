@@ -108,6 +108,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.render-task.outputs.task-definition }}
-          service: wportal2_ecs_service
-          cluster: wportal2_ecs_cluster
+          service: wportal2-ecs-service
+          cluster: wportal2-ecs-cluster
           wait-for-service-stability: true
