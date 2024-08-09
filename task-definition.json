@@ -5,16 +5,14 @@
       "name": "wportal2-container",
       "essential": true,
       "image": "979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest",
-      "logConfiguration": [
-        {
-          "logDriver": "awslogs",
-          "options": {
-            "awslogs-region": "ap-northeast-1",
-            "awslogs-stream-prefix": "httpd",
-            "awslogs-group": "/wportal2/ecs"
-          }
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "httpd",
+          "awslogs-group": "/wportal2/ecs"
         }
-      ],
+      },
       "portMappings": [
         {
           "containerPort": 80,
