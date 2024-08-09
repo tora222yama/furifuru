@@ -22,7 +22,7 @@
       "command": [
         "/usr/local/bin/server.sh"
       ],
-      "secret": [
+      "secrets": [
         {
           "name": "DB_HOST",
           "valueFrom": "/wportal/db/host"
