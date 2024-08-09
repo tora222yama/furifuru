@@ -43,13 +43,13 @@ jobs:
           echo "docker build -t $IMAGEのようにイメージを作成してECRに送る"
 
       # キャッシュ対応.
-      - name: Cache step
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+#      - name: Cache step
+#        uses: actions/cache@v2
+#        with:
+#          path: /tmp/.buildx-cache
+#          key: ${{ runner.os }}-buildx-${{ github.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx-
 
       # ビルド設定.
       - name: Build step - setup buildx
@@ -61,24 +61,30 @@ jobs:
         with:
           registry: ${{ env.ECR_REGISTRY }}
 
+      # docker-composeでビルド.
+      - name: Build step - docker-compose build
+        run: |
+          echo "docker-composeでビルド"
+          echo "docker-compose -f docker-compose-for-service.yml build"
+
       # ビルドとプッシュ.
-      - name: Build step - build and push
-        uses: docker/build-push-action@v2
-        with:
-          # ディレクトリを[wportal2-app]に変更.
-          context: ./wportal2-app
-          # リリース用のwebコンテナでビルド
-          file: ./wportal2-app/service_container/web/Dockerfile
-          push: true
-          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+#      - name: Build step - build and push
+#        uses: docker/build-push-action@v2
+#        with:
+#          # ディレクトリを[wportal2-app]に変更.
+#          context: ./wportal2-app
+#          # リリース用のwebコンテナでビルド
+#          file: ./wportal2-app/service_container/web/Dockerfile
+#          push: true
+#          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+#          cache-from: type=local,src=/tmp/.buildx-cache
+#          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       # キャッシュ削除.
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+#      - name: Move cache
+#        run: |
+#          rm -rf /tmp/.buildx-cache
+#          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy step
         run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
