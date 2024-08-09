@@ -61,41 +61,33 @@ jobs:
         with:
           registry: ${{ env.ECR_REGISTRY }}
 
-      # docker-composeでビルド.
+      # docker-compose(with cache)でビルド.
 #      - name: Build step - docker-compose build
 #        run: |
-#          echo "docker-composeでビルド"
+#          docker buildx bake \
+#            --file docker-compose-for-service.yml \
+#            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
+#            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
+#
+#      # コンテナを起動して、コマンド実行.
+#      - name: Build step - docker-compose up and build.
+#        run: |
 #          cp wportal2-app/.env.prd.sample wportal2-app/.env
-#          docker compose -f docker-compose-for-service.yml build
+#          echo "TODO: 環境変数を設定する"
+#          docker compose -f docker-compose-for-service.yml up -d
 #          docker compose -f docker-compose-for-service.yml ps
-
-      # docker-compose(with cache)でビルド.
-      - name: Build step - docker-compose build
-        run: |
-          docker buildx bake \
-            --file docker-compose-for-service.yml \
-            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
-            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
-
-      # コンテナを起動して、コマンド実行.
-      - name: Build step - docker-compose up and build.
-        run: |
-          cp wportal2-app/.env.prd.sample wportal2-app/.env
-          echo "TODO: 環境変数を設定する"
-          docker compose -f docker-compose-for-service.yml up -d
-          docker compose -f docker-compose-for-service.yml ps
-          docker exec service_container_web composer install
-          docker exec service_container_web php artisan key:generate
-          docker exec service_container_web npm ci
-          docker exec service_container_web npm run build
-          # テストでenvの値を確認する.
-          cat wportal2-app/.env      
-
-      # ECRへのpush.
-      - name: Build step - docker-compose push
-        run: |
-          echo "docker-composeでビルドしたイメージをECRにpush"
-          docker compose -f docker-compose-for-service.yml push
+#          docker exec service_container_web composer install
+#          docker exec service_container_web php artisan key:generate
+#          docker exec service_container_web npm ci
+#          docker exec service_container_web npm run build
+#          # テストでenvの値を確認する.
+#          cat wportal2-app/.env
+#
+#      # ECRへのpush.
+#      - name: Build step - docker-compose push
+#        run: |
+#          echo "docker-composeでビルドしたイメージをECRにpush"
+#          docker compose -f docker-compose-for-service.yml push
 
       # キャッシュ削除.
 #      - name: Move cache
@@ -103,5 +95,10 @@ jobs:
 #          rm -rf /tmp/.buildx-cache
 #          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - name: Deploy step
-        run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
+      - name: Deploy step - render task
+        id: render-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: aws/task-definition.json
+          container-name: wportal2-container
+          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest

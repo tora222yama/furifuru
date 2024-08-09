@@ -93,147 +93,144 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
 #/**
 # *  タスク定義
 # */
-#/**
-# *  ECRにイメージが入るまで起動できない
-# */
-#resource "aws_ecs_task_definition" "wportal2_ecs_task" {
-#  family                   = "wportal2-task"
-#  cpu                      = "256"
-#  memory                   = "512"
-#  network_mode             = "awsvpc"
-#  requires_compatibilities = ["FARGATE"]
-#  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-#  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn
-#
-#  container_definitions = jsonencode([
-#    {
-#      name      = "wportal2-container"
-#      essential = true
-#      image     = "${data.aws_ecr_repository.service_container.repository_url}:${local.ecr_wportal2_repository_newest_tags[0]}"
-#      logConfiguration = {
-#        logDriver = "awslogs"
-#        options = {
-#          awslogs-region        = "ap-northeast-1"
-#          awslogs-stream-prefix = "httpd"
-#          awslogs-group         = "/wportal2/ecs"
-#        }
-#      }
-#      portMappings = [
-#        {
-#          containerPort = 80
-#          protocol      = "tcp"
-#        }
-#      ]
-#      command = [
-#        "/usr/local/bin/server.sh"
-#      ]
-#      secrets = [
-#        {
-#          name      = "DB_HOST"
-#          valueFrom = "/wportal/db/host"
-#        },
-#        {
-#          name      = "DB_USERNAME"
-#          valueFrom = "/wportal/db/username"
-#        },
-#        {
-#          name      = "DB_PASSWORD"
-#          valueFrom = "/wportal/db/password"
-#        },
-#        {
-#          name      = "REDIS_HOST"
-#          valueFrom = "/wportal/redis/host"
-#        },
-#        {
-#          name      = "GOOGLE_CLIENT_ID"
-#          valueFrom = "/wportal/google_client_id"
-#        },
-#        {
-#          name      = "GOOGLE_CLIENT_SECRET"
-#          valueFrom = "/wportal/google_client_secret"
-#        },
-#        {
-#          name      = "SLACK_APP_TOKEN"
-#          valueFrom = "/wportal/slack_app_token"
-#        },
-#        {
-#          name      = "SLACK_BOT_USER_OAUTH_TOKEN"
-#          valueFrom = "/wportal/slack_bot_user_oauth_token"
-#        },
-#        {
-#          name      = "SLACK_URL_NOTICE"
-#          valueFrom = "/wportal/slack_url_notice"
-#        },
-#        {
-#          name      = "RECAPTCHA_SECRET_KEY"
-#          valueFrom = "/wportal/recaptcha_secret_key"
-#        },
-#        {
-#          name      = "VITE_RECAPTCHA_SITE_KEY"
-#          valueFrom = "/wportal/vite_recaptcha_site_key"
-#        },
-#        {
-#          name      = "APP_AWS_ACCESS_KEY_ID"
-#          valueFrom = "/wportal/app_aws_access_key_id"
-#        },
-#        {
-#          name      = "APP_AWS_SECRET_ACCESS_KEY"
-#          valueFrom = "/wportal/app_aws_secret_access_key"
-#        },
-#        {
-#          name      = "APP_AWS_REGION"
-#          valueFrom = "/wportal/app_aws_region"
-#        }
-#      ],
-#      environment = [
-#        {
-#          name  = "DB_DATABASE"
-#          value = "wportal"
-#        },
-#      ]
-#    }
-#  ])
-#
-#  tags = {
-#    Name = "wportal2-ecs-task"
-#  }
-#}
+resource "aws_ecs_task_definition" "wportal2_ecs_task" {
+  family                   = "wportal2-task"
+  cpu                      = "256"
+  memory                   = "512"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn
+
+  container_definitions = jsonencode([
+    {
+      name      = "wportal2-container"
+      essential = true
+      image     = "${data.aws_ecr_repository.service_container.repository_url}:${local.ecr_wportal2_repository_newest_tags[0]}"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-region        = "ap-northeast-1"
+          awslogs-stream-prefix = "httpd"
+          awslogs-group         = "/wportal2/ecs"
+        }
+      }
+      portMappings = [
+        {
+          containerPort = 80
+          protocol      = "tcp"
+        }
+      ]
+      command = [
+        "/usr/local/bin/server.sh"
+      ]
+      secrets = [
+        {
+          name      = "DB_HOST"
+          valueFrom = "/wportal/db/host"
+        },
+        {
+          name      = "DB_USERNAME"
+          valueFrom = "/wportal/db/username"
+        },
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "/wportal/db/password"
+        },
+        {
+          name      = "REDIS_HOST"
+          valueFrom = "/wportal/redis/host"
+        },
+        {
+          name      = "GOOGLE_CLIENT_ID"
+          valueFrom = "/wportal/google_client_id"
+        },
+        {
+          name      = "GOOGLE_CLIENT_SECRET"
+          valueFrom = "/wportal/google_client_secret"
+        },
+        {
+          name      = "SLACK_APP_TOKEN"
+          valueFrom = "/wportal/slack_app_token"
+        },
+        {
+          name      = "SLACK_BOT_USER_OAUTH_TOKEN"
+          valueFrom = "/wportal/slack_bot_user_oauth_token"
+        },
+        {
+          name      = "SLACK_URL_NOTICE"
+          valueFrom = "/wportal/slack_url_notice"
+        },
+        {
+          name      = "RECAPTCHA_SECRET_KEY"
+          valueFrom = "/wportal/recaptcha_secret_key"
+        },
+        {
+          name      = "VITE_RECAPTCHA_SITE_KEY"
+          valueFrom = "/wportal/vite_recaptcha_site_key"
+        },
+        {
+          name      = "APP_AWS_ACCESS_KEY_ID"
+          valueFrom = "/wportal/app_aws_access_key_id"
+        },
+        {
+          name      = "APP_AWS_SECRET_ACCESS_KEY"
+          valueFrom = "/wportal/app_aws_secret_access_key"
+        },
+        {
+          name      = "APP_AWS_REGION"
+          valueFrom = "/wportal/app_aws_region"
+        }
+      ],
+      environment = [
+        {
+          name  = "DB_DATABASE"
+          value = "wportal"
+        },
+      ]
+    }
+  ])
+
+  tags = {
+    Name = "wportal2-ecs-task"
+  }
+}
 
 /**
  *  ECSサービス
  */
-#resource "aws_ecs_service" "wportal2_ecs_service" {
-#  name                               = "wportal2-ecs-service"
-#  cluster                            = aws_ecs_cluster.wportal2_ecs_cluster.arn
-#  task_definition                    = aws_ecs_task_definition.wportal2_ecs_task.arn
-#  desired_count                      = 1
-#  launch_type                        = "FARGATE"
-#  enable_execute_command             = true
-#  platform_version                   = "1.4.0"
-#  health_check_grace_period_seconds  = 1800
-#  deployment_minimum_healthy_percent = 50
-#  deployment_maximum_percent         = 200
-#
-#  network_configuration {
-#    assign_public_ip = false
-#    security_groups  = [module.apache_sg.security_group_id]
-#
-#    subnets = [
-#      aws_subnet.private_0.id,
-#      aws_subnet.private_1.id,
-#    ]
-#  }
-#
-#  load_balancer {
-#    target_group_arn = aws_alb_target_group.alb_target_group.arn
-#    container_name   = "wportal2-container"
-#    container_port   = 80
-#  }
-#
-#  lifecycle {
-#    ignore_changes = [task_definition]
-#  }
-#}
+resource "aws_ecs_service" "wportal2_ecs_service" {
+  name                               = "wportal2-ecs-service"
+  cluster                            = aws_ecs_cluster.wportal2_ecs_cluster.arn
+  task_definition                    = aws_ecs_task_definition.wportal2_ecs_task.arn
+  desired_count                      = 1
+  launch_type                        = "FARGATE"
+  enable_execute_command             = true
+  platform_version                   = "1.4.0"
+  health_check_grace_period_seconds  = 1800
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+
+  network_configuration {
+    assign_public_ip = false
+    security_groups  = [module.apache_sg.security_group_id]
+
+    subnets = [
+      aws_subnet.private_0.id,
+      aws_subnet.private_1.id,
+    ]
+  }
+
+  load_balancer {
+    target_group_arn = aws_alb_target_group.alb_target_group.arn
+    container_name   = "wportal2-container"
+    container_port   = 80
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+}
 
 module "apache_sg" {
   source      = "./module/security_group"
