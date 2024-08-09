@@ -65,7 +65,8 @@ jobs:
       - name: Build step - docker-compose build
         run: |
           echo "docker-composeでビルド"
-          echo "docker-compose -f docker-compose-for-service.yml build"
+          docker-compose -f docker-compose-for-service.yml build
+          docker-compose ps
 
       # ビルドとプッシュ.
 #      - name: Build step - build and push
