@@ -70,7 +70,7 @@ jobs:
           echo SLACK_APP_TOKEN="$(aws ssm get-parameter --name /wportal/slack_app_token --query Parameter.Value --output text)" >> wportal2-app/.env
           echo SLACK_BOT_USER_OAUTH_TOKEN="$(aws ssm get-parameter --name /wportal/slack_bot_user_oauth_token --query Parameter.Value --output text)" >> wportal2-app/.env
           echo SLACK_URL_NOTICE="$(aws ssm get-parameter --name /wportal/slack_url_notice --query Parameter.Value --output text)" >> wportal2-app/.env
-          echo RECAPTCHA_SECRET_KEY="$(aws ssm get-parameter --name "/wportal/recaptcha_secret_key --query Parameter.Value --output text)" >> wportal2-app/.env
+          echo RECAPTCHA_SECRET_KEY="$(aws ssm get-parameter --name /wportal/recaptcha_secret_key --query Parameter.Value --output text)" >> wportal2-app/.env
           echo VITE_RECAPTCHA_SITE_KEY="$(aws ssm get-parameter --name /wportal/vite_recaptcha_site_key --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_ACCESS_KEY_ID="$(aws ssm get-parameter --name /wportal/app_aws_access_key_id --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_SECRET_ACCESS_KEY="$(aws ssm get-parameter --name /wportal/app_aws_secret_access_key --query Parameter.Value --output text)" >> wportal2-app/.env
