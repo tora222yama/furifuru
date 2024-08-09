@@ -71,7 +71,7 @@ jobs:
 
       # docker-compose(with cache)でビルド.
       - name: Build step - docker-compose build
-        run: docker buildx bake --file docker-compose-for-service.yml --file docker-compose-for-service-cache.js
+        run: docker buildx bake --file docker-compose-for-service.yml --file docker-compose-for-service-cache.json
 
       # ビルドとプッシュ.
 #      - name: Build step - build and push
