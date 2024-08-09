@@ -62,12 +62,16 @@ jobs:
           registry: ${{ env.ECR_REGISTRY }}
 
       # docker-composeでビルド.
+#      - name: Build step - docker-compose build
+#        run: |
+#          echo "docker-composeでビルド"
+#          cp wportal2-app/.env.prd.sample wportal2-app/.env
+#          docker compose -f docker-compose-for-service.yml build
+#          docker compose -f docker-compose-for-service.yml ps
+
+      # docker-compose(with cache)でビルド.
       - name: Build step - docker-compose build
-        run: |
-          echo "docker-composeでビルド"
-          cp wportal2-app/.env.prd.sample wportal2-app/.env
-          docker compose -f docker-compose-for-service.yml build
-          docker compose -f docker-compose-for-service.yml ps
+        run: docker buildx bake --file docker-compose-for-service.yml --file docker-compose-for-service-cache.js
 
       # ビルドとプッシュ.
 #      - name: Build step - build and push

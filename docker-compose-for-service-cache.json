@@ -1,0 +1,15 @@
+{
+  "target": {
+    "service-name": {
+      "cache-from": [
+        "type=registry,ref=ghcr.io/quick-wpd/wportal2:cache"
+      ],
+      "cache-to": [
+        "type=registry,ref=ghcr.io/quick-wpd/wportal2:cache"
+      ],
+      "output": [
+        "type=docker"
+      ]
+    }
+  }
+}
