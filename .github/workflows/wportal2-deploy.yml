@@ -88,25 +88,20 @@ jobs:
           docker exec service_container_web php artisan key:generate
           docker exec service_container_web npm ci
           docker exec service_container_web npm run build
+          # テストでenvの値を確認する.
+          cat .env      
 
-      # ビルドとプッシュ.
-#      - name: Build step - build and push
-#        uses: docker/build-push-action@v2
-#        with:
-#          # ディレクトリを[wportal2-app]に変更.
-#          context: ./wportal2-app
-#          # リリース用のwebコンテナでビルド
-#          file: ./wportal2-app/service_container/web/Dockerfile
-#          push: true
-#          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-#          cache-from: type=local,src=/tmp/.buildx-cache
-#          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      # ECRへのpush.
+      - name: Build step - docker-compose push
+        run: |
+          echo "docker-composeでビルドしたイメージをECRにpush"
+          docker compose -f docker-compose-for-service.yml push
 
       # キャッシュ削除.
-#      - name: Move cache
-#        run: |
-#          rm -rf /tmp/.buildx-cache
-#          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy step
         run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
