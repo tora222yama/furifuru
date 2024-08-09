@@ -89,7 +89,7 @@ jobs:
           docker exec service_container_web npm ci
           docker exec service_container_web npm run build
           # テストでenvの値を確認する.
-          cat .env      
+          cat wportal2-app/.env      
 
       # ECRへのpush.
       - name: Build step - docker-compose push
