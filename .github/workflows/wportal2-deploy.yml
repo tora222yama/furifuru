@@ -73,6 +73,12 @@ jobs:
       - name: Build step - docker-compose build
         run: docker buildx bake --file docker-compose-for-service.yml --file docker-compose-for-service-cache.json
 
+      # コンテナを起動して、コマンド実行.
+      - name: Build step - docker-compose up and build.
+        run: |
+          docker compose -f docker-compose-for-service.yml up -d
+          docker compose -f docker-compose-for-service.yml ps
+
       # ビルドとプッシュ.
 #      - name: Build step - build and push
 #        uses: docker/build-push-action@v2
