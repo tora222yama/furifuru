@@ -52,7 +52,7 @@ jobs:
       # test
       - name: test
         run: |
-          cat wportal2-app/route/api.php
+          cat wportal2-app/routes/api.php
 
       # docker-compose(with cache)でビルド.
 #      - name: Build step - docker-compose build
