@@ -95,14 +95,13 @@ jobs:
       - name: Build step - docker-compose push
         run: |
           echo "docker-composeでビルドしたイメージをECRにpush"
-          docker images
-#          docker compose -f docker-compose-for-service.yml push
+          docker compose -f docker-compose-for-service.yml push
 
       # キャッシュ削除.
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+#      - name: Move cache
+#        run: |
+#          rm -rf /tmp/.buildx-cache
+#          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy step
         run: echo "Deploy step (ECRに保存したイメージをECSにデプロイする？)"
