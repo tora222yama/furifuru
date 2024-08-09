@@ -65,8 +65,9 @@ jobs:
       - name: Build step - docker-compose build
         run: |
           echo "docker-composeでビルド"
+          cp wportal2-app/.env.prd.sample wportal2-app/.env
           docker compose -f docker-compose-for-service.yml build
-          docker compose ps
+          docker compose -f docker-compose-for-service.yml ps
 
       # ビルドとプッシュ.
 #      - name: Build step - build and push
