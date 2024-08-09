@@ -80,8 +80,14 @@ jobs:
       # コンテナを起動して、コマンド実行.
       - name: Build step - docker-compose up and build.
         run: |
+          cp wportal2-app/.env.prd.sample wportal2-app/.env
+          echo "TODO: 環境変数を設定する"
           docker compose -f docker-compose-for-service.yml up -d
           docker compose -f docker-compose-for-service.yml ps
+          docker exec service_container_web composer install
+          docker exec service_container_web php artisan key:generate
+          docker exec service_container_web npm ci
+          docker exec service_container_web npm run build
 
       # ビルドとプッシュ.
 #      - name: Build step - build and push
