@@ -54,9 +54,7 @@ jobs:
         run: |
           cp wportal2-app/.env.prd.sample wportal2-app/.env
           echo "TODO: 環境変数を設定する"
-          VALUE=$(aws ssm get-parameter --name /wportal/db/host --query Parameter.Value --output text)
-          echo "$VALUE"
-          echo DB_HOST="$VALUE" >> wportal2-app/.env
+          echo DB_HOST="$(aws ssm get-parameter --name /wportal/db/host --query Parameter.Value --output text)" >> wportal2-app/.env
           # テストでenvの値を確認する.
           cat wportal2-app/.env
 
