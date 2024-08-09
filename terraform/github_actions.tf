@@ -55,7 +55,7 @@ resource "aws_iam_role_policy_attachment" "wportal2_deploy_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
-# ECRログイン用.
+# ECRログイン/タスク更新用.
 data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
     statement {
       sid = "AllowPush"
@@ -66,7 +66,13 @@ data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
         "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload",
-        "ecr:BatchCheckLayerAvailability"
+        "ecr:BatchCheckLayerAvailability",
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:RegisterTaskDefinition",
+        "ecs:UpdateService",
       ]
       resources = ["*"]
     }

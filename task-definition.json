@@ -1,5 +1,6 @@
 {
   "family": "wportal2-containers",
+  "executionRoleArn": "arn:aws:iam::979109089196:role/wportal2_ecs_task_execution_role",
   "containerDefinitions": [
     {
       "name": "wportal2-container",
