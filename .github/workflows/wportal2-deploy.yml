@@ -95,7 +95,8 @@ jobs:
       - name: Build step - docker-compose push
         run: |
           echo "docker-composeでビルドしたイメージをECRにpush"
-          docker compose -f docker-compose-for-service.yml push
+          docker images
+#          docker compose -f docker-compose-for-service.yml push
 
       # キャッシュ削除.
       - name: Move cache
