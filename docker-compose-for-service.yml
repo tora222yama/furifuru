@@ -9,17 +9,19 @@ services:
     image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
     container_name: service_container_web
     build: wportal2-app/service_container/web
+    env_file:
+      - wportal2-app/.env
     environment:
       - APP_TIMEOUT=60
       - PHP_MEMORY_LIMIT=256M
       - PHP_MAX_UPLOAD=20M
-    working_dir: /var/www/html
+    working_dir: /var/www/html/wportal2-app
     ports:
       - "80:80"
     networks:
       - service_container_net
     volumes:
-      - ./wportal2-app:/var/www/html
+      - ./:/var/www/html
 
 networks:
   service_container_net:
