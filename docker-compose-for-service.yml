@@ -18,7 +18,7 @@ services:
     networks:
       - service_container_net
     volumes:
-      - ./:/var/www/html
+      - ./wportal2-app:/var/www/html
 
 networks:
   service_container_net:
