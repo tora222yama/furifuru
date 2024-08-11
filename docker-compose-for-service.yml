@@ -18,8 +18,8 @@ services:
       - "80:80"
     networks:
       - service_container_net
-    volumes:
-      - ./:/var/www/html
+    #volumes:
+    #  - ./:/var/www/html
 
 networks:
   service_container_net:
