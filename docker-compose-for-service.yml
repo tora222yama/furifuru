@@ -13,12 +13,13 @@ services:
       - APP_TIMEOUT=60
       - PHP_MEMORY_LIMIT=256M
       - PHP_MAX_UPLOAD=20M
+    working_dir: /var/www/html/wportal2-app
     ports:
       - "80:80"
     networks:
       - service_container_net
     volumes:
-      - ./wportal2-app:/var/www/html
+      - ./:/var/www/html
 
 networks:
   service_container_net:
