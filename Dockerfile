@@ -22,13 +22,15 @@ RUN apt-get update && \
 RUN git config --global --add safe.directory /var/www/html
 
 # set configuration for apache and php
-COPY apache-virtualhost.conf /etc/apache2/sites-enabled/000-default.conf
-COPY php.ini /usr/local/etc/php/php.ini
-COPY server.sh /usr/local/bin/server.sh
-#COPY ../../../wportal2-app/ /var/www/html/wportal2-app/
-COPY ../../wportal2-app/ /var/www/html/wportal2-app/
+COPY wportal2-app/service_container/web/apache-virtualhost.conf /etc/apache2/sites-enabled/000-default.conf
+COPY wportal2-app/service_container/web/php.ini /usr/local/etc/php/php.ini
+COPY wportal2-app/service_container/web/server.sh /usr/local/bin/server.sh
 RUN chmod 755 /usr/local/bin/server.sh
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+
+COPY --chown=www-data:www-data wportal2-app /var/www/html
+
+WORKDIR /var/www/html
 
 # set entrypoint
 # ENTRYPOINT ["/usr/local/bin/server.sh"]
