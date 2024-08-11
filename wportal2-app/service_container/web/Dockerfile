@@ -25,7 +25,8 @@ RUN git config --global --add safe.directory /var/www/html
 COPY apache-virtualhost.conf /etc/apache2/sites-enabled/000-default.conf
 COPY php.ini /usr/local/etc/php/php.ini
 COPY server.sh /usr/local/bin/server.sh
-COPY ../../../wportal2-app/ /var/www/html/wportal2-app/
+#COPY ../../../wportal2-app/ /var/www/html/wportal2-app/
+COPY ../../wportal2-app/ /var/www/html/wportal2-app/
 RUN chmod 755 /usr/local/bin/server.sh
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
