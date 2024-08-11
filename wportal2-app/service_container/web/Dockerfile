@@ -29,4 +29,4 @@ RUN chmod 755 /usr/local/bin/server.sh
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 # set entrypoint
-ENTRYPOINT ["/usr/local/bin/server.sh"]
+# ENTRYPOINT ["/usr/local/bin/server.sh"]
