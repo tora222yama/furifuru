@@ -28,9 +28,9 @@ COPY wportal2-app/service_container/web/server.sh /usr/local/bin/server.sh
 RUN chmod 755 /usr/local/bin/server.sh
 RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
-COPY --chown=www-data:www-data wportal2-app /var/www/html
+COPY --chown=www-data:www-data wportal2-app /var/www/html/wportal2-app
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/wportal2-app
 
 # set entrypoint
 # ENTRYPOINT ["/usr/local/bin/server.sh"]
