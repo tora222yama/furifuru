@@ -32,5 +32,11 @@ COPY --chown=www-data:www-data wportal2-app /var/www/html/wportal2-app
 
 WORKDIR /var/www/html/wportal2-app
 
+# setup
+RUN composer install
+RUN php artisan key:generate
+RUN npm ci
+RUN npm run build
+
 # set entrypoint
 # ENTRYPOINT ["/usr/local/bin/server.sh"]

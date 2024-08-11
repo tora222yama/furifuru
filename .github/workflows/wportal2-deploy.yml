@@ -76,12 +76,12 @@ jobs:
           echo APP_AWS_SECRET_ACCESS_KEY="$(aws ssm get-parameter --name /wportal/app_aws_secret_access_key --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_REGION="$(aws ssm get-parameter --name /wportal/app_aws_region --query Parameter.Value --output text)" >> wportal2-app/.env
           docker compose -f docker-compose-for-service.yml build
-          docker compose -f docker-compose-for-service.yml up -d
-          docker compose -f docker-compose-for-service.yml ps
-          docker exec service_container_web composer install
-          docker exec service_container_web php artisan key:generate
-          docker exec service_container_web npm ci
-          docker exec service_container_web npm run build
+#          docker compose -f docker-compose-for-service.yml up -d
+#          docker compose -f docker-compose-for-service.yml ps
+#          docker exec service_container_web composer install
+#          docker exec service_container_web php artisan key:generate
+#          docker exec service_container_web npm ci
+#          docker exec service_container_web npm run build
 
       # ECRへのpush.
       - name: Build step - docker-compose push
