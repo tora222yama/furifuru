@@ -36,6 +36,10 @@
       "command": [
         "/usr/local/bin/server.sh"
       ],
+      "entryPoint": [
+        "sh",
+        "-c"
+      ],
       "secrets": [
         {
           "name": "DB_HOST",
