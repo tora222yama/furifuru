@@ -63,6 +63,17 @@ enum EPages: string
     case SAMPLE_INERTIA_DATA              = 'sample_inertia_data'; // Inertiaデータ.
 
     /**
+     * 各ページの想定するURLを取得.
+     */
+    public function getUrl(): string
+    {
+        return match ($this) {
+            self::ATTENDANCE                     => '/attendance',
+            default                              => '',
+        };
+    }
+
+    /**
      * routing時のinvokeパスの取得.
      */
     public function getInvokePath(): string

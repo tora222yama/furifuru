@@ -82,7 +82,7 @@ class AttendanceController extends Controller
             SlackService::updateByPipe();
         });
 
-        return redirect(null, 302, [], true)->action(EPages::ATTENDANCE->getInvokePath());
+        return redirect(EPages::ATTENDANCE->getUrl(), 302, [], isPrd());
     }
 
     /**
