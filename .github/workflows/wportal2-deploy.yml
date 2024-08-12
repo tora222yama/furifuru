@@ -35,13 +35,13 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       # キャッシュ対応.
-##      - name: Cache step
-##        uses: actions/cache@v2
-##        with:
-##          path: /tmp/.buildx-cache
-##          key: ${{ runner.os }}-buildx-${{ github.sha }}
-##          restore-keys: |
-##            ${{ runner.os }}-buildx-
+      - name: Cache step
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       # ECRログイン.
       - name: Build step - login to ECR
@@ -87,14 +87,9 @@ jobs:
       - name: Build step - docker-compose push
         run: |
           echo "docker-composeでビルドしたイメージをECRにpush"
-          docker compose -f docker-compose-for-service.yml push
+          docker compose -f docker-compose-for-service.yml push      
 
-      # キャッシュ削除.
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
+      # タスク定義作成.
       - name: Deploy step - render task
         id: render-task
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -103,6 +98,7 @@ jobs:
           container-name: wportal2-container
           image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
 
+      # タスク定義のデプロイ.
       - name: Deploy step - deploy task
         id: deploy-task
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -111,3 +107,9 @@ jobs:
           service: wportal2-ecs-service
           cluster: wportal2-ecs-cluster
           wait-for-service-stability: true
+
+      # キャッシュ削除.
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
