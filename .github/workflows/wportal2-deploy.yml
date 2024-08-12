@@ -49,16 +49,8 @@ jobs:
         with:
           registry: ${{ env.ECR_REGISTRY }}
 
-      # docker-compose(with cache)でビルド.
-#      - name: Build step - docker-compose build
-#        run: |
-#          docker buildx bake \
-#            --file docker-compose-for-service.yml
-##            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
-##            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
-
-      # コンテナを起動して、コマンド実行.
-      - name: Build step - docker-compose up and build.
+      # envの準備.
+      - name: Build step - prepare .env
         run: |
           cp wportal2-app/.env.prd.sample wportal2-app/.env
           echo DB_HOST="$(aws ssm get-parameter --name /wportal/db/host --query Parameter.Value --output text)" >> wportal2-app/.env
@@ -75,13 +67,21 @@ jobs:
           echo APP_AWS_ACCESS_KEY_ID="$(aws ssm get-parameter --name /wportal/app_aws_access_key_id --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_SECRET_ACCESS_KEY="$(aws ssm get-parameter --name /wportal/app_aws_secret_access_key --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_REGION="$(aws ssm get-parameter --name /wportal/app_aws_region --query Parameter.Value --output text)" >> wportal2-app/.env
-          docker compose -f docker-compose-for-service.yml build
+#          docker compose -f docker-compose-for-service.yml build
 #          docker compose -f docker-compose-for-service.yml up -d
 #          docker compose -f docker-compose-for-service.yml ps
 #          docker exec service_container_web composer install
 #          docker exec service_container_web php artisan key:generate
 #          docker exec service_container_web npm ci
 #          docker exec service_container_web npm run build
+
+      # docker-compose(with cache)でビルド.
+      - name: Build step - docker-compose build
+        run: |
+          docker buildx bake \
+            --file docker-compose-for-service.yml
+            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
+            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
 
       # ECRへのpush.
       - name: Build step - docker-compose push
@@ -90,10 +90,10 @@ jobs:
           docker compose -f docker-compose-for-service.yml push
 
       # キャッシュ削除.
-##      - name: Move cache
-##        run: |
-##          rm -rf /tmp/.buildx-cache
-##          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Deploy step - render task
         id: render-task
