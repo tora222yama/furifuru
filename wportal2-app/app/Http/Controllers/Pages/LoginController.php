@@ -140,7 +140,7 @@ class LoginController extends Controller
         if ($authUser === null && ! $this->is919Domain($googleUser)) {
             Log::error('invalid domain:'.$googleUser->email);
 
-            return redirect(EPages::LOGIN->getUrl(), 302, [], isPrd());
+            return redirect('/login');
         }
 
         // 新規ユーザーの作成.
@@ -150,7 +150,7 @@ class LoginController extends Controller
 
         Auth::login($authUser, true);
 
-        return redirect(EPages::DASHBOARD->getUrl(), 302, [], isPrd());
+        return redirect('/dashboard');
     }
 
     /**
@@ -180,7 +180,6 @@ class LoginController extends Controller
     {
         Auth::logout();
 
-        //return redirect(EPages::LOGIN->getUrl(), 302, [], isPrd());
         return redirect('/login');
     }
 
