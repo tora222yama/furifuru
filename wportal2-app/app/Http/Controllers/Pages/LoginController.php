@@ -109,13 +109,13 @@ class LoginController extends Controller
         if (is_null($authUser)) {
             Log::error("invalid onetime password id:$pipe->authId email:$pipe->email pass:$pipe->onetimePassword");
 
-            return redirect()->action(EPages::LOGIN->getInvokePath());
+            return redirect(EPages::LOGIN->getUrl(), 302, [], isPrd());
         }
 
         // ログイン処理を実施
         Auth::login($authUser, true);
 
-        return redirect()->action(EPages::DASHBOARD->getInvokePath());
+        return redirect(EPages::DASHBOARD->getUrl(), 302, [], isPrd());
     }
 
     public function getGoogleAuth(): RedirectResponse

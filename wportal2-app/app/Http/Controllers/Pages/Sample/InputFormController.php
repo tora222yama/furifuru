@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages\Sample;
 
-use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
 use App\Http\Controllers\Controller;
 use App\Pipe\Sample\PipeSampleInputFormUpdate;
@@ -36,7 +35,7 @@ class InputFormController extends Controller
         if (! PipeService::isValid()) {
             // エラーがある場合は入力ページにリダイレクトする.
             // バリデーション情報はセッションに保存.
-            return redirect()->action(EPages::SAMPLE_INPUT_FORM->getInvokePath())
+            return redirect('/sample/input_form', 302, [], isPrd())
                 ->with([
                     'serverValidation' => PipeService::getValidationResult(),
                 ]);

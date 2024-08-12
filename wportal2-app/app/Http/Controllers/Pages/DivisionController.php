@@ -103,9 +103,9 @@ class DivisionController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::DIVISION__EDIT->getInvokePath(), [
-                'divisionId' => $pipe->trnDivisionId,
-            ])->with([
+            return redirect(EPages::DIVISION__EDIT->getUrl([
+                '{divisionId}' => $pipe->trnDivisionId,
+            ]), 302, [], isPrd())->with([
                 'serverValidation' => PipeService::getValidationResult(),
             ]);
         }
@@ -116,9 +116,9 @@ class DivisionController extends Controller
             TrnDivisionService::updateByPipe();
         });
 
-        return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
-            'divisionId' => $pipe->trnDivisionId,
-        ]);
+        return redirect(EPages::DIVISION__SHOW->getUrl([
+            '{divisionId}' => $pipe->trnDivisionId,
+        ]), 302, [], isPrd());
     }
 
     /**
@@ -136,9 +136,9 @@ class DivisionController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
-                'divisionId' => $pipe->trnDivisionId,
-            ]);
+            return redirect(EPages::DIVISION__SHOW->getUrl([
+                '{divisionId}' => $pipe->trnDivisionId,
+            ]), 302, [], isPrd());
         }
 
         // 更新処理.
@@ -147,9 +147,9 @@ class DivisionController extends Controller
             TrnDivisionUserService::updateByPipe();
         });
 
-        return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
-            'divisionId' => $pipe->trnDivisionId,
-        ]);
+        return redirect(EPages::DIVISION__SHOW->getUrl([
+            '{divisionId}' => $pipe->trnDivisionId,
+        ]), 302, [], isPrd());
     }
 
     /**
@@ -195,6 +195,6 @@ class DivisionController extends Controller
             TrnDivisionService::updateByPipe();
         });
 
-        return redirect()->action(EPages::DIVISION->getInvokePath());
+        return redirect(EPages::DIVISION->getUrl(), 302, [], isPrd());
     }
 }

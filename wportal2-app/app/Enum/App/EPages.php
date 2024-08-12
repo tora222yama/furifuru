@@ -65,12 +65,31 @@ enum EPages: string
     /**
      * 各ページの想定するURLを取得.
      */
-    public function getUrl(): string
+    public function getUrl(array $replace = []): string
     {
-        return match ($this) {
+        $ret    = match ($this) {
+            self::DASHBOARD                      => '/dashboard',
             self::ATTENDANCE                     => '/attendance',
+            self::DIVISION                       => '/division',
+            self::DIVISION__SHOW                 => '/division/{divisionId}/show',
+            self::DIVISION__EDIT                 => '/division/{divisionId}/edit',
+            self::PROJECT                        => '/project',
+            self::PROJECT__NEW                   => '/project/new',
+            self::PROJECT__SHOW                  => '/project/{projectId}/show',
+            self::PROJECT__EDIT                  => '/project/{projectId}/edit',
+            self::USER                           => '/user',
+            self::USER__SHOW                     => '/user/{userId}/show',
+            self::USER__NEW                      => '/user/new',
+            self::PERSONAL_SETTING__SHOW         => '/personal_setting/show',
+            self::PERSONAL_SETTING__EDIT         => '/personal_setting/edit',
+            self::LOGIN                          => '/login',
             default                              => '',
         };
+
+        $keys   = array_keys($replace);
+        $values = array_values($replace);
+
+        return str_replace($keys, $values, $ret);
     }
 
     /**

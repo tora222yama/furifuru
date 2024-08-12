@@ -94,9 +94,9 @@ class UserController extends Controller
             AuthUserService::updateByPipe();
         });
 
-        return redirect()->action(EPages::USER__SHOW->getInvokePath(), [
-            'userId' => $pipe->trnUserId,
-        ]);
+        return redirect(EPages::USER__SHOW->getUrl([
+            '{userId}' => $pipe->trnUserId,
+        ]), 302, [], isPrd());
     }
 
     public function new(Request $request): Response
@@ -137,7 +137,7 @@ class UserController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::USER__NEW->getInvokePath())
+            return redirect(EPages::USER__NEW->getUrl(), 302, [], isPrd())
                 ->with([
                     'serverValidation' => PipeService::getValidationResult(),
                 ]);
@@ -152,7 +152,7 @@ class UserController extends Controller
             TrnUserService::updateByPipe();
         });
 
-        return redirect()->action(EPages::USER->getInvokePath());
+        return redirect(EPages::USER->getUrl(), 302, [], isPrd());
     }
 
     /**

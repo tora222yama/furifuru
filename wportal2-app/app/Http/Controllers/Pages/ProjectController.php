@@ -105,9 +105,9 @@ class ProjectController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::PROJECT__EDIT->getInvokePath(), [
-                'projectId' => $pipe->trnProjectId,
-            ])->with([
+            return redirect(EPages::PROJECT__EDIT->getUrl([
+                '{projectId}' => $pipe->trnProjectId,
+            ]), 302, [], isPrd())->with([
                 'serverValidation' => PipeService::getValidationResult(),
             ]);
         }
@@ -121,9 +121,9 @@ class ProjectController extends Controller
             TrnProjectNotificationService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
-            'projectId' => $pipe->trnProjectId,
-        ]);
+        return redirect(EPages::PROJECT__SHOW->getUrl([
+            '{projectId}' => $pipe->trnProjectId,
+        ]), 302, [], isPrd());
     }
 
     public function new(Request $request): Response
@@ -146,7 +146,7 @@ class ProjectController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::PROJECT__NEW->getInvokePath())
+            return redirect(EPages::PROJECT__NEW->getUrl(), 302, [], isPrd())
                 ->with([
                     'serverValidation' => PipeService::getValidationResult(),
                 ]);
@@ -158,7 +158,7 @@ class ProjectController extends Controller
             TrnProjectService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PROJECT->getInvokePath());
+        return redirect(EPages::PROJECT->getUrl(), 302, [], isPrd());
     }
 
     /**
@@ -176,9 +176,9 @@ class ProjectController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
-                'projectId' => $pipe->trnProjectId,
-            ]);
+            return redirect(EPages::PROJECT__SHOW->getUrl([
+                '{projectId}' => $pipe->trnProjectId,
+            ]), 302, [], isPrd());
         }
 
         // 更新処理.
@@ -187,9 +187,9 @@ class ProjectController extends Controller
             TrnProjectUserService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PROJECT__SHOW->getInvokePath(), [
-            'projectId' => $pipe->trnProjectId,
-        ]);
+        return redirect(EPages::PROJECT__SHOW->getUrl([
+            '{projectId}' => $pipe->trnProjectId,
+        ]), 302, [], isPrd());
     }
 
     /**
@@ -235,6 +235,6 @@ class ProjectController extends Controller
             TrnProjectService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PROJECT->getInvokePath());
+        return redirect(EPages::PROJECT->getUrl(), 302, [], isPrd());
     }
 }

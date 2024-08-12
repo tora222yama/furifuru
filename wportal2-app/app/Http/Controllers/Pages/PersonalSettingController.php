@@ -71,7 +71,7 @@ class PersonalSettingController extends Controller
         if (! PipeService::isValid()) {
             // エラーがある場合は入力ページにリダイレクトする.
             // バリデーション情報はセッションに保存.
-            return redirect()->action(EPages::PERSONAL_SETTING__EDIT->getInvokePath())
+            return redirect(EPages::PERSONAL_SETTING__EDIT->getUrl(), 302, [], isPrd())
                 ->with([
                     'serverValidation' => PipeService::getValidationResult(),
                 ]);
@@ -86,7 +86,7 @@ class PersonalSettingController extends Controller
             TrnUserSlackProfileService::updateByPipe();
         });
 
-        return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());
+        return redirect(EPages::PERSONAL_SETTING__SHOW->getUrl(), 302, [], isPrd());
     }
 
     /**
