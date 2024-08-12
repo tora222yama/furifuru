@@ -14,7 +14,7 @@ export const Logo: React.FC<IProps> = ({ sx }) => {
       }}
     >
       <InertiaLink href={getPagesHref(E_PAGES.DASHBOARD)}>
-        <TypoH1>Web本部ポータル2.0</TypoH1>
+        <TypoH1>Web本部ポータル</TypoH1>
       </InertiaLink>
     </Box>
   );

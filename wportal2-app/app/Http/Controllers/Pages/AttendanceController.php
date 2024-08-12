@@ -103,7 +103,7 @@ class AttendanceController extends Controller
             TrnAttendanceStateService::updateByPipe();
         });
 
-        return redirect(EPages::ATTENDANCE->getUrl(), 302, [], isPrd());
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
     }
 
     /**
@@ -124,7 +124,7 @@ class AttendanceController extends Controller
             TrnUserProjectPriorityService::updateByPipe();
         });
 
-        return redirect(EPages::ATTENDANCE->getUrl(), 302, [], isPrd());
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
     }
 
     /**
@@ -145,7 +145,7 @@ class AttendanceController extends Controller
             TrnUserDivisionPriorityService::updateByPipe();
         });
 
-        return redirect(EPages::ATTENDANCE->getUrl(), 302, [], isPrd());
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
     }
 
     /**
