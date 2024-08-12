@@ -78,8 +78,12 @@ jobs:
       # docker-compose(with cache)でビルド.
       - name: Build step - docker-compose build
         run: |
-          docker buildx bake \
-            --file docker-compose-for-service.yml
+          docker compose -f docker-compose-for-service.yml build
+          docker compose -f docker-compose-for-service.yml up -d
+          docker compose -f docker-compose-for-service.yml ps
+#        run: |
+#          docker buildx bake \
+#            --file docker-compose-for-service.yml
 #            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
 #            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
 
