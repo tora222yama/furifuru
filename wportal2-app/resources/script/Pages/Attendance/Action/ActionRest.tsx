@@ -7,6 +7,7 @@ import {
   getLabelAttendanceState,
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { SwitchPlace } from '@/script/Pages/Attendance/Action/SwitchPlace';
 
 interface IProps extends IPropsBase {
   handleClick: (state: EAttendanceState) => void;
@@ -27,6 +28,7 @@ export const ActionRest: React.FC<IProps> = ({ sx, handleClick }) => {
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.END_BREAK)}
         onClick={() => handleClick(E_ATTENDANCE_STATE.END_BREAK)}
       />
+      <SwitchPlace handleClick={handleClick} />
     </Box>
   );
 };
