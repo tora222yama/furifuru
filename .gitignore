@@ -17,3 +17,13 @@ yarn-error.log
 /.vscode
 local-opensearch
 .pint.cache
+
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
