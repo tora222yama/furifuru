@@ -14,7 +14,7 @@ env:
   ECR_REPOSITORY: wportal2_ecr_repository
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: configure aws credential
