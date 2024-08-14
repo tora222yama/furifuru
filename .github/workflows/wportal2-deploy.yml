@@ -112,6 +112,12 @@ jobs:
           cluster: wportal2-ecs-cluster
           wait-for-service-stability: true
 
+      # Slack通知.
+      - name: slack notice
+        run: |
+          echo "Notice to slack"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルのdeployが完了しました:${{ github.sha }}"}' https://hooks.slack.com/services/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
+
       # キャッシュ削除.
 #      - name: Move cache
 #        run: |
