@@ -161,13 +161,15 @@ class UserController extends Controller
     private function getPaginationUser(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex = $request->input('index', 0);
-        $pageStep  = $request->input('step', 20);
+        $pageIndex   = $request->input('index', 0);
+        $pageStep    = $request->input('step', 20);
+        $searchValue = $request->input('searchValue', '');
 
         return TrnUserService::offsetPagination(
             $pageIndex,
             $pageStep,
-            $with
+            $with,
+            $searchValue,
         );
     }
 
