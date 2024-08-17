@@ -132,7 +132,7 @@ jobs:
             aws ecs run-task \
               --cluster ${TASK_CLUSTER_NAME} \
               --task-definition ${TASK_DEF_ARN} \
-              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": "ls" }]}' \
+              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php", "artisan", "route:list"] }]}' \
               --query tasks[0].taskArn --output text \
           )
           TASK_ID=$( echo "${TASK_ARN}" | grep -oE "[^/]+$")
