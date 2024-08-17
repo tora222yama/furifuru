@@ -123,6 +123,7 @@ jobs:
       # タスク名の取得.
       - name: Deploy step - execute task
         run: |
+          COMMAND="php artisan route:list"
           TASK_DEF_ARN=$(aws ecs list-task-definitions --family-prefix "${TASK_FAMILY_NAME}" --query "reverse(taskDefinitionArns)[0]" --output text)
           echo "${TASK_DEF_ARN}"
           NOW=$(date +'%Y/%m/%d %H:%M:%S%z')
@@ -131,7 +132,7 @@ jobs:
             aws ecs run-task \
               --cluster ${TASK_CLUSTER_NAME} \
               --task-definition ${TASK_DEF_ARN} \
-              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": \\\"php artisan route:list\\\" }]}' \
+              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": {{ COMMAND }} }]}' \
               --query tasks[0].taskArn --output text \
           )
           TASK_ID=$( echo "${TASK_ARN}" | grep -oE "[^/]+$")
