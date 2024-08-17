@@ -123,22 +123,13 @@ jobs:
       # タスク名の取得.
       - name: Deploy step - execute task
         run: |
-          COMMAND="php artisan route:list"
-          TASK_DEF_ARN=$(aws ecs list-task-definitions --family-prefix "${TASK_FAMILY_NAME}" --query "reverse(taskDefinitionArns)[0]" --output text)
-          echo "${TASK_DEF_ARN}"
-          NOW=$(date +'%Y/%m/%d %H:%M:%S%z')
-          echo "${NOW}"
-          TASK_ARN=$( \
-            aws ecs run-task \
+          aws ecs run-task \
+              --region ap-northeast-1 \
+              --launch-type FARGATE \
               --cluster ${TASK_CLUSTER_NAME} \
-              --task-definition ${TASK_DEF_ARN} \
-              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php", "artisan", "route:list"] }]}' \
-              --query tasks[0].taskArn --output text \
-          )
-          TASK_ID=$( echo "${TASK_ARN}" | grep -oE "[^/]+$")
-          echo "check https://ap-northeast-1.console.aws.amazon.com/ecs/v2/clusters/${TASK_CLUSTER_NAME}/tasks/${TASK_ID} for status"
-          aws ecs wait tasks-stopped --cluster ${TASK_CLUSTER_NAME} --tasks ${TASK_ARN}
-          aws logs tail /ecs/logs/prod/${TASK_LOG_GROUP_NAME} --since="${NOW}"
+#              --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
+              --task-definition ${{ steps.render-task.outputs.task-definition }} \
+              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php","artisan","route:list"] }]}'
 
       # Slack通知.
 #      - name: slack notice

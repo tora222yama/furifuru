@@ -75,6 +75,7 @@ data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
         "ecs:RegisterTaskDefinition",
         "ecs:UpdateService",
         "ecs:TagResource",
+        "ecs:RunTask",
         "iam:PassRole",
         "ssm:GetParameter",
         "ssm:GetParameters",
