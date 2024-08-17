@@ -128,7 +128,7 @@ jobs:
           TASK_ARN=$(aws ecs run-task \
             --region ap-northeast-1 \
             --launch-type FARGATE \
-            --cluster '${{TASK_CLUSTER_NAME}}' \
+            --cluster '${{ env.TASK_CLUSTER_NAME }}' \
             --task-definition ${{ steps.render-task.outputs.task-definition }} \
             --overrides '${{ env.container_overrides }}' \
             --query tasks[0].taskArn --output text)
