@@ -71,6 +71,7 @@ data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
         "ecs:DescribeTaskDefinition",
         "ecs:DescribeTasks",
         "ecs:ListTasks",
+        "ecs:ListTaskDefinitions",
         "ecs:RegisterTaskDefinition",
         "ecs:UpdateService",
         "ecs:TagResource",

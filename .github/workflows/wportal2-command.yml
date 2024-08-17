@@ -15,7 +15,9 @@ permissions:
 env:
   ECR_REGISTRY: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com
   ECR_REPOSITORY: wportal2_ecr_repository
+  TASK_CLUSTER_NAME: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
   TASK_FAMILY_NAME: wportal2-task
+  TASK_LOG_GROUP_NAME: /wportal2/ecs
 
 jobs:
   command:
@@ -122,7 +124,20 @@ jobs:
       - name: Deploy step - execute task
         run: |
           TASK_DEF_ARN=$(aws ecs list-task-definitions --family-prefix "${TASK_FAMILY_NAME}" --query "reverse(taskDefinitionArns)[0]" --output text)
-          echo "${TASK_DEF_ARN}"        
+          echo "${TASK_DEF_ARN}"
+          NOW=$(date +'%Y/%m/%d %H:%M:%S%z')
+          echo "${NOW}"
+          TASK_ARN=$( \
+            aws ecs run-task \
+              --cluster ${TASK_CLUSTER_NAME} \
+              --task-definition ${TASK_DEF_ARN} \
+              --overrides '{"containerOverrides": [{"name": "wportal2-command-task", "command": ${{ github.event.inputs.command }} }]}' \
+              --query tasks[0].taskArn --output text \
+          )
+          TASK_ID=$( echo "${TASK_ARN}" | grep -oE "[^/]+$")
+          echo "check https://ap-northeast-1.console.aws.amazon.com/ecs/v2/clusters/${TASK_CLUSTER_NAME}/tasks/${TASK_ID} for status"
+          aws ecs wait tasks-stopped --cluster ${TASK_CLUSTER_NAME} --tasks ${TASK_ARN}
+          aws logs tail /ecs/logs/prod/${TASK_LOG_GROUP_NAME} --since="${NOW}"
 
       # Slack通知.
 #      - name: slack notice
