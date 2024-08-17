@@ -31,11 +31,11 @@ jobs:
           aws-region: ap-northeast-1
 
       # Source step
-#      - name: Source step - gitからコード取得
-#        uses: actions/checkout@v2
-#      - name: Source step - List files
-#        run: |
-#          ls -l
+      - name: Source step - gitからコード取得
+        uses: actions/checkout@v2
+      - name: Source step - List files
+        run: |
+          ls -l
 #
 #      # ビルド設定.
 #      - name: Build step - setup buildx
