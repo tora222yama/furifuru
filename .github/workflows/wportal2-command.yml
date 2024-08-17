@@ -8,6 +8,10 @@ on:
         required: true
         default: 'php artisan route:list'
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   ECR_REGISTRY: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com
   ECR_REPOSITORY: wportal2_ecr_repository
