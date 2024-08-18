@@ -106,32 +106,41 @@ jobs:
 #          docker compose -f docker-compose-for-service.yml push
 
       # タスク定義作成.
-      - name: Deploy step - render task
-        id: render-task
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: wportal2-container
-          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
+#      - name: Deploy step - render task
+#        id: render-task
+#        uses: aws-actions/amazon-ecs-render-task-definition@v1
+#        with:
+#          task-definition: task-definition.json
+#          container-name: wportal2-container
+#          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
 
       # ワンショットタスクの実行
       - name: Deploy step - execute task
         run: |
           echo "ここで aws ecs run-task を実行します"
 
+      # タスク定義の取得.
+      - name: Deploy step - get task definition
+        run: |
+          TASK_DEF_ARN=$(aws ecs list-task-definitions \
+            --family-prefix "${TASK_NAME}" \
+            --query "reverse(taskDefinitionArns)[0]" \
+            --output text)
+          echo "TASK_DEF_ARN: $TASK_DEF_ARN"
+
       # ワンショットタスクの実行.
       #           --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
-      - name: Deploy step - execute task
-        env:
-          container_overrides: '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php","artisan","route:list"] }]}'
-        run: |
-          TASK_ARN=$(aws ecs run-task \
-            --region ap-northeast-1 \
-            --launch-type FARGATE \
-            --cluster '${{ env.TASK_CLUSTER_NAME }}' \
-            --task-definition ${{ steps.render-task.outputs.task-definition }} \
-            --overrides '${{ env.container_overrides }}' \
-            --query tasks[0].taskArn --output text)
+#      - name: Deploy step - execute task
+#        env:
+#          container_overrides: '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php","artisan","route:list"] }]}'
+#        run: |
+#          TASK_ARN=$(aws ecs run-task \
+#            --region ap-northeast-1 \
+#            --launch-type FARGATE \
+#            --cluster '${{ env.TASK_CLUSTER_NAME }}' \
+#            --task-definition ${{ steps.render-task.outputs.task-definition }} \
+#            --overrides '${{ env.container_overrides }}' \
+#            --query tasks[0].taskArn --output text)
 
       # Slack通知.
 #      - name: slack notice
