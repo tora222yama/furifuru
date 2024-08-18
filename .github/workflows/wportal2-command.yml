@@ -125,12 +125,12 @@ jobs:
             --output text)
           echo "TASK_DEF_ARN: $TASK_DEF_ARN"
           TASK_ARN=$(aws ecs run-task \
-            --region ap-northeast-1 \
-            --launch-type FARGATE \
-            --cluster '${{ env.TASK_CLUSTER_NAME }}' \
-            --task-definition ${{ TASK_DEF_ARN }} \
-            --overrides '${{ env.container_overrides }}' \
-            --query tasks[0].taskArn --output text)
+                  --region ap-northeast-1 \
+                  --launch-type FARGATE \
+                  --cluster '${{ env.TASK_CLUSTER_NAME }}' \
+                  --task-definition "$TASK_DEF_ARN" \
+                  --overrides '${{ env.container_overrides }}' \
+                  --query tasks[0].taskArn --output text)
 
       # ワンショットタスクの実行.
       #           --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
