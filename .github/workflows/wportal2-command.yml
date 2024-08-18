@@ -121,6 +121,8 @@ jobs:
 
       # タスク定義の取得.
       - name: Deploy step - get task definition
+        env:
+          TASK_NAME: wportal2-task
         run: |
           TASK_DEF_ARN=$(aws ecs list-task-definitions \
             --family-prefix "${TASK_NAME}" \
