@@ -73,6 +73,26 @@ jobs:
           echo 'awsvpcConfiguration={subnets=["${{ env.ECS_TASK_SUBNET }}"],securityGroups=["${{ env.ECS_TASK_SECURITY_GROUP }}"],assignPublicIp="DISABLED"}'
           echo '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}", "command": ["sleep", "7200"]}]}'
 
+      # ECSタスクの実行.
+      - name: Run ECS Task
+        id: run-ecs-task
+        env:
+          LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
+          ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
+          ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
+          CONTAINER_NAME: ${{ env.AWS_ECS_TASK }}
+        run: |
+          result=$(aws ecs run-task \
+            --cluster ${{ env.AWS_ECS_CLUSTER }} \
+            --launch-type FARGATE \
+            --enable-execute-command \
+            --task-definition ${{ env.LATEST_TASK_DEF }} \
+            --network-configuration 'awsvpcConfiguration={subnets=["${{ env.ECS_TASK_SUBNET }}"],securityGroups=["${{ env.ECS_TASK_SECURITY_GROUP }}"],assignPublicIp="DISABLED"}' \
+            --tags key=StartedBy,value=GitHubActions \
+            --overrides '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}", "command": ["php", "artisan", "test:test:SendSes", "miki-yoji@919.jp"]}]}' \
+            --count 1)
+          echo "Run Task result: $result"
+
       # Source step
 #      - name: Source step - gitからコード取得
 #        uses: actions/checkout@v2
