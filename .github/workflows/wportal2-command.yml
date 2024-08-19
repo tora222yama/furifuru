@@ -135,6 +135,7 @@ jobs:
                   --task-definition "$TASK_DEF_ARN" \
                   --overrides '${{ env.CONTAINER_OVERRIDES }}' \
                   --query tasks[0].taskArn --output text)
+          echo "TASK_ARN: $TASK_ARN"
 
       # ワンショットタスクの実行.
       #           --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
