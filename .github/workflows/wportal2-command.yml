@@ -23,6 +23,7 @@ env:
   AWS_REGION: "ap-northeast-1"
   AWS_ECS_CLUSTER: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
   AWS_ECS_TASK: "wportal2-task"
+  CONTAINER_NAME: "wportal2-container"
 
 jobs:
   command:
@@ -66,7 +67,6 @@ jobs:
           LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
           ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
           ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
-          CONTAINER_NAME: "wportal2-container"
         run: |
           echo "${{ env.AWS_ECS_CLUSTER }}"
           echo "${{ env.LATEST_TASK_DEF }}"
@@ -97,15 +97,15 @@ jobs:
       - name: Exec ECS Command
         id: exec-ecs-command
         env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.task_arn }}
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.tasks[0].task_arn }}
         run: |
-          aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive  --command php artisan route:list
+          aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command php artisan route:list
 
       # ECSタスクの終了.
       - name: Stop ECS Task
         id: stop-ecs-task
         env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.taskArn }}
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.tasks[0].taskArn }}
         run: |
           aws ecs stop-task --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }}
 
