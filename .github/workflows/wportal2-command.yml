@@ -119,6 +119,8 @@ jobs:
         env:
           TASK_NAME: wportal2-task
           CONTAINER_OVERRIDES: '{"containerOverrides": [{"name": "wportal2-container", "command": ["php","artisan","route:list"] }]}'
+          SUBNET_ID_ARRAY: '["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"]'
+          SECURITY_GROUP_ID_ARRAY: '["sg-04d892c8cc26c7158"]'
         run: |
           TASK_DEF_ARN=$(aws ecs list-task-definitions \
             --family-prefix "${TASK_NAME}" \
@@ -128,6 +130,7 @@ jobs:
           TASK_ARN=$(aws ecs run-task \
                   --region ap-northeast-1 \
                   --launch-type FARGATE \
+                  --network-configuration "awsvpcConfiguration={subnets=$SUBNET_ID_ARRAY,securityGroups=$SECURITY_GROUP_ID_ARRAY,assignPublicIp=DISABLED}" \
                   --cluster '${{ env.TASK_CLUSTER_NAME }}' \
                   --task-definition "$TASK_DEF_ARN" \
                   --overrides '${{ env.CONTAINER_OVERRIDES }}' \
