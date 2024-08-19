@@ -60,6 +60,19 @@ jobs:
           echo "subnet=${SUBNET}" >> $GITHUB_OUTPUT
           echo "security_group=${SECURITY_GROUP}" >> $GITHUB_OUTPUT
 
+      # 実施前のecho test
+      - name: Echo test
+        env:
+          LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
+          ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
+          ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
+          CONTAINER_NAME: ${{ env.AWS_ECS_TASK }}
+        run: |
+          echo "${{ env.AWS_ECS_CLUSTER }}"
+          echo "${{ env.LATEST_TASK_DEF }}"
+          echo 'awsvpcConfiguration={subnets=["${{ env.ECS_TASK_SUBNET }}"],securityGroups=["${{ env.ECS_TASK_SECURITY_GROUP }}"],assignPublicIp="DISABLED"}'
+          echo '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}", "command": ["sleep", "7200"]}]}'
+
       # Source step
 #      - name: Source step - gitからコード取得
 #        uses: actions/checkout@v2
