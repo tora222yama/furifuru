@@ -12,12 +12,17 @@ permissions:
   id-token: write
   contents: read
 
+#env:
+#  ECR_REGISTRY: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com
+#  ECR_REPOSITORY: wportal2_ecr_repository
+#  TASK_CLUSTER_NAME: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
+#  TASK_FAMILY_NAME: wportal2-task
+#  TASK_LOG_GROUP_NAME: /wportal2/ecs
+
 env:
-  ECR_REGISTRY: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com
-  ECR_REPOSITORY: wportal2_ecr_repository
-  TASK_CLUSTER_NAME: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
-  TASK_FAMILY_NAME: wportal2-task
-  TASK_LOG_GROUP_NAME: /wportal2/ecs
+  AWS_REGION: "ap-northeast-1"
+  AWS_ECS_CLUSTER: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
+  AWS_ECS_TASK: "wportal2-task"
 
 jobs:
   command:
@@ -33,12 +38,34 @@ jobs:
           role-to-assume: arn:aws:iam::979109089196:role/wportal2_deploy_iam_role
           aws-region: ap-northeast-1
 
-      # Source step
-      - name: Source step - gitからコード取得
-        uses: actions/checkout@v2
-      - name: Source step - List files
+      # 最新タスク定義の取得.
+      - name: Get latest task definition revision
+        id: get-latest-task-def
+        env:
+          TASK_FAMILY: ${{ env.AWS_ECS_TASK }}
         run: |
-          ls -l
+          LATEST_TASK_DEF=$(aws ecs list-task-definitions --family-prefix ${{ env.TASK_FAMILY }} --sort DESC --max-items 1 --query "taskDefinitionArns[0]")
+          echo "latest_task_def=$LATEST_TASK_DEF" >> $GITHUB_OUTPUT
+
+      # ネットワーク設定の取得.
+      - name: Get ECS service network configuration
+        id: get-network-config
+        env:
+          CLUSTER_NAME: ${{ env.AWS_ECS_CLUSTER }}
+          SERVICE_NAME: ${{ env.AWS_ECS_TASK }}
+        run: |
+          NETWORK_CONFIG=$(aws ecs describe-services --cluster ${{ env.CLUSTER_NAME }} --services ${{ env.SERVICE_NAME }} --query "services[0].networkConfiguration.awsvpcConfiguration" --output json)
+          SUBNET=$(echo $NETWORK_CONFIG | jq -r '.subnets[0]')
+          SECURITY_GROUP=$(echo $NETWORK_CONFIG | jq -r '.securityGroups[0]')
+          echo "subnet=${SUBNET}" >> $GITHUB_OUTPUT
+          echo "security_group=${SECURITY_GROUP}" >> $GITHUB_OUTPUT
+
+      # Source step
+#      - name: Source step - gitからコード取得
+#        uses: actions/checkout@v2
+#      - name: Source step - List files
+#        run: |
+#          ls -l
 #
 #      # ビルド設定.
 #      - name: Build step - setup buildx
@@ -156,12 +183,3 @@ jobs:
 #        run: |
 #          echo "Notice to slack"
 #          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルへのコマンド実行が完了しました:${{ github.sha }} command:${{ github.event.inputs.command }}"}' https://hooks.slack.com/services/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
-
-      # タスク定義作成.
-      - name: Deploy step - render task
-        id: render-task
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: wportal2-container-command
-          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
