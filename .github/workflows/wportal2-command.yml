@@ -80,7 +80,7 @@ jobs:
           LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
           ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
           ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
-          CONTAINER_NAME: ${{ env.AWS_ECS_TASK }}
+          CONTAINER_NAME: "wportal2-container"
         run: |
           result=$(aws ecs run-task \
             --cluster ${{ env.AWS_ECS_CLUSTER }} \
