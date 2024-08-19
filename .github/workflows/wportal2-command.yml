@@ -93,6 +93,22 @@ jobs:
             --count 1)
           echo "Run Task result: $result"
 
+      # ECSコマンドの実行.
+      - name: Exec ECS Command
+        id: exec-ecs-command
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.task_arn }}
+        run: |
+          aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive  --command php artisan route:list
+
+      # ECSタスクの終了.
+      - name: Stop ECS Task
+        id: stop-ecs-task
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.taskArn }}
+        run: |
+          aws ecs stop-task --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }}
+
       # Source step
 #      - name: Source step - gitからコード取得
 #        uses: actions/checkout@v2
