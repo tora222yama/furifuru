@@ -115,27 +115,27 @@ jobs:
 #          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
 
       # タスク定義を取得して、ECSをワンショット起動.
-      - name: Deploy step - get task definition
-        env:
-          TASK_NAME: wportal2-task
-          CONTAINER_OVERRIDES: '{"containerOverrides": [{"name": "wportal2-container", "command": ["php","artisan","test:SendSes", "miki-yoji@919.jp"] }]}'
-          SUBNET_ID_ARRAY: '["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"]'
-          SECURITY_GROUP_ID_ARRAY: '["sg-04d892c8cc26c7158"]'
-        run: |
-          TASK_DEF_ARN=$(aws ecs list-task-definitions \
-            --family-prefix "${TASK_NAME}" \
-            --query "reverse(taskDefinitionArns)[0]" \
-            --output text)
-          echo "TASK_DEF_ARN: $TASK_DEF_ARN"
-          TASK_ARN=$(aws ecs run-task \
-                  --region ap-northeast-1 \
-                  --launch-type FARGATE \
-                  --network-configuration "awsvpcConfiguration={subnets=$SUBNET_ID_ARRAY,securityGroups=$SECURITY_GROUP_ID_ARRAY,assignPublicIp=DISABLED}" \
-                  --cluster '${{ env.TASK_CLUSTER_NAME }}' \
-                  --task-definition "$TASK_DEF_ARN" \
-                  --overrides '${{ env.CONTAINER_OVERRIDES }}' \
-                  --query tasks[0].taskArn --output text)
-          echo "TASK_ARN: $TASK_ARN"
+#      - name: Deploy step - get task definition
+#        env:
+#          TASK_NAME: wportal2-task
+#          CONTAINER_OVERRIDES: '{"containerOverrides": [{"name": "wportal2-container", "command": ["php","artisan","test:SendSes", "miki-yoji@919.jp"] }]}'
+#          SUBNET_ID_ARRAY: '["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"]'
+#          SECURITY_GROUP_ID_ARRAY: '["sg-04d892c8cc26c7158"]'
+#        run: |
+#          TASK_DEF_ARN=$(aws ecs list-task-definitions \
+#            --family-prefix "${TASK_NAME}" \
+#            --query "reverse(taskDefinitionArns)[0]" \
+#            --output text)
+#          echo "TASK_DEF_ARN: $TASK_DEF_ARN"
+#          TASK_ARN=$(aws ecs run-task \
+#                  --region ap-northeast-1 \
+#                  --launch-type FARGATE \
+#                  --network-configuration "awsvpcConfiguration={subnets=$SUBNET_ID_ARRAY,securityGroups=$SECURITY_GROUP_ID_ARRAY,assignPublicIp=DISABLED}" \
+#                  --cluster '${{ env.TASK_CLUSTER_NAME }}' \
+#                  --task-definition "$TASK_DEF_ARN" \
+#                  --overrides '${{ env.CONTAINER_OVERRIDES }}' \
+#                  --query tasks[0].taskArn --output text)
+#          echo "TASK_ARN: $TASK_ARN"
 
       # ワンショットタスクの実行.
       #           --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
@@ -156,3 +156,12 @@ jobs:
 #        run: |
 #          echo "Notice to slack"
 #          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルへのコマンド実行が完了しました:${{ github.sha }} command:${{ github.event.inputs.command }}"}' https://hooks.slack.com/services/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
+
+      # タスク定義作成.
+      - name: Deploy step - render task
+        id: render-task
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: wportal2-container-command
+          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
