@@ -101,7 +101,7 @@ jobs:
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command php artisan route:list
+          aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command "php artisan route:list"
 
       # ECSタスクの終了.
       - name: Stop ECS Task
