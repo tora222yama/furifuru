@@ -103,7 +103,7 @@ jobs:
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          aws ecs wait services-stable --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }} --services ${{ env.AWS_ECS_SERVICE }}
+          aws ecs wait services-stable --cluster ${{ env.AWS_ECS_CLUSTER }} --services ${{ env.AWS_ECS_SERVICE }}
 
       # ECSコマンドの実行.
       - name: Exec ECS Command
