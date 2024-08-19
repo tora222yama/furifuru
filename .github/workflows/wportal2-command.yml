@@ -22,6 +22,7 @@ permissions:
 env:
   AWS_REGION: "ap-northeast-1"
   AWS_ECS_CLUSTER: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
+  AWS_ECS_SERVICE: arn:aws:ecs:ap-northeast-1:979109089196:service/wportal2-ecs-cluster/wportal2-ecs-service
   AWS_ECS_TASK: "wportal2-task"
   CONTAINER_NAME: "wportal2-container"
 
@@ -98,14 +99,16 @@ jobs:
       # ECSのタスク起動を待つ.
       - name: Wait ECS Task
         id: wait-ecs-task
+        continue-on-error: true
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          aws ecs wait services-stable --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
+          aws ecs wait services-stable --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }} --services ${{ env.AWS_ECS_SERVICE }}
 
       # ECSコマンドの実行.
       - name: Exec ECS Command
         id: exec-ecs-command
+        continue-on-error: true
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
