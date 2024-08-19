@@ -20,7 +20,7 @@ class SesService
     public function sendMail(SesParameter $param): void
     {
         // AWSのconfig確認.
-        $key    = config('services.ses.key');
+        $key    = config('aws.credentials.key');
         if (empty($key)) {
             Log::error('AWSのconfigが設定されていません');
 
