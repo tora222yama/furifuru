@@ -83,21 +83,23 @@ jobs:
           ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
           CONTAINER_NAME: "wportal2-container"
         run: |
-          result=$(aws ecs run-task \
+          TASK_ARN=$(aws ecs run-task \
             --cluster ${{ env.AWS_ECS_CLUSTER }} \
             --launch-type FARGATE \
             --enable-execute-command \
             --task-definition ${{ env.LATEST_TASK_DEF }} \
             --network-configuration 'awsvpcConfiguration={subnets=["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"],securityGroups=["sg-04d892c8cc26c7158"],assignPublicIp="DISABLED"}' \
             --tags key=StartedBy,value=GitHubActions \
-            --count 1)
-          echo "Run Task result: $result"
+            --count 1 \
+            --query tasks[0].taskArn --output text)
+          echo "TASK_ARN: $TASK_ARN"
+          echo "TASK_ARN=$TASK_ARN" >> $GITHUB_OUTPUT
 
       # ECSコマンドの実行.
       - name: Exec ECS Command
         id: exec-ecs-command
         env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.tasks[0].task_arn }}
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command php artisan route:list
 
@@ -105,7 +107,7 @@ jobs:
       - name: Stop ECS Task
         id: stop-ecs-task
         env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.tasks[0].taskArn }}
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           aws ecs stop-task --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }}
 
