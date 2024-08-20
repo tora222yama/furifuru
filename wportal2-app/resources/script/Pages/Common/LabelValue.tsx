@@ -8,6 +8,7 @@ interface IProps extends IPropsBase {
   value: string;
   labelSx?: SxProps;
   valueSx?: SxProps;
+  showDivider?: boolean;
 }
 export const LabelValue: React.FC<IProps> = ({
   sx,
@@ -15,16 +16,17 @@ export const LabelValue: React.FC<IProps> = ({
   value,
   labelSx,
   valueSx,
+  showDivider = true,
 }) => {
   return (
     <Box sx={{ ...sx }}>
       <Box sx={{ display: 'flex' }}>
-        <TypoText sx={{ minWidth: '200px', width: '200px', ...labelSx }}>
+        <TypoText sx={{ minWidth: '100px', width: '180px', ...labelSx }}>
           {label}
         </TypoText>
         <TypoText sx={{ ...valueSx }}>{value}</TypoText>
       </Box>
-      <Divider sx={{ marginTop: '6px' }} />
+      {showDivider && <Divider sx={{ marginTop: '6px' }} />}
     </Box>
   );
 };

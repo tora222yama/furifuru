@@ -88,6 +88,7 @@ class TrnUser extends ModelBase
             'authId'              => $this->auth_id           ?? 0,
             'nickname'            => $this->nickname          ?? '',
             'birthDate'           => $this->birth_date        ?? '',
+            'selfIntroduction'    => $this->self_introduction ?? '',
             'faceImagePath'       => TrnUserService::getImageUrl($this),
 
             'authUser'            => $this->isExistKeyInWith($with, 'AuthUser', $history)
