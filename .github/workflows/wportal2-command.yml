@@ -105,6 +105,19 @@ jobs:
         run: |
           aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
 
+      # コマンドの確認
+      - name: Confirm ECS Command
+        id: confirm-ecs-command
+        continue-on-error: true
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+        run: |
+          RESULT=$(aws ecs describe-tasks \
+            --region ap-northeast-1 \
+            --cluster ${{ env.AWS_ECS_CLUSTER }} \
+            --task ${{ env.TASK_ARN }})
+          echo "RESULT: $RESULT"
+
       # ECSコマンドの実行.
       - name: Exec ECS Command
         id: exec-ecs-command
