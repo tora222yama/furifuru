@@ -118,6 +118,16 @@ jobs:
             --task ${{ env.TASK_ARN }})
           echo "RESULT: $RESULT"
 
+      # 設定の確認
+      - name: Confirm setting
+        id: confirm-setting
+        continue-on-error: true
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+        run: |
+          git clone https://github.com/aws-containers/amazon-ecs-exec-checker.git
+          ./check-ecs-exec.sh ${{ env.AWS_ECS_CLUSTER }} ${{ env.TASK_ARN }}
+
       # ECSコマンドの実行.
       - name: Exec ECS Command
         id: exec-ecs-command
