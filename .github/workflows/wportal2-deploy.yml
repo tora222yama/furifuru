@@ -78,7 +78,7 @@ jobs:
           tags: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest # イメージ名を指定/docker-compose.ymlで参照する名前
           load: true
           context: .
-          file: ./Dockerfile
+          file: ./DockerfileForServiceContainer
           cache-from: type=local,src=/tmp/.buildx-cache # キャッシュを指定
           cache-to: type=local,dest=/tmp/.buildx-cache-new # キャッシュを指定
 
