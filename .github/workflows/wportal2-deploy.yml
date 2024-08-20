@@ -14,7 +14,7 @@ env:
   ECR_REPOSITORY: wportal2_ecr_repository
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: configure aws credential
@@ -32,16 +32,17 @@ jobs:
 
       # ビルド設定.
       - name: Build step - setup buildx
+        id: buildx
         uses: docker/setup-buildx-action@v1
 
       # キャッシュ対応.
-#      - name: Cache step
-#        uses: actions/cache@v2
-#        with:
-#          path: /tmp/.buildx-cache
-#          key: ${{ runner.os }}-buildx-${{ github.sha }}
-#          restore-keys: |
-#            ${{ runner.os }}-buildx-
+      - name: Cache step
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       # ECRログイン.
       - name: Build step - login to ECR
@@ -67,13 +68,19 @@ jobs:
           echo APP_AWS_ACCESS_KEY_ID="$(aws ssm get-parameter --name /wportal/app_aws_access_key_id --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_SECRET_ACCESS_KEY="$(aws ssm get-parameter --name /wportal/app_aws_secret_access_key --query Parameter.Value --output text)" >> wportal2-app/.env
           echo APP_AWS_REGION="$(aws ssm get-parameter --name /wportal/app_aws_region --query Parameter.Value --output text)" >> wportal2-app/.env
-#          docker compose -f docker-compose-for-service.yml build
-#          docker compose -f docker-compose-for-service.yml up -d
-#          docker compose -f docker-compose-for-service.yml ps
-#          docker exec service_container_web composer install
-#          docker exec service_container_web php artisan key:generate
-#          docker exec service_container_web npm ci
-#          docker exec service_container_web npm run build
+
+      # Buildxでイメージをビルドする
+      - name: Build images - App
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }} # Buildxでビルドすることを指定
+          tags: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest # イメージ名を指定/docker-compose.ymlで参照する名前
+          load: true
+          context: .
+          file: ./DockerfileForServiceContainer
+          cache-from: type=local,src=/tmp/.buildx-cache # キャッシュを指定
+          cache-to: type=local,dest=/tmp/.buildx-cache-new # キャッシュを指定
 
       # docker-compose(with cache)でビルド.
       - name: Build step - docker-compose build
@@ -81,11 +88,6 @@ jobs:
           docker compose -f docker-compose-for-service.yml build
           docker compose -f docker-compose-for-service.yml up -d
           docker compose -f docker-compose-for-service.yml ps
-#        run: |
-#          docker buildx bake \
-#            --file docker-compose-for-service.yml
-#            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
-#            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache'
 
       # ECRへのpush.
       - name: Build step - docker-compose push
@@ -112,8 +114,14 @@ jobs:
           cluster: wportal2-ecs-cluster
           wait-for-service-stability: true
 
+      # Slack通知.
+      - name: slack notice
+        run: |
+          echo "Notice to slack"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルのdeployが完了しました:${{ github.sha }}"}' https://hooks.slack.com/services/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
+
       # キャッシュ削除.
-#      - name: Move cache
-#        run: |
-#          rm -rf /tmp/.buildx-cache
-#          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache

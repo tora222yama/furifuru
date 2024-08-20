@@ -98,10 +98,15 @@ class TrnUserService extends ModelServiceBase
     public function offsetPagination(
         int $index,
         int $step,
-        array $with = []
+        array $with = [],
+        string $searchValue = '',
     ): array {
         // リスト取得.
         $trnUserList      = TrnUser::query()
+            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+                // 検索文字列があれば名称から検索.
+                return $query->where('nickname', 'like', "%$searchValue%");
+            })
             ->with($with)
             ->alive()
             ->offset($index * $step)
@@ -109,7 +114,12 @@ class TrnUserService extends ModelServiceBase
             ->get();
 
         // カウント取得.
-        $trnUserListCount = TrnUser::count();
+        $trnUserListCount = TrnUser::query()
+            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+                // 検索文字列があれば名称から検索.
+                return $query->where('nickname', 'like', "%$searchValue%");
+            })
+            ->count();
 
         return [
             'list'  => $trnUserList->map(function (TrnUser $trnUser) use ($with) {

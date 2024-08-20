@@ -83,6 +83,10 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
           "s3:GetObject",
           "s3:GetObjectVersion",
           "s3:GetBucketVersioning",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel",
         ],
         "Resource" : ["*"]
       }
