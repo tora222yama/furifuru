@@ -146,7 +146,7 @@ jobs:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           sudo apt install -y expect
-          unbuffer aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command "php artisan route:list"
+          unbuffer aws ecs execute-command --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }} --container ${{ env.CONTAINER_NAME }} --interactive --command "${{ github.event.inputs.command }}"
 
       # ECSタスクの終了.
       - name: Stop ECS Task
