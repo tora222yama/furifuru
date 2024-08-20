@@ -12,13 +12,6 @@ permissions:
   id-token: write
   contents: read
 
-#env:
-#  ECR_REGISTRY: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com
-#  ECR_REPOSITORY: wportal2_ecr_repository
-#  TASK_CLUSTER_NAME: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
-#  TASK_FAMILY_NAME: wportal2-task
-#  TASK_LOG_GROUP_NAME: /wportal2/ecs
-
 env:
   AWS_REGION: "ap-northeast-1"
   AWS_ECS_CLUSTER: arn:aws:ecs:ap-northeast-1:979109089196:cluster/wportal2-ecs-cluster
@@ -30,10 +23,7 @@ jobs:
   command:
     runs-on: ubuntu-latest
     steps:
-      - name: test
-        run: |
-          echo "input-command: ${{ github.event.inputs.command }}"
-
+      # AWS認証設定.
       - name: configure aws credential
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -62,20 +52,7 @@ jobs:
           echo "subnet=${SUBNET}" >> $GITHUB_OUTPUT
           echo "security_group=${SECURITY_GROUP}" >> $GITHUB_OUTPUT
 
-      # 実施前のecho test
-      - name: Echo test
-        env:
-          LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
-          ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
-          ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
-        run: |
-          echo "${{ env.AWS_ECS_CLUSTER }}"
-          echo "${{ env.LATEST_TASK_DEF }}"
-          echo 'awsvpcConfiguration={subnets=["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"],securityGroups=["sg-04d892c8cc26c7158"],assignPublicIp="DISABLED"}'
-          echo '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}", "command": ["sleep", "7200"]}]}'
-
       # ECSタスクの実行.
-      #             --overrides '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}", "command": ["php", "artisan", "test:test:SendSes", "miki-yoji@919.jp"]}]}' \
       - name: Run ECS Task
         id: run-ecs-task
         env:
@@ -103,40 +80,23 @@ jobs:
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
-
-      # コマンドの確認
-      - name: Confirm ECS Command
-        id: confirm-ecs-command
-        continue-on-error: true
-        env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
-        run: |
-          RESULT=$(aws ecs describe-tasks \
-            --region ap-northeast-1 \
-            --cluster ${{ env.AWS_ECS_CLUSTER }} \
-            --task ${{ env.TASK_ARN }})
-          echo "RESULT: $RESULT"
-
-      # 設定の確認のための準備.
-      - name: Prepare confirm
-        continue-on-error: true
-        run: |
-          git clone https://github.com/aws-containers/amazon-ecs-exec-checker.git
+          aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}       
 
       # 設定の確認
-      - name: Confirm setting
-        id: confirm-setting
-        continue-on-error: true
-        env:
-          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
-        run: |
-          ls
-          cd amazon-ecs-exec-checker
-          ls
-          ./check-ecs-exec.sh ${{ env.AWS_ECS_CLUSTER }} ${{ env.TASK_ARN }}
-          cd ..
-          ls
+      # 上手く動作しない場合は以下を利用してECSの状態を確認する.
+#      - name: Confirm setting
+#        id: confirm-setting
+#        continue-on-error: true
+#        env:
+#          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+#        run: |
+#          git clone https://github.com/aws-containers/amazon-ecs-exec-checker.git
+#          ls
+#          cd amazon-ecs-exec-checker
+#          ls
+#          ./check-ecs-exec.sh ${{ env.AWS_ECS_CLUSTER }} ${{ env.TASK_ARN }}
+#          cd ..
+#          ls
 
       # ECSコマンドの実行.
       - name: Exec ECS Command
@@ -155,127 +115,3 @@ jobs:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           aws ecs stop-task --cluster ${{ env.AWS_ECS_CLUSTER }} --task ${{ env.TASK_ARN }}
-
-      # Source step
-#      - name: Source step - gitからコード取得
-#        uses: actions/checkout@v2
-#      - name: Source step - List files
-#        run: |
-#          ls -l
-#
-#      # ビルド設定.
-#      - name: Build step - setup buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v1
-#
-#      # キャッシュ対応.
-#      - name: Cache step
-#        uses: actions/cache@v2
-#        with:
-#          path: /tmp/.buildx-cache
-#          key: ${{ runner.os }}-buildx-${{ github.sha }}
-#          restore-keys: |
-#            ${{ runner.os }}-buildx-
-#
-#      # ECRログイン.
-#      - name: Build step - login to ECR
-#        uses: docker/login-action@v2
-#        with:
-#          registry: ${{ env.ECR_REGISTRY }}
-#
-#      # envの準備.
-#      - name: Build step - prepare .env
-#        run: |
-#          cp wportal2-app/.env.prd.sample wportal2-app/.env
-#          echo DB_HOST="$(aws ssm get-parameter --name /wportal/db/host --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo DB_USERNAME="$(aws ssm get-parameter --name /wportal/db/username --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo DB_PASSWORD="$(aws ssm get-parameter --name /wportal/db/password --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo REDIS_HOST="$(aws ssm get-parameter --name /wportal/redis/host --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo GOOGLE_CLIENT_ID="$(aws ssm get-parameter --name /wportal/google_client_id --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo GOOGLE_CLIENT_SECRET="$(aws ssm get-parameter --name /wportal/google_client_secret --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo SLACK_APP_TOKEN="$(aws ssm get-parameter --name /wportal/slack_app_token --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo SLACK_BOT_USER_OAUTH_TOKEN="$(aws ssm get-parameter --name /wportal/slack_bot_user_oauth_token --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo SLACK_URL_NOTICE="$(aws ssm get-parameter --name /wportal/slack_url_notice --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo RECAPTCHA_SECRET_KEY="$(aws ssm get-parameter --name /wportal/recaptcha_secret_key --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo VITE_RECAPTCHA_SITE_KEY="$(aws ssm get-parameter --name /wportal/vite_recaptcha_site_key --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo APP_AWS_ACCESS_KEY_ID="$(aws ssm get-parameter --name /wportal/app_aws_access_key_id --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo APP_AWS_SECRET_ACCESS_KEY="$(aws ssm get-parameter --name /wportal/app_aws_secret_access_key --query Parameter.Value --output text)" >> wportal2-app/.env
-#          echo APP_AWS_REGION="$(aws ssm get-parameter --name /wportal/app_aws_region --query Parameter.Value --output text)" >> wportal2-app/.env
-#
-#      # Buildxでイメージをビルドする
-#      - name: Build images - App
-#        uses: docker/build-push-action@v4
-#        with:
-#          push: false
-#          builder: ${{ steps.buildx.outputs.name }} # Buildxでビルドすることを指定
-#          tags: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest # イメージ名を指定/docker-compose.ymlで参照する名前
-#          load: true
-#          context: .
-#          file: ./DockerfileForServiceContainer
-#          cache-from: type=local,src=/tmp/.buildx-cache # キャッシュを指定
-#          cache-to: type=local,dest=/tmp/.buildx-cache-new # キャッシュを指定
-#
-#      # docker-compose(with cache)でビルド.
-#      - name: Build step - docker-compose build
-#        run: |
-#          docker compose -f docker-compose-for-service.yml build
-#          docker compose -f docker-compose-for-service.yml up -d
-#          docker compose -f docker-compose-for-service.yml ps
-#
-#      # ECRへのpush.
-#      - name: Build step - docker-compose push
-#        run: |
-#          echo "docker-composeでビルドしたイメージをECRにpush"
-#          docker compose -f docker-compose-for-service.yml push
-
-      # タスク定義作成.
-#      - name: Deploy step - render task
-#        id: render-task
-#        uses: aws-actions/amazon-ecs-render-task-definition@v1
-#        with:
-#          task-definition: task-definition.json
-#          container-name: wportal2-container
-#          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
-
-      # タスク定義を取得して、ECSをワンショット起動.
-#      - name: Deploy step - get task definition
-#        env:
-#          TASK_NAME: wportal2-task
-#          CONTAINER_OVERRIDES: '{"containerOverrides": [{"name": "wportal2-container", "command": ["php","artisan","test:SendSes", "miki-yoji@919.jp"] }]}'
-#          SUBNET_ID_ARRAY: '["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"]'
-#          SECURITY_GROUP_ID_ARRAY: '["sg-04d892c8cc26c7158"]'
-#        run: |
-#          TASK_DEF_ARN=$(aws ecs list-task-definitions \
-#            --family-prefix "${TASK_NAME}" \
-#            --query "reverse(taskDefinitionArns)[0]" \
-#            --output text)
-#          echo "TASK_DEF_ARN: $TASK_DEF_ARN"
-#          TASK_ARN=$(aws ecs run-task \
-#                  --region ap-northeast-1 \
-#                  --launch-type FARGATE \
-#                  --network-configuration "awsvpcConfiguration={subnets=$SUBNET_ID_ARRAY,securityGroups=$SECURITY_GROUP_ID_ARRAY,assignPublicIp=DISABLED}" \
-#                  --cluster '${{ env.TASK_CLUSTER_NAME }}' \
-#                  --task-definition "$TASK_DEF_ARN" \
-#                  --overrides '${{ env.CONTAINER_OVERRIDES }}' \
-#                  --query tasks[0].taskArn --output text)
-#          echo "TASK_ARN: $TASK_ARN"
-
-      # ワンショットタスクの実行.
-      #           --network-configuration 'awsvpcConfiguration={{ vpc_configuration }}' \
-#      - name: Deploy step - execute task
-#        env:
-#          container_overrides: '{"containerOverrides": [{"name": "wportal2-command-task", "command": ["php","artisan","route:list"] }]}'
-#        run: |
-#          TASK_ARN=$(aws ecs run-task \
-#            --region ap-northeast-1 \
-#            --launch-type FARGATE \
-#            --cluster '${{ env.TASK_CLUSTER_NAME }}' \
-#            --task-definition ${{ steps.render-task.outputs.task-definition }} \
-#            --overrides '${{ env.container_overrides }}' \
-#            --query tasks[0].taskArn --output text)
-
-      # Slack通知.
-#      - name: slack notice
-#        run: |
-#          echo "Notice to slack"
-#          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルへのコマンド実行が完了しました:${{ github.sha }} command:${{ github.event.inputs.command }}"}' https://hooks.slack.com/services/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
