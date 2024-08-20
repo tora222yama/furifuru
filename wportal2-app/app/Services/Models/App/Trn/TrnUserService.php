@@ -68,6 +68,10 @@ class TrnUserService extends ModelServiceBase
 
             // ファイルパスの更新.
             $trnUser->face_image_path = Constant::FACE_IMAGE_S3_PATH.$name;
+
+            // キャッシュの削除.
+            $cacheKey                 = $this->getCacheKeyFaceImage($trnUser);
+            Cache::delete($cacheKey);
         }
 
         // 保存.
