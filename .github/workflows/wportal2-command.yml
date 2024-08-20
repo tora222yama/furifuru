@@ -132,7 +132,11 @@ jobs:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           ls
+          cd amazon-ecs-exec-checker
+          ls
           ./check-ecs-exec.sh ${{ env.AWS_ECS_CLUSTER }} ${{ env.TASK_ARN }}
+          cd ..
+          ls
 
       # ECSコマンドの実行.
       - name: Exec ECS Command
