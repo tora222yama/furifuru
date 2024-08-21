@@ -5,6 +5,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import BuildIcon from '@mui/icons-material/Build';
 import BusinessIcon from '@mui/icons-material/Business';
 import CachedIcon from '@mui/icons-material/Cached';
+import ClearIcon from '@mui/icons-material/Clear';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -67,6 +68,8 @@ export const Icon: React.FC<IProps> = ({
       return <CachedIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CAFE:
       return <LocalCafeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.CLEAR:
+      return <ClearIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.DASHBOARD:
       return <DashboardIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.EXPAND_LESS:

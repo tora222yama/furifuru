@@ -9,6 +9,7 @@ export const E_ICON = {
   BUILD: 'build',
   CACHED: 'cached',
   CAFE: 'cafe',
+  CLEAR: 'clear',
   DASHBOARD: 'dashboard',
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
@@ -46,6 +47,8 @@ export const getIconWidth = (icon: EIcon): string => {
     case E_ICON.CACHED:
       return '32px';
     case E_ICON.CAFE:
+      return '20px';
+    case E_ICON.CLEAR:
       return '20px';
     case E_ICON.DASHBOARD:
       return '20px';
@@ -89,6 +92,8 @@ export const getIconHeight = (icon: EIcon): string => {
     case E_ICON.CACHED:
       return '32px';
     case E_ICON.CAFE:
+      return '20px';
+    case E_ICON.CLEAR:
       return '20px';
     case E_ICON.DASHBOARD:
       return '20px';
