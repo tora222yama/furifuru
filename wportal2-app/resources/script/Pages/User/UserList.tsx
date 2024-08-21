@@ -13,6 +13,8 @@ import {
   IFormSearch,
   initialValue,
 } from '@/script/Pages/User/FormSearch';
+import { Closable } from '@/script/Component/Misc/Closable';
+import { SearchFilter } from '@/script/Pages/User/SearchFilter';
 
 interface IProps extends IPropsBase {}
 export const UserList: React.FC<IProps> = ({ sx }) => {
@@ -28,13 +30,9 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
   /**
    * 検索値の更新.
    */
-  const handleUpdate = React.useCallback(
-    (newValues: Partial<IFormSearch>) => {
-      setSearchFormValue({ ...searchFormValue, ...newValues });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setSearchFormValue],
-  );
+  const handleUpdate = (newValues: Partial<IFormSearch>) => {
+    setSearchFormValue({ ...searchFormValue, ...newValues });
+  };
 
   /**
    * 検索の実行.
@@ -130,6 +128,35 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
     );
   };
 
+  /**
+   * 検索をリセットする.
+   */
+  const handleReset = (): void => {
+    setSearchFormValue(initialValue);
+    setSearchValue(initialValue);
+    setPageIndex(0);
+
+    router.reload({
+      method: 'post',
+      onStart,
+      onFinish,
+      data: {
+        index: 0,
+        step: pageStep,
+        keyword: initialValue.keyword,
+        inactiveUserFlag: initialValue.inactiveUserFlag,
+      },
+      only: ['paginationUser'],
+    });
+  };
+
+  /**
+   * 検索状態が有効かどうか.
+   */
+  const isSearchActive = (): boolean => {
+    return searchValue.keyword !== '' || searchValue.inactiveUserFlag;
+  };
+
   return (
     <Box
       sx={{
@@ -147,29 +174,42 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
           handleSubmit={handleSubmitSearch}
         />
       </Paper>
-      <Paging
-        sx={{
-          marginTop: '20px',
-          justifyContent: 'flex-end',
-        }}
-        index={pageIndex}
-        step={pageStep}
-        total={trnUserListCount}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <Closable open={isSearchActive()}>
+        <SearchFilter
+          sx={{
+            marginTop: '20px',
+          }}
+          searchValue={searchValue}
+          handleReset={handleReset}
+        />
+      </Closable>
+      <Closable open={!!trnUserListCount}>
+        <Paging
+          sx={{
+            marginTop: '20px',
+            justifyContent: 'flex-end',
+          }}
+          index={pageIndex}
+          step={pageStep}
+          total={trnUserListCount}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+        />
+      </Closable>
       <UserTable sx={{ marginTop: '10px' }} handleSelect={handleSelect} />
-      <Paging
-        sx={{
-          marginTop: '10px',
-          justifyContent: 'flex-end',
-        }}
-        index={pageIndex}
-        step={pageStep}
-        total={trnUserListCount}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <Closable open={!!trnUserListCount}>
+        <Paging
+          sx={{
+            marginTop: '10px',
+            justifyContent: 'flex-end',
+          }}
+          index={pageIndex}
+          step={pageStep}
+          total={trnUserListCount}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+        />
+      </Closable>
     </Box>
   );
 };

@@ -60,7 +60,7 @@ export const FormSearch: React.FC<IProps> = ({
       >
         <TypoText sx={{ minWidth: '200px' }}>非アクティブのみ</TypoText>
         <Checkbox
-          value={formSearch.inactiveUserFlag}
+          checked={formSearch.inactiveUserFlag}
           onChange={v => handleUpdate({ inactiveUserFlag: v.target.checked })}
         />
       </Box>

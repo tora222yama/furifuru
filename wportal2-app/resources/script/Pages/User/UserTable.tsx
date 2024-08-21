@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Box,
   styled,
   Table,
   TableBody,
@@ -15,6 +16,7 @@ import { Image } from '@/script/Component/Misc/Image';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 import { DateTime } from '@/script/Common/DateTime';
+import { TypoText } from '@/script/Component/Typography/TypoText';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -74,6 +76,24 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
       );
     });
   };
+
+  /**
+   * データが見つからない場合.
+   */
+  if (!trnUserList.count()) {
+    return (
+      <Box
+        sx={{
+          marginTop: '60px',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <TypoText>検索条件に一致するユーザーが見つかりませんでした。</TypoText>
+      </Box>
+    );
+  }
 
   return (
     <Table sx={sx}>
