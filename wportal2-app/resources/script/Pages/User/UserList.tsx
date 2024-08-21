@@ -8,8 +8,13 @@ import { Paging } from '@/script/Component/Misc/Paging';
 import { UserTable } from '@/script/Pages/User/UserTable';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
-import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { InputField } from '@/script/Component/Form/InputField';
+import {
+  FormSearch,
+  IFormSearch,
+  initialValue,
+} from '@/script/Pages/User/FormSearch';
+import { Closable } from '@/script/Component/Misc/Closable';
+import { SearchFilter } from '@/script/Pages/User/SearchFilter';
 
 interface IProps extends IPropsBase {}
 export const UserList: React.FC<IProps> = ({ sx }) => {
@@ -17,18 +22,17 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
   const { onStart, onFinish } = useProgressContext();
   const pageStep = 20;
   const [pageIndex, setPageIndex] = React.useState<number>(0);
-  const [searchFormValue, setSearchFormValue] = React.useState<string>('');
-  const [searchValue, setSearchValue] = React.useState<string>('');
+  const [searchFormValue, setSearchFormValue] =
+    React.useState<IFormSearch>(initialValue);
+  const [searchValue, setSearchValue] =
+    React.useState<IFormSearch>(initialValue);
 
   /**
    * 検索値の更新.
    */
-  const handleUpdate = React.useCallback(
-    (newValue: string) => {
-      setSearchFormValue(newValue);
-    },
-    [setSearchFormValue],
-  );
+  const handleUpdate = (newValues: Partial<IFormSearch>) => {
+    setSearchFormValue({ ...searchFormValue, ...newValues });
+  };
 
   /**
    * 検索の実行.
@@ -46,7 +50,8 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
       data: {
         index: 0,
         step: pageStep,
-        searchValue: searchFormValue,
+        keyword: searchFormValue.keyword,
+        inactiveUserFlag: searchFormValue.inactiveUserFlag,
       },
       only: ['paginationUser'],
     });
@@ -68,7 +73,8 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
         data: {
           index: nextIndex,
           step: pageStep,
-          searchValue,
+          keyword: searchValue.keyword,
+          inactiveUserFlag: searchValue.inactiveUserFlag,
         },
         only: ['paginationUser'],
       });
@@ -94,7 +100,8 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
         data: {
           index: nextIndex,
           step: pageStep,
-          searchValue,
+          keyword: searchValue.keyword,
+          inactiveUserFlag: searchValue.inactiveUserFlag,
         },
         only: ['paginationUser'],
       });
@@ -121,6 +128,35 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
     );
   };
 
+  /**
+   * 検索をリセットする.
+   */
+  const handleReset = (): void => {
+    setSearchFormValue(initialValue);
+    setSearchValue(initialValue);
+    setPageIndex(0);
+
+    router.reload({
+      method: 'post',
+      onStart,
+      onFinish,
+      data: {
+        index: 0,
+        step: pageStep,
+        keyword: initialValue.keyword,
+        inactiveUserFlag: initialValue.inactiveUserFlag,
+      },
+      only: ['paginationUser'],
+    });
+  };
+
+  /**
+   * 検索状態が有効かどうか.
+   */
+  const isSearchActive = (): boolean => {
+    return searchValue.keyword !== '' || searchValue.inactiveUserFlag;
+  };
+
   return (
     <Box
       sx={{
@@ -130,55 +166,50 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
       <Paper
         sx={{
           padding: '20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '20px',
         }}
       >
-        <InputField
-          sx={{
-            width: '100%',
-          }}
-          inputProps={{
-            width: '100%',
-          }}
-          id="user-search"
-          inputValue={searchFormValue}
-          onChange={searchFormValue => handleUpdate(searchFormValue)}
-        />
-        <ButtonGeneral
-          sx={{
-            padding: '5px 10px',
-          }}
-          label="検索"
-          onClick={handleSubmitSearch}
-          disabled={searchValue === searchFormValue}
+        <FormSearch
+          formSearch={searchFormValue}
+          handleUpdate={handleUpdate}
+          handleSubmit={handleSubmitSearch}
         />
       </Paper>
-      <Paging
-        sx={{
-          marginTop: '20px',
-          justifyContent: 'flex-end',
-        }}
-        index={pageIndex}
-        step={pageStep}
-        total={trnUserListCount}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <Closable open={isSearchActive()}>
+        <SearchFilter
+          sx={{
+            marginTop: '20px',
+          }}
+          searchValue={searchValue}
+          handleReset={handleReset}
+        />
+      </Closable>
+      <Closable open={!!trnUserListCount}>
+        <Paging
+          sx={{
+            marginTop: '20px',
+            justifyContent: 'flex-end',
+          }}
+          index={pageIndex}
+          step={pageStep}
+          total={trnUserListCount}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+        />
+      </Closable>
       <UserTable sx={{ marginTop: '10px' }} handleSelect={handleSelect} />
-      <Paging
-        sx={{
-          marginTop: '10px',
-          justifyContent: 'flex-end',
-        }}
-        index={pageIndex}
-        step={pageStep}
-        total={trnUserListCount}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <Closable open={!!trnUserListCount}>
+        <Paging
+          sx={{
+            marginTop: '10px',
+            justifyContent: 'flex-end',
+          }}
+          index={pageIndex}
+          step={pageStep}
+          total={trnUserListCount}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+        />
+      </Closable>
     </Box>
   );
 };

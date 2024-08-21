@@ -32,7 +32,23 @@ class UserController extends Controller
         return $this->render('User/Index', [
 
             // ユーザー情報.
-            'paginationUser' => fn () => $this->getPaginationUser($request, []),
+            'paginationUser' => fn () => $this->getPaginationUser($request, [
+
+                // アクション実行日が最新の1件だけを取得する.
+                'TrnAttendanceState' => function ($query) {
+                    return $query
+                        ->select([
+                            DB::raw('MAX(id) as id'),
+                            'trn_user_id',
+                            DB::raw('MAX(created_at) as created_at'),
+                            DB::raw('MAX(updated_at) as updated_at'),
+                        ])
+                        // 30日以内.
+                        ->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)')
+                        // ユーザー毎にまとめる.
+                        ->groupBy('trn_user_id');
+                },
+            ]),
         ]);
     }
 
@@ -161,15 +177,17 @@ class UserController extends Controller
     private function getPaginationUser(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex   = $request->input('index', 0);
-        $pageStep    = $request->input('step', 20);
-        $searchValue = $request->input('searchValue', '');
+        $pageIndex        = $request->input('index', 0);
+        $pageStep         = $request->input('step', 20);
+        $keyword          = $request->input('keyword', '');
+        $inactiveUserFlag = (bool) $request->input('inactiveUserFlag', false);
 
         return TrnUserService::offsetPagination(
             $pageIndex,
             $pageStep,
             $with,
-            $searchValue,
+            $keyword,
+            $inactiveUserFlag,
         );
     }
 

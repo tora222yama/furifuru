@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Box,
   styled,
   Table,
   TableBody,
@@ -13,6 +14,9 @@ import { useIndexContext } from '@/script/Pages/User/Index';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { Image } from '@/script/Component/Misc/Image';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
+import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import { DateTime } from '@/script/Common/DateTime';
+import { TypoText } from '@/script/Component/Typography/TypoText';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,29 +40,60 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
   const { trnUserList } = useIndexContext();
 
   const tableBody = (): React.ReactNode => {
-    return trnUserList.list().map(trnUser => (
-      <TableRow
-        sx={{
-          backgroundColor: E_COLOR.WHITE,
-          '&:hover': {
-            backgroundColor: theme => theme.palette.primary.light,
-            cursor: 'pointer',
-          },
-        }}
-        key={trnUser.id}
-        onClick={() => handleSelect(trnUser)}
-      >
-        <StyledTableCell>{trnUser.id}</StyledTableCell>
-        <StyledTableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Image
-            sx={{ width: '60px', height: '60px', borderRadius: '30px' }}
-            src={trnUser.faceImagePath}
-          />
-        </StyledTableCell>
-        <StyledTableCell>{trnUser.nickname}</StyledTableCell>
-      </TableRow>
-    ));
+    return trnUserList.list().map(trnUser => {
+      // 最終出退勤アクションを取得.
+      const latestActionState = trnUser.trnAttendanceState?.length
+        ? trnUser.trnAttendanceState[0]
+        : AppTrnAttendanceStateList.defaultInterface();
+
+      // 最終出退勤アクションの日時を取得.
+      const latestDate = latestActionState.createdAt
+        ? DateTime.parseString(latestActionState.createdAt).toDateTime()
+        : '----';
+
+      return (
+        <TableRow
+          sx={{
+            backgroundColor: E_COLOR.WHITE,
+            '&:hover': {
+              backgroundColor: theme => theme.palette.primary.light,
+              cursor: 'pointer',
+            },
+          }}
+          key={trnUser.id}
+          onClick={() => handleSelect(trnUser)}
+        >
+          <StyledTableCell>{trnUser.id}</StyledTableCell>
+          <StyledTableCell sx={{ display: 'flex', alignItems: 'center' }}>
+            <Image
+              sx={{ width: '60px', height: '60px', borderRadius: '30px' }}
+              src={trnUser.faceImagePath}
+            />
+          </StyledTableCell>
+          <StyledTableCell>{trnUser.nickname}</StyledTableCell>
+          <StyledTableCell>{latestDate}</StyledTableCell>
+        </TableRow>
+      );
+    });
   };
+
+  /**
+   * データが見つからない場合.
+   */
+  if (!trnUserList.count()) {
+    return (
+      <Box
+        sx={{
+          marginTop: '60px',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <TypoText>検索条件に一致するユーザーが見つかりませんでした。</TypoText>
+      </Box>
+    );
+  }
 
   return (
     <Table sx={sx}>
@@ -67,6 +102,7 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
           <StyledTableCell sx={{ width: '60px' }}>id</StyledTableCell>
           <StyledTableCell sx={{ width: '60px' }}>icon</StyledTableCell>
           <StyledTableCell>nickname</StyledTableCell>
+          <StyledTableCell>最終アクション</StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>{tableBody()}</TableBody>

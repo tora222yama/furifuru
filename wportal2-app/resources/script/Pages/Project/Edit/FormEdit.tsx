@@ -133,7 +133,7 @@ export const FormEdit: React.FC<IProps> = ({
             <FormControlLabel
               control={
                 <Checkbox
-                  value={formEdit.editNotification}
+                  checked={formEdit.editNotification}
                   onChange={v =>
                     handleUpdate({ editNotification: v.target.checked })
                   }
