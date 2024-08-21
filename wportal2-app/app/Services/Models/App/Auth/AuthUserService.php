@@ -10,6 +10,7 @@ use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Pipe\App\PipeAppLegacyLogin;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\App\PipeAppUserUpdate;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
@@ -31,6 +32,7 @@ class AuthUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_UPDATE                  => $this->execAppUserUpdate($pipe),
+                EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
                 EPipeKind::APP_LEGACY_LOGIN                 => $this->execAppLegacyLogin($pipe),
                 default                                     => throw new Exception(),
             };
@@ -76,6 +78,19 @@ class AuthUserService extends ModelServiceBase
 
         // 更新の実施.
         $this->updateOrFail($authUser);
+    }
+
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        $target = AuthUser::query()
+            ->where('id', $pipe->authUserId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->delete();
     }
 
     /**

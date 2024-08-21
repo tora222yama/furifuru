@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Models\App\Trn;
 
 use App\Constant;
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Carbon\Carbon;
@@ -40,6 +42,7 @@ class TrnUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
+                EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -90,6 +93,25 @@ class TrnUserService extends ModelServiceBase
             $pipe->createdAuthUser,
             $pipe->nickname,
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        $target                  = TrnUser::query()
+            ->where('id', $pipe->trnUserId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $this->updateOrFail($target);
     }
 
     /**

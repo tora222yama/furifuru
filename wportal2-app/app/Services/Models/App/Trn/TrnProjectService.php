@@ -48,7 +48,7 @@ class TrnProjectService extends ModelServiceBase
     }
 
     /**
-     * にすみ - プロジェクトの削除用
+     * @throws Exception
      */
     private function execAppProjectDelete(
         PipeAppProjectDelete|PipeBase $pipe
@@ -64,7 +64,7 @@ class TrnProjectService extends ModelServiceBase
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
 
         // 削除を保存.
-        $target->updateOrFail();
+        $this->updateOrFail($target);
     }
 
     /**

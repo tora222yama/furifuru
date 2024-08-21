@@ -13,6 +13,7 @@ use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\App\PipeAppUserUpdate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -166,6 +167,34 @@ class UserController extends Controller
 
             // ユーザー情報の更新.
             TrnUserService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::USER->getInvokePath());
+    }
+
+    /**
+     * ユーザーの削除.
+     *
+     * @throws Throwable
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppUserDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // ユーザーのアーカイブ.
+            TrnUserService::updateByPipe();
+
+            // 認証ユーザーの削除.
+            AuthUserService::updateByPipe();
+
+            // TODO:プロジェクトユーザーの削除.
+
+            // TODO:課ユーザーの削除.
         });
 
         return redirect()->action(EPages::USER->getInvokePath());
