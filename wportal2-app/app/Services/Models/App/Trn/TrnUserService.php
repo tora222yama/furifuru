@@ -99,13 +99,20 @@ class TrnUserService extends ModelServiceBase
         int $index,
         int $step,
         array $with = [],
-        string $searchValue = '',
+        string $keyword = '',
+        bool $inactiveUserFlag = false,
     ): array {
         // リスト取得.
         $trnUserList      = TrnUser::query()
-            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+            ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
-                return $query->where('nickname', 'like', "%$searchValue%");
+                return $query->where('nickname', 'like', "%$keyword%");
+            })
+            ->when(! empty($inactiveUserFlag), function ($query) {
+                // 非アクティブユーザーも含める.
+                return $query->whereDoesntHave('TrnAttendanceState', function ($query) {
+                    return $query->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
+                });
             })
             ->with($with)
             ->alive()
@@ -115,9 +122,15 @@ class TrnUserService extends ModelServiceBase
 
         // カウント取得.
         $trnUserListCount = TrnUser::query()
-            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+            ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
-                return $query->where('nickname', 'like', "%$searchValue%");
+                return $query->where('nickname', 'like', "%$keyword%");
+            })
+            ->when(! empty($inactiveUserFlag), function ($query) {
+                // 非アクティブユーザーも含める.
+                return $query->whereDoesntHave('TrnAttendanceState', function ($query) {
+                    return $query->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
+                });
             })
             ->count();
 
