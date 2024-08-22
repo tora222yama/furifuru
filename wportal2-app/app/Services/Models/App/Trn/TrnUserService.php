@@ -253,7 +253,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): void
     {
-        // ユーザーを作成.
+        // 新規にユーザーを作成.
         $trnUser                  = new TrnUser();
         if ($id !== 0) {
             $trnUser->id   = $id;
@@ -272,6 +272,25 @@ class TrnUserService extends ModelServiceBase
         // 画像パスを保存.
         $trnUser->face_image_path = $path;
         $trnUser->saveOrFail();
+    }
+
+    /**
+     * 再認証による復帰.
+     *
+     * @throws Exception
+     */
+    public function comebackUser(AuthUser $authUser): void
+    {
+        // ユーザー情報を取得.
+        $trnUser                  = TrnUser::query()
+            ->where('auth_id', $authUser->id)
+            ->firstOrFail();
+
+        // アーカイブレベルを変更.
+        $trnUser->e_archive_level = EArchiveLevel::ALIVE->value;
+
+        // 保存.
+        $this->updateOrFail($trnUser);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
 use App\Facades\External\RecaptchaService;
@@ -131,9 +132,10 @@ class LoginController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        // ユーザー情報を検索.
+        // アクティブなユーザー情報を検索.
         $authUser   = AuthUser::query()
             ->where('email', $googleUser->email)
+            ->alive()
             ->first();
 
         // ユーザーがなく、919ドメインでなければ止めたいログイン.
@@ -190,6 +192,27 @@ class LoginController extends Controller
      */
     private function createNewUserByGoogle($googleUser): AuthUser
     {
+        // アーカイブデータの検索.
+        $archiveAuthUser             = AuthUser::query()
+            ->where('email', $googleUser->email)
+            ->whereNot('e_archive_level', EArchiveLevel::ALIVE)
+            ->first();
+
+        // もしアーカイブデータがあれば復帰する.
+        if (! is_null($archiveAuthUser)) {
+            DB::transaction(function () use ($archiveAuthUser) {
+                // 認証ユーザーを復帰.
+                $archiveAuthUser->e_archive_level = EArchiveLevel::ALIVE;
+                $archiveAuthUser->saveOrFail();
+
+                // TrnUserを復帰.
+                TrnUserService::comebackUser($archiveAuthUser);
+            });
+
+            return $archiveAuthUser;
+        }
+
+        // 新規作成の実施.
         return DB::transaction(static function () use ($googleUser) {
             $name                        = $googleUser->user['family_name'].' '.$googleUser->user['given_name'];
 

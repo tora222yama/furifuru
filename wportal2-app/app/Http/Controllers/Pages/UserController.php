@@ -182,7 +182,8 @@ class UserController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         // パイプ作成.
-        PipeService::insertNewPipe(
+        /** @var PipeAppUserDelete $pipe */
+        $pipe = PipeService::insertNewPipe(
             new PipeAppUserDelete($request->toArray())
         );
 
@@ -200,6 +201,13 @@ class UserController extends Controller
             // 課ユーザーの削除.
             TrnDivisionUserService::updateByPipe();
         });
+
+        // 自身の削除の場合はログアウトする.
+        if ($pipe->authUserId === Auth::id()) {
+            Auth::logout();
+
+            return redirect('/login');
+        }
 
         return redirect()->action(EPages::USER->getInvokePath());
     }

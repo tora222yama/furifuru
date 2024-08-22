@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Auth;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
@@ -80,16 +81,23 @@ class AuthUserService extends ModelServiceBase
         $this->updateOrFail($authUser);
     }
 
+    /**
+     * @throws Exception
+     */
     private function execAppUserDelete(
         PipeAppUserDelete|PipeBase $pipe
     ): void {
         // 対象データを取得.
-        $target = AuthUser::query()
+        $target                  = AuthUser::query()
             ->where('id', $pipe->authUserId)
+            ->alive()
             ->firstOrFail();
 
         // 対象データを削除.
-        $target->delete();
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $this->updateOrFail($target);
     }
 
     /**
