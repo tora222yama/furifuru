@@ -86,7 +86,6 @@ class AuthUserService extends ModelServiceBase
         // 対象データを取得.
         $target = AuthUser::query()
             ->where('id', $pipe->authUserId)
-            ->alive()
             ->firstOrFail();
 
         // 対象データを削除.

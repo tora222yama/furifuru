@@ -9,6 +9,8 @@ use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnDivisionUserService;
+use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
@@ -192,9 +194,11 @@ class UserController extends Controller
             // 認証ユーザーの削除.
             AuthUserService::updateByPipe();
 
-            // TODO:プロジェクトユーザーの削除.
+            // プロジェクトユーザーの削除.
+            TrnProjectUserService::updateByPipe();
 
-            // TODO:課ユーザーの削除.
+            // 課ユーザーの削除.
+            TrnDivisionUserService::updateByPipe();
         });
 
         return redirect()->action(EPages::USER->getInvokePath());
