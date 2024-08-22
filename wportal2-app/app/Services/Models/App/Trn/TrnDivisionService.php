@@ -52,6 +52,8 @@ class TrnDivisionService extends ModelServiceBase
 
     /**
      * 課の削除
+     *
+     * @throws Exception
      */
     private function execAppDivisionDelete(
         PipeAppDivisionDelete|PipeBase $pipe
@@ -67,7 +69,7 @@ class TrnDivisionService extends ModelServiceBase
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
 
         // 削除を保存.
-        $target->updateOrFail();
+        $this->updateOrFail($target);
     }
 
     /**

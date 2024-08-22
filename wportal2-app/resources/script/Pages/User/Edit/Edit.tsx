@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { BackLink } from '@/script/Pages/Common/BackLink';
@@ -13,6 +13,10 @@ import { Page } from '@/script/Pages/Page';
 import { useIndexContext } from '@/script/Pages/User/Edit/Index';
 import { FormEdit, IFormEdit } from '@/script/Pages/User/Edit/FormEdit';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
+import { Closable } from '@/script/Component/Misc/Closable';
+import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -22,6 +26,7 @@ export const Edit: React.FC<IProps> = () => {
     enableLegacyLogin: false,
     overwritePassword: '',
   });
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
 
   /**
    * 値の更新.
@@ -55,8 +60,36 @@ export const Edit: React.FC<IProps> = () => {
     });
   };
 
+  /**
+   * メンバーの削除.
+   */
+  const handleDelete = () => {
+    router.visit(getPagesHref(E_PAGES.USER__DELETE), {
+      method: 'post',
+      preserveState: true,
+      preserveScroll: true,
+      data: {
+        trnUserId: trnUser.id,
+      },
+      onStart,
+      onFinish,
+    });
+  };
+
   return (
     <Page>
+      <Closable open={openConfirm}>
+        <DialogYesNo
+          open={openConfirm}
+          labels={{
+            content: 'メンバーを削除しますか？',
+          }}
+          actions={{
+            submit: handleDelete,
+            close: () => setOpenConfirm(false),
+          }}
+        />
+      </Closable>
       <BackLink
         current={E_PAGES.USER__EDIT}
         replace={[
@@ -66,7 +99,23 @@ export const Edit: React.FC<IProps> = () => {
           },
         ]}
       />
-      <TypoH1>{getPagesName(E_PAGES.USER__EDIT)}</TypoH1>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <TypoH1>{getPagesName(E_PAGES.USER__EDIT)}</TypoH1>
+        <ButtonGeneral
+          sx={{
+            width: '200px',
+            color: 'white',
+          }}
+          buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
+          label="メンバーを削除"
+          onClick={() => setOpenConfirm(true)}
+        />
+      </Box>
       <Paper
         sx={{
           marginTop: '20px',

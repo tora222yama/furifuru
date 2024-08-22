@@ -115,7 +115,6 @@ export const Edit: React.FC<IProps> = () => {
         <TypoH1>
           {getPagesName(E_PAGES.DIVISION__EDIT)}[{trnDivision.id}]
         </TypoH1>
-
         <ButtonGeneral
           sx={{
             width: '150px',

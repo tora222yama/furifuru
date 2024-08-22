@@ -8,6 +8,7 @@ use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Trn\TrnDivisionUser;
 use App\Pipe\App\PipeAppDivisionUserUpdate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
@@ -27,6 +28,7 @@ class TrnDivisionUserService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_DIVISION_USER_UPDATE => $this->execAppDivisionUserUpdate($pipe),
+                EPipeKind::APP_USER_DELETE          => $this->execAppUserDelete($pipe),
                 default                             => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -66,5 +68,18 @@ class TrnDivisionUserService extends ModelServiceBase
         $delLog      = json_encode($delUserList->toArray());
         $addLog      = json_encode($addUserList->toArray());
         Log::info("execAppDivisionUserUpdate del:$delLog add:$addLog");
+    }
+
+    /**
+     * EPipeKind::APP_USER_DELETE
+     */
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipeAppUserDelete
+    ): void {
+        // ユーザーを削除.
+        TrnDivisionUser::query()
+            ->where('trn_user_id', $pipeAppUserDelete->trnUserId)
+            ->alive()
+            ->delete();
     }
 }

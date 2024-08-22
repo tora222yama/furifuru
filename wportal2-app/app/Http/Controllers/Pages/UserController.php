@@ -9,10 +9,13 @@ use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnDivisionUserService;
+use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\App\PipeAppUserUpdate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -167,6 +170,44 @@ class UserController extends Controller
             // ユーザー情報の更新.
             TrnUserService::updateByPipe();
         });
+
+        return redirect()->action(EPages::USER->getInvokePath());
+    }
+
+    /**
+     * ユーザーの削除.
+     *
+     * @throws Throwable
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppUserDelete $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppUserDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // ユーザーのアーカイブ.
+            TrnUserService::updateByPipe();
+
+            // 認証ユーザーの削除.
+            AuthUserService::updateByPipe();
+
+            // プロジェクトユーザーの削除.
+            TrnProjectUserService::updateByPipe();
+
+            // 課ユーザーの削除.
+            TrnDivisionUserService::updateByPipe();
+        });
+
+        // 自身の削除の場合はログアウトする.
+        if ($pipe->authUserId === Auth::id()) {
+            Auth::logout();
+
+            return redirect('/login');
+        }
 
         return redirect()->action(EPages::USER->getInvokePath());
     }

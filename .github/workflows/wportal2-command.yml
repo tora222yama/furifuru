@@ -81,6 +81,7 @@ jobs:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
           aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}       
+          sleep 10
 
       # 設定の確認
       # 上手く動作しない場合は以下を利用してECSの状態を確認する.
