@@ -154,6 +154,7 @@ class TrnUserService extends ModelServiceBase
                     return $query->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
                 });
             })
+            ->alive()
             ->count();
 
         return [

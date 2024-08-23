@@ -34,7 +34,8 @@ WORKDIR /var/www/html/wportal2-app
 
 # setup
 RUN composer install
-RUN php artisan key:generate
+#　これを行ってしまうとセッションが切れてしまう.
+#　RUN php artisan key:generate
 RUN npm ci
 RUN npm run build
 
