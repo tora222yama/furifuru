@@ -37,6 +37,7 @@ export const ButtonGeneral: React.FC<IProps> = ({
         color: getButtonColorText(buttonType),
         textTransform: 'none',
         padding: '10px 16px',
+        overflow: 'hidden',
 
         '&:hover': {
           backgroundColor: getButtonColorHover(buttonType),

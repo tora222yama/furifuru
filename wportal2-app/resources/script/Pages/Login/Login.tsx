@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
-import { CardLegacyLogin } from '@/script/Pages/Login/CardLegacyLogin';
 import { CardLogin } from '@/script/Pages/Login/CardLogin';
+import { LegacyLogin } from '@/script/Pages/Login/LegacyLogin';
 
 interface IProps extends IPropsBase {}
 export const Login: React.FC<IProps> = () => {
@@ -20,7 +20,7 @@ export const Login: React.FC<IProps> = () => {
       }}
     >
       <CardLogin />
-      <CardLegacyLogin />
+      <LegacyLogin />
     </Box>
   );
 };
