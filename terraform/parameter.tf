@@ -73,6 +73,20 @@ resource "aws_ssm_parameter" "wportal_redis_host" {
 }
 
 /**
+ *  APP_KEY
+ */
+resource "aws_ssm_parameter" "wportal_app_key" {
+  name  = "/wportal/app_key"
+  type  = "SecureString"
+  value = "uninitialized"
+  description = "LARAVEL APP KEY"
+
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
+
+/**
  *  GOOGLE_CLIENT_ID
  */
 #import {

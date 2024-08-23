@@ -54,6 +54,7 @@ jobs:
       - name: Build step - prepare .env
         run: |
           cp wportal2-app/.env.prd.sample wportal2-app/.env
+          echo APP_KEY="$(aws ssm get-parameter --name /wportal/app_key --with-decryption --query Parameter.Value --output text)" >> wportal2-app/.env
           echo DB_HOST="$(aws ssm get-parameter --name /wportal/db/host --query Parameter.Value --output text)" >> wportal2-app/.env
           echo DB_USERNAME="$(aws ssm get-parameter --name /wportal/db/username --query Parameter.Value --output text)" >> wportal2-app/.env
           echo DB_PASSWORD="$(aws ssm get-parameter --name /wportal/db/password --query Parameter.Value --output text)" >> wportal2-app/.env
