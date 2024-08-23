@@ -40,6 +40,7 @@ enum EPages: string
     case USER__NEW                        = 'user__new'; // メンバー新規作成.
     case USER__CREATE                     = 'user__create'; // メンバー新規登録.
     case USER__UPDATE                     = 'user__update'; // メンバー更新.
+    case USER__DELETE                     = 'user__delete'; // メンバー削除.
     case PERSONAL_SETTING__SHOW           = 'personal_setting__show'; // 個人設定・閲覧.
     case PERSONAL_SETTING__EDIT           = 'personal_setting__edit'; // 個人設定・編集.
     case PERSONAL_SETTING__UPDATE         = 'personal_setting__update'; // 個人設定・更新.
@@ -94,6 +95,7 @@ enum EPages: string
             self::USER__NEW                      => '\App\Http\Controllers\Pages\UserController@new',
             self::USER__CREATE                   => '\App\Http\Controllers\Pages\UserController@create',
             self::USER__UPDATE                   => '\App\Http\Controllers\Pages\UserController@update',
+            self::USER__DELETE                   => '\App\Http\Controllers\Pages\UserController@delete',
             self::PERSONAL_SETTING__SHOW         => '\App\Http\Controllers\Pages\PersonalSettingController@show',
             self::PERSONAL_SETTING__EDIT         => '\App\Http\Controllers\Pages\PersonalSettingController@edit',
             self::PERSONAL_SETTING__UPDATE       => '\App\Http\Controllers\Pages\PersonalSettingController@update',

@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/user/update', EPages::USER__UPDATE->getInvokePath());
     Route::get('/user/new', EPages::USER__NEW->getInvokePath());
     Route::post('/user/create', EPages::USER__CREATE->getInvokePath());
+    Route::post('/user/delete', EPages::USER__DELETE->getInvokePath());
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
     Route::post('/personal_setting/update', EPages::PERSONAL_SETTING__UPDATE->getInvokePath());

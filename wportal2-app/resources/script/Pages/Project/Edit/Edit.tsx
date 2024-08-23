@@ -17,6 +17,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 
 interface IProps extends IPropsBase {}
 
@@ -130,7 +131,9 @@ export const Edit: React.FC<IProps> = () => {
         <ButtonGeneral
           sx={{
             width: '200px',
+            color: 'white',
           }}
+          buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
           label="プロジェクトを削除"
           onClick={() => setOpenConfirm(true)}
         />

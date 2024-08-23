@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Models\App\Trn;
 
 use App\Constant;
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Carbon\Carbon;
@@ -40,6 +42,7 @@ class TrnUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
+                EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -97,19 +100,45 @@ class TrnUserService extends ModelServiceBase
     }
 
     /**
+     * @throws Exception
+     */
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        $target                  = TrnUser::query()
+            ->where('id', $pipe->trnUserId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $this->updateOrFail($target);
+    }
+
+    /**
      * オフセットページネーション情報の取得.
      */
     public function offsetPagination(
         int $index,
         int $step,
         array $with = [],
-        string $searchValue = '',
+        string $keyword = '',
+        bool $inactiveUserFlag = false,
     ): array {
         // リスト取得.
         $trnUserList      = TrnUser::query()
-            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+            ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
-                return $query->where('nickname', 'like', "%$searchValue%");
+                return $query->where('nickname', 'like', "%$keyword%");
+            })
+            ->when(! empty($inactiveUserFlag), function ($query) {
+                // 非アクティブユーザーも含める.
+                return $query->whereDoesntHave('TrnAttendanceState', function ($query) {
+                    return $query->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
+                });
             })
             ->with($with)
             ->alive()
@@ -119,10 +148,17 @@ class TrnUserService extends ModelServiceBase
 
         // カウント取得.
         $trnUserListCount = TrnUser::query()
-            ->when(! empty($searchValue), function ($query) use ($searchValue) {
+            ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
-                return $query->where('nickname', 'like', "%$searchValue%");
+                return $query->where('nickname', 'like', "%$keyword%");
             })
+            ->when(! empty($inactiveUserFlag), function ($query) {
+                // 非アクティブユーザーも含める.
+                return $query->whereDoesntHave('TrnAttendanceState', function ($query) {
+                    return $query->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)');
+                });
+            })
+            ->alive()
             ->count();
 
         return [
@@ -222,7 +258,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): void
     {
-        // ユーザーを作成.
+        // 新規にユーザーを作成.
         $trnUser                  = new TrnUser();
         if ($id !== 0) {
             $trnUser->id   = $id;
@@ -241,6 +277,25 @@ class TrnUserService extends ModelServiceBase
         // 画像パスを保存.
         $trnUser->face_image_path = $path;
         $trnUser->saveOrFail();
+    }
+
+    /**
+     * 再認証による復帰.
+     *
+     * @throws Exception
+     */
+    public function comebackUser(AuthUser $authUser): void
+    {
+        // ユーザー情報を取得.
+        $trnUser                  = TrnUser::query()
+            ->where('auth_id', $authUser->id)
+            ->firstOrFail();
+
+        // アーカイブレベルを変更.
+        $trnUser->e_archive_level = EArchiveLevel::ALIVE->value;
+
+        // 保存.
+        $this->updateOrFail($trnUser);
     }
 
     /**
