@@ -60,10 +60,7 @@ export const LegacyLogin: React.FC<IProps> = () => {
   return (
     <Box
       sx={{
-        width: {
-          xs: '90%',
-          sm: '375px',
-        },
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
       }}

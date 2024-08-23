@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { CardLogin } from '@/script/Pages/Login/CardLogin';
 import { LegacyLogin } from '@/script/Pages/Login/LegacyLogin';
+import { AuthenticatorLogin } from '@/script/Pages/Login/AuthenticatorLogin';
 
 interface IProps extends IPropsBase {}
 export const Login: React.FC<IProps> = () => {
@@ -19,8 +20,21 @@ export const Login: React.FC<IProps> = () => {
         gap: '40px',
       }}
     >
-      <CardLogin />
-      <LegacyLogin />
+      <Box
+        sx={{
+          width: {
+            xs: '90%',
+            sm: '375px',
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '40px',
+        }}
+      >
+        <CardLogin />
+        <LegacyLogin />
+        <AuthenticatorLogin />
+      </Box>
     </Box>
   );
 };
