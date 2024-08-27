@@ -5,7 +5,7 @@ import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { Closable } from '@/script/Component/Misc/Closable';
-import { AuthenticatorSettingDialog } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog';
+import { AuthenticatorSettingDialog } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/AuthenticatorSettingDialog';
 
 interface IProps extends IPropsBase {}
 export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {

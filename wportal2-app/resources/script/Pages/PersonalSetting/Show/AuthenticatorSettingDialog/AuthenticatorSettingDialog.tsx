@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { Box, Dialog, Paper } from '@mui/material';
 import { QRCodeCanvas } from 'qrcode.react';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { useMutationAppPersonalSettingSpPassword } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingSPPassword';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { useMutationAppPersonalSettingSpConfirmCode } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingSPConfirmCode';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { ContentPassword } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentPassword';
 
 /**
  * ダイアログの状態管理.
@@ -34,26 +36,17 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
   const [dialogState, setDialogState] = React.useState<E_DIALOG_STATE>(
     E_DIALOG_STATE.SETTING_PASSWORD,
   );
+
   const [url, setUrl] = React.useState<string>('');
-  const [, mutationPassword] = useMutationAppPersonalSettingSpPassword();
   const [, mutationConfirmCode] = useMutationAppPersonalSettingSpConfirmCode();
 
   /**
-   * パスワードの送信.
+   * パスワードの送信の完了.
+   * @param url
    */
-  const handleSubmitPassword = () => {
-    onStart();
-    mutationPassword({ password: 'password' }, []).then(result => {
-      switch (result.statusCode) {
-        case E_STATUS_CODE.OK:
-          setUrl(result.url);
-          setDialogState(E_DIALOG_STATE.SETTING_QR);
-          break;
-        default:
-          break;
-      }
-      onFinish();
-    });
+  const handleCompletePassword = (url: string) => {
+    setUrl(url);
+    setDialogState(E_DIALOG_STATE.SETTING_QR);
   };
 
   /**
@@ -74,17 +67,28 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
   };
 
   /**
+   * 処理完了の確認.
+   */
+  const handleComplete = () => {
+    router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW), {
+      onStart,
+      onFinish,
+      preserveScroll: true,
+      preserveState: false,
+    });
+  };
+
+  /**
    * 表示コンテンツ.
    */
   const nodeContent = (): React.ReactNode => {
     switch (dialogState) {
       case E_DIALOG_STATE.SETTING_PASSWORD:
         return (
-          <>
-            <TypoText>- サーバーにログイン用のパスワードを送信する</TypoText>
-            <ButtonGeneral label="キャンセル" onClick={handleClose} />
-            <ButtonGeneral label="送信する" onClick={handleSubmitPassword} />
-          </>
+          <ContentPassword
+            handleClose={handleClose}
+            handleComplete={handleCompletePassword}
+          />
         );
       case E_DIALOG_STATE.SETTING_QR:
         return (
@@ -109,7 +113,7 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
         return (
           <>
             <TypoText>- 処理完了</TypoText>
-            <ButtonGeneral label="閉じる" onClick={handleClose} />
+            <ButtonGeneral label="閉じる" onClick={handleComplete} />
           </>
         );
       default:

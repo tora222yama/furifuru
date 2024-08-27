@@ -6,6 +6,7 @@ namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
 use App\Pipe\App\PipeAppPersonalSettingSpPassword;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -20,15 +21,24 @@ final class AppPersonalSettingSpPassword
         localSleep();
 
         // パイプ作成.
-        PipeService::insertNewPipe(
+        /** @var PipeAppPersonalSettingSpPassword $pipe */
+        $pipe = PipeService::insertNewPipe(
             new PipeAppPersonalSettingSpPassword($args)
         );
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            return PipeService::getValidationResult();
+            return PipeService::getValidationResult([
+                'url' => '',
+            ]);
         }
 
+        // 更新処理.
+        DB::transaction(static function () {
+            // TODO: auth_userのpasswordを更新する.
+        });
+
+        Log::info('password:'.$pipe->password);
         Log::info('ここでQRのURLを発行する');
 
         return PipeService::getResult([

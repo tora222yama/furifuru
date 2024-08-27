@@ -86,10 +86,10 @@ class PipeService
     /**
      * バリデーション実行結果を返す.
      */
-    public function getValidationResult(): array
+    public function getValidationResult(array $attachResult = []): array
     {
-        $status_code    = EStatusCode::UNPROCESSABLE_ENTITY->value;
-        $status_message = 'validation error';
+        $statusCode     = EStatusCode::UNPROCESSABLE_ENTITY->value;
+        $statusMessage  = 'validation error';
 
         // バリデーションエラーを格納.
         $errorValues    = [];
@@ -105,7 +105,10 @@ class PipeService
 
         $errors         = json_encode($errorValues);
 
-        return compact('status_code', 'errors', 'status_message');
+        return [
+            ...compact('statusCode', 'errors', 'statusMessage'),
+            ...$attachResult,
+        ];
     }
 
     /**

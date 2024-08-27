@@ -141,6 +141,8 @@ const errorMessage = (
       return `${columnName}は10〜13字の半角数字及び"-"で入力してください`;
     case E_VALIDATION_TYPE.EMAIL:
       return `${columnName}はメールアドレス形式で入力してください`;
+    case E_VALIDATION_TYPE.SIMPLE_PASSWORD:
+      return `${columnName}は8文字以上の半角英数字で入力してください`;
     default:
       return '';
   }
@@ -184,6 +186,8 @@ const validate = (value: string, validation: BaseValidationType): boolean => {
       return validatePhoneRegex(value, false);
     case E_VALIDATION_TYPE.EMAIL:
       return validateMailRegex(value, false);
+    case E_VALIDATION_TYPE.SIMPLE_PASSWORD:
+      return validateSimplePassword(value);
     default:
       throw new Error(`invalid validation.`);
   }
@@ -242,6 +246,16 @@ const validateMailRegex = (value: string, isRequired: boolean) => {
   return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/.test(
     value,
   );
+};
+
+/**
+ * SIMPLE_PASSWORD
+ * 8文字以上の英数字(英文字・数字必ず1つ含む)
+ * Password::min(8)->letters()->numbers()
+ */
+const validateSimplePassword = (value: string) => {
+  // min(8)->letters()->numbers()
+  return /^(?=.*?[a-zA-Z])(?=.*?\d)[a-zA-Z\d]{8,}$/.test(value);
 };
 
 /**

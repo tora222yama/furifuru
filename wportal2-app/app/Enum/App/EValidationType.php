@@ -6,9 +6,10 @@ namespace App\Enum\App;
 
 use App\Enum\ValidationRules\RuleMaxLength;
 use App\Enum\ValidationRules\ValidationRuleSet;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
+use Mockery\Exception;
 
 /**
  * バリデーション種別.
@@ -29,6 +30,7 @@ enum EValidationType: string
     case PHONE             = 'phone'; // 電話番号.
     case EMAIL             = 'email'; // Eメール.
     case UNIQUE_AUTH_EMAIL = 'unique_auth_email'; // 認証メールユニーク確認.
+    case SIMPLE_PASSWORD   = 'simple_password'; // 英数字8文字以上16文字以内.
 
     /**
      * バリデーション指定の情報を作成.
@@ -75,29 +77,27 @@ enum EValidationType: string
         string $columnName,
         Collection $rules,
     ): array {
-        return $rules->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
-            // カスタムルールはメッセージ設定が不要.
-            if ($pack->type->isCustomRule()) {
-                return true;
-            }
+        return $rules->filter(function ($rule) {
+            return gettype($rule) === 'string';
+        })
+            ->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
+                // ルール内の各指定について処理する.
+                return $pack->rule()->flatMap(function (string $rule) use (
+                    $columnTag,
+                    $pack,
+                    $columnName
+                ) {
+                    // 設定値付きのタグから設定値を除外.
+                    $tag = $rule;
+                    if (Str::contains($tag, ':')) {
+                        $tag = Str::substr($rule, 0, Str::position($rule, ':'));
+                    }
 
-            // ルール内の各指定について処理する.
-            return $pack->rule()->flatMap(function (ValidationRule|string $rule) use (
-                $columnTag,
-                $pack,
-                $columnName
-            ) {
-                // 設定値付きのタグから設定値を除外.
-                $tag = $rule;
-                if (Str::contains($tag, ':')) {
-                    $tag = Str::substr($rule, 0, Str::position($rule, ':'));
-                }
-
-                // タグを設定、required|not_inの場合は
-                // column.requiredとcolumn.not_inの両方を設定しておく必要がある.
-                return ["$columnTag.".$tag => $pack->message($columnName)];
-            });
-        })->toArray();
+                    // タグを設定、required|not_inの場合は
+                    // column.requiredとcolumn.not_inの両方を設定しておく必要がある.
+                    return ["$columnTag.".$tag => $pack->message($columnName)];
+                });
+            })->toArray();
     }
 
     /**
@@ -121,7 +121,8 @@ enum EValidationType: string
             self::PHONE             => collect(['regex:/^[0-9-]{10,13}$/']),
             self::EMAIL             => collect(["regex:/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/"]),
             self::UNIQUE_AUTH_EMAIL => collect(['unique:auth_user,email']),
-            default                 => collect(),
+            self::SIMPLE_PASSWORD   => collect([Password::min(8)->letters()->numbers()]),
+            default                 => throw new Exception('バリデーションルールが未設定です'),
         };
     }
 
@@ -151,7 +152,8 @@ enum EValidationType: string
             self::PHONE             => "{$columnName}は10〜13字の半角数字及び\"-\"で入力してください",
             self::EMAIL             => "{$columnName}はメールアドレス形式で入力してください",
             self::UNIQUE_AUTH_EMAIL => "{$columnName}が既存登録メールと重複しています",
-            default                 => '',
+            // self::SIMPLE_PASSWORD   => '', Passwordを利用.
+            default                 => throw new Exception('バリデーションメッセージが未設定です'),
         };
     }
 }
