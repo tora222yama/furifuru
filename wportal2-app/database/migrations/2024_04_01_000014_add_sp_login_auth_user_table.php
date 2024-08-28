@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('e_enable_sp_login')->default(EEnableFlag::INVALID->value)->after('onetime_password_expired');
             $table->string('sp_password', 128)->nullable()->after('e_enable_sp_login');
             $table->string('sp_google_2fa_secret', 128)->nullable()->after('sp_password');
+            $table->integer('sp_login_failed_count')->default(0)->after('sp_google_2fa_secret');
         });
     }
 
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->dropColumn('e_enable_sp_login');
             $table->dropColumn('sp_password');
             $table->dropColumn('sp_google_2fa_secret');
+            $table->dropColumn('sp_login_failed_count');
         });
     }
 };

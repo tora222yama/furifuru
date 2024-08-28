@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\GraphQL\App\Mutations;
 
+use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Auth\AuthUserService;
 use App\Pipe\App\PipeAppPersonalSettingSpConfirmCode;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 final class AppPersonalSettingSpConfirmCode
@@ -20,7 +22,8 @@ final class AppPersonalSettingSpConfirmCode
         localSleep();
 
         // パイプ作成.
-        PipeService::insertNewPipe(
+        /** @var PipeAppPersonalSettingSpConfirmCode $pipe */
+        $pipe = PipeService::insertNewPipe(
             new PipeAppPersonalSettingSpConfirmCode($args)
         );
 
@@ -29,8 +32,16 @@ final class AppPersonalSettingSpConfirmCode
             return PipeService::getValidationResult();
         }
 
-        Log::info('ここで2FAログインの最終確認とする.');
+        // 更新処理.
+        DB::transaction(static function () {
+            // auth_userのログイン許可を更新する.
+            AuthUserService::updateByPipe();
+        });
 
-        return PipeService::getResult();
+        return PipeService::getResult([
+            'statusCode' => $pipe->isValid
+                ? (string) EStatusCode::OK->value
+                : (string) EStatusCode::UNPROCESSABLE_ENTITY->value,
+        ]);
     }
 }

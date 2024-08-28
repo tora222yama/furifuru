@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\GraphQL\App\Mutations;
 
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Auth\AuthUserService;
 use App\Pipe\App\PipeAppPersonalSettingSpPassword;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 final class AppPersonalSettingSpPassword
@@ -35,14 +35,12 @@ final class AppPersonalSettingSpPassword
 
         // 更新処理.
         DB::transaction(static function () {
-            // TODO: auth_userのpasswordを更新する.
+            // auth_userのpasswordを更新する.
+            AuthUserService::updateByPipe();
         });
 
-        Log::info('password:'.$pipe->password);
-        Log::info('ここでQRのURLを発行する');
-
         return PipeService::getResult([
-            'url' => 'http://localhost:9190',
+            'url' => $pipe->resultUrl,
         ]);
     }
 }

@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { Box, Dialog, Paper } from '@mui/material';
-import { QRCodeCanvas } from 'qrcode.react';
+import { Dialog, Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
-import { E_COLOR } from '@/script/Enum/EColor';
-import { useMutationAppPersonalSettingSpConfirmCode } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingSPConfirmCode';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { ContentPassword } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentPassword';
+import { ContentConfirmCode } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentConfirmCode';
 
 /**
  * ダイアログの状態管理.
@@ -38,7 +35,6 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
   );
 
   const [url, setUrl] = React.useState<string>('');
-  const [, mutationConfirmCode] = useMutationAppPersonalSettingSpConfirmCode();
 
   /**
    * パスワードの送信の完了.
@@ -50,20 +46,10 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
   };
 
   /**
-   * 2FAコードの送信.
+   * 2FAコードの送信完了.
    */
-  const handleSubmitCode = () => {
-    onStart();
-    mutationConfirmCode({ code: 'code' }, []).then(result => {
-      switch (result.statusCode) {
-        case E_STATUS_CODE.OK:
-          setDialogState(E_DIALOG_STATE.SETTING_COMPLETE);
-          break;
-        default:
-          break;
-      }
-      onFinish();
-    });
+  const handleCompleteConfirmCode = () => {
+    setDialogState(E_DIALOG_STATE.SETTING_COMPLETE);
   };
 
   /**
@@ -92,22 +78,11 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
         );
       case E_DIALOG_STATE.SETTING_QR:
         return (
-          <>
-            <TypoText>- サーバーからQRを受け取る</TypoText>
-            <TypoText>- URL:{`${url}`}</TypoText>
-            <TypoText>- Authenticatorに登録して、コードを送る</TypoText>
-            <Box
-              sx={{
-                width: 'fit-content',
-                border: `1px solid ${E_COLOR.TEXT_PRIMARY}`,
-                padding: '5px 5px 0px',
-              }}
-            >
-              <QRCodeCanvas value={url} />
-            </Box>
-            <ButtonGeneral label="キャンセル" onClick={handleClose} />
-            <ButtonGeneral label="送信する" onClick={handleSubmitCode} />
-          </>
+          <ContentConfirmCode
+            url={url}
+            handleClose={handleClose}
+            handleComplete={handleCompleteConfirmCode}
+          />
         );
       case E_DIALOG_STATE.SETTING_COMPLETE:
         return (

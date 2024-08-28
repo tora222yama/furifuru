@@ -7,12 +7,19 @@ namespace App\Pipe\App;
 use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
+use App\Models\App\Auth\AuthUser;
 use App\Pipe\PipeBase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 final class PipeAppPersonalSettingSpPassword extends PipeBase
 {
-    public string $password = '';
+    public string $password    = '';
+
+    public ?AuthUser $authUser = null;
+
+    // authenticator登録用URL.
+    public string $resultUrl   = '';
 
     /**
      * constructor.
@@ -28,6 +35,8 @@ final class PipeAppPersonalSettingSpPassword extends PipeBase
     public function parse(): void
     {
         $this->password = $this->getArgAsString('password');
+
+        $this->authUser = Auth::user();
     }
 
     /**

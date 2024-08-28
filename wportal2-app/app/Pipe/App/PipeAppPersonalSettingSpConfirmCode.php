@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
+use App\Models\App\Auth\AuthUser;
 use App\Pipe\PipeBase;
+use Illuminate\Support\Facades\Auth;
 
 final class PipeAppPersonalSettingSpConfirmCode extends PipeBase
 {
-    public string $code = '';
+    public string $code        = '';
+
+    public ?AuthUser $authUser = null;
+
+    // 認証が成功したかどうか.
+    public bool $isValid       = false;
 
     /**
      * constructor.
@@ -24,7 +31,9 @@ final class PipeAppPersonalSettingSpConfirmCode extends PipeBase
      */
     public function parse(): void
     {
-        $this->code = $this->getArgAsString('code');
+        $this->code     = $this->getArgAsString('code');
+
+        $this->authUser = Auth::user();
     }
 
     /**

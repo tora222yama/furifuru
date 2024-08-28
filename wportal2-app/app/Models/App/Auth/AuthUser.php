@@ -28,6 +28,7 @@ class AuthUser extends Authenticatable
         'name',
         'email',
         'password',
+        'sp_password',
     ];
 
     /**
@@ -38,6 +39,7 @@ class AuthUser extends Authenticatable
     protected $hidden   = [
         'password',
         'remember_token',
+        'sp_password',
     ];
 
     /**
@@ -48,6 +50,7 @@ class AuthUser extends Authenticatable
     protected $casts    = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
+        'sp_password'       => 'hashed',
     ];
 
     /**
