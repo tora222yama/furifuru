@@ -17,9 +17,9 @@ enum EPages: string
     case ATTENDANCE_DELETE                = 'attendance_delete'; // 勤怠共有・削除.
     case ATTENDANCE_DIVISION_PRIORITY     = 'attendance_division_priority'; // 課優先度変更.
     case ATTENDANCE_PROJECT_PRIORITY      = 'attendance_project_priority'; // プロジェクト優先度変更.
-    case SHOP                             = 'shop'; // ショップ.
     case ATTENDANCE__EDIT                 = 'attendance__edit'; // 勤怠修正.
     case ATTENDANCE__TABLE                = 'attendance__table'; // 勤怠一覧表.
+    case SHOP                             = 'shop'; // ショップ.
     case DIVISION                         = 'division'; // 課一覧.
     case DIVISION__SHOW                   = 'division__show'; // 課詳細.
     case DIVISION__EDIT                   = 'division__edit'; // 課編集.
@@ -75,6 +75,7 @@ enum EPages: string
             self::ATTENDANCE_DELETE              => '\App\Http\Controllers\Pages\AttendanceController@delete',
             self::ATTENDANCE_DIVISION_PRIORITY   => '\App\Http\Controllers\Pages\AttendanceController@division_priority',
             self::ATTENDANCE_PROJECT_PRIORITY    => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
+            self::ATTENDANCE__EDIT               => '\App\Http\Controllers\Pages\AttendanceController@edit',
             self::DIVISION                       => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW                 => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT                 => '\App\Http\Controllers\Pages\DivisionController@edit',

@@ -12,7 +12,9 @@ use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppAttendanceDelete;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnAttendanceStateService extends ModelServiceBase
@@ -78,5 +80,20 @@ class TrnAttendanceStateService extends ModelServiceBase
 
         // 削除を保存.
         $target->updateOrFail();
+    }
+
+    /**
+     * ユーザーIDと期間を指定して、出退勤情報を取得.
+     */
+    public function listByUserIdAndPeriod(
+        int $trnUserId,
+        Carbon $startOfMonth,
+        Carbon $endOfMonth
+    ): Collection {
+        return TrnAttendanceState::query()
+            ->where('trn_user_id', $trnUserId)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->alive()
+            ->get();
     }
 }

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import BuildIcon from '@mui/icons-material/Build';
 import BusinessIcon from '@mui/icons-material/Business';
 import CachedIcon from '@mui/icons-material/Cached';
@@ -62,6 +64,10 @@ export const Icon: React.FC<IProps> = ({
       return <AddIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ATTENDANCE:
       return <AccessTimeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_LEFT:
+      return <ArrowBackIosNewIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_RIGHT:
+      return <ArrowForwardIosIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.BUILD:
       return <BuildIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CACHED:

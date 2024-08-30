@@ -11,9 +11,9 @@ export const E_PAGES = {
   ATTENDANCE_DELETE: 'attendance_delete', // 勤怠共有・削除.
   ATTENDANCE_DIVISION_PRIORITY: 'attendance_division_priority', // 課優先度変更.
   ATTENDANCE_PROJECT_PRIORITY: 'attendance_project_priority', // プロジェクト優先度変更.
-  SHOP: 'shop', // ショップ.
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
+  SHOP: 'shop', // ショップ.
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
@@ -80,6 +80,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.ATTENDANCE__EDIT:
+      return '/attendance/edit';
     case E_PAGES.DIVISION:
       return '/division';
     case E_PAGES.DIVISION__SHOW:
@@ -182,6 +184,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.ATTENDANCE__EDIT:
+      return '勤怠修正';
     case E_PAGES.DIVISION:
       return '課一覧';
     case E_PAGES.DIVISION__SHOW:
