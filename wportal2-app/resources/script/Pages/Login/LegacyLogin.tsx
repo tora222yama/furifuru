@@ -1,18 +1,20 @@
 import * as React from 'react';
-import { Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
+import { Box, Dialog, Paper } from '@mui/material';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { E_COLOR } from '@/script/Enum/EColor';
 import { IPropsBase } from '@/script/System/System';
+import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import {
   FormLegacyLogin,
   IFormLegacyLogin,
 } from '@/script/Pages/Login/FormLegacyLogin';
-import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {}
-export const CardLegacyLogin: React.FC<IProps> = () => {
+export const LegacyLogin: React.FC<IProps> = () => {
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const { onStart, onFinish } = useProgressContext();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [formLegacyLogin, setFormLegacyLogin] =
@@ -35,8 +37,6 @@ export const CardLegacyLogin: React.FC<IProps> = () => {
    * 値の送信.
    */
   const handleSubmit = async () => {
-    // TODO: バリデーションが必要であれば.
-
     // recaptchaのtoken取得.
     if (!executeRecaptcha) {
       return;
@@ -58,21 +58,43 @@ export const CardLegacyLogin: React.FC<IProps> = () => {
   };
 
   return (
-    <Paper
+    <Box
       sx={{
-        padding: '20px',
-        width: '460px',
+        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: E_COLOR.GREY_LIGHT,
+        justifyContent: 'center',
       }}
     >
-      <FormLegacyLogin
-        formLegacyLogin={formLegacyLogin}
-        handleUpdate={handleUpdate}
-        handleSubmit={handleSubmit}
+      <Dialog
+        open={openDialog}
+        PaperProps={{
+          style: {
+            width: '100%',
+          },
+        }}
+        onClose={() => setOpenDialog(false)}
+      >
+        <Paper
+          sx={{
+            padding: '20px',
+          }}
+        >
+          <FormLegacyLogin
+            formLegacyLogin={formLegacyLogin}
+            handleUpdate={handleUpdate}
+            handleSubmit={handleSubmit}
+          />
+        </Paper>
+      </Dialog>
+      <ButtonGeneral
+        sx={{
+          width: '60%',
+          height: '60px',
+        }}
+        buttonType={E_BUTTON_TYPE.OUTLINE_PRIMARY}
+        label="gmail以外のログイン"
+        onClick={() => setOpenDialog(true)}
       />
-    </Paper>
+    </Box>
   );
 };

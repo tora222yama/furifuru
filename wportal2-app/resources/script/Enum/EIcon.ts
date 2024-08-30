@@ -13,6 +13,7 @@ export const E_ICON = {
   DASHBOARD: 'dashboard',
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
+  FAVICON: 'favicon.png',
   GOOGLE: 'google_icon.svg',
   HELP: 'help',
   HOME: 'home',
@@ -56,6 +57,8 @@ export const getIconWidth = (icon: EIcon): string => {
       return '20px';
     case E_ICON.EXPAND_MORE:
       return '20px';
+    case E_ICON.FAVICON:
+      return '64px';
     case E_ICON.GOOGLE:
       return '18px';
     case E_ICON.HELP:
@@ -101,6 +104,8 @@ export const getIconHeight = (icon: EIcon): string => {
       return '20px';
     case E_ICON.EXPAND_MORE:
       return '20px';
+    case E_ICON.FAVICON:
+      return '64px';
     case E_ICON.GOOGLE:
       return '18px';
     case E_ICON.HELP:

@@ -34,6 +34,14 @@ export type Scalars = {
   Upload: { input: any; output: any };
 };
 
+export type AppPersonalSettingSpPasswordResponse = {
+  __typename?: 'AppPersonalSettingSpPasswordResponse';
+  errors?: Maybe<Scalars['String']['output']>;
+  statusCode: Scalars['Int']['output'];
+  statusMessage: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
 export type AppTrnUser = {
   __typename?: 'AppTrnUser';
   authId: Scalars['Int']['output'];
@@ -45,8 +53,18 @@ export type AppTrnUser = {
 export type Mutation = {
   __typename?: 'Mutation';
   AppPersonalSettingShowAlignSlack?: Maybe<Response>;
+  AppPersonalSettingSpConfirmCode?: Maybe<Response>;
+  AppPersonalSettingSpPassword?: Maybe<AppPersonalSettingSpPasswordResponse>;
   SampleInputFormUpdate?: Maybe<Response>;
   SampleRedisUpdate?: Maybe<Response>;
+};
+
+export type MutationAppPersonalSettingSpConfirmCodeArgs = {
+  code: Scalars['String']['input'];
+};
+
+export type MutationAppPersonalSettingSpPasswordArgs = {
+  password: Scalars['String']['input'];
 };
 
 export type MutationSampleInputFormUpdateArgs = {
@@ -103,6 +121,35 @@ export type AppPersonalSettingShowAlignSlackMutationVariables = Exact<{
 export type AppPersonalSettingShowAlignSlackMutation = {
   __typename?: 'Mutation';
   AppPersonalSettingShowAlignSlack?: {
+    __typename?: 'Response';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+  } | null;
+};
+
+export type AppPersonalSettingSpPasswordMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+}>;
+
+export type AppPersonalSettingSpPasswordMutation = {
+  __typename?: 'Mutation';
+  AppPersonalSettingSpPassword?: {
+    __typename?: 'AppPersonalSettingSpPasswordResponse';
+    statusCode: number;
+    statusMessage: string;
+    errors?: string | null;
+    url: string;
+  } | null;
+};
+
+export type AppPersonalSettingSpConfirmCodeMutationVariables = Exact<{
+  code: Scalars['String']['input'];
+}>;
+
+export type AppPersonalSettingSpConfirmCodeMutation = {
+  __typename?: 'Mutation';
+  AppPersonalSettingSpConfirmCode?: {
     __typename?: 'Response';
     statusCode: number;
     statusMessage: string;
@@ -237,6 +284,113 @@ export type AppPersonalSettingShowAlignSlackMutationOptions =
   Apollo.BaseMutationOptions<
     AppPersonalSettingShowAlignSlackMutation,
     AppPersonalSettingShowAlignSlackMutationVariables
+  >;
+export const AppPersonalSettingSpPasswordDocument = gql`
+  mutation AppPersonalSettingSpPassword($password: String!) {
+    AppPersonalSettingSpPassword(password: $password) {
+      statusCode
+      statusMessage
+      errors
+      url
+    }
+  }
+`;
+export type AppPersonalSettingSpPasswordMutationFn = Apollo.MutationFunction<
+  AppPersonalSettingSpPasswordMutation,
+  AppPersonalSettingSpPasswordMutationVariables
+>;
+
+/**
+ * __useAppPersonalSettingSpPasswordMutation__
+ *
+ * To run a mutation, you first call `useAppPersonalSettingSpPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppPersonalSettingSpPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appPersonalSettingSpPasswordMutation, { data, loading, error }] = useAppPersonalSettingSpPasswordMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useAppPersonalSettingSpPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppPersonalSettingSpPasswordMutation,
+    AppPersonalSettingSpPasswordMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppPersonalSettingSpPasswordMutation,
+    AppPersonalSettingSpPasswordMutationVariables
+  >(AppPersonalSettingSpPasswordDocument, options);
+}
+export type AppPersonalSettingSpPasswordMutationHookResult = ReturnType<
+  typeof useAppPersonalSettingSpPasswordMutation
+>;
+export type AppPersonalSettingSpPasswordMutationResult =
+  Apollo.MutationResult<AppPersonalSettingSpPasswordMutation>;
+export type AppPersonalSettingSpPasswordMutationOptions =
+  Apollo.BaseMutationOptions<
+    AppPersonalSettingSpPasswordMutation,
+    AppPersonalSettingSpPasswordMutationVariables
+  >;
+export const AppPersonalSettingSpConfirmCodeDocument = gql`
+  mutation AppPersonalSettingSpConfirmCode($code: String!) {
+    AppPersonalSettingSpConfirmCode(code: $code) {
+      statusCode
+      statusMessage
+      errors
+    }
+  }
+`;
+export type AppPersonalSettingSpConfirmCodeMutationFn = Apollo.MutationFunction<
+  AppPersonalSettingSpConfirmCodeMutation,
+  AppPersonalSettingSpConfirmCodeMutationVariables
+>;
+
+/**
+ * __useAppPersonalSettingSpConfirmCodeMutation__
+ *
+ * To run a mutation, you first call `useAppPersonalSettingSpConfirmCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAppPersonalSettingSpConfirmCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [appPersonalSettingSpConfirmCodeMutation, { data, loading, error }] = useAppPersonalSettingSpConfirmCodeMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useAppPersonalSettingSpConfirmCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AppPersonalSettingSpConfirmCodeMutation,
+    AppPersonalSettingSpConfirmCodeMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AppPersonalSettingSpConfirmCodeMutation,
+    AppPersonalSettingSpConfirmCodeMutationVariables
+  >(AppPersonalSettingSpConfirmCodeDocument, options);
+}
+export type AppPersonalSettingSpConfirmCodeMutationHookResult = ReturnType<
+  typeof useAppPersonalSettingSpConfirmCodeMutation
+>;
+export type AppPersonalSettingSpConfirmCodeMutationResult =
+  Apollo.MutationResult<AppPersonalSettingSpConfirmCodeMutation>;
+export type AppPersonalSettingSpConfirmCodeMutationOptions =
+  Apollo.BaseMutationOptions<
+    AppPersonalSettingSpConfirmCodeMutation,
+    AppPersonalSettingSpConfirmCodeMutationVariables
   >;
 export const AppTrnUserListDocument = gql`
   query AppTrnUserList {

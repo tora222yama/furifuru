@@ -9,6 +9,8 @@ export interface IAppAuthUser {
   name: string;
   email: string;
   eEnableLegacyLogin: number;
+  eEnableSpLogin: number;
+  spLoginFailedCount: number;
 
   trnUser?: IAppTrnUser;
 }
@@ -21,6 +23,12 @@ export const parseAppAuthUserPayload = (payload: any): IAppAuthUser => {
     email: payload?.email ? String(payload.email) : '',
     eEnableLegacyLogin: payload?.eEnableLegacyLogin
       ? Number(payload.eEnableLegacyLogin)
+      : 0,
+    eEnableSpLogin: payload?.eEnableSpLogin
+      ? Number(payload.eEnableSpLogin)
+      : 0,
+    spLoginFailedCount: payload?.spLoginFailedCount
+      ? Number(payload.spLoginFailedCount)
       : 0,
 
     trnUser: payload?.trnUser
@@ -40,6 +48,8 @@ export class AppAuthUserList extends ListBase<IAppAuthUser> {
       name: '',
       email: '',
       eEnableLegacyLogin: 0,
+      eEnableSpLogin: 0,
+      spLoginFailedCount: 0,
     };
   }
 
