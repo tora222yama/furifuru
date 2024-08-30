@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import BuildIcon from '@mui/icons-material/Build';
 import BusinessIcon from '@mui/icons-material/Business';
 import CachedIcon from '@mui/icons-material/Cached';
+import CircleIcon from '@mui/icons-material/Circle';
 import ClearIcon from '@mui/icons-material/Clear';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -74,6 +75,8 @@ export const Icon: React.FC<IProps> = ({
       return <CachedIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CAFE:
       return <LocalCafeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.CIRCLE:
+      return <CircleIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CLEAR:
       return <ClearIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.DASHBOARD:

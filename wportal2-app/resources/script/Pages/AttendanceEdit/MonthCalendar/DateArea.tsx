@@ -27,7 +27,10 @@ export const DateArea: React.FC<IProps> = ({ sx }) => {
       return {
         uid: attendance.id,
         start: DateTime.parseString(attendance.updatedAt),
+        eAttendanceState: attendance.eAttendanceState,
         label: `${time} ${action}`,
+        createdAt: DateTime.parseString(attendance.createdAt),
+        updatedAt: DateTime.parseString(attendance.updatedAt),
       };
     });
   }, [trnAttendanceStateList]);

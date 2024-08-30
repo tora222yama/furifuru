@@ -32,6 +32,13 @@ export const DialogEdit: React.FC<IProps> = ({
     });
   };
 
+  /**
+   * 送信処理.
+   */
+  const handleSubmit = () => {
+    console.log('送信処理.');
+  };
+
   return (
     <Dialog sx={sx} open={open} onClose={handleClose}>
       <Paper
@@ -42,7 +49,7 @@ export const DialogEdit: React.FC<IProps> = ({
         <FormDialogEdit
           formDialogEdit={formDialogEdit}
           handleUpdate={handleUpdate}
-          handleClose={handleClose}
+          handleSubmit={handleSubmit}
         />
       </Paper>
     </Dialog>
