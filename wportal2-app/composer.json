@@ -16,7 +16,8 @@
         "laravel/socialite": "^5.13",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.27",
-        "nuwave/lighthouse": "^6.36"
+        "nuwave/lighthouse": "^6.36",
+        "pragmarx/google2fa-laravel": "^2.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
