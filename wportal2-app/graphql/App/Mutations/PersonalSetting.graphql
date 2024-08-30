@@ -6,3 +6,30 @@ mutation AppPersonalSettingShowAlignSlack {
     errors
   }
 }
+
+# SPログイン用パスワードの送付.
+mutation AppPersonalSettingSpPassword (
+  $password: String!
+) {
+  AppPersonalSettingSpPassword (
+    password: $password
+  ) {
+    statusCode
+    statusMessage
+    errors
+    url
+  }
+}
+
+# 二要素認証コードの確認.
+mutation AppPersonalSettingSpConfirmCode (
+  $code: String!
+) {
+  AppPersonalSettingSpConfirmCode (
+    code: $code
+  ) {
+    statusCode
+    statusMessage
+    errors
+  }
+}
