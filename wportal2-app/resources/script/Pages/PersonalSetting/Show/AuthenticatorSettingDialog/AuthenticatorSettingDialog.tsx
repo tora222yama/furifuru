@@ -2,12 +2,11 @@ import * as React from 'react';
 import { Dialog, Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { ContentPassword } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentPassword';
 import { ContentConfirmCode } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentConfirmCode';
+import { ContentComplete } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentComplete';
 
 /**
  * ダイアログの状態管理.
@@ -22,19 +21,26 @@ export type E_DIALOG_STATE =
 
 interface IProps extends IPropsBase {
   open: boolean;
-  handleClose: () => void;
 }
-export const AuthenticatorSettingDialog: React.FC<IProps> = ({
-  sx,
-  open,
-  handleClose,
-}) => {
+export const AuthenticatorSettingDialog: React.FC<IProps> = ({ sx, open }) => {
   const { onStart, onFinish } = useProgressContext();
   const [dialogState, setDialogState] = React.useState<E_DIALOG_STATE>(
     E_DIALOG_STATE.SETTING_PASSWORD,
   );
 
   const [url, setUrl] = React.useState<string>('');
+
+  /**
+   * 処理を終了.
+   */
+  const handleClose = () => {
+    router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW), {
+      onStart,
+      onFinish,
+      preserveScroll: true,
+      preserveState: false,
+    });
+  };
 
   /**
    * パスワードの送信の完了.
@@ -50,18 +56,6 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
    */
   const handleCompleteConfirmCode = () => {
     setDialogState(E_DIALOG_STATE.SETTING_COMPLETE);
-  };
-
-  /**
-   * 処理完了の確認.
-   */
-  const handleComplete = () => {
-    router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW), {
-      onStart,
-      onFinish,
-      preserveScroll: true,
-      preserveState: false,
-    });
   };
 
   /**
@@ -85,12 +79,7 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({
           />
         );
       case E_DIALOG_STATE.SETTING_COMPLETE:
-        return (
-          <>
-            <TypoText>- 処理完了</TypoText>
-            <ButtonGeneral label="閉じる" onClick={handleComplete} />
-          </>
-        );
+        return <ContentComplete handleComplete={handleClose} />;
       default:
         return null;
     }

@@ -84,6 +84,8 @@ class AuthUser extends Authenticatable
             'name'               => $this->name                  ?? '',
             'email'              => $this->email                 ?? '',
             'eEnableLegacyLogin' => $this->e_enable_legacy_login ?? 0,
+            'eEnableSpLogin'     => $this->e_enable_sp_login     ?? 0,
+            'spLoginFailedCount' => $this->spLoginFailedCount    ?? 0,
 
             'trnUser'            => $this->isExistKeyInWith($with, 'TrnUser', $history)
                 ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])

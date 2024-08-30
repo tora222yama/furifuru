@@ -6,9 +6,11 @@ import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { AuthenticatorSettingDialog } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/AuthenticatorSettingDialog';
+import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 
 interface IProps extends IPropsBase {}
 export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
+  const { authUser } = useCommonIndexContext();
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   return (
     <Box
@@ -17,10 +19,7 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
       }}
     >
       <Closable open={openDialog}>
-        <AuthenticatorSettingDialog
-          open={openDialog}
-          handleClose={() => setOpenDialog(false)}
-        />
+        <AuthenticatorSettingDialog open={openDialog} />
       </Closable>
       <TypoH2>Authenticator情報</TypoH2>
       <Box
@@ -45,7 +44,7 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
               width: '100%',
             }}
             label="Google Authenticator"
-            value="ログイン不可"
+            value={authUser.eEnableSpLogin ? 'ログイン可' : 'ログイン不可'}
           />
           <ButtonGeneral
             sx={{
@@ -55,7 +54,12 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
             onClick={() => setOpenDialog(true)}
           />
         </Box>
-        <LabelValue label="認証失敗回数" value="----" />
+        <LabelValue
+          label="認証失敗回数"
+          value={
+            authUser.eEnableSpLogin ? String(authUser.spLoginFailedCount) : '-'
+          }
+        />
       </Box>
     </Box>
   );

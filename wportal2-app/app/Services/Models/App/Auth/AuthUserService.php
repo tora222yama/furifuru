@@ -138,27 +138,28 @@ class AuthUserService extends ModelServiceBase
         if (is_null($pipe->authUser)) {
             throw new Exception();
         }
-        $authUser = $pipe->authUser;
+        $authUser                       = $pipe->authUser;
 
-        //        // SPログインの禁止
-        //        $authUser->e_enable_sp_login = EEnableFlag::INVALID->value;
-        //
-        //        // パスワードの更新.
-        //        $authUser->sp_password = $pipe->password;
-        //
-        //        // シークレットの更新.
-        //        $google2fa = new Google2FA();
-        //        $authUser->sp_google_2fa_secret = $google2fa->generateSecretKey();
-        //
-        //        // DB保存.
-        //        $this->updateOrFail($authUser);
-        //
-        //        // URL作成.
-        //        $pipe->resultUrl = $google2fa->getQRCodeUrl(
-        //            'Web本部ポータル2',
-        //            $authUser->email,
-        //            $authUser->sp_google_2fa_secret
-        //        );
+        // SPログインの禁止
+        $authUser->e_enable_sp_login    = EEnableFlag::INVALID->value;
+
+        // パスワードの更新.
+        $authUser->sp_password          = $pipe->password;
+
+        // シークレットの更新.
+        $google2fa                      = new Google2FA();
+        $authUser->sp_google_2fa_secret = $google2fa->generateSecretKey();
+
+        // DB保存.
+        $this->updateOrFail($authUser);
+
+        // URL作成.
+        $name                           = isLocal() ? 'wportal2(local)' : 'Web本部ポータル2';
+        $pipe->resultUrl                = $google2fa->getQRCodeUrl(
+            $name,
+            $authUser->email,
+            $authUser->sp_google_2fa_secret
+        );
     }
 
     /**
