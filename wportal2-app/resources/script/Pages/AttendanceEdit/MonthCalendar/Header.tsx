@@ -26,7 +26,7 @@ export const Header: React.FC<IProps> = ({ sx }) => {
       onStart,
       onFinish,
       data: {
-        dateTime: dateTime.subMonth().toDateTime(),
+        dateTime: dateTime.subMonth().startOfMonth().toDateTime(),
       },
     });
   };
@@ -42,7 +42,7 @@ export const Header: React.FC<IProps> = ({ sx }) => {
       onStart,
       onFinish,
       data: {
-        dateTime: dateTime.addMonth().toDateTime(),
+        dateTime: dateTime.addMonth().startOfMonth().toDateTime(),
       },
     });
   };

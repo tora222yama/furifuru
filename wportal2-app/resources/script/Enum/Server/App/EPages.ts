@@ -12,6 +12,7 @@ export const E_PAGES = {
   ATTENDANCE_DIVISION_PRIORITY: 'attendance_division_priority', // 課優先度変更.
   ATTENDANCE_PROJECT_PRIORITY: 'attendance_project_priority', // プロジェクト優先度変更.
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
+  ATTENDANCE__EDIT__UPDATE: 'attendance__edit__update', // 勤怠修正・更新.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   SHOP: 'shop', // ショップ.
   DIVISION: 'division', // 課一覧.
@@ -82,6 +83,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/project_priority';
     case E_PAGES.ATTENDANCE__EDIT:
       return '/attendance/edit';
+    case E_PAGES.ATTENDANCE__EDIT__UPDATE:
+      return '/attendance/edit/update';
     case E_PAGES.DIVISION:
       return '/division';
     case E_PAGES.DIVISION__SHOW:

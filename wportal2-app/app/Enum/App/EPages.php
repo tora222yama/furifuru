@@ -10,58 +10,59 @@ namespace App\Enum\App;
  */
 enum EPages: string
 {
-    case INVALID                          = 'invalid';   // 無効.
-    case DASHBOARD                        = 'dashboard'; // ダッシュボード.
-    case ATTENDANCE                       = 'attendance'; // 勤怠共有.
-    case ATTENDANCE_CREATE                = 'attendance_create'; // 勤怠共有・追加.
-    case ATTENDANCE_DELETE                = 'attendance_delete'; // 勤怠共有・削除.
-    case ATTENDANCE_DIVISION_PRIORITY     = 'attendance_division_priority'; // 課優先度変更.
-    case ATTENDANCE_PROJECT_PRIORITY      = 'attendance_project_priority'; // プロジェクト優先度変更.
-    case ATTENDANCE__EDIT                 = 'attendance__edit'; // 勤怠修正.
-    case ATTENDANCE__TABLE                = 'attendance__table'; // 勤怠一覧表.
-    case SHOP                             = 'shop'; // ショップ.
-    case DIVISION                         = 'division'; // 課一覧.
-    case DIVISION__SHOW                   = 'division__show'; // 課詳細.
-    case DIVISION__EDIT                   = 'division__edit'; // 課編集.
-    case DIVISION__UPDATE                 = 'division__update'; // 課更新.
-    case DIVISION__UPDATE_USER            = 'division__update_user'; // 課メンバー更新.
-    case DIVISION__DELETE                 = 'division__delete'; // 課削除.
-    case PROJECT                          = 'project'; // プロジェクト一覧.
-    case PROJECT__SHOW                    = 'project__show'; // プロジェクト詳細.
-    case PROJECT__EDIT                    = 'project__edit'; // プロジェクト編集.
-    case PROJECT__NEW                     = 'project__new'; // プロジェクト新規作成.
-    case PROJECT__CREATE                  = 'project__create'; // プロジェクト新規登録.
-    case PROJECT__UPDATE                  = 'project__update'; // プロジェクト更新.
-    case PROJECT__UPDATE_USER             = 'project__update_user'; // プロジェクトメンバー更新.
-    case PROJECT__DELETE                  = 'project__delete'; // プロジェクト削除.
-    case USER                             = 'user'; // メンバー一覧.
-    case USER__SHOW                       = 'user__show'; // メンバー詳細.
-    case USER__EDIT                       = 'user__edit'; // メンバー編集.
-    case USER__NEW                        = 'user__new'; // メンバー新規作成.
-    case USER__CREATE                     = 'user__create'; // メンバー新規登録.
-    case USER__UPDATE                     = 'user__update'; // メンバー更新.
-    case USER__DELETE                     = 'user__delete'; // メンバー削除.
-    case PERSONAL_SETTING__SHOW           = 'personal_setting__show'; // 個人設定・閲覧.
-    case PERSONAL_SETTING__EDIT           = 'personal_setting__edit'; // 個人設定・編集.
-    case PERSONAL_SETTING__UPDATE         = 'personal_setting__update'; // 個人設定・更新.
-    case LOGIN                            = 'login'; // ログイン.
-    case LEGACY_LOGIN                     = 'legacy_login'; // ワンタイムパスワードの発行.
-    case ONETIME_PASSWORD_LOGIN           = 'onetime_password_login'; // ワンタイムパスワードログイン.
-    case NOT_FOUND                        = 'not_found'; // ページが見つからない.
+    case INVALID                           = 'invalid';   // 無効.
+    case DASHBOARD                         = 'dashboard'; // ダッシュボード.
+    case ATTENDANCE                        = 'attendance'; // 勤怠共有.
+    case ATTENDANCE_CREATE                 = 'attendance_create'; // 勤怠共有・追加.
+    case ATTENDANCE_DELETE                 = 'attendance_delete'; // 勤怠共有・削除.
+    case ATTENDANCE_DIVISION_PRIORITY      = 'attendance_division_priority'; // 課優先度変更.
+    case ATTENDANCE_PROJECT_PRIORITY       = 'attendance_project_priority'; // プロジェクト優先度変更.
+    case ATTENDANCE__EDIT                  = 'attendance__edit'; // 勤怠修正.
+    case ATTENDANCE__EDIT__UPDATE          = 'attendance__edit__update'; // 勤怠修正・更新.
+    case ATTENDANCE__TABLE                 = 'attendance__table'; // 勤怠一覧表.
+    case SHOP                              = 'shop'; // ショップ.
+    case DIVISION                          = 'division'; // 課一覧.
+    case DIVISION__SHOW                    = 'division__show'; // 課詳細.
+    case DIVISION__EDIT                    = 'division__edit'; // 課編集.
+    case DIVISION__UPDATE                  = 'division__update'; // 課更新.
+    case DIVISION__UPDATE_USER             = 'division__update_user'; // 課メンバー更新.
+    case DIVISION__DELETE                  = 'division__delete'; // 課削除.
+    case PROJECT                           = 'project'; // プロジェクト一覧.
+    case PROJECT__SHOW                     = 'project__show'; // プロジェクト詳細.
+    case PROJECT__EDIT                     = 'project__edit'; // プロジェクト編集.
+    case PROJECT__NEW                      = 'project__new'; // プロジェクト新規作成.
+    case PROJECT__CREATE                   = 'project__create'; // プロジェクト新規登録.
+    case PROJECT__UPDATE                   = 'project__update'; // プロジェクト更新.
+    case PROJECT__UPDATE_USER              = 'project__update_user'; // プロジェクトメンバー更新.
+    case PROJECT__DELETE                   = 'project__delete'; // プロジェクト削除.
+    case USER                              = 'user'; // メンバー一覧.
+    case USER__SHOW                        = 'user__show'; // メンバー詳細.
+    case USER__EDIT                        = 'user__edit'; // メンバー編集.
+    case USER__NEW                         = 'user__new'; // メンバー新規作成.
+    case USER__CREATE                      = 'user__create'; // メンバー新規登録.
+    case USER__UPDATE                      = 'user__update'; // メンバー更新.
+    case USER__DELETE                      = 'user__delete'; // メンバー削除.
+    case PERSONAL_SETTING__SHOW            = 'personal_setting__show'; // 個人設定・閲覧.
+    case PERSONAL_SETTING__EDIT            = 'personal_setting__edit'; // 個人設定・編集.
+    case PERSONAL_SETTING__UPDATE          = 'personal_setting__update'; // 個人設定・更新.
+    case LOGIN                             = 'login'; // ログイン.
+    case LEGACY_LOGIN                      = 'legacy_login'; // ワンタイムパスワードの発行.
+    case ONETIME_PASSWORD_LOGIN            = 'onetime_password_login'; // ワンタイムパスワードログイン.
+    case NOT_FOUND                         = 'not_found'; // ページが見つからない.
 
     /**
      * 以下、標準環境と同等のサンプルページ.
      */
-    case SAMPLE_DASHBOARD                 = 'sample_dashboard'; // ダッシュボード.
-    case SAMPLE_MVC_VALUE                 = 'sample_mvc_value'; // MVC値渡し.
-    case SAMPLE_INPUT_FORM                = 'sample_input_form'; // 入力フォーム.
-    case SAMPLE_INPUT_FORM__CREATE        = 'sample_input_form__create'; // 入力フォームPost更新.
-    case SAMPLE_REDIS                     = 'sample_redis'; // Redis操作.
-    case SAMPLE_REDIS_POST_RESULT         = 'sample_redis_post_result'; // RedisをPostで更新.
-    case SAMPLE_SLACK_LOG                 = 'sample_slack_log'; // Slackログ通知.
-    case SAMPLE_PAGINATION                = 'sample_pagination'; // ページネーション.
-    case SAMPLE_INTERN                    = 'sample_intern'; // インターン.
-    case SAMPLE_INERTIA_DATA              = 'sample_inertia_data'; // Inertiaデータ.
+    case SAMPLE_DASHBOARD                  = 'sample_dashboard'; // ダッシュボード.
+    case SAMPLE_MVC_VALUE                  = 'sample_mvc_value'; // MVC値渡し.
+    case SAMPLE_INPUT_FORM                 = 'sample_input_form'; // 入力フォーム.
+    case SAMPLE_INPUT_FORM__CREATE         = 'sample_input_form__create'; // 入力フォームPost更新.
+    case SAMPLE_REDIS                      = 'sample_redis'; // Redis操作.
+    case SAMPLE_REDIS_POST_RESULT          = 'sample_redis_post_result'; // RedisをPostで更新.
+    case SAMPLE_SLACK_LOG                  = 'sample_slack_log'; // Slackログ通知.
+    case SAMPLE_PAGINATION                 = 'sample_pagination'; // ページネーション.
+    case SAMPLE_INTERN                     = 'sample_intern'; // インターン.
+    case SAMPLE_INERTIA_DATA               = 'sample_inertia_data'; // Inertiaデータ.
 
     /**
      * routing時のinvokeパスの取得.
@@ -75,7 +76,8 @@ enum EPages: string
             self::ATTENDANCE_DELETE              => '\App\Http\Controllers\Pages\AttendanceController@delete',
             self::ATTENDANCE_DIVISION_PRIORITY   => '\App\Http\Controllers\Pages\AttendanceController@division_priority',
             self::ATTENDANCE_PROJECT_PRIORITY    => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
-            self::ATTENDANCE__EDIT               => '\App\Http\Controllers\Pages\AttendanceController@edit',
+            self::ATTENDANCE__EDIT               => '\App\Http\Controllers\Pages\AttendanceEditController@invoke',
+            self::ATTENDANCE__EDIT__UPDATE       => '\App\Http\Controllers\Pages\AttendanceEditController@update',
             self::DIVISION                       => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW                 => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT                 => '\App\Http\Controllers\Pages\DivisionController@edit',

@@ -10,9 +10,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Facades\Models\App\Trn\TrnUserDivisionPriorityService;
 use App\Facades\Models\App\Trn\TrnUserProjectPriorityService;
-use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
-use App\Models\App\Trn\TrnAttendanceState;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnUser;
@@ -23,7 +21,6 @@ use App\Pipe\App\PipeAppAttendanceProjectPriority;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Throwable;
@@ -149,35 +146,6 @@ class AttendanceController extends Controller
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());
-    }
-
-    /**
-     * 勤怠修正.
-     */
-    public function edit(Request $request): Response
-    {
-        // 指定月の取得、なければ今月とする.
-        $dateTimeString = $request->has('dateTime')
-            ? $request->input('dateTime')
-            : Carbon::now()->toString();
-
-        // 取得範囲の作成
-        $startOfMonth   = Carbon::createFromTimeString($dateTimeString)->startOfMonth();
-        $endOfMonth     = Carbon::createFromTimeString($dateTimeString)->endOfMonth();
-
-        // 取得対象.
-        $trnUser        = TrnUserService::findByAuthIdOrFail(Auth::id());
-
-        return $this->render('AttendanceEdit/Index', [
-            'dateTime'               => fn () => $dateTimeString,
-
-            // 出退勤状態の取得.
-            'trnAttendanceStateList' => fn () => TrnAttendanceStateService::listByUserIdAndPeriod(
-                $trnUser->id,
-                $startOfMonth,
-                $endOfMonth
-            )->map(fn (TrnAttendanceState $trnAttendanceState) => $trnAttendanceState->toPayload()),
-        ]);
     }
 
     /**
