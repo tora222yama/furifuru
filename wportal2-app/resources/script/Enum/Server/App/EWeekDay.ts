@@ -13,3 +13,27 @@ export const E_WEEK_DAY = {
 } as const;
 export type EWeekDay = (typeof E_WEEK_DAY)[keyof typeof E_WEEK_DAY];
 // #ENUM_DEFINE_END#
+
+/**
+ * 曜日に対応するラベルを取得.
+ */
+export const getWeekDayShortLabel = (weekDay: EWeekDay): string => {
+  switch (weekDay) {
+    case E_WEEK_DAY.SUNDAY:
+      return '日';
+    case E_WEEK_DAY.MONDAY:
+      return '月';
+    case E_WEEK_DAY.TUESDAY:
+      return '火';
+    case E_WEEK_DAY.WEDNESDAY:
+      return '水';
+    case E_WEEK_DAY.THURSDAY:
+      return '木';
+    case E_WEEK_DAY.FRIDAY:
+      return '金';
+    case E_WEEK_DAY.SATURDAY:
+      return '土';
+    default:
+      return '';
+  }
+};

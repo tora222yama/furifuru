@@ -57,6 +57,10 @@ trait GraphQLVariablesHelper
     }
 
     /**
+     * argumentsからarrayを取得.
+     */
+
+    /**
      * argumentsから文字列の引数を取得.
      */
     protected function getArgAsStringArray(string $key, ?array $args = null): array

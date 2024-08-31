@@ -16,7 +16,7 @@ final class SampleRedisQuery
     public function __invoke($_, array $args): array
     {
         // 早く完了しないように強制遅延.
-        sleep(1);
+        localSleep(1);
 
         // パイプ作成.
         /** @var PipeSampleRedisQuery $pipe */
