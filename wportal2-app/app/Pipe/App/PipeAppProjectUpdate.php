@@ -47,7 +47,7 @@ final class PipeAppProjectUpdate extends PipeBase
         $notificationList       = json_decode($notificationListJson);
         if ($this->editNotification && is_array($notificationList)) {
             array_map(function ($notification) {
-                $new = InputNotification::create($notification);
+                $new = InputNotification::createFromObject($notification);
                 $this->notificationList->add($new);
             }, $notificationList);
         }
