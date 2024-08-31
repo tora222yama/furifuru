@@ -56,6 +56,32 @@ export const getLabelAttendanceState = (
 };
 
 /**
+ * 出退勤アクションのショートラベルを取得.
+ */
+export const getShortLabelAttendanceState = (
+  attendance: EAttendanceState,
+): string => {
+  switch (attendance) {
+    case E_ATTENDANCE_STATE.INVALID:
+      return '';
+    case E_ATTENDANCE_STATE.ATTENDANCE_OFFICE:
+    case E_ATTENDANCE_STATE.ATTENDANCE_TELEWORK:
+      return '出勤';
+    case E_ATTENDANCE_STATE.BEGIN_BREAK:
+      return '休憩in';
+    case E_ATTENDANCE_STATE.END_BREAK:
+      return '休憩out';
+    case E_ATTENDANCE_STATE.SWITCH_TO_OFFICE:
+    case E_ATTENDANCE_STATE.SWITCH_TO_TELEWORK:
+      return '切替';
+    case E_ATTENDANCE_STATE.LEAVING:
+      return '退勤';
+    default:
+      return '';
+  }
+};
+
+/**
  * アクションを勤務状態に変換.
  * @param attendance
  */

@@ -19,7 +19,7 @@ final class InputNotification
 
     public string $notificationValue            = '';
 
-    public static function create(object $object): InputNotification
+    public static function createFromObject(object $object): InputNotification
     {
         $new                    = new InputNotification();
 
