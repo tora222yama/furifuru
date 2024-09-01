@@ -1,24 +1,35 @@
 import * as React from 'react';
-import { Box, Container } from '@mui/material';
+import { Box, Container, useTheme } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { AppBarDesktop } from '@/script/Component/AppBar/AppBarDesktop';
 import { DrawerDesktop } from '@/script/Component/Drawer/DrawerDesktop';
+import { DisplayDesktop } from '@/script/Component/Misc/DisplayDesktop';
+import { DisplayMobile } from '@/script/Component/Misc/DisplayMobile';
+import { AppBarMobile } from '@/script/Component/AppBar/AppBarMobile';
 
 interface IProps extends IPropsBase {}
 export const Page: React.FC<IProps> = ({ sx, children }) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         ...sx,
       }}
     >
-      <AppBarDesktop />
-      <DrawerDesktop />
+      <DisplayDesktop>
+        <AppBarDesktop />
+        <DrawerDesktop />
+      </DisplayDesktop>
+      <DisplayMobile>
+        <AppBarMobile />
+      </DisplayMobile>
       <Container
         sx={{
           marginTop: theme => theme.mixins.toolbar.height,
-          paddingLeft: theme => theme.mixins.drawer?.width,
-          minWidth: theme => theme.breakpoints.values.md,
+          paddingLeft: {
+            sm: '0px',
+            md: theme.mixins.drawer?.width,
+          },
         }}
         maxWidth={false}
         disableGutters

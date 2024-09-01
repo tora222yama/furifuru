@@ -97,3 +97,13 @@ export const themeCommon = createTheme({
     },
   },
 });
+
+/**
+ * フォントサイズ・レスポンシブ調整:h1
+ */
+themeCommon.typography.h1 = {
+  fontSize: '28px',
+  [themeCommon.breakpoints.down('sm')]: {
+    fontSize: '18px',
+  },
+};
