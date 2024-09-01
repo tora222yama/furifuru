@@ -42,6 +42,7 @@ export const E_PAGES = {
   LOGIN: 'login', // ログイン.
   LEGACY_LOGIN: 'legacy_login', // ワンタイムパスワードの発行.
   ONETIME_PASSWORD_LOGIN: 'onetime_password_login', // ワンタイムパスワードログイン.
+  SP_LOGIN: 'sp_login', // スマートフォン版ログイン.
   NOT_FOUND: 'not_found', // ページが見つからない.
   SAMPLE_DASHBOARD: 'sample_dashboard', // ダッシュボード.
   SAMPLE_MVC_VALUE: 'sample_mvc_value', // MVC値渡し.
@@ -135,6 +136,8 @@ const getHref = (page: EPages): string => {
       return '/personal_setting/update';
     case E_PAGES.LEGACY_LOGIN:
       return '/legacy_login';
+    case E_PAGES.SP_LOGIN:
+      return '/sp_login';
     case E_PAGES.ONETIME_PASSWORD_LOGIN:
       return '/onetime_password_login';
 
