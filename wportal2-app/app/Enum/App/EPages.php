@@ -48,6 +48,7 @@ enum EPages: string
     case LOGIN                             = 'login'; // ログイン.
     case LEGACY_LOGIN                      = 'legacy_login'; // ワンタイムパスワードの発行.
     case ONETIME_PASSWORD_LOGIN            = 'onetime_password_login'; // ワンタイムパスワードログイン.
+    case SP_LOGIN                          = 'sp_login'; // スマートフォン版ログイン.
     case NOT_FOUND                         = 'not_found'; // ページが見つからない.
 
     /**
@@ -105,6 +106,7 @@ enum EPages: string
             self::LOGIN                          => '\App\Http\Controllers\Pages\LoginController@invoke',
             self::LEGACY_LOGIN                   => '\App\Http\Controllers\Pages\LoginController@legacy_login',
             self::ONETIME_PASSWORD_LOGIN         => '\App\Http\Controllers\Pages\LoginController@onetime_password_login',
+            self::SP_LOGIN                       => '\App\Http\Controllers\Pages\LoginController@sp_login',
             self::NOT_FOUND                      => '\App\Http\Controllers\Pages\NotFoundController@invoke',
 
             /**
