@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Constant;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
@@ -16,8 +17,10 @@ use App\Http\Controllers\Controller;
 use App\Models\App\Auth\AuthUser;
 use App\Pipe\App\PipeAppLegacyLogin;
 use App\Pipe\App\PipeAppOnetimePasswordLogin;
+use App\Pipe\App\PipeAppSpLogin;
 use App\Services\External\SesService\SesParameter;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +28,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Laravel\Socialite\Facades\Socialite;
+use PragmaRX\Google2FA\Google2FA;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Throwable;
 
@@ -119,6 +123,74 @@ class LoginController extends Controller
         return redirect()->action(EPages::DASHBOARD->getInvokePath());
     }
 
+    /**
+     * SP版ログインの実施.
+     */
+    public function sp_login(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppSpLogin $pipe */
+        $pipe                 = PipeService::insertNewPipe(
+            new PipeAppSpLogin($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+
+        // recaptchaのチェック.
+        if (! RecaptchaService::isValidToken($pipe->recaptchaToken)) {
+            redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+
+        // 許可&パスワードが一致し、不正カウンタが問題ない認証ユーザーを取得.
+        $pipe->targetAuthUser = AuthUser::query()
+            ->where('e_enable_sp_login', EEnableFlag::ENABLE)
+            ->where('email', $pipe->email)
+            ->where('sp_login_failed_count', '<', Constant::INVALID_SP_LOGIN_COUNT)
+            ->first();
+
+        // 対象が見つからない場合.
+        if (is_null($pipe->targetAuthUser)) {
+            return redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+
+        // パスワードが違う場合.
+        if (! Hash::check($pipe->password, $pipe->targetAuthUser->sp_password)) {
+            Log::error("invalid password sp login, mail: [$pipe->email]");
+
+            return redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+
+        // tokenコードのチェック.
+        try {
+            $google2fa   = new Google2FA();
+            $isValidCode = $google2fa->verifyKey($pipe->targetAuthUser->sp_google_2fa_secret, $pipe->code);
+            if (! $isValidCode) {
+                // 不正アクセスカウントを加算.
+                $pipe->targetAuthUser->sp_login_failed_count++;
+                $pipe->targetAuthUser->saveOrFail();
+
+                Log::error("invalid authenticator code, mail: [$pipe->email]");
+
+                return redirect()->action(EPages::LOGIN->getInvokePath());
+            }
+
+            // ログイン処理を実施
+            Auth::login($pipe->targetAuthUser, true);
+
+            return redirect()->action(EPages::DASHBOARD->getInvokePath());
+        } catch (Exception $e) {
+            Log::error('invalid code:'.$e->getMessage());
+
+            return redirect()->action(EPages::LOGIN->getInvokePath());
+        }
+    }
+
+    /**
+     * google認証の実施.
+     */
     public function getGoogleAuth(): RedirectResponse
     {
         return Socialite::driver('google')
