@@ -47,6 +47,11 @@ export const FormEdit: React.FC<IProps> = ({
         ...sx,
       }}
     >
+      <FormEditImageDrop
+        sx={{ width: '100%' }}
+        formEdit={formEdit}
+        handleUpdate={handleUpdate}
+      />
       <LabelValue sx={{ width: '400px' }} label="名前" value={formEdit.name} />
       <Box
         sx={{
@@ -56,7 +61,7 @@ export const FormEdit: React.FC<IProps> = ({
           width: '500px',
         }}
       >
-        <TypoText sx={{ minWidth: '90px' }}>表示名</TypoText>
+        <TypoText sx={{ minWidth: '150px' }}>表示名</TypoText>
         <InputField
           id="form-personal-setting-nickname"
           inputValue={formEdit.nickname}
@@ -75,7 +80,7 @@ export const FormEdit: React.FC<IProps> = ({
           width: '500px',
         }}
       >
-        <TypoText sx={{ minWidth: '90px' }}>生年月日</TypoText>
+        <TypoText sx={{ minWidth: '150px' }}>生年月日</TypoText>
         <InputField
           id="form-personal-setting-birth-date"
           inputValue={formEdit.birthDate ?? ''}
@@ -83,41 +88,11 @@ export const FormEdit: React.FC<IProps> = ({
           visibleError
           errors={validation.data.birthDate?.errors}
           type="date"
+          inputProps={{
+            width: '186px',
+          }}
         />
       </Box>
-
-      {/* 自己紹介入力フォーム */}
-      {/* TODO:画面幅に応じて幅が変わるようにする */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '20px',
-        }}
-      >
-        <TypoText sx={{ minWidth: '90px' }}>自己紹介</TypoText>
-        <Box
-        // sx={{
-        // }}
-        >
-          <InputFieldMultiline
-            sx={{ minWidth: '50%' }}
-            id="form-personal-setting-self-introduction"
-            inputValue={formEdit.selfIntroduction ?? ''}
-            onChange={selfIntroduction => handleUpdate({ selfIntroduction })}
-            errors={validation.data.selfIntroduction?.errors}
-            placeHolder="自己紹介を入力してください"
-            rows={5}
-            inputProps={{
-              width: '400px',
-            }}
-          />
-        </Box>
-      </Box>
-      <FormEditImageDrop
-        sx={{ width: '100%' }}
-        formEdit={formEdit}
-        handleUpdate={handleUpdate}
-      />
       <Box
         sx={{
           display: 'flex',
@@ -157,13 +132,44 @@ export const FormEdit: React.FC<IProps> = ({
           onChange={slackTeamId => handleUpdate({ slackTeamId })}
         />
       </Box>
-      <ButtonGeneral
+      {/* 自己紹介入力フォーム */}
+      <Box
         sx={{
-          minWidth: '200px',
+          display: 'flex',
+          gap: '20px',
         }}
-        label="更新"
-        onClick={handleSubmit}
-      />
+      >
+        <TypoText sx={{ minWidth: '150px' }}>自己紹介</TypoText>
+        <Box>
+          <InputFieldMultiline
+            sx={{ minWidth: '50%' }}
+            id="form-personal-setting-self-introduction"
+            inputValue={formEdit.selfIntroduction ?? ''}
+            onChange={selfIntroduction => handleUpdate({ selfIntroduction })}
+            errors={validation.data.selfIntroduction?.errors}
+            placeHolder="自己紹介を入力してください"
+            rows={5}
+            inputProps={{
+              width: '500px',
+            }}
+          />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          marginLeft: 'auto',
+        }}
+      >
+        <ButtonGeneral
+          sx={{
+            minWidth: '200px',
+            alignItems: 'right',
+            marginBottom: '20px',
+          }}
+          label="更新"
+          onClick={handleSubmit}
+        />
+      </Box>
     </FormControl>
   );
 };

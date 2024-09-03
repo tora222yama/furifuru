@@ -33,6 +33,18 @@ export const Show: React.FC<IProps> = () => {
     useMutationAppPersonalSettingShowAlignSlack();
   const loading = processingAlignSlack;
 
+  // 生年月日をYYYY/MM/DD形式に変換
+  const formatDate = (dataString: string | null) => {
+    if (!dataString) {
+      return '';
+    }
+    const date = new Date(dataString);
+    const year = date.getFullYear();
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    return `${year}/${month}/${day}`;
+  };
+
   /**
    * SlackIdの有効化を実行.
    */
@@ -97,18 +109,19 @@ export const Show: React.FC<IProps> = () => {
           padding: '20px',
         }}
       >
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4} md={2}>
+        <Grid sx={{ width: '700px' }}>
+          <Grid>
             <Image
               sx={{
                 borderRadius: '24px',
                 width: '130px',
                 height: '130px',
+                paddingBottom: '20px',
               }}
               src={String(authUser.trnUser?.faceImagePath)}
             />
           </Grid>
-          <Grid item xs={12} sm={8} md={5} sx={{ marginTop: '10px' }}>
+          <Grid sx={{ marginTop: '10px' }}>
             <LabelValue label="名前" value={authUser.name} />
             <LabelValue
               sx={{ marginTop: '10px' }}
@@ -118,11 +131,21 @@ export const Show: React.FC<IProps> = () => {
             <LabelValue
               sx={{ marginTop: '10px' }}
               label="生年月日"
-              value={String(authUser.trnUser?.birthDate)}
+              value={
+                authUser.trnUser?.birthDate
+                  ? formatDate(authUser.trnUser.birthDate)
+                  : ''
+              }
             />
           </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <TypoH2>Slack情報</TypoH2>
+          <Grid>
+            <TypoH2
+              sx={{
+                paddingTop: '35px',
+              }}
+            >
+              Slack情報
+            </TypoH2>
             <Box
               sx={{
                 marginTop: '20px',
@@ -167,11 +190,12 @@ export const Show: React.FC<IProps> = () => {
               />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid>
             <TypoText
               sx={{
                 fontSize: '20px',
                 marginBottom: '10px',
+                paddingTop: '35px',
               }}
             >
               自己紹介
