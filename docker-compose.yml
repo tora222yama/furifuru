@@ -10,8 +10,6 @@ services:
   wportal2_web:
     container_name: wportal2_web
     build: wportal2-app/docker/web
-    env_file:
-      - wportal2-app/.env
     environment:
       - APP_TIMEOUT=60
       - PHP_MEMORY_LIMIT=256M

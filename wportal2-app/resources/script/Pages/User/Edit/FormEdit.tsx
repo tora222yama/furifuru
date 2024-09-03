@@ -138,7 +138,7 @@ export const FormEdit: React.FC<IProps> = ({
             <FormControlLabel
               control={
                 <Checkbox
-                  value={formEdit.enableLegacyLogin}
+                  checked={formEdit.enableLegacyLogin}
                   onChange={v =>
                     handleUpdate({ enableLegacyLogin: v.target.checked })
                   }

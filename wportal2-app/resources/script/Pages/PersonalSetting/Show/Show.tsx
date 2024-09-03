@@ -8,21 +8,23 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { Image } from '@/script/Component/Misc/Image';
 import { TypoText } from '@/script/Component/Typography/TypoText';
-import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { useIndexContext } from '@/script/Pages/PersonalSetting/Show/Index';
-import { Str } from '@/script/Common/Str';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { useMutationAppPersonalSettingShowAlignSlack } from '@/script/Hooks/App/Mutations/useMutationAppPersonalSettingShowAlignSlack';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
+import { SlackInfo } from '@/script/Pages/PersonalSetting/Show/SlackInfo';
+import { AuthenticatorInfo } from '@/script/Pages/PersonalSetting/Show/AuthenticatorInfo';
 import {
   E_PAGES,
   getPagesHref,
   getPagesName,
 } from '@/script/Enum/Server/App/EPages';
+import { Str } from '@/script/Common/Str';
+import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -224,8 +226,18 @@ export const Show: React.FC<IProps> = () => {
                   '何も入力されていません'}
               </TypoText>
             </Box>
-            {/* TODO:趣味欄追加 */}
           </Grid>
+          <SlackInfo
+            sx={{
+              marginTop: '20px',
+            }}
+            trnUserSlackProfile={trnUserSlackProfile}
+          />
+          <AuthenticatorInfo
+            sx={{
+              marginTop: '20px',
+            }}
+          />
         </Grid>
       </Paper>
     </Page>

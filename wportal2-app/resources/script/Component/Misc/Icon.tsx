@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { styled } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import BuildIcon from '@mui/icons-material/Build';
 import BusinessIcon from '@mui/icons-material/Business';
 import CachedIcon from '@mui/icons-material/Cached';
+import CircleIcon from '@mui/icons-material/Circle';
+import ClearIcon from '@mui/icons-material/Clear';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -61,12 +65,20 @@ export const Icon: React.FC<IProps> = ({
       return <AddIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ATTENDANCE:
       return <AccessTimeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_LEFT:
+      return <ArrowBackIosNewIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_RIGHT:
+      return <ArrowForwardIosIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.BUILD:
       return <BuildIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CACHED:
       return <CachedIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.CAFE:
       return <LocalCafeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.CIRCLE:
+      return <CircleIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.CLEAR:
+      return <ClearIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.DASHBOARD:
       return <DashboardIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.EXPAND_LESS:

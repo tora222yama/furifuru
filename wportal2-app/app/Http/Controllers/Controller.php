@@ -71,7 +71,7 @@ class Controller extends BaseController
 
     private function getUserAuthorityList(array $with = []): array
     {
-        if (is_null($this->authUser)) {
+        if (is_null($this->authUser) || is_null($this->authUser->TrnUser)) {
             return [];
         }
 

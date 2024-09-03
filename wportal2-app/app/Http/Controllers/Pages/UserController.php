@@ -9,10 +9,13 @@ use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnDivisionUserService;
+use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\App\PipeAppUserUpdate;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -32,7 +35,23 @@ class UserController extends Controller
         return $this->render('User/Index', [
 
             // ユーザー情報.
-            'paginationUser' => fn () => $this->getPaginationUser($request, []),
+            'paginationUser' => fn () => $this->getPaginationUser($request, [
+
+                // アクション実行日が最新の1件だけを取得する.
+                'TrnAttendanceState' => function ($query) {
+                    return $query
+                        ->select([
+                            DB::raw('MAX(id) as id'),
+                            'trn_user_id',
+                            DB::raw('MAX(created_at) as created_at'),
+                            DB::raw('MAX(updated_at) as updated_at'),
+                        ])
+                        // 30日以内.
+                        ->whereRaw('created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)')
+                        // ユーザー毎にまとめる.
+                        ->groupBy('trn_user_id');
+                },
+            ]),
         ]);
     }
 
@@ -156,18 +175,60 @@ class UserController extends Controller
     }
 
     /**
+     * ユーザーの削除.
+     *
+     * @throws Throwable
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        /** @var PipeAppUserDelete $pipe */
+        $pipe = PipeService::insertNewPipe(
+            new PipeAppUserDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // ユーザーのアーカイブ.
+            TrnUserService::updateByPipe();
+
+            // 認証ユーザーの削除.
+            AuthUserService::updateByPipe();
+
+            // プロジェクトユーザーの削除.
+            TrnProjectUserService::updateByPipe();
+
+            // 課ユーザーの削除.
+            TrnDivisionUserService::updateByPipe();
+        });
+
+        // 自身の削除の場合はログアウトする.
+        if ($pipe->authUserId === Auth::id()) {
+            Auth::logout();
+
+            return redirect('/login');
+        }
+
+        return redirect()->action(EPages::USER->getInvokePath());
+    }
+
+    /**
      * ページネーション・ユーザー
      */
     private function getPaginationUser(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex = $request->input('index', 0);
-        $pageStep  = $request->input('step', 20);
+        $pageIndex        = $request->input('index', 0);
+        $pageStep         = $request->input('step', 20);
+        $keyword          = $request->input('keyword', '');
+        $inactiveUserFlag = (bool) $request->input('inactiveUserFlag', false);
 
         return TrnUserService::offsetPagination(
             $pageIndex,
             $pageStep,
-            $with
+            $with,
+            $keyword,
+            $inactiveUserFlag,
         );
     }
 

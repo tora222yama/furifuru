@@ -52,7 +52,10 @@ export const OnetimePassword: React.FC<IProps> = () => {
       <Paper
         sx={{
           padding: '20px',
-          width: '460px',
+          width: {
+            xs: '90%',
+            sm: '375px',
+          },
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

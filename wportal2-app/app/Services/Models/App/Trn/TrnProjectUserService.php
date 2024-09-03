@@ -6,9 +6,10 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProjectUser;
 use App\Pipe\App\PipeAppProjectUserUpdate;
+use App\Pipe\App\PipeAppUserDelete;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Illuminate\Support\Collection;
@@ -28,6 +29,7 @@ class TrnProjectUserService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_PROJECT_USER_UPDATE  => $this->execAppProjectUserUpdate($pipe),
+                EPipeKind::APP_USER_DELETE          => $this->execAppUserDelete($pipe),
                 default                             => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -67,6 +69,19 @@ class TrnProjectUserService extends ModelServiceBase
         $delLog      = json_encode($delUserList->toArray());
         $addLog      = json_encode($addUserList->toArray());
         Log::info("execAppProjectUserUpdate del:$delLog add:$addLog");
+    }
+
+    /**
+     * EPipeKind::APP_USER_DELETE
+     */
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipeAppUserDelete
+    ): void {
+        // ユーザーを削除.
+        TrnProjectUser::query()
+            ->where('trn_user_id', $pipeAppUserDelete->trnUserId)
+            ->alive()
+            ->delete();
     }
 
     /**

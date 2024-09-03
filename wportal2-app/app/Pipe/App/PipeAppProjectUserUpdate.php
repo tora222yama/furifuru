@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Pipe\App;
 
 use App\Enum\App\EPipeKind;
-use App\GraphQL\PipeBase;
+use App\Pipe\PipeBase;
 use Illuminate\Support\Collection;
 
 final class PipeAppProjectUserUpdate extends PipeBase

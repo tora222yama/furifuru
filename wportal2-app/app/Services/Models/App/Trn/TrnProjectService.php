@@ -7,11 +7,11 @@ namespace App\Services\Models\App\Trn;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnProject;
 use App\Pipe\App\PipeAppProjectCreate;
 use App\Pipe\App\PipeAppProjectDelete;
 use App\Pipe\App\PipeAppProjectUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
 use Throwable;
@@ -48,7 +48,7 @@ class TrnProjectService extends ModelServiceBase
     }
 
     /**
-     * にすみ - プロジェクトの削除用
+     * @throws Exception
      */
     private function execAppProjectDelete(
         PipeAppProjectDelete|PipeBase $pipe
@@ -64,7 +64,7 @@ class TrnProjectService extends ModelServiceBase
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
 
         // 削除を保存.
-        $target->updateOrFail();
+        $this->updateOrFail($target);
     }
 
     /**

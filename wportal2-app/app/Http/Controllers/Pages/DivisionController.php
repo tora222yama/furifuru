@@ -9,6 +9,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnDivisionService;
 use App\Facades\Models\App\Trn\TrnDivisionUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppDivisionDelete;
 use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Pipe\App\PipeAppDivisionUserUpdate;
 use Exception;
@@ -176,5 +177,24 @@ class DivisionController extends Controller
             $request->route('divisionId'),
             $with,
         )->toPayload($with);
+    }
+
+    /**
+     * 課の削除処理
+     */
+    public function delete(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppDivisionDelete($request->toArray())
+        );
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 課の削除.
+            TrnDivisionService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::DIVISION->getInvokePath());
     }
 }

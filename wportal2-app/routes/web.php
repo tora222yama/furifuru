@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/attendance/delete', EPages::ATTENDANCE_DELETE->getInvokePath());
     Route::post('/attendance/project_priority', EPages::ATTENDANCE_PROJECT_PRIORITY->getInvokePath());
     Route::post('/attendance/division_priority', EPages::ATTENDANCE_DIVISION_PRIORITY->getInvokePath());
+    Route::match(['get', 'post'], '/attendance/edit', EPages::ATTENDANCE__EDIT->getInvokePath());
+    Route::post('/attendance/edit/update', EPages::ATTENDANCE__EDIT__UPDATE->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
     Route::get('/division/{divisionId}/show', EPages::DIVISION__SHOW->getInvokePath())
         ->where('divisionId', '[0-9]+');
@@ -31,6 +33,7 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('divisionId', '[0-9]+');
     Route::post('/division/update', EPages::DIVISION__UPDATE->getInvokePath());
     Route::post('/division/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
+    Route::post('/division/delete', EPages::DIVISION__DELETE->getInvokePath());
     Route::match(['get', 'post'], '/project', EPages::PROJECT->getInvokePath());
     Route::get('/project/{projectId}/show', EPages::PROJECT__SHOW->getInvokePath())
         ->where('projectId', '[0-9]+');
@@ -49,9 +52,24 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/user/update', EPages::USER__UPDATE->getInvokePath());
     Route::get('/user/new', EPages::USER__NEW->getInvokePath());
     Route::post('/user/create', EPages::USER__CREATE->getInvokePath());
+    Route::post('/user/delete', EPages::USER__DELETE->getInvokePath());
     Route::get('/personal_setting/show', EPages::PERSONAL_SETTING__SHOW->getInvokePath());
     Route::get('/personal_setting/edit', EPages::PERSONAL_SETTING__EDIT->getInvokePath());
     Route::post('/personal_setting/update', EPages::PERSONAL_SETTING__UPDATE->getInvokePath());
+
+    /**
+     * サンプルページ用.
+     */
+    Route::get('/sample/dashboard', '\App\Http\Controllers\Pages\Sample\DashboardController@invoke');
+    Route::get('/sample/mvc_value', '\App\Http\Controllers\Pages\Sample\MvcValueController@invoke');
+    Route::get('/sample/input_form', '\App\Http\Controllers\Pages\Sample\InputFormController@invoke');
+    Route::post('/sample/input_form/create', '\App\Http\Controllers\Pages\Sample\InputFormController@create');
+    Route::get('/sample/redis', '\App\Http\Controllers\Pages\Sample\RedisController@invoke');
+    Route::post('/sample/redis_post_result', '\App\Http\Controllers\Pages\Sample\RedisPostResultController@invoke');
+    Route::get('/sample/slack_log', '\App\Http\Controllers\Pages\Sample\SlackLogController@invoke');
+    Route::match(['get', 'post'], '/sample/pagination', '\App\Http\Controllers\Pages\Sample\PaginationController@invoke');
+    Route::get('/sample/intern', '\App\Http\Controllers\Pages\Sample\InternController@invoke');
+    Route::get('/sample/inertia_data', '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke');
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
@@ -61,6 +79,7 @@ Route::get('/login', EPages::LOGIN->getInvokePath())
     ->name('login');
 Route::post('/legacy_login', EPages::LEGACY_LOGIN->getInvokePath());
 Route::post('/onetime_password_login', EPages::ONETIME_PASSWORD_LOGIN->getInvokePath());
+Route::post('/sp_login', EPages::SP_LOGIN->getInvokePath());
 Route::get('/auth/google', '\App\Http\Controllers\Pages\LoginController@getGoogleAuth');
 Route::get('/login/googleCallback', '\App\Http\Controllers\Pages\LoginController@authGoogleCallback');
 Route::get('/logout', '\App\Http\Controllers\Pages\LoginController@logout');

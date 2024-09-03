@@ -65,8 +65,8 @@ export class DateTime {
    */
   public endOfMonth(): DateTime {
     const ret = this.newDate();
-    ret.setMonth(ret.getMonth() + 1);
     ret.setDate(0);
+    ret.setMonth(ret.getMonth() + 1);
     ret.setHours(23);
     ret.setMinutes(59);
     ret.setSeconds(59);

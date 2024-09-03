@@ -5,13 +5,18 @@ export const E_ICON = {
   INVALID: 'invalid',
 
   ADD: 'add',
+  ARROW_LEFT: 'arrow_left',
+  ARROW_RIGHT: 'arrow_right',
   ATTENDANCE: 'attendance',
   BUILD: 'build',
   CACHED: 'cached',
   CAFE: 'cafe',
+  CIRCLE: 'circle',
+  CLEAR: 'clear',
   DASHBOARD: 'dashboard',
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
+  FAVICON: 'favicon.png',
   GOOGLE: 'google_icon.svg',
   HELP: 'help',
   HOME: 'home',
@@ -39,6 +44,10 @@ export const getIconWidth = (icon: EIcon): string => {
   switch (icon) {
     case E_ICON.ADD:
       return '20px';
+    case E_ICON.ARROW_LEFT:
+      return '32px';
+    case E_ICON.ARROW_RIGHT:
+      return '32px';
     case E_ICON.ATTENDANCE:
       return '20px';
     case E_ICON.BUILD:
@@ -47,12 +56,18 @@ export const getIconWidth = (icon: EIcon): string => {
       return '32px';
     case E_ICON.CAFE:
       return '20px';
+    case E_ICON.CIRCLE:
+      return '20px';
+    case E_ICON.CLEAR:
+      return '20px';
     case E_ICON.DASHBOARD:
       return '20px';
     case E_ICON.EXPAND_LESS:
       return '20px';
     case E_ICON.EXPAND_MORE:
       return '20px';
+    case E_ICON.FAVICON:
+      return '64px';
     case E_ICON.GOOGLE:
       return '18px';
     case E_ICON.HELP:
@@ -82,6 +97,10 @@ export const getIconHeight = (icon: EIcon): string => {
   switch (icon) {
     case E_ICON.ADD:
       return '20px';
+    case E_ICON.ARROW_LEFT:
+      return '32px';
+    case E_ICON.ARROW_RIGHT:
+      return '32px';
     case E_ICON.ATTENDANCE:
       return '20px';
     case E_ICON.BUILD:
@@ -90,12 +109,18 @@ export const getIconHeight = (icon: EIcon): string => {
       return '32px';
     case E_ICON.CAFE:
       return '20px';
+    case E_ICON.CIRCLE:
+      return '20px';
+    case E_ICON.CLEAR:
+      return '20px';
     case E_ICON.DASHBOARD:
       return '20px';
     case E_ICON.EXPAND_LESS:
       return '20px';
     case E_ICON.EXPAND_MORE:
       return '20px';
+    case E_ICON.FAVICON:
+      return '64px';
     case E_ICON.GOOGLE:
       return '18px';
     case E_ICON.HELP:

@@ -7,12 +7,16 @@ namespace App\Services\Models\App\Trn;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Trn\TrnAttendanceState;
+use App\Pipe\App\Input\InputEvent;
 use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppAttendanceDelete;
+use App\Pipe\App\PipeAppAttendanceEditUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnAttendanceStateService extends ModelServiceBase
@@ -29,6 +33,7 @@ class TrnAttendanceStateService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_ATTENDANCE_DELETE            => $this->execAppAttendanceStateDelete($pipe),
+                EPipeKind::App_ATTENDANCE_EDIT_UPDATE       => $this->execAppAttendanceEditUpdate($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
@@ -78,5 +83,42 @@ class TrnAttendanceStateService extends ModelServiceBase
 
         // 削除を保存.
         $target->updateOrFail();
+    }
+
+    /**
+     * 勤怠時間の更新.
+     *
+     * @throws Exception
+     */
+    private function execAppAttendanceEditUpdate(
+        PipeAppAttendanceEditUpdate|PipeBase $pipe
+    ): void {
+        $pipe->eventList->each(function (InputEvent $event) {
+            $model             = $this->findByIdOrFail($event->uid);
+            $model->updated_at = $event->updatedAt;
+            $this->updateOrFail($model);
+        });
+    }
+
+    public function findByIdOrFail(int $id): ?TrnAttendanceState
+    {
+        return TrnAttendanceState::query()
+            ->alive()
+            ->findOrFail($id);
+    }
+
+    /**
+     * ユーザーIDと期間を指定して、出退勤情報を取得.
+     */
+    public function listByUserIdAndPeriod(
+        int $trnUserId,
+        Carbon $startOfMonth,
+        Carbon $endOfMonth
+    ): Collection {
+        return TrnAttendanceState::query()
+            ->where('trn_user_id', $trnUserId)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->alive()
+            ->get();
     }
 }

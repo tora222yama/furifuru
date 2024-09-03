@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InputField } from '@/script/Component/Form/InputField';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { E_COLOR } from '@/script/Enum/EColor';
 
 export interface IFormLegacyLogin {
   email: string;
@@ -27,19 +28,19 @@ export const FormLegacyLogin: React.FC<IProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '5px',
+        gap: '20px',
         ...sx,
       }}
       component="form"
     >
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <TypoText sx={{ minWidth: '100px' }}>email</TypoText>
+      <Box>
+        <TypoText>ワンタイムパスワードでログイン</TypoText>
+        <TypoText bold color={E_COLOR.TEXT_RED}>
+          ※gmail以外のアドレス
+        </TypoText>
+      </Box>
+      <Box sx={{ width: '100%' }}>
+        <TypoText size="12px">メールアドレス</TypoText>
         <InputField
           sx={{
             width: '100%',
@@ -54,14 +55,8 @@ export const FormLegacyLogin: React.FC<IProps> = ({
           visibleError
         />
       </Box>
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <TypoText sx={{ minWidth: '100px' }}>password</TypoText>
+      <Box sx={{ width: '100%' }}>
+        <TypoText size="12px">パスワード</TypoText>
         <InputField
           sx={{
             width: '100%',
@@ -79,11 +74,11 @@ export const FormLegacyLogin: React.FC<IProps> = ({
       </Box>
       <ButtonGeneral
         sx={{
-          marginTop: '10px',
-          minWidth: '200px',
+          width: '80%',
+          height: '60px',
           padding: '2px 5px',
         }}
-        label="ワンタイムパスワードでログイン"
+        label="ログイン"
         onClick={handleSubmit}
         disabled={!formLegacyLogin.email || !formLegacyLogin.password}
       />

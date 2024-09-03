@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Auth;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
-use App\GraphQL\PipeBase;
 use App\Models\App\Auth\AuthUser;
 use App\Pipe\App\PipeAppLegacyLogin;
+use App\Pipe\App\PipeAppPersonalSettingSpConfirmCode;
+use App\Pipe\App\PipeAppPersonalSettingSpPassword;
 use App\Pipe\App\PipeAppUserCreate;
+use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\App\PipeAppUserUpdate;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Carbon\Carbon;
 use Exception;
+use PragmaRX\Google2FA\Google2FA;
 use Throwable;
 
 class AuthUserService extends ModelServiceBase
@@ -29,10 +34,13 @@ class AuthUserService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
-                EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
-                EPipeKind::APP_USER_UPDATE                  => $this->execAppUserUpdate($pipe),
-                EPipeKind::APP_LEGACY_LOGIN                 => $this->execAppLegacyLogin($pipe),
-                default                                     => throw new Exception(),
+                EPipeKind::APP_USER_CREATE                      => $this->execAppUserCreate($pipe),
+                EPipeKind::APP_USER_UPDATE                      => $this->execAppUserUpdate($pipe),
+                EPipeKind::APP_USER_DELETE                      => $this->execAppUserDelete($pipe),
+                EPipeKind::APP_LEGACY_LOGIN                     => $this->execAppLegacyLogin($pipe),
+                EPipeKind::APP_PERSONAL_SETTING_SP_PASSWORD     => $this->execAppPersonalSettingSpPassword($pipe),
+                EPipeKind::APP_PERSONAL_SETTING_SP_CONFIRM_CODE => $this->execAppPersonalSettingSpConfirmCode($pipe),
+                default                                         => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -81,6 +89,25 @@ class AuthUserService extends ModelServiceBase
     /**
      * @throws Exception
      */
+    private function execAppUserDelete(
+        PipeAppUserDelete|PipeBase $pipe
+    ): void {
+        // 対象データを取得.
+        $target                  = AuthUser::query()
+            ->where('id', $pipe->authUserId)
+            ->alive()
+            ->firstOrFail();
+
+        // 対象データを削除.
+        $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
+
+        // 削除を保存.
+        $this->updateOrFail($target);
+    }
+
+    /**
+     * @throws Exception
+     */
     private function execAppLegacyLogin(
         PipeAppLegacyLogin|PipeBase $pipe
     ): void {
@@ -100,6 +127,67 @@ class AuthUserService extends ModelServiceBase
         $pipe->targetAuthUser->onetime_password         = $onetimePassword;
         $pipe->targetAuthUser->onetime_password_expired = $expired;
         $this->updateOrFail($pipe->targetAuthUser);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppPersonalSettingSpPassword(
+        PipeAppPersonalSettingSpPassword|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->authUser)) {
+            throw new Exception();
+        }
+        $authUser                       = $pipe->authUser;
+
+        // SPログインの禁止
+        $authUser->e_enable_sp_login    = EEnableFlag::INVALID->value;
+
+        // パスワードの更新.
+        $authUser->sp_password          = $pipe->password;
+
+        // シークレットの更新.
+        $google2fa                      = new Google2FA();
+        $authUser->sp_google_2fa_secret = $google2fa->generateSecretKey();
+
+        // DB保存.
+        $this->updateOrFail($authUser);
+
+        // URL作成.
+        $name                           = isLocal() ? 'wportal2(local)' : 'Web本部ポータル2';
+        $pipe->resultUrl                = $google2fa->getQRCodeUrl(
+            $name,
+            $authUser->email,
+            $authUser->sp_google_2fa_secret
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppPersonalSettingSpConfirmCode(
+        PipeAppPersonalSettingSpConfirmCode|PipeBase $pipe
+    ): void {
+        if (is_null($pipe->authUser)) {
+            throw new Exception();
+        }
+        $authUser      = $pipe->authUser;
+
+        // コード.
+        $code          = $pipe->code;
+
+        // シークレット.
+        $secret        = $authUser->sp_google_2fa_secret;
+
+        // 認証確認.
+        $google2fa     = new Google2FA();
+        $pipe->isValid = $google2fa->verifyKey($secret, $code);
+        if ($pipe->isValid) {
+            // ログイン失敗回数を0に初期化してSPログインの許可.
+            $authUser->e_enable_sp_login     = EEnableFlag::ENABLE->value;
+            $authUser->sp_login_failed_count = 0;
+            $this->updateOrFail($authUser);
+        }
     }
 
     /**

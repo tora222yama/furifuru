@@ -20,6 +20,14 @@ export const E_MENU = {
   ADMIN_ROOT: 'admin_root', // 管理.
   ADMIN_DATA: 'admin_data', // データ.
   ADMIN_COMMAND: 'admin_command', // コマンド.
+  SAMPLE_INTERN_ROOT: 'sample_intern_root',
+  SAMPLE_INTERN_MVC_VALUE: 'sample_intern_mvc_value',
+  SAMPLE_INTERN_INPUT_FORM: 'sample_intern_input_form',
+  SAMPLE_INTERN_REDIS: 'sample_intern_redis',
+  SAMPLE_INTERN_SLACK_LOG: 'sample_intern_slack_log',
+  SAMPLE_INTERN_PAGINATION: 'sample_intern_pagination',
+  SAMPLE_INTERN_INTERN: 'sample_intern_intern',
+  SAMPLE_INTERN_INERTIA_DATA: 'sample_intern_inertia_data',
 } as const;
 export type EMenu = (typeof E_MENU)[keyof typeof E_MENU];
 
@@ -146,6 +154,70 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.ADMIN_ROOT,
     back: E_PAGES.INVALID,
     name: 'データ',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_ROOT,
+    pages: E_PAGES.INVALID,
+    parent: E_MENU.INVALID,
+    back: E_PAGES.INVALID,
+    name: 'インターン',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_MVC_VALUE,
+    pages: E_PAGES.SAMPLE_MVC_VALUE,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv01.MVC値',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_INTERN,
+    pages: E_PAGES.SAMPLE_INTERN,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv02.コンポーネント',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_INERTIA_DATA,
+    pages: E_PAGES.SAMPLE_INERTIA_DATA,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv03.データ受信',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_REDIS,
+    pages: E_PAGES.SAMPLE_REDIS,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv04.Redis操作',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_INPUT_FORM,
+    pages: E_PAGES.SAMPLE_INPUT_FORM,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv05.入力フォーム',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_PAGINATION,
+    pages: E_PAGES.SAMPLE_PAGINATION,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv06.ページネーション',
+    icon: E_ICON.BUILD,
+  },
+  {
+    menu: E_MENU.SAMPLE_INTERN_SLACK_LOG,
+    pages: E_PAGES.SAMPLE_SLACK_LOG,
+    parent: E_MENU.SAMPLE_INTERN_ROOT,
+    back: E_PAGES.INVALID,
+    name: 'Lv--.Slackログ',
     icon: E_ICON.BUILD,
   },
 ];

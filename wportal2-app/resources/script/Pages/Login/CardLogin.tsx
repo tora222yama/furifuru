@@ -13,10 +13,11 @@ export const CardLogin: React.FC<IProps> = () => {
     <Paper
       sx={{
         padding: '20px',
-        width: '460px',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'hidden',
       }}
     >
       <TypoH2>Web本部ポータル</TypoH2>
