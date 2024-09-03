@@ -9,6 +9,7 @@ import { Myself } from '@/script/Pages/Attendance/Myself/Myself';
 import { Action } from '@/script/Pages/Attendance/Action/Action';
 import { Member } from '@/script/Pages/Attendance/Member/Member';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Attendance: React.FC<IProps> = () => {
@@ -26,12 +27,12 @@ export const Attendance: React.FC<IProps> = () => {
       </Box>
       <Myself
         sx={{
-          marginTop: '20px',
+          marginTop: responsiveSpacing(4),
         }}
       />
-      <Action sx={{ marginTop: '20px' }} />
-      <TypoH2 sx={{ marginTop: '20px' }}>他メンバーの状況</TypoH2>
-      <Member sx={{ marginTop: '20px' }} />
+      <Action sx={{ marginTop: responsiveSpacing(4) }} />
+      <TypoH2 sx={{ marginTop: responsiveSpacing(4) }}>他メンバーの状況</TypoH2>
+      <Member sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
 };

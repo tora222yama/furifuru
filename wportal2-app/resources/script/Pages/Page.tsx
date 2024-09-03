@@ -6,6 +6,7 @@ import { DrawerDesktop } from '@/script/Component/Drawer/DrawerDesktop';
 import { DisplayDesktop } from '@/script/Component/Misc/DisplayDesktop';
 import { DisplayMobile } from '@/script/Component/Misc/DisplayMobile';
 import { AppBarMobile } from '@/script/Component/AppBar/AppBarMobile';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Page: React.FC<IProps> = ({ sx, children }) => {
@@ -36,7 +37,7 @@ export const Page: React.FC<IProps> = ({ sx, children }) => {
       >
         <Box
           sx={{
-            padding: '20px',
+            padding: responsiveSpacing(4),
           }}
         >
           {children}

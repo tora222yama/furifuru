@@ -23,6 +23,7 @@ export const themeCommon = createTheme({
       primary: E_COLOR.TEXT_PRIMARY,
     },
   },
+  spacing: 6,
   typography: {
     fontFamily: "'Noto Sans JP', sans-serif;",
     h1: {
@@ -97,13 +98,3 @@ export const themeCommon = createTheme({
     },
   },
 });
-
-/**
- * フォントサイズ・レスポンシブ調整:h1
- */
-themeCommon.typography.h1 = {
-  fontSize: '28px',
-  [themeCommon.breakpoints.down('sm')]: {
-    fontSize: '18px',
-  },
-};

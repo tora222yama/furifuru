@@ -5,6 +5,7 @@ import { EIcon } from '@/script/Enum/EIcon';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   icon: EIcon;
@@ -14,9 +15,8 @@ export const Status: React.FC<IProps> = ({ sx, icon, label }) => {
   return (
     <Box
       sx={{
-        width: '240px',
-        height: '50px',
-        borderRadius: '8px',
+        padding: responsiveSpacing(4),
+        borderRadius: responsiveSpacing(4),
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -26,7 +26,7 @@ export const Status: React.FC<IProps> = ({ sx, icon, label }) => {
     >
       <Icon
         sx={{
-          marginRight: '10px',
+          marginRight: responsiveSpacing(2),
         }}
         icon={icon}
       />
