@@ -23,8 +23,6 @@ import {
   getPagesHref,
   getPagesName,
 } from '@/script/Enum/Server/App/EPages';
-import { Str } from '@/script/Common/Str';
-import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -111,19 +109,18 @@ export const Show: React.FC<IProps> = () => {
           padding: '20px',
         }}
       >
-        <Grid sx={{ width: '700px' }}>
+        <Grid sx={{ width: '600px' }}>
           <Grid>
             <Image
               sx={{
                 borderRadius: '24px',
                 width: '130px',
                 height: '130px',
-                paddingBottom: '20px',
               }}
               src={String(authUser.trnUser?.faceImagePath)}
             />
           </Grid>
-          <Grid sx={{ marginTop: '10px' }}>
+          <Grid sx={{ marginTop: '35px' }}>
             <LabelValue label="名前" value={authUser.name} />
             <LabelValue
               sx={{ marginTop: '10px' }}
@@ -141,56 +138,12 @@ export const Show: React.FC<IProps> = () => {
             />
           </Grid>
           <Grid>
-            <TypoH2
+            <SlackInfo
               sx={{
-                paddingTop: '35px',
+                marginTop: '35px',
               }}
-            >
-              Slack情報
-            </TypoH2>
-            <Box
-              sx={{
-                marginTop: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-              }}
-            >
-              <LabelValue
-                label="Slack User ID"
-                value={
-                  Str.exceptEmpty(trnUserSlackProfile.slackUserId) ?? '設定なし'
-                }
-                valueSx={{
-                  color: Str.exceptEmpty(trnUserSlackProfile.slackUserId)
-                    ? 'inherit'
-                    : `${E_COLOR.GREY}`,
-                }}
-              />
-              <LabelValue
-                label="Slack User Name"
-                value={
-                  Str.exceptEmpty(trnUserSlackProfile.slackUserName) ??
-                  '設定なし'
-                }
-                valueSx={{
-                  color: Str.exceptEmpty(trnUserSlackProfile.slackUserId)
-                    ? 'inherit'
-                    : `${E_COLOR.GREY}`,
-                }}
-              />
-              <LabelValue
-                label="Slack Team ID"
-                value={
-                  Str.exceptEmpty(trnUserSlackProfile.slackTeamId) ?? '設定なし'
-                }
-                valueSx={{
-                  color: Str.exceptEmpty(trnUserSlackProfile.slackUserId)
-                    ? 'inherit'
-                    : `${E_COLOR.GREY}`,
-                }}
-              />
-            </Box>
+              trnUserSlackProfile={trnUserSlackProfile}
+            />
           </Grid>
           <Grid>
             <TypoText
@@ -206,17 +159,18 @@ export const Show: React.FC<IProps> = () => {
               sx={{
                 display: 'inline-block',
                 borderRadius: '8px',
-                width: 'auto',
+                width: '700px',
                 maxWidth: '100%',
                 padding: '10px',
                 border: '1px solid #ddd',
+                height: '10em',
                 overflowY: 'auto',
               }}
             >
               <TypoText
                 sx={{
-                  height: 'auto',
                   whiteSpace: 'pre-wrap',
+                  fontSize: '14px',
                   color: authUser.trnUser?.selfIntroduction
                     ? 'inherit'
                     : `${E_COLOR.GREY}`,
@@ -227,12 +181,6 @@ export const Show: React.FC<IProps> = () => {
               </TypoText>
             </Box>
           </Grid>
-          <SlackInfo
-            sx={{
-              marginTop: '20px',
-            }}
-            trnUserSlackProfile={trnUserSlackProfile}
-          />
           <AuthenticatorInfo
             sx={{
               marginTop: '20px',

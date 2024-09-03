@@ -148,9 +148,9 @@ export const FormEdit: React.FC<IProps> = ({
             onChange={selfIntroduction => handleUpdate({ selfIntroduction })}
             errors={validation.data.selfIntroduction?.errors}
             placeHolder="自己紹介を入力してください"
-            rows={5}
+            rows={8}
             inputProps={{
-              width: '500px',
+              width: '700px',
             }}
           />
         </Box>
