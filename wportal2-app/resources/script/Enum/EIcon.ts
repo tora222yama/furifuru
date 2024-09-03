@@ -36,108 +36,38 @@ export const getIconPath = (icon: EIcon): string => {
   return `/image/icon/${icon}`;
 };
 
-/**
- * アイコンの基本widthを取得.
- * @param icon
- */
-export const getIconWidth = (icon: EIcon): string => {
+export const getIconSize = (icon: EIcon): { w: number; h: number } => {
   switch (icon) {
     case E_ICON.ADD:
-      return '20px';
-    case E_ICON.ARROW_LEFT:
-      return '32px';
-    case E_ICON.ARROW_RIGHT:
-      return '32px';
     case E_ICON.ATTENDANCE:
-      return '20px';
     case E_ICON.BUILD:
-      return '20px';
-    case E_ICON.CACHED:
-      return '32px';
     case E_ICON.CAFE:
-      return '20px';
     case E_ICON.CIRCLE:
-      return '20px';
     case E_ICON.CLEAR:
-      return '20px';
     case E_ICON.DASHBOARD:
-      return '20px';
     case E_ICON.EXPAND_LESS:
-      return '20px';
     case E_ICON.EXPAND_MORE:
-      return '20px';
-    case E_ICON.FAVICON:
-      return '64px';
-    case E_ICON.GOOGLE:
-      return '18px';
     case E_ICON.HELP:
-      return '20px';
     case E_ICON.HOME:
-      return '20px';
     case E_ICON.OFFICE:
-      return '20px';
     case E_ICON.REMOVE:
-      return '20px';
     case E_ICON.SHOP:
-      return '20px';
     case E_ICON.STAR:
-      return '20px';
     case E_ICON.STAR_OUTLINE:
-      return '20px';
-    default:
-      return '0px';
-  }
-};
+      return { w: 20, h: 20 };
 
-/**
- * アイコンの基本heightを取得.
- * @param icon
- */
-export const getIconHeight = (icon: EIcon): string => {
-  switch (icon) {
-    case E_ICON.ADD:
-      return '20px';
     case E_ICON.ARROW_LEFT:
-      return '32px';
     case E_ICON.ARROW_RIGHT:
-      return '32px';
-    case E_ICON.ATTENDANCE:
-      return '20px';
-    case E_ICON.BUILD:
-      return '20px';
     case E_ICON.CACHED:
-      return '32px';
-    case E_ICON.CAFE:
-      return '20px';
-    case E_ICON.CIRCLE:
-      return '20px';
-    case E_ICON.CLEAR:
-      return '20px';
-    case E_ICON.DASHBOARD:
-      return '20px';
-    case E_ICON.EXPAND_LESS:
-      return '20px';
-    case E_ICON.EXPAND_MORE:
-      return '20px';
+      return { w: 32, h: 32 };
+
     case E_ICON.FAVICON:
-      return '64px';
+      return { w: 64, h: 64 };
+
     case E_ICON.GOOGLE:
-      return '18px';
-    case E_ICON.HELP:
-      return '20px';
-    case E_ICON.HOME:
-      return '20px';
-    case E_ICON.OFFICE:
-      return '20px';
-    case E_ICON.REMOVE:
-      return '20px';
-    case E_ICON.SHOP:
-      return '20px';
-    case E_ICON.STAR:
-      return '20px';
-    case E_ICON.STAR_OUTLINE:
-      return '20px';
+      return { w: 18, h: 18 };
+
     default:
-      return '0px';
+      return { w: 0, h: 0 };
   }
 };

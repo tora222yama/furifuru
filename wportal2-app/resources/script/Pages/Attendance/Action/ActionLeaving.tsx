@@ -7,6 +7,7 @@ import {
   getLabelAttendanceState,
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   handleClick: (state: EAttendanceState) => void;
@@ -22,7 +23,7 @@ export const ActionLeaving: React.FC<IProps> = ({ sx, handleClick }) => {
     >
       <ButtonGeneral
         sx={{
-          width: '200px',
+          width: responsiveSize(200),
         }}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.LEAVING)}
         onClick={() => handleClick(E_ATTENDANCE_STATE.LEAVING)}

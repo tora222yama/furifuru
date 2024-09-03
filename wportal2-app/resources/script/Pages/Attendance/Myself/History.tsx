@@ -15,7 +15,10 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
-import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
+import {
+  responsiveSizeBySpacing,
+  responsiveSpacing,
+} from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const History: React.FC<IProps> = ({ sx }) => {
@@ -78,7 +81,7 @@ export const History: React.FC<IProps> = ({ sx }) => {
                     borderColor: E_COLOR.PRIMARY_DARK,
                   },
                   '.MuiSvgIcon-root': {
-                    width: responsiveSize(4),
+                    width: responsiveSizeBySpacing(4),
                   },
                 }}
               >

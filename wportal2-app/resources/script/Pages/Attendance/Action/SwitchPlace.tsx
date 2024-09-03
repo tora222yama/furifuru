@@ -12,6 +12,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   handleClick: (state: EAttendanceState) => void;
@@ -29,7 +30,7 @@ export const SwitchPlace: React.FC<IProps> = ({ handleClick }) => {
       {/* オフィス勤務の場合 */}
       {workingPlace === E_WORKING_PLACE.HOME && (
         <ButtonGeneral
-          sx={{ width: '200px' }}
+          sx={{ width: responsiveSize(200) }}
           startIcon={<Icon icon={E_ICON.OFFICE} />}
           label="オフィス勤務へ切替"
           onClick={() => handleClick(E_ATTENDANCE_STATE.SWITCH_TO_OFFICE)}
@@ -38,7 +39,7 @@ export const SwitchPlace: React.FC<IProps> = ({ handleClick }) => {
       {/* 在宅勤務の場合 */}
       {workingPlace === E_WORKING_PLACE.OFFICE && (
         <ButtonGeneral
-          sx={{ width: '200px' }}
+          sx={{ width: responsiveSize(200) }}
           startIcon={<Icon icon={E_ICON.HOME} />}
           label="在宅勤務へ切替"
           onClick={() => handleClick(E_ATTENDANCE_STATE.SWITCH_TO_TELEWORK)}

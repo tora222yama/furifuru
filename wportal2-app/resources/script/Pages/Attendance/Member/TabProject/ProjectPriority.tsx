@@ -8,6 +8,7 @@ import { Icon } from '@/script/Component/Misc/Icon';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { AppTrnUserProjectPriorityList } from '@/script/Models/App/Trn/TrnUserProjectPriorityList';
+import { E_COLOR } from '@/script/Enum/EColor';
 
 interface IStar {
   priority: number;
@@ -65,12 +66,12 @@ export const ProjectPriority: React.FC<IProps> = ({ sx, trnProject }) => {
         return (
           <Icon
             sx={{
-              color: '#F5CD3B',
+              color: E_COLOR.YELLOW,
               cursor: 'pointer',
             }}
             key={star.priority}
             icon={star.icon}
-            size="32px"
+            size={32}
             onClick={() => handleClickStar(star)}
           />
         );
