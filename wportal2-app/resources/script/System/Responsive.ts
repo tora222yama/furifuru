@@ -6,21 +6,21 @@ import { themeCommon } from '@/script/System/Theme';
 themeCommon.typography.h1 = {
   ...themeCommon.typography.h1,
   fontSize: '28px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '14px',
   },
 };
 themeCommon.typography.h2 = {
   ...themeCommon.typography.h2,
   fontSize: '20px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '10px',
   },
 };
 themeCommon.typography.h3 = {
   ...themeCommon.typography.h3,
   fontSize: '18px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '9px',
   },
 };
@@ -31,14 +31,14 @@ themeCommon.typography.h3 = {
 themeCommon.typography.body1 = {
   ...themeCommon.typography.body1,
   fontSize: '16px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '10px',
   },
 };
 themeCommon.typography.body2 = {
   ...themeCommon.typography.body1,
   fontSize: '14px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '8px',
   },
 };
@@ -49,7 +49,7 @@ themeCommon.typography.body2 = {
 themeCommon.typography.button = {
   ...themeCommon.typography.button,
   fontSize: '16px',
-  [themeCommon.breakpoints.down('sm')]: {
+  [themeCommon.breakpoints.down('md')]: {
     fontSize: '8px',
   },
 };
@@ -61,7 +61,8 @@ themeCommon.typography.button = {
 export const responsiveSpacing = (unit: number) => {
   return {
     xs: unit / 2,
-    sm: unit,
+    sm: unit / 2,
+    md: unit,
   };
 };
 
@@ -72,7 +73,8 @@ export const responsiveSpacing = (unit: number) => {
 export const responsiveSizeBySpacing = (unit: number) => {
   return {
     xs: themeCommon.spacing(unit / 2),
-    sm: themeCommon.spacing(unit),
+    sm: themeCommon.spacing(unit / 2),
+    md: themeCommon.spacing(unit),
   };
 };
 
@@ -82,7 +84,8 @@ export const responsiveSizeBySpacing = (unit: number) => {
  */
 export const responsiveSize = (size: number) => {
   return {
-    xs: `${size / 2}px`,
-    sm: `${size}px`,
+    sx: `${size / 2}px`,
+    sm: `${size / 2}px`,
+    md: `${size}px`,
   };
 };
