@@ -9,6 +9,7 @@ import { useMutationAppPersonalSettingSpConfirmCode } from '@/script/Hooks/App/M
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { InputField } from '@/script/Component/Form/InputField';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormCode {
   code: string;
@@ -50,7 +51,7 @@ export const ContentConfirmCode: React.FC<IProps> = ({
   return (
     <>
       <TypoText bold>Step 2/3</TypoText>
-      <TypoText sx={{ marginTop: '10px' }}>
+      <TypoText sx={{ marginTop: responsiveSpacing(2) }} noWrap={false}>
         下記QRを「Google
         Authenticator」で読み取り、表示されたコードを入力してください。
       </TypoText>
@@ -58,21 +59,24 @@ export const ContentConfirmCode: React.FC<IProps> = ({
         sx={{
           width: 'fit-content',
           border: `1px solid ${E_COLOR.TEXT_PRIMARY}`,
-          margin: '10px',
-          padding: '5px 5px 0px',
+          margin: responsiveSpacing(2),
+          pt: responsiveSize(5),
+          px: responsiveSize(5),
+          pb: '0px',
         }}
       >
         <QRCodeCanvas value={url} />
       </Box>
       <Box
         sx={{
-          margin: '20px 0px 20px',
+          mx: responsiveSpacing(4),
+          my: '0px',
           display: 'flex',
           alignItems: 'center',
         }}
         component="form"
       >
-        <TypoText sx={{ width: '200px' }}>6桁のコード</TypoText>
+        <TypoText sx={{ width: responsiveSize(200) }}>6桁のコード</TypoText>
         <InputField
           inputValue={formCode.code}
           onChange={code => setFormCode({ code })}
@@ -81,6 +85,7 @@ export const ContentConfirmCode: React.FC<IProps> = ({
       </Box>
       <Box
         sx={{
+          marginTop: responsiveSpacing(4),
           display: 'flex',
           justifyContent: 'space-between',
         }}

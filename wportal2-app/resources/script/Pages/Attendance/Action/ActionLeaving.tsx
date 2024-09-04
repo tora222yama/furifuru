@@ -23,7 +23,7 @@ export const ActionLeaving: React.FC<IProps> = ({ sx, handleClick }) => {
     >
       <ButtonGeneral
         sx={{
-          width: responsiveSize(200),
+          width: responsiveSize(220),
         }}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.LEAVING)}
         onClick={() => handleClick(E_ATTENDANCE_STATE.LEAVING)}

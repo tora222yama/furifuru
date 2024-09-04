@@ -7,6 +7,7 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { ContentPassword } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentPassword';
 import { ContentConfirmCode } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentConfirmCode';
 import { ContentComplete } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentComplete';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 /**
  * ダイアログの状態管理.
@@ -92,15 +93,15 @@ export const AuthenticatorSettingDialog: React.FC<IProps> = ({ sx, open }) => {
       }}
       PaperProps={{
         style: {
-          width: '800px',
-          maxWidth: '90%',
+          width: '100%',
+          maxWidth: '600px',
         },
       }}
       open={open}
     >
       <Paper
         sx={{
-          padding: '20px',
+          padding: responsiveSpacing(4),
         }}
       >
         {nodeContent()}

@@ -23,7 +23,7 @@ export const ActionWorking: React.FC<IProps> = ({ sx, handleClick }) => {
         }}
       >
         <ButtonGeneral
-          sx={{ width: responsiveSize(200) }}
+          sx={{ width: responsiveSize(220) }}
           label={getLabelAttendanceState(E_ATTENDANCE_STATE.BEGIN_BREAK)}
           onClick={() => handleClick(E_ATTENDANCE_STATE.BEGIN_BREAK)}
         />
@@ -39,7 +39,7 @@ export const ActionWorking: React.FC<IProps> = ({ sx, handleClick }) => {
         >
           <ButtonGeneral
             sx={{
-              width: responsiveSize(200),
+              width: responsiveSize(220),
             }}
             label={getLabelAttendanceState(E_ATTENDANCE_STATE.LEAVING)}
             onClick={() => handleClick(E_ATTENDANCE_STATE.LEAVING)}
