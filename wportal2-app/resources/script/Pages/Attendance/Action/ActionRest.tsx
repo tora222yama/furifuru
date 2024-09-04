@@ -8,6 +8,7 @@ import {
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { SwitchPlace } from '@/script/Pages/Attendance/Action/SwitchPlace';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   handleClick: (state: EAttendanceState) => void;
@@ -23,7 +24,7 @@ export const ActionRest: React.FC<IProps> = ({ sx, handleClick }) => {
     >
       <ButtonGeneral
         sx={{
-          width: '200px',
+          width: responsiveSize(200),
         }}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.END_BREAK)}
         onClick={() => handleClick(E_ATTENDANCE_STATE.END_BREAK)}

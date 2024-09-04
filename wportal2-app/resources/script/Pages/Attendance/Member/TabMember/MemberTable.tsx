@@ -25,6 +25,7 @@ import {
   getLabelAttendanceState,
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { DateTime } from '@/script/Common/DateTime';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,11 +34,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: '14px',
     height: '48px',
     padding: '5px 10px',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '8px',
+      height: '24px',
+      padding: '0px 5px',
+    },
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: '14px',
     height: '40px',
     padding: '5px 10px',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '8px',
+      height: '26px',
+      padding: '0px 5px',
+    },
   },
 }));
 
@@ -85,7 +96,7 @@ export const MemberTable: React.FC<IProps> = ({ sx, stateList }) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
+              gap: responsiveSpacing(2),
             }}
           >
             <TypoText>{getLabelWorkingState(state.workingState)}</TypoText>
@@ -125,9 +136,15 @@ export const MemberTable: React.FC<IProps> = ({ sx, stateList }) => {
       </Closable>
       <TableHead>
         <TableRow>
-          <StyledTableCell sx={{ width: '60px' }}>ID</StyledTableCell>
-          <StyledTableCell sx={{ width: '200px' }}>メンバー</StyledTableCell>
-          <StyledTableCell sx={{ width: '140px' }}>勤怠状態</StyledTableCell>
+          <StyledTableCell sx={{ width: responsiveSize(40) }}>
+            ID
+          </StyledTableCell>
+          <StyledTableCell sx={{ width: responsiveSize(200) }}>
+            メンバー
+          </StyledTableCell>
+          <StyledTableCell sx={{ width: responsiveSize(140) }}>
+            勤怠状態
+          </StyledTableCell>
           <StyledTableCell>最終アクション</StyledTableCell>
         </TableRow>
       </TableHead>

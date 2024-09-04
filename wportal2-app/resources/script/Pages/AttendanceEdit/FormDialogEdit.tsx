@@ -11,6 +11,7 @@ import {
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { DateTime } from '@/script/Common/DateTime';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormDialogEdit {
   eventList: IEvent[];
@@ -65,18 +66,24 @@ export const FormDialogEdit: React.FC<IProps> = ({
           <Box
             key={event.uid}
             sx={{
-              marginBottom: '10px',
+              marginBottom: responsiveSpacing(2),
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '20px',
+              gap: responsiveSpacing(4),
             }}
           >
             <Icon icon={icon} />
-            <TypoText sx={{ width: '160px' }}>
+            <TypoText sx={{ width: responsiveSize(160) }}>
               {getLabelAttendanceState(event.eAttendanceState)}
             </TypoText>
             <TextField
+              sx={{
+                '& .MuiOutlinedInput-input': {
+                  py: responsiveSize(16),
+                  px: responsiveSize(14),
+                },
+              }}
               type="time"
               value={event.updatedAt.toHHMM()}
               onChange={v => handleChangeTime(event, v.target.value)}
@@ -90,10 +97,13 @@ export const FormDialogEdit: React.FC<IProps> = ({
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
-        <ButtonGeneral sx={{ marginTop: '10px' }} onClick={handleSubmit}>
+        <ButtonGeneral
+          sx={{ marginTop: responsiveSpacing(2) }}
+          onClick={handleSubmit}
+        >
           更新する
         </ButtonGeneral>
       </Box>

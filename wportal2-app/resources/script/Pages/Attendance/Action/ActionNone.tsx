@@ -9,6 +9,7 @@ import {
 } from '@/script/Enum/Server/App/EAttendanceState';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   handleClick: (state: EAttendanceState) => void;
@@ -19,13 +20,13 @@ export const ActionNone: React.FC<IProps> = ({ sx, handleClick }) => {
       sx={{
         display: 'flex',
         flexFlow: 'column',
-        rowGap: '20px',
+        rowGap: responsiveSpacing(4),
         ...sx,
       }}
     >
       <ButtonGeneral
         sx={{
-          width: '200px',
+          width: responsiveSize(200),
         }}
         startIcon={<Icon icon={E_ICON.OFFICE} />}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.ATTENDANCE_OFFICE)}
@@ -33,7 +34,7 @@ export const ActionNone: React.FC<IProps> = ({ sx, handleClick }) => {
       />
       <ButtonGeneral
         sx={{
-          width: '200px',
+          width: responsiveSize(200),
         }}
         startIcon={<Icon icon={E_ICON.HOME} />}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.ATTENDANCE_TELEWORK)}
