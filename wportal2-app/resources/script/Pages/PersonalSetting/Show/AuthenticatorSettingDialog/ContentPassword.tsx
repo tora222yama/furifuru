@@ -14,6 +14,7 @@ import {
   parseServerValidation,
   validateAll,
 } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/ContentPasswordValidation';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormPassword {
   password: string;
@@ -67,19 +68,20 @@ export const ContentPassword: React.FC<IProps> = ({
   return (
     <>
       <TypoText bold>Step 1/3</TypoText>
-      <TypoText sx={{ marginTop: '10px' }}>
+      <TypoText sx={{ marginTop: responsiveSpacing(2) }} noWrap={false}>
         スマートフォンからログインする場合のパスワードを入力してください
       </TypoText>
       <TypoText color={E_COLOR.TEXT_RED}>※英数字8文字以上</TypoText>
       <Box
         sx={{
-          margin: '20px 0px 20px',
+          mx: '0px',
+          my: responsiveSpacing(4),
           display: 'flex',
           alignItems: 'center',
         }}
         component="form"
       >
-        <TypoText sx={{ width: '200px' }}>password</TypoText>
+        <TypoText sx={{ width: responsiveSize(200) }}>password</TypoText>
         <InputField
           type="password"
           inputValue={formPassword.password}

@@ -24,7 +24,7 @@ export const ActionRest: React.FC<IProps> = ({ sx, handleClick }) => {
     >
       <ButtonGeneral
         sx={{
-          width: responsiveSize(200),
+          width: responsiveSize(220),
         }}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.END_BREAK)}
         onClick={() => handleClick(E_ATTENDANCE_STATE.END_BREAK)}
