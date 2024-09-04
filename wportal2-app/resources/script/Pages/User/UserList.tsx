@@ -15,6 +15,7 @@ import {
 } from '@/script/Pages/User/FormSearch';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { SearchFilter } from '@/script/Pages/User/SearchFilter';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const UserList: React.FC<IProps> = ({ sx }) => {
@@ -165,7 +166,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
     >
       <Paper
         sx={{
-          padding: '20px',
+          padding: responsiveSpacing(4),
         }}
       >
         <FormSearch
@@ -177,7 +178,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
       <Closable open={isSearchActive()}>
         <SearchFilter
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
           }}
           searchValue={searchValue}
           handleReset={handleReset}
@@ -186,7 +187,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
       <Closable open={!!trnUserListCount}>
         <Paging
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
             justifyContent: 'flex-end',
           }}
           index={pageIndex}
@@ -196,11 +197,14 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
           handleNext={handleNext}
         />
       </Closable>
-      <UserTable sx={{ marginTop: '10px' }} handleSelect={handleSelect} />
+      <UserTable
+        sx={{ marginTop: responsiveSpacing(2) }}
+        handleSelect={handleSelect}
+      />
       <Closable open={!!trnUserListCount}>
         <Paging
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
             justifyContent: 'flex-end',
           }}
           index={pageIndex}

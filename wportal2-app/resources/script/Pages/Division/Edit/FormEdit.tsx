@@ -6,6 +6,7 @@ import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InputField } from '@/script/Component/Form/InputField';
 import { IFormEditValidationResult } from '@/script/Pages/Division/Edit/FormEditValidation';
 import { InputFieldMultiline } from '@/script/Component/Form/InputFieldMultiline';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormEdit {
   id: number;
@@ -30,7 +31,7 @@ export const FormEdit: React.FC<IProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        gap: '20px',
+        gap: responsiveSpacing(4),
         ...sx,
       }}
     >
@@ -41,7 +42,7 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>名前</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>名前</TypoText>
         <InputField
           id="form-division-name"
           inputValue={formEdit.name}
@@ -57,7 +58,7 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>説明</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>説明</TypoText>
         <InputFieldMultiline
           sx={{
             width: '100%',

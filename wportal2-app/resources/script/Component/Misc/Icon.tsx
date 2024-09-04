@@ -19,6 +19,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import { ArrowBackIos } from '@mui/icons-material';
 import { E_ICON, EIcon, getIconPath, getIconSize } from '@/script/Enum/EIcon';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
@@ -60,6 +61,8 @@ export const Icon: React.FC<IProps> = ({
       return <AddIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ATTENDANCE:
       return <AccessTimeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_BACK:
+      return <ArrowBackIos sx={iconSx} onClick={onClick} />;
     case E_ICON.ARROW_LEFT:
       return <ArrowBackIosNewIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ARROW_RIGHT:
