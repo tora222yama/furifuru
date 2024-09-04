@@ -4,13 +4,14 @@ import { Page } from '@/script/Pages/Page';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { DivisionList } from '@/script/Pages/Division/DivisionList';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Division: React.FC<IProps> = () => {
   return (
     <Page>
       <TypoH1>{getPagesName(E_PAGES.DIVISION)}</TypoH1>
-      <DivisionList sx={{ marginTop: '20px' }} />
+      <DivisionList sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
 };

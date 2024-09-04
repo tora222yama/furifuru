@@ -26,6 +26,24 @@ themeCommon.typography.h3 = {
 };
 
 /**
+ * フォントサイズ・レスポンシブ調整:subtitle1~2
+ */
+themeCommon.typography.subtitle1 = {
+  ...themeCommon.typography.subtitle1,
+  fontSize: '18px',
+  [themeCommon.breakpoints.down('md')]: {
+    fontSize: '9px',
+  },
+};
+themeCommon.typography.subtitle2 = {
+  ...themeCommon.typography.subtitle2,
+  fontSize: '16px',
+  [themeCommon.breakpoints.down('md')]: {
+    fontSize: '8px',
+  },
+};
+
+/**
  * フォントサイズ・レスポンシブ調整:body1~2
  */
 themeCommon.typography.body1 = {

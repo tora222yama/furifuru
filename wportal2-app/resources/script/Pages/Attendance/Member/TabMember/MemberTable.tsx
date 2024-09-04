@@ -34,7 +34,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: '14px',
     height: '48px',
     padding: '5px 10px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '8px',
       height: '24px',
       padding: '0px 5px',
@@ -44,7 +44,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: '14px',
     height: '40px',
     padding: '5px 10px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '8px',
       height: '26px',
       padding: '0px 5px',

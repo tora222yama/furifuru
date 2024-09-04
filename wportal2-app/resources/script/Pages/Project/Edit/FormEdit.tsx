@@ -19,6 +19,7 @@ import { E_ICON } from '@/script/Enum/EIcon';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { SlackNotification } from '@/script/Pages/Project/Edit/SlackNotification';
 import { IAppTrnProjectNotification } from '@/script/Models/App/Trn/TrnProjectNotification';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormEdit {
   id: number;
@@ -47,7 +48,7 @@ export const FormEdit: React.FC<IProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        gap: '20px',
+        gap: responsiveSpacing(4),
         ...sx,
       }}
     >
@@ -58,7 +59,7 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>名前</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>名前</TypoText>
         <InputField
           id="form-project-name"
           inputValue={formEdit.name}
@@ -74,7 +75,7 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>説明</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>説明</TypoText>
         <InputFieldMultiline
           sx={{
             width: '100%',
@@ -92,16 +93,18 @@ export const FormEdit: React.FC<IProps> = ({
       </Box>
       <Box sx={{ display: 'flex' }}>
         <Box>
-          <TypoText sx={{ minWidth: '200px', width: '200px' }}>
+          <TypoText
+            sx={{ minWidth: responsiveSize(200), width: responsiveSize(200) }}
+          >
             メンバー
           </TypoText>
         </Box>
         <Box
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '10px',
+            gap: responsiveSpacing(2),
           }}
         >
           {trnProject.trnProjectUser?.map(trnProjectUser => {
@@ -121,9 +124,9 @@ export const FormEdit: React.FC<IProps> = ({
       >
         <TypoText
           sx={{
-            marginTop: '10px',
-            minWidth: '200px',
-            width: '200px',
+            marginTop: responsiveSpacing(2),
+            minWidth: responsiveSize(200),
+            width: responsiveSize(200),
           }}
         >
           Slack通知

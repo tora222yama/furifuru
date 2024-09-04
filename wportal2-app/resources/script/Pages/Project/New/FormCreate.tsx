@@ -6,6 +6,7 @@ import { InputField } from '@/script/Component/Form/InputField';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { IFormCreateValidationResult } from '@/script/Pages/Project/New/FormCreateValidation';
 import { InputFieldMultiline } from '@/script/Component/Form/InputFieldMultiline';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormCreate {
   name: string;
@@ -32,7 +33,7 @@ export const FormCreate: React.FC<IProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        gap: '20px',
+        gap: responsiveSpacing(4),
         ...sx,
       }}
     >
@@ -42,7 +43,7 @@ export const FormCreate: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>名前</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>名前</TypoText>
         <InputField
           id="form-project-create-name"
           inputValue={formCreate.name}
@@ -58,7 +59,7 @@ export const FormCreate: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>説明</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>説明</TypoText>
         <InputFieldMultiline
           sx={{
             width: '100%',
@@ -77,7 +78,7 @@ export const FormCreate: React.FC<IProps> = ({
       </Box>
       <ButtonGeneral
         sx={{
-          minWidth: '200px',
+          minWidth: responsiveSize(200),
         }}
         label="登録"
         onClick={handleSubmit}

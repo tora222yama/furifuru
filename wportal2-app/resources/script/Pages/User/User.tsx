@@ -14,6 +14,7 @@ import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_USER_AUTHORITY } from '@/script/Enum/Server/App/EUserAuthority';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const User: React.FC<IProps> = () => {
@@ -35,14 +36,14 @@ export const User: React.FC<IProps> = () => {
           <InertiaLink href={getPagesHref(E_PAGES.USER__NEW)}>
             <ButtonGeneral
               sx={{
-                width: '140px',
+                width: responsiveSize(140),
               }}
               label="新規作成"
             />
           </InertiaLink>
         </Closable>
       </Box>
-      <UserList sx={{ marginTop: '20px' }} />
+      <UserList sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
 };

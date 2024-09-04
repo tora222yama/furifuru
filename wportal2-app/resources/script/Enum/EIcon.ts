@@ -5,6 +5,7 @@ export const E_ICON = {
   INVALID: 'invalid',
 
   ADD: 'add',
+  ARROW_BACK: 'arrow_back',
   ARROW_LEFT: 'arrow_left',
   ARROW_RIGHT: 'arrow_right',
   ATTENDANCE: 'attendance',
@@ -40,6 +41,7 @@ export const getIconPath = (icon: EIcon): string => {
 export const getIconSize = (icon: EIcon): { w: number; h: number } => {
   switch (icon) {
     case E_ICON.ADD:
+    case E_ICON.ARROW_BACK:
     case E_ICON.ATTENDANCE:
     case E_ICON.BUILD:
     case E_ICON.CAFE:

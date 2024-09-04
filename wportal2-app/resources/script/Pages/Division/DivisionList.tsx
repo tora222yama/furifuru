@@ -12,6 +12,7 @@ import { Avatar } from '@/script/Pages/Common/Avatar';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const DivisionList: React.FC<IProps> = ({ sx }) => {
@@ -89,9 +90,9 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
         return (
           <Paper
             sx={{
-              padding: '20px',
+              padding: responsiveSpacing(4),
               '&:not(:first-of-type)': {
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
               },
             }}
             key={division.id}
@@ -119,7 +120,7 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 backgroundColor: E_COLOR.GREY_LIGHT,
               }}
             >
@@ -129,10 +130,10 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '10px',
+                gap: responsiveSpacing(2),
               }}
             >
               {division.trnDivisionUser?.map(trnDivisionUser => {
@@ -149,7 +150,7 @@ export const DivisionList: React.FC<IProps> = ({ sx }) => {
       })}
       <Paging
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
           justifyContent: 'flex-end',
         }}
         index={pageIndex}
