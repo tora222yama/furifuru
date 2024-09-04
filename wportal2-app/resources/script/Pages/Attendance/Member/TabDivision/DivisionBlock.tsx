@@ -8,6 +8,7 @@ import { AttendanceState } from '@/script/Pages/Attendance/AttendanceState';
 import { E_WORKING_PLACE } from '@/script/Enum/Server/App/EWorkingPlace';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
 import { DivisionPriority } from '@/script/Pages/Attendance/Member/TabDivision/DivisionPriority';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   trnDivision: IAppTrnDivision;
@@ -21,8 +22,8 @@ export const DivisionBlock: React.FC<IProps> = ({ sx, trnDivision }) => {
   return (
     <Box
       sx={{
-        marginTop: '10px',
-        padding: '10px',
+        marginTop: responsiveSpacing(2),
+        padding: responsiveSpacing(2),
         ...sx,
       }}
     >
@@ -30,15 +31,16 @@ export const DivisionBlock: React.FC<IProps> = ({ sx, trnDivision }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: '20px',
+          gap: responsiveSpacing(4),
         }}
       >
         <Box
           sx={{
             backgroundColor: E_COLOR.PRIMARY_LIGHT,
             width: 'fit-content',
-            padding: '5px 40px 5px 40px',
-            borderRadius: '4px',
+            py: responsiveSpacing(2),
+            px: responsiveSpacing(8),
+            borderRadius: responsiveSize(8),
           }}
         >
           <TypoH2>{trnDivision.name}</TypoH2>
@@ -46,7 +48,7 @@ export const DivisionBlock: React.FC<IProps> = ({ sx, trnDivision }) => {
         <DivisionPriority trnDivision={trnDivision} />
       </Box>
       <AttendanceState
-        sx={{ marginTop: '10px' }}
+        sx={{ marginTop: responsiveSpacing(2) }}
         label="オフィス"
         stateList={divisionStateList
           .filter(state => state.isWorking)

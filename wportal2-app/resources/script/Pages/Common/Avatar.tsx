@@ -7,6 +7,7 @@ import { E_COLOR, EColor } from '@/script/Enum/EColor';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   trnUser?: IAppTrnUser;
@@ -58,7 +59,7 @@ export const Avatar: React.FC<IProps> = ({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: '5px',
+          gap: responsiveSize(6),
         }}
       >
         <TypoText>{trnUser?.nickname}</TypoText>
@@ -70,7 +71,7 @@ export const Avatar: React.FC<IProps> = ({
             sx={{
               cursor: 'pointer',
               borderLeft: `1px solid ${E_COLOR.GREY}`,
-              paddingLeft: '5px',
+              paddingLeft: responsiveSize(6),
             }}
             onClick={() =>
               handleClose ? handleClose(trnUser as IAppTrnUser) : undefined
@@ -87,6 +88,12 @@ export const Avatar: React.FC<IProps> = ({
     <Chip
       sx={{
         backgroundColor: getColor(),
+        height: responsiveSize(36),
+        borderRadius: responsiveSize(18),
+        '& .MuiChip-avatar': {
+          width: responsiveSize(32),
+          height: responsiveSize(32),
+        },
         ...sx,
       }}
       onClick={onClick}

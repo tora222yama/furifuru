@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
 import { Paging } from '@/script/Component/Misc/Paging';
 import { MemberTable } from '@/script/Pages/Attendance/Member/TabMember/MemberTable';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const TabMember: React.FC<IProps> = ({ sx }) => {
@@ -43,8 +44,8 @@ export const TabMember: React.FC<IProps> = ({ sx }) => {
         ...sx,
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
-        paddingTop: '20px',
+        gap: responsiveSpacing(4),
+        paddingTop: responsiveSpacing(4),
         alignItems: 'end',
       }}
     >
