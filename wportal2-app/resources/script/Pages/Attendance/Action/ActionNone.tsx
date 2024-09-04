@@ -26,7 +26,7 @@ export const ActionNone: React.FC<IProps> = ({ sx, handleClick }) => {
     >
       <ButtonGeneral
         sx={{
-          width: responsiveSize(200),
+          width: responsiveSize(220),
         }}
         startIcon={<Icon icon={E_ICON.OFFICE} />}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.ATTENDANCE_OFFICE)}
@@ -34,7 +34,7 @@ export const ActionNone: React.FC<IProps> = ({ sx, handleClick }) => {
       />
       <ButtonGeneral
         sx={{
-          width: responsiveSize(200),
+          width: responsiveSize(220),
         }}
         startIcon={<Icon icon={E_ICON.HOME} />}
         label={getLabelAttendanceState(E_ATTENDANCE_STATE.ATTENDANCE_TELEWORK)}

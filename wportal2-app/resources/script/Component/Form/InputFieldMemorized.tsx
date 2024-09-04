@@ -5,6 +5,7 @@ import { Closable } from '@/script/Component/Misc/Closable';
 import { InputError } from '@/script/Component/Form/InputError';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { parseInputProps } from '@/script/Component/Form/IInputProps';
+import { responsiveSize } from '@/script/System/Responsive';
 
 export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
   sx,
@@ -61,7 +62,7 @@ export const InputFieldMemorized: React.FC<IInputFieldProps> = ({
     <Box
       sx={{
         '& .MuiOutlinedInput-root': {
-          padding: '4px',
+          padding: responsiveSize(4),
           lineHeight: 'normal',
         },
         ...sx,

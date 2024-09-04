@@ -7,6 +7,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { AuthenticatorSettingDialog } from '@/script/Pages/PersonalSetting/Show/AuthenticatorSettingDialog/AuthenticatorSettingDialog';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
@@ -21,14 +22,14 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
       <Closable open={openDialog}>
         <AuthenticatorSettingDialog open={openDialog} />
       </Closable>
-      <TypoH2>Authenticator情報</TypoH2>
+      <TypoH2 bold>Authenticator情報</TypoH2>
       <Box
         sx={{
           width: '100%',
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <Box
@@ -36,7 +37,7 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            gap: '20px',
+            gap: responsiveSpacing(4),
           }}
         >
           <LabelValue
@@ -48,7 +49,7 @@ export const AuthenticatorInfo: React.FC<IProps> = ({ sx }) => {
           />
           <ButtonGeneral
             sx={{
-              minWidth: '100px',
+              minWidth: responsiveSize(100),
             }}
             label="設定する"
             onClick={() => setOpenDialog(true)}

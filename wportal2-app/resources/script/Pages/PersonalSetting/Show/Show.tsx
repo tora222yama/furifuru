@@ -23,6 +23,7 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { SlackInfo } from '@/script/Pages/PersonalSetting/Show/SlackInfo';
 import { AuthenticatorInfo } from '@/script/Pages/PersonalSetting/Show/AuthenticatorInfo';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -64,7 +65,7 @@ export const Show: React.FC<IProps> = () => {
         <InertiaLink href={getPagesHref(E_PAGES.PERSONAL_SETTING__EDIT)}>
           <ButtonGeneral
             sx={{
-              minWidth: '140px',
+              minWidth: responsiveSize(140),
             }}
             label="編集"
           />
@@ -73,11 +74,11 @@ export const Show: React.FC<IProps> = () => {
       <Closable open={!trnUserSlackProfile.slackUserId}>
         <Box
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
             border: `1px solid ${E_COLOR.PRIMARY_MAIN}`,
             backgroundColor: E_COLOR.WHITE,
-            marginBottom: '20px',
-            padding: '10px',
+            marginBottom: responsiveSpacing(4),
+            padding: responsiveSpacing(2),
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -93,29 +94,29 @@ export const Show: React.FC<IProps> = () => {
       </Closable>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
         }}
       >
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: '20px',
+            gap: responsiveSpacing(4),
           }}
         >
           <Image
             sx={{
-              borderRadius: '24px',
-              width: '120px',
-              height: '120px',
+              borderRadius: responsiveSize(24),
+              width: responsiveSize(120),
+              height: responsiveSize(120),
             }}
             src={String(authUser.trnUser?.faceImagePath)}
           />
-          <Box sx={{ width: '400px' }}>
+          <Box sx={{ width: '100%' }}>
             <LabelValue label="名前" value={authUser.name} />
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
               label="表示名"
               value={String(authUser.trnUser?.nickname)}
             />
@@ -123,13 +124,13 @@ export const Show: React.FC<IProps> = () => {
         </Box>
         <SlackInfo
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
           }}
           trnUserSlackProfile={trnUserSlackProfile}
         />
         <AuthenticatorInfo
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
           }}
         />
       </Paper>
