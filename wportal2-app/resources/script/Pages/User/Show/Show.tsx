@@ -20,6 +20,7 @@ import { Icon } from '@/script/Component/Misc/Icon';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { E_USER_AUTHORITY } from '@/script/Enum/Server/App/EUserAuthority';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -53,41 +54,56 @@ export const Show: React.FC<IProps> = () => {
           >
             <ButtonGeneral
               sx={{
-                minWidth: '140px',
+                minWidth: responsiveSize(140),
               }}
               label="編集"
             />
           </InertiaLink>
         </Closable>
       </Box>
-      <Paper sx={{ marginTop: '20px', padding: '20px' }}>
+      <Paper
+        sx={{ marginTop: responsiveSpacing(4), padding: responsiveSpacing(4) }}
+      >
         <Box
           sx={{
             display: 'flex',
-            gap: '20px',
+            alignItems: 'center',
+            gap: responsiveSpacing(4),
           }}
         >
           <Image
             sx={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '24px',
+              width: responsiveSize(120),
+              height: responsiveSize(120),
+              borderRadius: responsiveSize(24),
             }}
             src={trnUser.faceImagePath}
           />
           <Box sx={{ width: '100%' }}>
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
+              labelSx={{
+                width: responsiveSize(100),
+                minWidth: responsiveSize(100),
+              }}
               label="名前"
               value={String(trnUser?.authUser?.name)}
             />
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
+              labelSx={{
+                width: responsiveSize(100),
+                minWidth: responsiveSize(100),
+              }}
               label="表示名"
               value={String(trnUser?.nickname)}
             />
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
+              labelSx={{
+                width: responsiveSize(100),
+                minWidth: responsiveSize(100),
+              }}
               label="E-Mail"
               value={String(trnUser?.authUser?.email)}
             />
@@ -95,34 +111,31 @@ export const Show: React.FC<IProps> = () => {
         </Box>
         <Box
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
             display: 'flex',
             alignItems: 'center',
           }}
         >
-          <Icon
-            sx={{ width: '20px', height: '20px', marginRight: '5px' }}
-            icon={E_ICON.BUILD}
-          />
-          <TypoH2>Slack情報</TypoH2>
+          <Icon sx={{ marginRight: responsiveSize(5) }} icon={E_ICON.BUILD} />
+          <TypoH2 bold>Slack情報</TypoH2>
         </Box>
         <LabelValue
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
           }}
           label="Slack User ID"
           value={trnUser.trnUserSlackProfile?.slackUserId ?? '設定なし'}
         />
         <LabelValue
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
           }}
           label="Slack User Name"
           value={trnUser.trnUserSlackProfile?.slackUserName ?? '設定なし'}
         />
         <LabelValue
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
           }}
           label="Slack Team ID"
           value={trnUser.trnUserSlackProfile?.slackTeamId ?? '設定なし'}
@@ -130,27 +143,24 @@ export const Show: React.FC<IProps> = () => {
         <Closable open>
           <Box
             sx={{
-              marginTop: '20px',
+              marginTop: responsiveSpacing(4),
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            <Icon
-              sx={{ width: '20px', height: '20px', marginRight: '5px' }}
-              icon={E_ICON.BUILD}
-            />
-            <TypoH2>管理者向け情報</TypoH2>
+            <Icon sx={{ marginRight: responsiveSize(5) }} icon={E_ICON.BUILD} />
+            <TypoH2 bold>管理者向け情報</TypoH2>
           </Box>
           <LabelValue
             sx={{
-              marginTop: '10px',
+              marginTop: responsiveSpacing(2),
             }}
             label="Auth User ID"
             value={String(trnUser.authUser?.id ?? '')}
           />
           <LabelValue
             sx={{
-              marginTop: '10px',
+              marginTop: responsiveSpacing(2),
             }}
             label="レガシーログインの許可"
             value={trnUser.authUser?.eEnableLegacyLogin ? 'Yes' : 'No'}

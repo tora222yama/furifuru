@@ -14,6 +14,7 @@ import { FormCreate, IFormCreate } from '@/script/Pages/User/Create/FormCreate';
 import { validateAll } from '@/script/Pages/User/Create/FormCreateValidation';
 import { useIndexContext } from '@/script/Pages/User/Create/Index';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Create: React.FC<IProps> = () => {
@@ -67,8 +68,8 @@ export const Create: React.FC<IProps> = () => {
       <TypoH1>{getPagesName(E_PAGES.USER__NEW)}</TypoH1>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
         }}
       >
         <FormCreate

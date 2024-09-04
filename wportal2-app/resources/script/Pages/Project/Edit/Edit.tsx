@@ -18,6 +18,7 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 
@@ -130,7 +131,7 @@ export const Edit: React.FC<IProps> = () => {
         </TypoH1>
         <ButtonGeneral
           sx={{
-            width: '200px',
+            width: responsiveSize(200),
             color: 'white',
           }}
           buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
@@ -140,11 +141,11 @@ export const Edit: React.FC<IProps> = () => {
       </Box>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <FormEdit
@@ -154,7 +155,7 @@ export const Edit: React.FC<IProps> = () => {
         />
         <ButtonGeneral
           sx={{
-            width: '200px',
+            width: responsiveSize(200),
           }}
           label="更新"
           onClick={handleSubmit}

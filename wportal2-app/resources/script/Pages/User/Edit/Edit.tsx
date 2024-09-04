@@ -17,6 +17,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -108,7 +109,7 @@ export const Edit: React.FC<IProps> = () => {
         <TypoH1>{getPagesName(E_PAGES.USER__EDIT)}</TypoH1>
         <ButtonGeneral
           sx={{
-            width: '200px',
+            width: responsiveSize(200),
             color: 'white',
           }}
           buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
@@ -118,8 +119,8 @@ export const Edit: React.FC<IProps> = () => {
       </Box>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
         }}
       >
         <FormEdit

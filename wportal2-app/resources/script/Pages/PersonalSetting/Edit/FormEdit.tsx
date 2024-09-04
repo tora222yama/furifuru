@@ -10,6 +10,7 @@ import {
   DropFile,
   FormEditImageDrop,
 } from '@/script/Pages/PersonalSetting/Edit/FormEditImageDrop';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormEdit {
   name: string;
@@ -39,18 +40,18 @@ export const FormEdit: React.FC<IProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        gap: '20px',
+        gap: responsiveSpacing(4),
         ...sx,
       }}
     >
-      <LabelValue sx={{ width: '400px' }} label="名前" value={formEdit.name} />
+      <LabelValue sx={{ width: '100%' }} label="名前" value={formEdit.name} />
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>表示名</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>表示名</TypoText>
         <InputField
           id="form-personal-setting-nickname"
           inputValue={formEdit.nickname}
@@ -70,7 +71,9 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>SlackユーザーID</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>
+          SlackユーザーID
+        </TypoText>
         <InputField
           id="form-personal-setting-slack-user-id"
           inputValue={formEdit.slackUserId}
@@ -83,7 +86,9 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>Slackユーザー名</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>
+          Slackユーザー名
+        </TypoText>
         <InputField
           id="form-personal-setting-slack-user-name"
           inputValue={formEdit.slackUserName}
@@ -96,7 +101,9 @@ export const FormEdit: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>SlackチームID</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>
+          SlackチームID
+        </TypoText>
         <InputField
           id="form-personal-setting-slack-team-id"
           inputValue={formEdit.slackTeamId}
@@ -105,7 +112,7 @@ export const FormEdit: React.FC<IProps> = ({
       </Box>
       <ButtonGeneral
         sx={{
-          minWidth: '200px',
+          minWidth: responsiveSize(200),
         }}
         label="更新"
         onClick={handleSubmit}

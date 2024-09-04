@@ -8,6 +8,7 @@ import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
 import { IFormSearch } from '@/script/Pages/User/FormSearch';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   searchValue: IFormSearch;
@@ -39,20 +40,20 @@ export const SearchFilter: React.FC<IProps> = ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '10px',
+        padding: responsiveSpacing(2),
         border: `1px dashed ${E_COLOR.PRIMARY_DARK}`,
         backgroundColor: E_COLOR.PRIMARY_LIGHT,
-        borderRadius: '10px',
+        borderRadius: responsiveSpacing(2),
         ...sx,
       }}
     >
       <TypoText>{filterMessage()}</TypoText>
       <ButtonGeneral
         sx={{
-          borderRadius: '24px',
-          width: '48px',
-          minWidth: '48px',
-          height: '48px',
+          borderRadius: responsiveSize(24),
+          width: responsiveSize(48),
+          minWidth: responsiveSize(48),
+          height: responsiveSize(48),
           padding: '0px',
         }}
         buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
