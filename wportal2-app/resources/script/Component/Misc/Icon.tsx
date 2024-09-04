@@ -14,6 +14,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import MenuIcon from '@mui/icons-material/Menu';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
@@ -81,6 +82,8 @@ export const Icon: React.FC<IProps> = ({
       return <ExpandMore sx={iconSx} onClick={onClick} />;
     case E_ICON.HOME:
       return <HomeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.MENU:
+      return <MenuIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.OFFICE:
       return <BusinessIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.REMOVE:

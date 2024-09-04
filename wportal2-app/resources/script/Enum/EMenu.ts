@@ -94,7 +94,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.DIVISION_ROOT,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.INVALID,
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: '課',
@@ -110,7 +110,7 @@ export const MenuList: IMenu[] = [
   },
   {
     menu: E_MENU.PROJECT_ROOT,
-    pages: E_PAGES.DASHBOARD,
+    pages: E_PAGES.INVALID,
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: 'プロジェクト',
@@ -220,6 +220,23 @@ export const MenuList: IMenu[] = [
     name: 'Lv--.Slackログ',
     icon: E_ICON.BUILD,
   },
+];
+
+/**
+ * モバイル表示の除外リスト.
+ */
+export const mobileIgnoreList: EMenu[] = [
+  // ダッシュボードはロゴから移動できる.
+  E_MENU.DASHBOARD,
+
+  // サンプルはレスポンシブル対応していないため除外.
+  E_MENU.SAMPLE_INTERN_MVC_VALUE,
+  E_MENU.SAMPLE_INTERN_INPUT_FORM,
+  E_MENU.SAMPLE_INTERN_REDIS,
+  E_MENU.SAMPLE_INTERN_SLACK_LOG,
+  E_MENU.SAMPLE_INTERN_PAGINATION,
+  E_MENU.SAMPLE_INTERN_INTERN,
+  E_MENU.SAMPLE_INTERN_INERTIA_DATA,
 ];
 
 /**

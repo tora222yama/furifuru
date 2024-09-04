@@ -11,6 +11,7 @@ import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/AttendanceEdit/Index';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   open: boolean;
@@ -68,10 +69,10 @@ export const DialogEdit: React.FC<IProps> = ({
       return (
         <Paper
           sx={{
-            padding: '20px',
+            padding: responsiveSpacing(4),
             display: 'flex',
             flexDirection: 'column',
-            gap: '10px',
+            gap: responsiveSpacing(2),
           }}
         >
           <TypoText>登録時刻修正</TypoText>
@@ -84,10 +85,10 @@ export const DialogEdit: React.FC<IProps> = ({
     return (
       <Paper
         sx={{
-          padding: '20px',
+          padding: responsiveSpacing(4),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <TypoText>登録時刻修正</TypoText>
