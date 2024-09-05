@@ -18,6 +18,7 @@ export const E_VALIDATION_TYPE = {
   EMAIL: 'email', // Eメール.
   UNIQUE_AUTH_EMAIL: 'unique_auth_email', // 認証メールユニーク確認.
   SIMPLE_PASSWORD: 'simple_password', // 英数字8文字以上16文字以内.
+  DATE: 'date', // 日付形式.
 } as const;
 export type EValidationType =
   (typeof E_VALIDATION_TYPE)[keyof typeof E_VALIDATION_TYPE];

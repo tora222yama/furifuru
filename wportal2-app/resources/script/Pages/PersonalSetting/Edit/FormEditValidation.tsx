@@ -32,6 +32,7 @@ export const parseServerValidation = (
   }
   const ret: IFormEditValidation = {
     nickname: parseErrorMessage('nickname', result),
+    birthDate: parseErrorMessage('birthDate', result),
   };
   return {
     hasError: Object.entries(ret).some(([, res]) => res && res.hasError),
@@ -47,6 +48,12 @@ export const validateAll = (formEdit: IFormEdit): IFormEditValidationResult => {
     nickname: validateMulti(formEdit.nickname, '表示名', [
       {
         type: E_VALIDATION_TYPE.REQUIRED,
+        level: EValidationLevel.Error,
+      },
+    ]),
+    birthDate: validateMulti(String(formEdit.birthDate), '生年月日', [
+      {
+        type: E_VALIDATION_TYPE.DATE,
         level: EValidationLevel.Error,
       },
     ]),

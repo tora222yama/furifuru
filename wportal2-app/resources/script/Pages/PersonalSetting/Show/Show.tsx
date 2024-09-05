@@ -1,13 +1,8 @@
 import * as React from 'react';
-import { router } from '@inertiajs/react';
 import { Box, Paper } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
-import {
-  E_PAGES,
-  getPagesHref,
-  getPagesName,
-} from '@/script/Enum/Server/App/EPages';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
@@ -23,7 +18,13 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_STATUS_CODE } from '@/script/Enum/Server/App/EStatusCode';
 import { SlackInfo } from '@/script/Pages/PersonalSetting/Show/SlackInfo';
 import { AuthenticatorInfo } from '@/script/Pages/PersonalSetting/Show/AuthenticatorInfo';
+import {
+  E_PAGES,
+  getPagesHref,
+  getPagesName,
+} from '@/script/Enum/Server/App/EPages';
 import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
+import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -33,6 +34,18 @@ export const Show: React.FC<IProps> = () => {
   const [processingAlignSlack, mutationAlignSlack] =
     useMutationAppPersonalSettingShowAlignSlack();
   const loading = processingAlignSlack;
+
+  // 生年月日をYYYY/MM/DD形式に変換
+  const formatDate = (dataString: string | null) => {
+    if (!dataString) {
+      return '';
+    }
+    const date = new Date(dataString);
+    const year = date.getFullYear();
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    return `${year}/${month}/${day}`;
+  };
 
   /**
    * SlackIdの有効化を実行.
@@ -120,6 +133,43 @@ export const Show: React.FC<IProps> = () => {
               label="表示名"
               value={String(authUser.trnUser?.nickname)}
             />
+            <LabelValue
+              sx={{ marginTop: responsiveSpacing(2) }}
+              label="生年月日"
+              value={
+                authUser.trnUser?.birthDate
+                  ? formatDate(authUser.trnUser.birthDate)
+                  : ''
+              }
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            marginTop: responsiveSpacing(4),
+          }}
+        >
+          <TypoH2 bold>自己紹介</TypoH2>
+          <Box
+            sx={{
+              marginTop: responsiveSpacing(2),
+              borderRadius: responsiveSize(8),
+              padding: responsiveSpacing(2),
+              minHeight: responsiveSize(100),
+              border: '1px solid #ddd',
+            }}
+          >
+            <TypoText
+              sx={{
+                whiteSpace: 'pre-wrap',
+                color: authUser.trnUser?.selfIntroduction
+                  ? 'inherit'
+                  : `${E_COLOR.GREY}`,
+              }}
+            >
+              {String(authUser.trnUser?.selfIntroduction) ||
+                '何も入力されていません'}
+            </TypoText>
           </Box>
         </Box>
         <SlackInfo

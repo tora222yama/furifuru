@@ -1,7 +1,7 @@
 import { IPropsBase } from '@/script/System/System';
 import { IInputProps } from '@/script/Component/Form/IInputProps';
 
-export type InputFieldType = 'text' | 'password' | 'number';
+export type InputFieldType = 'text' | 'email' | 'password' | 'date' | 'number';
 export interface IInputFieldProps extends IPropsBase {
   inputValue: string;
   onChange: (value: string) => void;
