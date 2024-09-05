@@ -46,7 +46,9 @@ export const FormSearch: React.FC<IProps> = ({
             width: '100%',
           }}
           inputProps={{
-            width: '100%',
+            sx: {
+              width: '100%',
+            },
           }}
           id="user-search"
           inputValue={formSearch.keyword}

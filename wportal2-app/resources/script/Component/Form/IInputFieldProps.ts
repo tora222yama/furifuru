@@ -1,5 +1,5 @@
+import { InputBaseComponentProps, SxProps, Theme } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IInputProps } from '@/script/Component/Form/IInputProps';
 
 export type InputFieldType = 'text' | 'email' | 'password' | 'date' | 'number';
 export interface IInputFieldProps extends IPropsBase {
@@ -12,5 +12,6 @@ export interface IInputFieldProps extends IPropsBase {
   type?: InputFieldType;
   autoComplete?: string;
   disabled?: boolean;
-  inputProps?: IInputProps;
+  fieldSx?: SxProps<Theme>;
+  inputProps?: InputBaseComponentProps;
 }

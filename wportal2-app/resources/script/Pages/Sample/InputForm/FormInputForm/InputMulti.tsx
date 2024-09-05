@@ -61,10 +61,15 @@ export const InputMulti: React.FC<IProps> = ({
           sx={{
             marginTop: '10px',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            height: '100%',
-            resize: 'vertical',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              height: '100%',
+              resize: 'vertical',
+            },
           }}
           rows={5}
           inputValue={formInputForm.inputMulti}

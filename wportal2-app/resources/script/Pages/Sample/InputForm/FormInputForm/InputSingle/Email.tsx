@@ -54,7 +54,9 @@ export const Email: React.FC<IProps> = ({
           marginTop: '10px',
         }}
         inputProps={{
-          width: '400px',
+          sx: {
+            width: '400px',
+          },
         }}
         inputValue={formInputForm.inputSingleEmail}
         onChange={inputSingleEmail => handleUpdate({ inputSingleEmail })}

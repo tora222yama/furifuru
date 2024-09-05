@@ -46,9 +46,14 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-authenticator-login-email"
           inputValue={formAuthenticatorLogin.email}
@@ -62,9 +67,14 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-authenticator-login-password"
           type="password"
@@ -79,9 +89,14 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-authenticator-login-token"
           inputValue={formAuthenticatorLogin.code}

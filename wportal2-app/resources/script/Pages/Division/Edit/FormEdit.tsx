@@ -65,8 +65,14 @@ export const FormEdit: React.FC<IProps> = ({
           }}
           id="form-division-explain"
           inputValue={formEdit.explain}
-          inputProps={{
+          fieldSx={{
             width: '100%',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              resize: 'vertical',
+            },
           }}
           onChange={explain => handleUpdate({ explain })}
           visibleError

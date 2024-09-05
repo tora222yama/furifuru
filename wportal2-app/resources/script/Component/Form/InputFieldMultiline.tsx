@@ -23,6 +23,7 @@ const MemoComponent = React.memo<IInputFieldMultilineProps>(
     rows,
     autoComplete,
     disabled,
+    fieldSx,
     inputProps,
   }) {
     return (
@@ -39,6 +40,7 @@ const MemoComponent = React.memo<IInputFieldMultilineProps>(
         rows={rows}
         autoComplete={autoComplete}
         disabled={disabled}
+        fieldSx={fieldSx}
         inputProps={inputProps}
       />
     );
@@ -59,6 +61,7 @@ export const InputFieldMultiline: React.FC<IInputFieldMultilineProps> = ({
   rows = 1,
   autoComplete = 'off',
   disabled,
+  fieldSx,
   inputProps,
 }) => {
   return (
@@ -75,6 +78,7 @@ export const InputFieldMultiline: React.FC<IInputFieldMultilineProps> = ({
       rows={rows}
       autoComplete={autoComplete}
       disabled={disabled}
+      fieldSx={fieldSx}
       inputProps={inputProps}
     />
   );

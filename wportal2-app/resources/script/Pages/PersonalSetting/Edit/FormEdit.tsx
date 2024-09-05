@@ -133,14 +133,20 @@ export const FormEdit: React.FC<IProps> = ({
       {/* 自己紹介入力フォーム */}
       <Box
         sx={{
+          width: '100%',
           display: 'flex',
           alignItems: 'center',
         }}
       >
         <TypoText sx={{ minWidth: responsiveSize(200) }}>自己紹介</TypoText>
-        <Box>
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
           <InputFieldMultiline
             sx={{
+              width: '100%',
               marginTop: responsiveSpacing(2),
             }}
             id="form-personal-setting-self-introduction"
@@ -149,8 +155,14 @@ export const FormEdit: React.FC<IProps> = ({
             errors={validation.data.selfIntroduction?.errors}
             placeHolder="自己紹介を入力してください"
             rows={8}
-            inputProps={{
+            fieldSx={{
               width: '100%',
+            }}
+            inputProps={{
+              sx: {
+                width: '100%',
+                resize: 'vertical',
+              },
             }}
           />
         </Box>

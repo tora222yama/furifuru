@@ -66,9 +66,14 @@ export const FormCreate: React.FC<IProps> = ({
           }}
           id="form-project-create-explain"
           inputValue={formCreate.explain}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            resize: 'vertical',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              resize: 'vertical',
+            },
           }}
           onChange={explain => handleUpdate({ explain })}
           visibleError

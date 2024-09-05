@@ -1,5 +1,5 @@
+import { InputBaseComponentProps, SxProps, Theme } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IInputProps } from '@/script/Component/Form/IInputProps';
 
 export type InputFieldMultilineType = 'text' | 'number';
 export interface IInputFieldMultilineProps extends IPropsBase {
@@ -13,5 +13,6 @@ export interface IInputFieldMultilineProps extends IPropsBase {
   rows?: number;
   autoComplete?: string;
   disabled?: boolean;
-  inputProps?: IInputProps;
+  fieldSx?: SxProps<Theme>;
+  inputProps?: InputBaseComponentProps;
 }
