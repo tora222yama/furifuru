@@ -85,6 +85,43 @@ export const FormEdit: React.FC<IProps> = ({
           type="date"
         />
       </Box>
+      {/* 自己紹介入力フォーム */}
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>自己紹介</TypoText>
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
+          <InputFieldMultiline
+            sx={{
+              width: '100%',
+              marginTop: responsiveSpacing(2),
+            }}
+            id="form-personal-setting-self-introduction"
+            inputValue={formEdit.selfIntroduction ?? ''}
+            onChange={selfIntroduction => handleUpdate({ selfIntroduction })}
+            errors={validation.data.selfIntroduction?.errors}
+            placeHolder="自己紹介を入力してください"
+            rows={8}
+            fieldSx={{
+              width: '100%',
+            }}
+            inputProps={{
+              sx: {
+                width: '100%',
+                resize: 'vertical',
+              },
+            }}
+          />
+        </Box>
+      </Box>
       <Box
         sx={{
           display: 'flex',
@@ -129,43 +166,6 @@ export const FormEdit: React.FC<IProps> = ({
           inputValue={formEdit.slackTeamId}
           onChange={slackTeamId => handleUpdate({ slackTeamId })}
         />
-      </Box>
-      {/* 自己紹介入力フォーム */}
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <TypoText sx={{ minWidth: responsiveSize(200) }}>自己紹介</TypoText>
-        <Box
-          sx={{
-            width: '100%',
-          }}
-        >
-          <InputFieldMultiline
-            sx={{
-              width: '100%',
-              marginTop: responsiveSpacing(2),
-            }}
-            id="form-personal-setting-self-introduction"
-            inputValue={formEdit.selfIntroduction ?? ''}
-            onChange={selfIntroduction => handleUpdate({ selfIntroduction })}
-            errors={validation.data.selfIntroduction?.errors}
-            placeHolder="自己紹介を入力してください"
-            rows={8}
-            fieldSx={{
-              width: '100%',
-            }}
-            inputProps={{
-              sx: {
-                width: '100%',
-                resize: 'vertical',
-              },
-            }}
-          />
-        </Box>
       </Box>
       <Box
         sx={{

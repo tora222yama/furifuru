@@ -81,7 +81,13 @@ export const InputFieldMultilineMemorized: React.FC<
 
           ...fieldSx,
         }}
-        inputProps={inputProps}
+        inputProps={{
+          ...inputProps,
+          sx: {
+            padding: responsiveSize(6),
+            ...inputProps?.sx,
+          },
+        }}
         variant="outlined"
         value={inputValue}
         onChange={v => {
