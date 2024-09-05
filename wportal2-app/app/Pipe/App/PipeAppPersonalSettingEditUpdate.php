@@ -12,17 +12,21 @@ use Illuminate\Http\UploadedFile;
 
 final class PipeAppPersonalSettingEditUpdate extends PipeBase
 {
-    public int $trnUserId        = 0;
+    public int $trnUserId           = 0;
 
-    public string $nickname      = '';
+    public string $nickname         = '';
 
-    public string $slackUserId   = '';
+    public ?string $birthDate       = null;
 
-    public string $slackUserName = '';
+    public string $selfIntroduction = '';
 
-    public string $slackTeamId   = '';
+    public string $slackUserId      = '';
 
-    public ?UploadedFile $upload = null;
+    public string $slackUserName    = '';
+
+    public string $slackTeamId      = '';
+
+    public ?UploadedFile $upload    = null;
 
     /**
      * constructor.
@@ -37,15 +41,18 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
      */
     public function parse(): void
     {
-        $this->trnUserId     = $this->getArgAsInteger('trnUserId');
-        $this->nickname      = $this->getArgAsString('nickname');
-        $this->slackUserId   = $this->getArgAsString('slackUserId');
-        $this->slackUserName = $this->getArgAsString('slackUserName');
-        $this->slackTeamId   = $this->getArgAsString('slackTeamId');
+        $this->trnUserId         = $this->getArgAsInteger('trnUserId');
+        $this->nickname          = $this->getArgAsString('nickname');
+        $birthDate               = $this->getArgAsString('birthDate');
+        $this->birthDate         = empty($birthDate) ? null : $birthDate;
+        $this->selfIntroduction  = $this->getArgAsString('selfIntroduction');
+        $this->slackUserId       = $this->getArgAsString('slackUserId');
+        $this->slackUserName     = $this->getArgAsString('slackUserName');
+        $this->slackTeamId       = $this->getArgAsString('slackTeamId');
 
         // image file upload.
         if (isset($this->args['upload'])) {
-            $this->upload = $this->args['upload'];
+            $this->upload        = $this->args['upload'];
         }
     }
 
@@ -63,6 +70,16 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
             $this->nickname,
             collect([
                 EValidationType::REQUIRED->ruleSet(),
+            ])
+        );
+
+        // 日付.
+        $packer->addValidation(
+            'birthDate',
+            '生年月日',
+            $this->birthDate,
+            collect([
+                EValidationType::DATE->ruleSet(),
             ])
         );
 

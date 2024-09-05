@@ -13,6 +13,7 @@ import { ActionWorking } from '@/script/Pages/Attendance/Action/ActionWorking';
 import { ActionRest } from '@/script/Pages/Attendance/Action/ActionRest';
 import { ActionLeaving } from '@/script/Pages/Attendance/Action/ActionLeaving';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Action: React.FC<IProps> = ({ sx }) => {
@@ -60,7 +61,7 @@ export const Action: React.FC<IProps> = ({ sx }) => {
   return (
     <Paper
       sx={{
-        padding: '20px',
+        padding: responsiveSpacing(4),
         ...sx,
       }}
     >

@@ -14,7 +14,7 @@ class RecaptchaService
      */
     public function isValidToken(string $recaptchaToken): bool
     {
-        // シークレットきーは環境変数から取得する.
+        // シークレットキーは環境変数から取得する.
         $secretKey         = config('recaptcha.SecretKey');
 
         // URLを取得.

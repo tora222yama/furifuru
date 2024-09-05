@@ -9,6 +9,7 @@ import { MyselfWorking } from '@/script/Pages/Attendance/Myself/MyselfWorking';
 import { MyselfRest } from '@/script/Pages/Attendance/Myself/MyselfRest';
 import { MyselfLeaving } from '@/script/Pages/Attendance/Myself/MyselfLeaving';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Myself: React.FC<IProps> = ({ sx }) => {
@@ -40,7 +41,7 @@ export const Myself: React.FC<IProps> = ({ sx }) => {
   return (
     <Paper
       sx={{
-        padding: '20px',
+        padding: responsiveSpacing(4),
         ...sx,
       }}
     >

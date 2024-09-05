@@ -77,9 +77,14 @@ export const OnetimePassword: React.FC<IProps> = () => {
             sx={{
               width: '50%',
             }}
-            inputProps={{
+            fieldSx={{
               width: '100%',
-              padding: '2px',
+            }}
+            inputProps={{
+              sx: {
+                width: '100%',
+                padding: '2px',
+              },
             }}
             id="form-onetime-password"
             inputValue={onetimePassword}

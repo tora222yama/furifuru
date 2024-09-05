@@ -9,12 +9,17 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
-const StyledImage = styled('img')({
+const StyledImage = styled('img')(({ theme }) => ({
   borderRadius: '50%',
   width: '128px',
   height: '128px',
-});
+  [theme.breakpoints.down('md')]: {
+    width: '64px',
+    height: '64px',
+  },
+}));
 
 export type DropFile = File & {
   preview: string;
@@ -111,9 +116,9 @@ export const FormEditImageDrop: React.FC<IProps> = ({
     return (
       <Image
         sx={{
-          borderRadius: '50%',
-          width: '128px',
-          height: '128px',
+          borderRadius: responsiveSize(64),
+          width: responsiveSize(128),
+          height: responsiveSize(128),
         }}
         src={String(authUser.trnUser?.faceImagePath)}
         alt="preview"
@@ -129,25 +134,25 @@ export const FormEditImageDrop: React.FC<IProps> = ({
     >
       <Box
         sx={{
-          padding: '20px',
+          padding: responsiveSpacing(4),
           display: 'flex',
           alignItems: 'center',
-          gap: '20px',
+          gap: responsiveSpacing(4),
           ...sx,
         }}
       >
         <Box>{preview()}</Box>
         <Box
           sx={{
-            padding: '20px',
+            padding: responsiveSpacing(2),
             border: '3px dashed #AAAAAA',
             width: '100%',
-            height: '128px',
+            height: responsiveSize(128),
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: '10px',
+            gap: responsiveSpacing(2),
           }}
           /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...getRootProps()}
@@ -161,7 +166,7 @@ export const FormEditImageDrop: React.FC<IProps> = ({
       <Closable open={formEdit?.upload !== undefined}>
         <Box
           sx={{
-            padding: '8px',
+            padding: responsiveSize(8),
             backgroundColor: E_COLOR.GREY_LIGHT,
           }}
         >

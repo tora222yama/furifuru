@@ -7,6 +7,7 @@ import { Avatar } from '@/script/Pages/Common/Avatar';
 import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { DialogUser } from '@/script/Pages/Attendance/DialogUser';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   label: string;
@@ -44,8 +45,8 @@ export const AttendanceState: React.FC<IProps> = ({ sx, label, stateList }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          minWidth: '100px',
-          padding: '10px',
+          minWidth: responsiveSize(120),
+          padding: responsiveSpacing(2),
         }}
       >
         {label}
@@ -55,8 +56,8 @@ export const AttendanceState: React.FC<IProps> = ({ sx, label, stateList }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          minWidth: '80px',
-          padding: '10px',
+          minWidth: responsiveSize(80),
+          padding: responsiveSpacing(2),
         }}
       >
         {stateList.length}
@@ -66,8 +67,9 @@ export const AttendanceState: React.FC<IProps> = ({ sx, label, stateList }) => {
           display: 'flex',
           alignItems: 'center',
           flexWrap: 'wrap',
-          padding: '10px 0px 10px',
-          gap: '10px',
+          py: responsiveSpacing(2),
+          px: 0,
+          gap: responsiveSpacing(2),
         }}
       >
         {stateList.map(state => {

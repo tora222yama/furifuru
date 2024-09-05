@@ -13,17 +13,25 @@ import {
 import { InputField } from '@/script/Component/Form/InputField';
 import { useIndexContext } from '@/script/Pages/Project/Edit/Index';
 import { E_NOTIFICATION_TYPE } from '@/script/Enum/Server/App/ENotificationType';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 /**
  * 円形ボタン.
  */
-const CircleButton = styled(ButtonGeneral)`
-  min-width: 48px;
-  width: 48px;
-  min-height: 48px;
-  height: 48px;
-  border-radius: 24px;
-`;
+const StyledCircleButton = styled(ButtonGeneral)(({ theme }) => ({
+  minWidth: '48px',
+  width: '48px',
+  minHeight: '48px',
+  height: '48px',
+  borderRadius: '24px',
+  [theme.breakpoints.down('md')]: {
+    minWidth: '24px',
+    width: '24px',
+    minHeight: '24px',
+    height: '24px',
+    borderRadius: '12px',
+  },
+}));
 
 interface IProps extends IPropsBase {
   formEdit: IFormEdit;
@@ -83,16 +91,16 @@ export const SlackNotification: React.FC<IProps> = ({
       <Box sx={sx}>
         <Box
           sx={{
-            marginBottom: '10px',
+            marginBottom: responsiveSpacing(2),
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
+            gap: responsiveSpacing(2),
           }}
         >
           <TypoText>新規登録</TypoText>
-          <CircleButton onClick={handleAdd}>
+          <StyledCircleButton onClick={handleAdd}>
             <Icon icon={E_ICON.ADD} />
-          </CircleButton>
+          </StyledCircleButton>
         </Box>
       </Box>
     );
@@ -103,7 +111,7 @@ export const SlackNotification: React.FC<IProps> = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
+        gap: responsiveSpacing(2),
         ...sx,
       }}
     >
@@ -114,7 +122,7 @@ export const SlackNotification: React.FC<IProps> = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
+              gap: responsiveSpacing(2),
             }}
           >
             <InputField
@@ -124,12 +132,12 @@ export const SlackNotification: React.FC<IProps> = ({
                 handleChangeValue(notification.id, notificationValue)
               }
             />
-            <CircleButton onClick={handleAdd}>
+            <StyledCircleButton onClick={handleAdd}>
               <Icon icon={E_ICON.ADD} />
-            </CircleButton>
-            <CircleButton onClick={() => handleRemove(notification.id)}>
+            </StyledCircleButton>
+            <StyledCircleButton onClick={() => handleRemove(notification.id)}>
               <Icon icon={E_ICON.REMOVE} />
-            </CircleButton>
+            </StyledCircleButton>
           </Box>
         );
       })}

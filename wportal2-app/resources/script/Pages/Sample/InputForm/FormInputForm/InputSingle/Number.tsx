@@ -54,7 +54,9 @@ export const Number: React.FC<IProps> = ({
           marginTop: '10px',
         }}
         inputProps={{
-          width: '400px',
+          sx: {
+            width: '400px',
+          },
         }}
         inputValue={formInputForm.inputSingleNumber}
         onChange={inputSingleNumber => handleUpdate({ inputSingleNumber })}

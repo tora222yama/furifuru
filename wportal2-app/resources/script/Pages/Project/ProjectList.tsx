@@ -12,6 +12,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Avatar } from '@/script/Pages/Common/Avatar';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const ProjectList: React.FC<IProps> = ({ sx }) => {
@@ -89,9 +90,9 @@ export const ProjectList: React.FC<IProps> = ({ sx }) => {
         return (
           <Paper
             sx={{
-              padding: '20px',
+              padding: responsiveSpacing(4),
               '&:not(:first-of-type)': {
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
               },
             }}
             key={project.id}
@@ -119,7 +120,7 @@ export const ProjectList: React.FC<IProps> = ({ sx }) => {
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 backgroundColor: E_COLOR.GREY_LIGHT,
               }}
             >
@@ -129,10 +130,10 @@ export const ProjectList: React.FC<IProps> = ({ sx }) => {
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '10px',
+                gap: responsiveSpacing(2),
               }}
             >
               {project.trnProjectUser?.map(trnProjectUser => {
@@ -149,7 +150,7 @@ export const ProjectList: React.FC<IProps> = ({ sx }) => {
       })}
       <Paging
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
           justifyContent: 'flex-end',
         }}
         index={pageIndex}

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Box, Dialog, Paper } from '@mui/material';
+import { router } from '@inertiajs/react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { IPropsBase } from '@/script/System/System';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
@@ -7,14 +9,19 @@ import {
   FormAuthenticatorLogin,
   IFormAuthenticatorLogin,
 } from '@/script/Pages/Login/FormAuthenticatorLogin';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const AuthenticatorLogin: React.FC<IProps> = () => {
+  const { onStart, onFinish } = useProgressContext();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [formAuthenticatorLogin, setFormAuthenticatorLogin] =
     React.useState<IFormAuthenticatorLogin>({
       email: '',
-      token: '',
+      password: '',
+      code: '',
     });
 
   /**
@@ -31,7 +38,27 @@ export const AuthenticatorLogin: React.FC<IProps> = () => {
    * 値の送信.
    */
   const handleSubmit = async () => {
-    // TODO: 送信処理の実装.
+    // recaptchaのtoken取得.
+    if (!executeRecaptcha) {
+      return;
+    }
+    const recaptchaToken = await executeRecaptcha('sp_login');
+
+    // SPログイン処理.
+    router.post(
+      getPagesHref(E_PAGES.SP_LOGIN),
+      {
+        email: formAuthenticatorLogin.email,
+        password: formAuthenticatorLogin.password,
+        code: formAuthenticatorLogin.code,
+        recaptchaToken,
+      },
+      {
+        preserveState: false,
+        onStart,
+        onFinish,
+      },
+    );
   };
 
   return (

@@ -11,6 +11,7 @@ import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { ProjectList } from '@/script/Pages/Project/ProjectList';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Project: React.FC<IProps> = () => {
@@ -26,13 +27,13 @@ export const Project: React.FC<IProps> = () => {
         <InertiaLink href={getPagesHref(E_PAGES.PROJECT__NEW)}>
           <ButtonGeneral
             sx={{
-              width: '140px',
+              width: responsiveSize(140),
             }}
             label="新規作成"
           />
         </InertiaLink>
       </Box>
-      <ProjectList sx={{ marginTop: '20px' }} />
+      <ProjectList sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
 };

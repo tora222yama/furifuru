@@ -17,6 +17,7 @@ import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
 import { DateTime } from '@/script/Common/DateTime';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { responsiveSize } from '@/script/System/Responsive';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,11 +26,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: '14px',
     height: '48px',
     padding: '5px 10px',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '8px',
+      height: '24px',
+      padding: '0px 5px',
+    },
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: '14px',
     height: '80px',
     padding: '5px 10px',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '8px',
+      height: '40px',
+      padding: '0px 5px',
+    },
   },
 }));
 
@@ -66,7 +77,11 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
           <StyledTableCell>{trnUser.id}</StyledTableCell>
           <StyledTableCell sx={{ display: 'flex', alignItems: 'center' }}>
             <Image
-              sx={{ width: '60px', height: '60px', borderRadius: '30px' }}
+              sx={{
+                width: responsiveSize(60),
+                height: responsiveSize(60),
+                borderRadius: responsiveSize(30),
+              }}
               src={trnUser.faceImagePath}
             />
           </StyledTableCell>
@@ -84,7 +99,7 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
     return (
       <Box
         sx={{
-          marginTop: '60px',
+          marginTop: responsiveSize(60),
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
@@ -99,8 +114,12 @@ export const UserTable: React.FC<IProps> = ({ sx, handleSelect }) => {
     <Table sx={sx}>
       <TableHead>
         <TableRow>
-          <StyledTableCell sx={{ width: '60px' }}>id</StyledTableCell>
-          <StyledTableCell sx={{ width: '60px' }}>icon</StyledTableCell>
+          <StyledTableCell sx={{ width: responsiveSize(60) }}>
+            id
+          </StyledTableCell>
+          <StyledTableCell sx={{ width: responsiveSize(60) }}>
+            icon
+          </StyledTableCell>
           <StyledTableCell>nickname</StyledTableCell>
           <StyledTableCell>最終アクション</StyledTableCell>
         </TableRow>

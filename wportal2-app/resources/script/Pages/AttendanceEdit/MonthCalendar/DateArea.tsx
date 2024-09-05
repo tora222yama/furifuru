@@ -109,7 +109,7 @@ export const DateArea: React.FC<IProps> = ({ sx }) => {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(7, 1fr)',
+        gridTemplateColumns: 'repeat(7, calc(100% / 7))',
         borderRight: `1px solid ${E_COLOR.GREY}`,
         ...sx,
       }}

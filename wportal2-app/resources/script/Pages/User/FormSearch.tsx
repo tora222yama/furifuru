@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { InputField } from '@/script/Component/Form/InputField';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormSearch {
   keyword: string;
@@ -29,7 +30,7 @@ export const FormSearch: React.FC<IProps> = ({
     <FormControl
       sx={{
         width: '100%',
-        gap: '20px',
+        gap: responsiveSpacing(4),
         ...sx,
       }}
     >
@@ -39,13 +40,15 @@ export const FormSearch: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>キーワード</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>キーワード</TypoText>
         <InputField
           sx={{
             width: '100%',
           }}
           inputProps={{
-            width: '100%',
+            sx: {
+              width: '100%',
+            },
           }}
           id="user-search"
           inputValue={formSearch.keyword}
@@ -58,7 +61,9 @@ export const FormSearch: React.FC<IProps> = ({
           alignItems: 'center',
         }}
       >
-        <TypoText sx={{ minWidth: '200px' }}>非アクティブのみ</TypoText>
+        <TypoText sx={{ minWidth: responsiveSize(200) }}>
+          非アクティブのみ
+        </TypoText>
         <Checkbox
           checked={formSearch.inactiveUserFlag}
           onChange={v => handleUpdate({ inactiveUserFlag: v.target.checked })}
@@ -67,8 +72,7 @@ export const FormSearch: React.FC<IProps> = ({
       <ButtonGeneral
         sx={{
           marginLeft: 'auto',
-          width: '200px',
-          padding: '5px 10px',
+          width: responsiveSize(200),
         }}
         label="検索"
         onClick={handleSubmit}

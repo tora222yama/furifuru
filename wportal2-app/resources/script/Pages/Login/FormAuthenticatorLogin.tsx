@@ -8,7 +8,8 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 
 export interface IFormAuthenticatorLogin {
   email: string;
-  token: string;
+  password: string;
+  code: string;
 }
 interface IProps extends IPropsBase {
   formAuthenticatorLogin: IFormAuthenticatorLogin;
@@ -45,9 +46,14 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-authenticator-login-email"
           inputValue={formAuthenticatorLogin.email}
@@ -56,18 +62,45 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
         />
       </Box>
       <Box sx={{ width: '100%' }}>
-        <TypoText size="12px">Token</TypoText>
+        <TypoText size="12px">パスワード</TypoText>
         <InputField
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
+          }}
+          id="form-authenticator-login-password"
+          type="password"
+          inputValue={formAuthenticatorLogin.password}
+          onChange={password => handleUpdate({ password })}
+          visibleError
+        />
+      </Box>
+      <Box sx={{ width: '100%' }}>
+        <TypoText size="12px">6桁のコード</TypoText>
+        <InputField
+          sx={{
+            width: '100%',
+          }}
+          fieldSx={{
+            width: '100%',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-authenticator-login-token"
-          inputValue={formAuthenticatorLogin.token}
-          onChange={token => handleUpdate({ token })}
+          inputValue={formAuthenticatorLogin.code}
+          onChange={code => handleUpdate({ code })}
           visibleError
         />
       </Box>
@@ -79,9 +112,7 @@ export const FormAuthenticatorLogin: React.FC<IProps> = ({
         }}
         label="ログイン"
         onClick={handleSubmit}
-        disabled={
-          !formAuthenticatorLogin.email || !formAuthenticatorLogin.token
-        }
+        disabled={!formAuthenticatorLogin.email || !formAuthenticatorLogin.code}
       />
     </FormControl>
   );
