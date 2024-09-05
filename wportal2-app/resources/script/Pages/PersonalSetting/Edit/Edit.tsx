@@ -29,6 +29,8 @@ export const Edit: React.FC<IProps> = () => {
   const [formEdit, setFormEdit] = React.useState<IFormEdit>({
     name: authUser.name,
     nickname: authUser.trnUser?.nickname ?? '',
+    birthDate: authUser.trnUser?.birthDate ?? '',
+    selfIntroduction: authUser.trnUser?.selfIntroduction ?? '',
     slackUserId: trnUserSlackProfile.slackUserId,
     slackUserName: trnUserSlackProfile.slackUserName,
     slackTeamId: trnUserSlackProfile.slackTeamId,
@@ -65,6 +67,8 @@ export const Edit: React.FC<IProps> = () => {
       data: {
         trnUserId: authUser.trnUser?.id ?? 0,
         nickname: formEdit.nickname,
+        birthDate: formEdit.birthDate,
+        selfIntroduction: formEdit.selfIntroduction,
         slackUserId: formEdit.slackUserId,
         slackUserName: formEdit.slackUserName,
         slackTeamId: formEdit.slackTeamId,

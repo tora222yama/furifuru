@@ -14,16 +14,18 @@ use Illuminate\Support\Facades\Auth;
 final class PipeAppPersonalSettingShowAlignSlack extends PipeBase
 {
     // 認証情報から取得するユーザー情報.
-    public int $trnUserId        = 0;
+    public int $trnUserId         = 0;
 
-    public string $email         = '';
+    public string $email          = '';
+
+    public ?string $birthDate     = null;
 
     // SlackAPIで取得したユーザー情報.
-    public string $slackUserId   = '';
+    public string $slackUserId    = '';
 
-    public string $slackUserName = '';
+    public string $slackUserName  = '';
 
-    public string $slackTeamId   = '';
+    public string $slackTeamId    = '';
 
     /**
      * constructor.

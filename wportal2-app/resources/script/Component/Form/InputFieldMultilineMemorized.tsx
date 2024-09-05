@@ -4,7 +4,6 @@ import { Closable } from '@/script/Component/Misc/Closable';
 import { InputError } from '@/script/Component/Form/InputError';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IInputFieldMultilineProps } from '@/script/Component/Form/IInputFieldMutilineProps';
-import { parseInputProps } from '@/script/Component/Form/IInputProps';
 import { responsiveSize } from '@/script/System/Responsive';
 
 export const InputFieldMultilineMemorized: React.FC<
@@ -22,9 +21,9 @@ export const InputFieldMultilineMemorized: React.FC<
   rows,
   autoComplete,
   disabled,
+  fieldSx,
   inputProps,
 }) => {
-  const input = parseInputProps(inputProps);
   const [isEdited, setIsEdited] = React.useState<boolean>(false);
 
   /**
@@ -74,23 +73,15 @@ export const InputFieldMultilineMemorized: React.FC<
       <TextField
         id={id}
         sx={{
-          width: input.width,
-          minWidth: input.minWidth,
-          height: input.height,
           backgroundColor: getBackgroundColor(),
 
           '& .MuiInputBase-input.Mui-disabled': {
             WebkitTextFillColor: E_COLOR.GREY,
           },
+
+          ...fieldSx,
         }}
-        inputProps={{
-          sx: {
-            width: input.width,
-            height: input.height,
-            resize: input.resize,
-            padding: input.padding,
-          },
-        }}
+        inputProps={inputProps}
         variant="outlined"
         value={inputValue}
         onChange={v => {

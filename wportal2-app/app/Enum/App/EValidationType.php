@@ -31,6 +31,7 @@ enum EValidationType: string
     case EMAIL             = 'email'; // Eメール.
     case UNIQUE_AUTH_EMAIL = 'unique_auth_email'; // 認証メールユニーク確認.
     case SIMPLE_PASSWORD   = 'simple_password'; // 英数字8文字以上16文字以内.
+    case DATE              = 'date'; // 日付形式.
 
     /**
      * バリデーション指定の情報を作成.
@@ -122,6 +123,7 @@ enum EValidationType: string
             self::EMAIL             => collect(["regex:/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-z]{2,13}$/"]),
             self::UNIQUE_AUTH_EMAIL => collect(['unique:auth_user,email']),
             self::SIMPLE_PASSWORD   => collect([Password::min(8)->letters()->numbers()]),
+            self::DATE              => collect(['date', 'nullable']),
             default                 => throw new Exception('バリデーションルールが未設定です'),
         };
     }
@@ -153,6 +155,7 @@ enum EValidationType: string
             self::EMAIL             => "{$columnName}はメールアドレス形式で入力してください",
             self::UNIQUE_AUTH_EMAIL => "{$columnName}が既存登録メールと重複しています",
             // self::SIMPLE_PASSWORD   => '', Passwordを利用.
+            self::DATE              => "{$columnName}は日付形式で入力してください",
             default                 => throw new Exception('バリデーションメッセージが未設定です'),
         };
     }

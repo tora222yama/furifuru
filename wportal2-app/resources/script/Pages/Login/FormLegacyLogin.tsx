@@ -45,9 +45,14 @@ export const FormLegacyLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-legacy-login-email"
           inputValue={formLegacyLogin.email}
@@ -61,9 +66,14 @@ export const FormLegacyLogin: React.FC<IProps> = ({
           sx={{
             width: '100%',
           }}
-          inputProps={{
+          fieldSx={{
             width: '100%',
-            padding: '2px',
+          }}
+          inputProps={{
+            sx: {
+              width: '100%',
+              padding: '2px',
+            },
           }}
           id="form-legacy-login-password"
           type="password"

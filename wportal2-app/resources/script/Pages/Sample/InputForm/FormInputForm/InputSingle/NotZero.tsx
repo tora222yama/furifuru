@@ -54,7 +54,9 @@ export const NotZero: React.FC<IProps> = ({
           marginTop: '10px',
         }}
         inputProps={{
-          width: '400px',
+          sx: {
+            width: '400px',
+          },
         }}
         inputValue={formInputForm.inputSingleNotZero}
         onChange={inputSingleNotZero => handleUpdate({ inputSingleNotZero })}

@@ -102,7 +102,7 @@ export const responsiveSizeBySpacing = (unit: number) => {
  */
 export const responsiveSize = (size: number) => {
   return {
-    sx: `${size / 2}px`,
+    xs: `${size / 2}px`,
     sm: `${size / 2}px`,
     md: `${size}px`,
   };
