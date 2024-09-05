@@ -13,5 +13,5 @@ export interface IInputFieldProps extends IPropsBase {
   autoComplete?: string;
   disabled?: boolean;
   fieldSx?: SxProps<Theme>;
-  inputProps?: InputBaseComponentProps;
+  inputProps?: InputBaseComponentProps & { sx?: SxProps<Theme> };
 }
