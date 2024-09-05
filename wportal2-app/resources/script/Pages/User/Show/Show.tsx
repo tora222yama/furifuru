@@ -21,11 +21,19 @@ import { Closable } from '@/script/Component/Misc/Closable';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { E_USER_AUTHORITY } from '@/script/Enum/Server/App/EUserAuthority';
 import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
+import { DateTime } from '@/script/Common/DateTime';
+import { TypoText } from '@/script/Component/Typography/TypoText';
+import { E_COLOR } from '@/script/Enum/EColor';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
   const { trnUserAuthorityList } = useCommonIndexContext();
   const { trnUser } = useIndexContext();
+
+  // 生年月日の表示文字列.
+  const birthDate = trnUser.birthDate
+    ? DateTime.parseString(String(trnUser.birthDate)).toDateJP()
+    : '';
 
   return (
     <Page>
@@ -107,6 +115,40 @@ export const Show: React.FC<IProps> = () => {
               label="E-Mail"
               value={String(trnUser?.authUser?.email)}
             />
+            <LabelValue
+              sx={{ marginTop: responsiveSpacing(2) }}
+              labelSx={{
+                width: responsiveSize(100),
+                minWidth: responsiveSize(100),
+              }}
+              label="生年月日"
+              value={birthDate}
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            marginTop: responsiveSpacing(4),
+          }}
+        >
+          <TypoH2 bold>自己紹介</TypoH2>
+          <Box
+            sx={{
+              marginTop: responsiveSpacing(2),
+              borderRadius: responsiveSize(8),
+              padding: responsiveSpacing(2),
+              minHeight: responsiveSize(100),
+              border: '1px solid #ddd',
+            }}
+          >
+            <TypoText
+              sx={{
+                whiteSpace: 'pre-wrap',
+                color: trnUser.selfIntroduction ? 'inherit' : `${E_COLOR.GREY}`,
+              }}
+            >
+              {String(trnUser.selfIntroduction) || '何も入力されていません'}
+            </TypoText>
           </Box>
         </Box>
         <Box
