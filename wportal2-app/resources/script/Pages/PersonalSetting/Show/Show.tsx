@@ -25,6 +25,7 @@ import {
 } from '@/script/Enum/Server/App/EPages';
 import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
+import { DateTime } from '@/script/Common/DateTime';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -35,17 +36,10 @@ export const Show: React.FC<IProps> = () => {
     useMutationAppPersonalSettingShowAlignSlack();
   const loading = processingAlignSlack;
 
-  // 生年月日をYYYY/MM/DD形式に変換
-  const formatDate = (dataString: string | null) => {
-    if (!dataString) {
-      return '';
-    }
-    const date = new Date(dataString);
-    const year = date.getFullYear();
-    const month = `0${date.getMonth() + 1}`.slice(-2);
-    const day = `0${date.getDate()}`.slice(-2);
-    return `${year}/${month}/${day}`;
-  };
+  // 生年月日の表示文字列.
+  const birthDate = authUser.trnUser?.birthDate
+    ? DateTime.parseString(String(authUser.trnUser.birthDate)).toDateJP()
+    : '';
 
   /**
    * SlackIdの有効化を実行.
@@ -136,11 +130,7 @@ export const Show: React.FC<IProps> = () => {
             <LabelValue
               sx={{ marginTop: responsiveSpacing(2) }}
               label="生年月日"
-              value={
-                authUser.trnUser?.birthDate
-                  ? formatDate(authUser.trnUser.birthDate)
-                  : ''
-              }
+              value={birthDate}
             />
           </Box>
         </Box>
