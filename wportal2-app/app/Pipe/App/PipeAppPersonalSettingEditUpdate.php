@@ -8,7 +8,6 @@ use App\Enum\App\EPipeKind;
 use App\Enum\App\EValidationType;
 use App\Enum\ValidationRules\ValidationPacker;
 use App\Pipe\PipeBase;
-use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 
 final class PipeAppPersonalSettingEditUpdate extends PipeBase
@@ -17,7 +16,7 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
 
     public string $nickname         = '';
 
-    public ?Carbon $birthDate       = null;
+    public ?string $birthDate       = null;
 
     public string $selfIntroduction = '';
 
@@ -45,7 +44,7 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
         $this->trnUserId         = $this->getArgAsInteger('trnUserId');
         $this->nickname          = $this->getArgAsString('nickname');
         $birthDate               = $this->getArgAsString('birthDate');
-        $this->birthDate         = Carbon::parse($birthDate);
+        $this->birthDate         = empty($birthDate) ? null : $birthDate;
         $this->selfIntroduction  = $this->getArgAsString('selfIntroduction');
         $this->slackUserId       = $this->getArgAsString('slackUserId');
         $this->slackUserName     = $this->getArgAsString('slackUserName');
@@ -71,6 +70,16 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
             $this->nickname,
             collect([
                 EValidationType::REQUIRED->ruleSet(),
+            ])
+        );
+
+        // 日付.
+        $packer->addValidation(
+            'birthDate',
+            '生年月日',
+            $this->birthDate,
+            collect([
+                EValidationType::DATE->ruleSet(),
             ])
         );
 

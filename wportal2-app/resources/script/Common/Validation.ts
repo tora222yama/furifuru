@@ -143,6 +143,8 @@ const errorMessage = (
       return `${columnName}はメールアドレス形式で入力してください`;
     case E_VALIDATION_TYPE.SIMPLE_PASSWORD:
       return `${columnName}は8文字以上の半角英数字で入力してください`;
+    case E_VALIDATION_TYPE.DATE:
+      return `${columnName}は日付形式で入力してください`;
     default:
       return '';
   }
@@ -188,6 +190,8 @@ const validate = (value: string, validation: BaseValidationType): boolean => {
       return validateMailRegex(value, false);
     case E_VALIDATION_TYPE.SIMPLE_PASSWORD:
       return validateSimplePassword(value);
+    case E_VALIDATION_TYPE.DATE:
+      return validateDate(value);
     default:
       throw new Error(`invalid validation.`);
   }
@@ -256,6 +260,18 @@ const validateMailRegex = (value: string, isRequired: boolean) => {
 const validateSimplePassword = (value: string) => {
   // min(8)->letters()->numbers()
   return /^(?=.*?[a-zA-Z])(?=.*?\d)[a-zA-Z\d]{8,}$/.test(value);
+};
+
+/**
+ * DATE
+ * 有効な日付かどうか.
+ */
+const validateDate = (value: string) => {
+  if (value === '') {
+    return true;
+  }
+  const date = new Date(value);
+  return !Number.isNaN(date.getDate());
 };
 
 /**

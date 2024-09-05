@@ -31,8 +31,6 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
-        $user = Auth::user();
-
         return $this->render('PersonalSetting/Show/Index', [
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
