@@ -9,6 +9,7 @@ import {
   getButtonColorText,
   getButtonVariant,
 } from '@/script/Component/Button/EButtonType';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 /**
  * 一般的なボタン、paddingやmarginなど共通で編集できるようにするためのラッパー.
@@ -36,7 +37,8 @@ export const ButtonGeneral: React.FC<IProps> = ({
         backgroundColor: getButtonColorNormal(buttonType),
         color: getButtonColorText(buttonType),
         textTransform: 'none',
-        padding: '10px 16px',
+        py: responsiveSpacing(2),
+        px: responsiveSpacing(3),
         overflow: 'hidden',
 
         '&:hover': {

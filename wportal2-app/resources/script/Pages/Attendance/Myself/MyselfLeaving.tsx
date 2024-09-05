@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { History } from '@/script/Pages/Attendance/Myself/History';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const MyselfLeaving: React.FC<IProps> = ({ sx }) => {
@@ -18,9 +19,8 @@ export const MyselfLeaving: React.FC<IProps> = ({ sx }) => {
       >
         <Box
           sx={{
-            width: '240px',
-            height: '50px',
-            borderRadius: '8px',
+            padding: responsiveSpacing(4),
+            borderRadius: responsiveSpacing(4),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -33,7 +33,7 @@ export const MyselfLeaving: React.FC<IProps> = ({ sx }) => {
       </Box>
       <History
         sx={{
-          marginTop: '20px',
+          marginTop: responsiveSpacing(4),
         }}
       />
     </>

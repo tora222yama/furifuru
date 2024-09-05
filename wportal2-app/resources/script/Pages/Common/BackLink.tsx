@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
-import { ArrowBackIos } from '@mui/icons-material';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
@@ -12,6 +11,9 @@ import {
   getPagesName,
   IPagesHrefReplace,
 } from '@/script/Enum/Server/App/EPages';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { E_ICON } from '@/script/Enum/EIcon';
 
 interface IProps extends IPropsBase {
   current: EPages;
@@ -24,19 +26,19 @@ export const BackLink: React.FC<IProps> = ({ current, replace = [] }) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        marginBottom: '8px',
-        gap: '10px',
+        marginBottom: responsiveSize(8),
+        gap: responsiveSpacing(2),
       }}
     >
       {backList.map(back => {
         return (
           <React.Fragment key={back}>
-            <ArrowBackIos sx={{ color: E_COLOR.BLACK }} />
+            <Icon icon={E_ICON.ARROW_BACK} />
             <InertiaLink href={getPagesHref(back, replace)}>
               <TypoText
                 sx={{
                   textDecoration: 'underline',
-                  marginRight: '20px',
+                  marginRight: responsiveSpacing(4),
                   '&:hover': {
                     color: E_COLOR.PRIMARY_DARK,
                   },

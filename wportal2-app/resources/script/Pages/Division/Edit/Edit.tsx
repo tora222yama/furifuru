@@ -20,6 +20,7 @@ import { validateAll } from '@/script/Pages/Division/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -117,7 +118,7 @@ export const Edit: React.FC<IProps> = () => {
         </TypoH1>
         <ButtonGeneral
           sx={{
-            width: '150px',
+            width: responsiveSize(150),
             color: 'white',
           }}
           buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
@@ -127,11 +128,11 @@ export const Edit: React.FC<IProps> = () => {
       </Box>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <FormEdit
@@ -142,16 +143,21 @@ export const Edit: React.FC<IProps> = () => {
         <Box>
           <Box sx={{ display: 'flex' }}>
             <Box>
-              <TypoText sx={{ minWidth: '200px', width: '200px' }}>
+              <TypoText
+                sx={{
+                  minWidth: responsiveSize(200),
+                  width: responsiveSize(200),
+                }}
+              >
                 メンバー
               </TypoText>
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '10px',
+                gap: responsiveSpacing(2),
               }}
             >
               {trnDivision.trnDivisionUser?.map(trnDivisionUser => {
@@ -164,11 +170,11 @@ export const Edit: React.FC<IProps> = () => {
               })}
             </Box>
           </Box>
-          <Divider sx={{ marginTop: '6px' }} />
+          <Divider sx={{ marginTop: responsiveSize(6) }} />
         </Box>
         <ButtonGeneral
           sx={{
-            width: '200px',
+            width: responsiveSize(200),
           }}
           label="更新"
           onClick={handleSubmit}

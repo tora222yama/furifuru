@@ -18,6 +18,7 @@ import {
 import { validateAll } from '@/script/Pages/PersonalSetting/Edit/FormEditValidation';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useIndexContext } from '@/script/Pages/PersonalSetting/Edit/Index';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Edit: React.FC<IProps> = () => {
@@ -58,8 +59,6 @@ export const Edit: React.FC<IProps> = () => {
       return;
     }
 
-    const birthDate = formEdit.birthDate === '' ? null : formEdit.birthDate;
-
     // 更新処理の実施.
     router.visit(getPagesHref(E_PAGES.PERSONAL_SETTING__UPDATE), {
       method: 'post',
@@ -86,8 +85,8 @@ export const Edit: React.FC<IProps> = () => {
       <TypoH1>{getPagesName(E_PAGES.PERSONAL_SETTING__EDIT)}</TypoH1>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
         }}
       >
         <FormEdit

@@ -23,6 +23,7 @@ export const themeCommon = createTheme({
       primary: E_COLOR.TEXT_PRIMARY,
     },
   },
+  spacing: 6,
   typography: {
     fontFamily: "'Noto Sans JP', sans-serif;",
     h1: {

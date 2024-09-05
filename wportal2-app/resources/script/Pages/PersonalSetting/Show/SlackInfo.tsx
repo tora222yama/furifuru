@@ -6,6 +6,7 @@ import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { Str } from '@/script/Common/Str';
 import { IAppTrnUserSlackProfile } from '@/script/Models/App/Trn/TrnUserSlackProfileList';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   trnUserSlackProfile: IAppTrnUserSlackProfile;
@@ -17,14 +18,14 @@ export const SlackInfo: React.FC<IProps> = ({ sx, trnUserSlackProfile }) => {
         ...sx,
       }}
     >
-      <TypoH2>Slack情報</TypoH2>
+      <TypoH2 bold>Slack情報</TypoH2>
       <Box
         sx={{
-          width: '600px',
-          marginTop: '10px',
+          width: '100%',
+          marginTop: responsiveSpacing(2),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <LabelValue

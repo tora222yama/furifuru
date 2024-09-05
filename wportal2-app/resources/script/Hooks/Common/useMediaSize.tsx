@@ -5,7 +5,7 @@ import { Theme, useMediaQuery } from '@mui/material';
  */
 export const useMediaSize = () => {
   const isMobileSize = useMediaQuery((theme: Theme) => {
-    return theme.breakpoints.down('md');
+    return theme.breakpoints.down('sm');
   });
 
   return { isMobileSize };

@@ -11,6 +11,7 @@ import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { InputField } from '@/script/Component/Form/InputField';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 export interface IFormEdit {
   enableLegacyLogin: boolean;
@@ -35,30 +36,42 @@ export const FormEdit: React.FC<IProps> = ({
       <Box
         sx={{
           display: 'flex',
-          gap: '20px',
+          gap: responsiveSpacing(4),
         }}
       >
         <Image
           sx={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '24px',
+            width: responsiveSize(120),
+            height: responsiveSize(120),
+            borderRadius: responsiveSize(24),
           }}
           src={trnUser.faceImagePath}
         />
         <Box sx={{ width: '100%' }}>
           <LabelValue
-            sx={{ marginTop: '10px' }}
+            sx={{ marginTop: responsiveSpacing(2) }}
+            labelSx={{
+              width: responsiveSize(100),
+              minWidth: responsiveSize(100),
+            }}
             label="名前"
             value={String(trnUser?.authUser?.name)}
           />
           <LabelValue
-            sx={{ marginTop: '10px' }}
+            sx={{ marginTop: responsiveSpacing(2) }}
+            labelSx={{
+              width: responsiveSize(100),
+              minWidth: responsiveSize(100),
+            }}
             label="表示名"
             value={String(trnUser?.nickname)}
           />
           <LabelValue
-            sx={{ marginTop: '10px' }}
+            sx={{ marginTop: responsiveSpacing(2) }}
+            labelSx={{
+              width: responsiveSize(100),
+              minWidth: responsiveSize(100),
+            }}
             label="E-Mail"
             value={String(trnUser?.authUser?.email)}
           />
@@ -66,72 +79,66 @@ export const FormEdit: React.FC<IProps> = ({
       </Box>
       <Box
         sx={{
-          marginTop: '20px',
+          marginTop: responsiveSpacing(4),
           display: 'flex',
           alignItems: 'center',
         }}
       >
-        <Icon
-          sx={{ width: '20px', height: '20px', marginRight: '5px' }}
-          icon={E_ICON.BUILD}
-        />
-        <TypoH2>Slack情報</TypoH2>
+        <Icon sx={{ marginRight: responsiveSize(5) }} icon={E_ICON.BUILD} />
+        <TypoH2 bold>Slack情報</TypoH2>
       </Box>
       <LabelValue
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
         }}
         label="Slack User ID"
         value={trnUser.trnUserSlackProfile?.slackUserId ?? '設定なし'}
       />
       <LabelValue
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
         }}
         label="Slack User Name"
         value={trnUser.trnUserSlackProfile?.slackUserName ?? '設定なし'}
       />
       <LabelValue
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
         }}
         label="Slack Team ID"
         value={trnUser.trnUserSlackProfile?.slackTeamId ?? '設定なし'}
       />
       <Box
         sx={{
-          marginTop: '20px',
+          marginTop: responsiveSpacing(4),
           display: 'flex',
           alignItems: 'center',
         }}
       >
-        <Icon
-          sx={{ width: '20px', height: '20px', marginRight: '5px' }}
-          icon={E_ICON.BUILD}
-        />
-        <TypoH2>管理者向け情報</TypoH2>
+        <Icon sx={{ marginRight: responsiveSize(5) }} icon={E_ICON.BUILD} />
+        <TypoH2 bold>管理者向け情報</TypoH2>
       </Box>
       <LabelValue
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
         }}
         label="Auth User ID"
         value={String(trnUser.authUser?.id ?? '')}
       />
       <Box
         sx={{
-          marginTop: '10px',
+          marginTop: responsiveSpacing(2),
           display: 'flex',
         }}
       >
         <TypoText
           sx={{
-            marginTop: '10px',
-            minWidth: '200px',
-            width: '200px',
+            marginTop: responsiveSpacing(2),
+            minWidth: responsiveSize(200),
+            width: responsiveSize(200),
           }}
         >
-          レガシーログインの許可
+          ログイン許可
         </TypoText>
         <Box>
           <Box sx={{ display: 'flex' }}>
@@ -152,15 +159,15 @@ export const FormEdit: React.FC<IProps> = ({
       <Closable open={formEdit.enableLegacyLogin}>
         <Box
           sx={{
-            marginTop: '10px',
+            marginTop: responsiveSpacing(2),
             display: 'flex',
           }}
         >
           <TypoText
             sx={{
-              marginTop: '10px',
-              minWidth: '200px',
-              width: '200px',
+              marginTop: responsiveSpacing(2),
+              minWidth: responsiveSize(200),
+              width: responsiveSize(200),
             }}
           >
             上書きパスワード
@@ -174,9 +181,9 @@ export const FormEdit: React.FC<IProps> = ({
       </Closable>
       <ButtonGeneral
         sx={{
-          marginTop: '20px',
-          minWidth: '200px',
-          width: '200px',
+          marginTop: responsiveSpacing(2),
+          minWidth: responsiveSize(200),
+          width: responsiveSize(200),
         }}
         label="更新"
         onClick={handleSubmit}

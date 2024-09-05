@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Box, Divider, SxProps } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
   label: string;
   value: string;
   labelSx?: SxProps;
   valueSx?: SxProps;
-  showDivider?: boolean;
 }
 export const LabelValue: React.FC<IProps> = ({
   sx,
@@ -16,17 +16,22 @@ export const LabelValue: React.FC<IProps> = ({
   value,
   labelSx,
   valueSx,
-  showDivider = true,
 }) => {
   return (
     <Box sx={{ ...sx }}>
       <Box sx={{ display: 'flex' }}>
-        <TypoText sx={{ minWidth: '100px', width: '180px', ...labelSx }}>
+        <TypoText
+          sx={{
+            minWidth: responsiveSize(200),
+            width: responsiveSize(200),
+            ...labelSx,
+          }}
+        >
           {label}
         </TypoText>
         <TypoText sx={{ ...valueSx }}>{value}</TypoText>
       </Box>
-      {showDivider && <Divider sx={{ marginTop: '6px' }} />}
+      <Divider sx={{ marginTop: responsiveSize(6) }} />
     </Box>
   );
 };

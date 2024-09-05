@@ -14,26 +14,23 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import MenuIcon from '@mui/icons-material/Menu';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
-import {
-  E_ICON,
-  EIcon,
-  getIconHeight,
-  getIconPath,
-  getIconWidth,
-} from '@/script/Enum/EIcon';
+import { ArrowBackIos } from '@mui/icons-material';
+import { E_ICON, EIcon, getIconPath, getIconSize } from '@/script/Enum/EIcon';
 import { IPropsBase } from '@/script/System/System';
+import { responsiveSize } from '@/script/System/Responsive';
 
 const StyledImg = styled('img')({});
 
 interface IProps extends IPropsBase {
   icon: EIcon;
-  size?: string;
-  width?: string;
-  height?: string;
+  size?: number;
+  width?: number;
+  height?: number;
   onClick?: () => void;
 }
 export const Icon: React.FC<IProps> = ({
@@ -50,12 +47,11 @@ export const Icon: React.FC<IProps> = ({
   }
 
   // size指定があれば正方利用、いずれの指定もなければデフォルト値を利用.
-  const iconWidth = (size || width) ?? getIconWidth(icon);
-  const iconHeight = (size || height) ?? getIconHeight(icon);
-
+  const iconWidth = (size || width) ?? getIconSize(icon).w;
+  const iconHeight = (size || height) ?? getIconSize(icon).h;
   const iconSx = {
-    width: iconWidth,
-    height: iconHeight,
+    width: responsiveSize(iconWidth),
+    height: responsiveSize(iconHeight),
     ...sx,
   };
 
@@ -65,6 +61,8 @@ export const Icon: React.FC<IProps> = ({
       return <AddIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ATTENDANCE:
       return <AccessTimeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.ARROW_BACK:
+      return <ArrowBackIos sx={iconSx} onClick={onClick} />;
     case E_ICON.ARROW_LEFT:
       return <ArrowBackIosNewIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.ARROW_RIGHT:
@@ -87,6 +85,8 @@ export const Icon: React.FC<IProps> = ({
       return <ExpandMore sx={iconSx} onClick={onClick} />;
     case E_ICON.HOME:
       return <HomeIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.MENU:
+      return <MenuIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.OFFICE:
       return <BusinessIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.REMOVE:

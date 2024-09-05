@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Box, Divider, Menu, MenuItem } from '@mui/material';
+import { Box, Divider, Menu } from '@mui/material';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText } from '@/script/Component/Typography/TypoText';
-import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { Image } from '@/script/Component/Misc/Image';
-import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { Manual } from '@/script/Component/AppBar/MenuItem/Manual';
+import { ReleaseNote } from '@/script/Component/AppBar/MenuItem/ReleaseNote';
+import { Logout } from '@/script/Component/AppBar/MenuItem/Logout';
+import { PersonalSetting } from '@/script/Component/AppBar/MenuItem/PersonalSetting';
+import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 
@@ -67,7 +70,7 @@ export const User: React.FC<IProps> = ({ sx }) => {
       <Menu
         sx={{
           '& .MuiMenuItem-root': {
-            width: '250px',
+            width: responsiveSize(250),
           },
         }}
         autoFocus={false}
@@ -77,36 +80,12 @@ export const User: React.FC<IProps> = ({ sx }) => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={handleClose}
       >
-        <MenuItem>
-          <InertiaLink href={getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW)}>
-            <TypoText>個人設定</TypoText>
-          </InertiaLink>
-        </MenuItem>
+        <PersonalSetting />
         <Divider sx={{ margin: '8px' }} />
-        <MenuItem>
-          <a
-            href="https://docs.google.com/document/d/1lREZOhp2aJOwNavq2go9mXaDuJjsrlwRhroe0te9T2c/edit?usp=sharing"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <TypoText>操作の手引き</TypoText>
-          </a>
-        </MenuItem>
-        <MenuItem>
-          <a
-            href="https://docs.google.com/spreadsheets/d/1wYJkLvmAX-sCdvwzTAAu8vMQ9Gp6SiLFqKRzDIDwHAY/edit?usp=sharing"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <TypoText>リリースノート</TypoText>
-          </a>
-        </MenuItem>
+        <Manual />
+        <ReleaseNote />
         <Divider sx={{ margin: '8px' }} />
-        <MenuItem>
-          <InertiaLink href="/logout">
-            <TypoText>ログアウト</TypoText>
-          </InertiaLink>
-        </MenuItem>
+        <Logout />
       </Menu>
     </>
   );

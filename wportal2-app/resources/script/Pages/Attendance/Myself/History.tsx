@@ -15,6 +15,10 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import {
+  responsiveSizeBySpacing,
+  responsiveSpacing,
+} from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const History: React.FC<IProps> = ({ sx }) => {
@@ -53,8 +57,7 @@ export const History: React.FC<IProps> = ({ sx }) => {
       <Box
         sx={{
           width: '100%',
-          height: '100px',
-          padding: '0 20px',
+          padding: responsiveSpacing(4),
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: '8px',
@@ -76,6 +79,9 @@ export const History: React.FC<IProps> = ({ sx }) => {
                 sx={{
                   '& .MuiStepConnector-line': {
                     borderColor: E_COLOR.PRIMARY_DARK,
+                  },
+                  '.MuiSvgIcon-root': {
+                    width: responsiveSizeBySpacing(4),
                   },
                 }}
               >
@@ -100,7 +106,7 @@ export const History: React.FC<IProps> = ({ sx }) => {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          marginTop: '5px',
+          marginTop: responsiveSpacing(1),
         }}
       >
         <ButtonGeneral

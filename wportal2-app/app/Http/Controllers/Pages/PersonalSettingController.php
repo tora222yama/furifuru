@@ -34,7 +34,6 @@ class PersonalSettingController extends Controller
         $user = Auth::user();
 
         return $this->render('PersonalSetting/Show/Index', [
-            'user'                => $user,
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
         ]);
     }
@@ -50,11 +49,9 @@ class PersonalSettingController extends Controller
             throw new Exception();
         }
 
-        $user = Auth::user();
-
         return $this->render('PersonalSetting/Edit/Index', [
             'trnUserSlackProfile' => fn () => $this->getTrnUserSlackProfile(),
-            'user'                => $user, // ユーザー情報をビューに渡す
+
             // セッションにバリデーション情報があれば取得する.
             'serverValidation'    => fn () => session('serverValidation') ?? null,
         ]);

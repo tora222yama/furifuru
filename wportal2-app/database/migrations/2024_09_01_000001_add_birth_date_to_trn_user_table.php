@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    const TABLE_NAME = 'trn_user';
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('trn_user', function (Blueprint $table) {
+        Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+            $table->date('birth_date')->nullable()->after('nickname');
             $table->text('self_introduction')->nullable()->after('birth_date');
         });
     }
@@ -23,7 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('trn_user', function (Blueprint $table) {
+        Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+            $table->dropColumn('birth_date');
             $table->dropColumn('self_introduction');
         });
     }

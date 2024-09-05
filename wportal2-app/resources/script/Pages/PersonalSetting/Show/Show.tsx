@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Paper, Grid } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
@@ -23,6 +23,8 @@ import {
   getPagesHref,
   getPagesName,
 } from '@/script/Enum/Server/App/EPages';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
+import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -76,7 +78,7 @@ export const Show: React.FC<IProps> = () => {
         <InertiaLink href={getPagesHref(E_PAGES.PERSONAL_SETTING__EDIT)}>
           <ButtonGeneral
             sx={{
-              minWidth: '140px',
+              minWidth: responsiveSize(140),
             }}
             label="編集"
           />
@@ -85,11 +87,11 @@ export const Show: React.FC<IProps> = () => {
       <Closable open={!trnUserSlackProfile.slackUserId}>
         <Box
           sx={{
-            marginTop: '20px',
+            marginTop: responsiveSpacing(4),
             border: `1px solid ${E_COLOR.PRIMARY_MAIN}`,
             backgroundColor: E_COLOR.WHITE,
-            marginBottom: '20px',
-            padding: '10px',
+            marginBottom: responsiveSpacing(4),
+            padding: responsiveSpacing(2),
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -105,30 +107,34 @@ export const Show: React.FC<IProps> = () => {
       </Closable>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
         }}
       >
-        <Grid sx={{ width: '600px' }}>
-          <Grid>
-            <Image
-              sx={{
-                borderRadius: '24px',
-                width: '130px',
-                height: '130px',
-              }}
-              src={String(authUser.trnUser?.faceImagePath)}
-            />
-          </Grid>
-          <Grid sx={{ marginTop: '35px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: responsiveSpacing(4),
+          }}
+        >
+          <Image
+            sx={{
+              borderRadius: responsiveSize(24),
+              width: responsiveSize(120),
+              height: responsiveSize(120),
+            }}
+            src={String(authUser.trnUser?.faceImagePath)}
+          />
+          <Box sx={{ width: '100%' }}>
             <LabelValue label="名前" value={authUser.name} />
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
               label="表示名"
               value={String(authUser.trnUser?.nickname)}
             />
             <LabelValue
-              sx={{ marginTop: '10px' }}
+              sx={{ marginTop: responsiveSpacing(2) }}
               label="生年月日"
               value={
                 authUser.trnUser?.birthDate
@@ -136,57 +142,47 @@ export const Show: React.FC<IProps> = () => {
                   : ''
               }
             />
-          </Grid>
-          <Grid>
-            <SlackInfo
-              sx={{
-                marginTop: '35px',
-              }}
-              trnUserSlackProfile={trnUserSlackProfile}
-            />
-          </Grid>
-          <Grid>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            marginTop: responsiveSpacing(4),
+          }}
+        >
+          <TypoH2 bold>自己紹介</TypoH2>
+          <Box
+            sx={{
+              marginTop: responsiveSpacing(2),
+              borderRadius: responsiveSize(8),
+              padding: responsiveSpacing(2),
+              minHeight: responsiveSize(100),
+              border: '1px solid #ddd',
+            }}
+          >
             <TypoText
               sx={{
-                fontSize: '20px',
-                marginBottom: '10px',
-                paddingTop: '35px',
+                whiteSpace: 'pre-wrap',
+                color: authUser.trnUser?.selfIntroduction
+                  ? 'inherit'
+                  : `${E_COLOR.GREY}`,
               }}
             >
-              自己紹介
+              {String(authUser.trnUser?.selfIntroduction) ||
+                '何も入力されていません'}
             </TypoText>
-            <Box
-              sx={{
-                display: 'inline-block',
-                borderRadius: '8px',
-                width: '700px',
-                maxWidth: '100%',
-                padding: '10px',
-                border: '1px solid #ddd',
-                height: '10em',
-                overflowY: 'auto',
-              }}
-            >
-              <TypoText
-                sx={{
-                  whiteSpace: 'pre-wrap',
-                  fontSize: '14px',
-                  color: authUser.trnUser?.selfIntroduction
-                    ? 'inherit'
-                    : `${E_COLOR.GREY}`,
-                }}
-              >
-                {String(authUser.trnUser?.selfIntroduction) ||
-                  '何も入力されていません'}
-              </TypoText>
-            </Box>
-          </Grid>
-          <AuthenticatorInfo
-            sx={{
-              marginTop: '20px',
-            }}
-          />
-        </Grid>
+          </Box>
+        </Box>
+        <SlackInfo
+          sx={{
+            marginTop: responsiveSpacing(4),
+          }}
+          trnUserSlackProfile={trnUserSlackProfile}
+        />
+        <AuthenticatorInfo
+          sx={{
+            marginTop: responsiveSpacing(4),
+          }}
+        />
       </Paper>
     </Page>
   );

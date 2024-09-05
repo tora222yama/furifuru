@@ -5,6 +5,7 @@ import { InputError } from '@/script/Component/Form/InputError';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IInputFieldMultilineProps } from '@/script/Component/Form/IInputFieldMutilineProps';
 import { parseInputProps } from '@/script/Component/Form/IInputProps';
+import { responsiveSize } from '@/script/System/Responsive';
 
 export const InputFieldMultilineMemorized: React.FC<
   IInputFieldMultilineProps
@@ -64,7 +65,7 @@ export const InputFieldMultilineMemorized: React.FC<
     <Box
       sx={{
         '& .MuiOutlinedInput-root': {
-          padding: '4px',
+          padding: responsiveSize(4),
           lineHeight: 'normal',
         },
         ...sx,

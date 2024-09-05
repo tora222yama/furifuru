@@ -19,6 +19,7 @@ import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
 import { DialogReplaceTrnUser } from '@/script/Pages/Common/Dialog/DialogReplaceTrnUser';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const Show: React.FC<IProps> = () => {
@@ -85,7 +86,7 @@ export const Show: React.FC<IProps> = () => {
         >
           <ButtonGeneral
             sx={{
-              minWidth: '140px',
+              minWidth: responsiveSize(140),
             }}
             label="編集"
           />
@@ -93,11 +94,11 @@ export const Show: React.FC<IProps> = () => {
       </Box>
       <Paper
         sx={{
-          marginTop: '20px',
-          padding: '20px',
+          marginTop: responsiveSpacing(4),
+          padding: responsiveSpacing(4),
           display: 'flex',
           flexDirection: 'column',
-          gap: '10px',
+          gap: responsiveSpacing(2),
         }}
       >
         <LabelValue label="id" value={String(trnDivision.id)} />
@@ -112,12 +113,17 @@ export const Show: React.FC<IProps> = () => {
         <Box>
           <Box sx={{ display: 'flex' }}>
             <Box>
-              <TypoText sx={{ minWidth: '200px', width: '200px' }}>
+              <TypoText
+                sx={{
+                  minWidth: responsiveSize(200),
+                  width: responsiveSize(200),
+                }}
+              >
                 メンバー
               </TypoText>
               <ButtonGeneral
                 sx={{
-                  marginTop: '10px',
+                  marginTop: responsiveSpacing(2),
                 }}
                 label="入替"
                 onClick={handleClickReplace}
@@ -125,10 +131,10 @@ export const Show: React.FC<IProps> = () => {
             </Box>
             <Box
               sx={{
-                marginTop: '10px',
+                marginTop: responsiveSpacing(2),
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '10px',
+                gap: responsiveSpacing(2),
               }}
             >
               {trnDivision.trnDivisionUser?.map(trnDivisionUser => {
@@ -141,7 +147,7 @@ export const Show: React.FC<IProps> = () => {
               })}
             </Box>
           </Box>
-          <Divider sx={{ marginTop: '6px' }} />
+          <Divider sx={{ marginTop: responsiveSize(6) }} />
         </Box>
       </Paper>
     </Page>

@@ -12,6 +12,7 @@ import {
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { History } from '@/script/Pages/Attendance/Myself/History';
 import { AppTrnAttendanceStateList } from '@/script/Models/App/Trn/TrnAttendanceStateList';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {}
 export const MyselfRest: React.FC<IProps> = ({ sx }) => {
@@ -33,9 +34,8 @@ export const MyselfRest: React.FC<IProps> = ({ sx }) => {
       >
         <Box
           sx={{
-            width: '240px',
-            height: '50px',
-            borderRadius: '8px',
+            padding: responsiveSpacing(4),
+            borderRadius: responsiveSpacing(4),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -45,7 +45,7 @@ export const MyselfRest: React.FC<IProps> = ({ sx }) => {
         >
           <Icon
             sx={{
-              marginRight: '10px',
+              marginRight: responsiveSpacing(2),
             }}
             icon={getIconWorkingPlace(lastWorkingPlace)}
           />
@@ -56,7 +56,7 @@ export const MyselfRest: React.FC<IProps> = ({ sx }) => {
       </Box>
       <History
         sx={{
-          marginTop: '20px',
+          marginTop: responsiveSpacing(4),
         }}
       />
     </>
