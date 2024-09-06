@@ -42,30 +42,6 @@ export const MobileMenu: React.FC<IProps> = () => {
         icon={E_ICON.SETTING}
         label="個人設定"
       />
-      <Divider sx={{ margin: responsiveSize(8) }} />
-      <Grid
-        sx={{
-          width: '306px',
-        }}
-        container
-      >
-        <Grid item xs={4}>
-          <MobileIcon
-            href="https://docs.google.com/document/d/1lREZOhp2aJOwNavq2go9mXaDuJjsrlwRhroe0te9T2c/edit?usp=sharing"
-            icon={E_ICON.LIBRARY_BOOKS}
-            label="操作の手引き"
-            target="_blank"
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <MobileIcon
-            href="https://docs.google.com/spreadsheets/d/1wYJkLvmAX-sCdvwzTAAu8vMQ9Gp6SiLFqKRzDIDwHAY/edit?usp=sharing"
-            icon={E_ICON.DESCRIPTION}
-            label="リリースノート"
-            target="_blank"
-          />
-        </Grid>
-      </Grid>
       <Divider sx={{ margin: '8px' }} />
       <MobileIcon href="/logout" icon={E_ICON.LOGOUT} label="ログアウト" />
     </>
