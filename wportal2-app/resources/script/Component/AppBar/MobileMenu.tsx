@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { Divider, MenuItem } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
-import { PersonalSetting } from '@/script/Component/AppBar/MenuItem/PersonalSetting';
-import { Manual } from '@/script/Component/AppBar/MenuItem/Manual';
-import { ReleaseNote } from '@/script/Component/AppBar/MenuItem/ReleaseNote';
-import { Logout } from '@/script/Component/AppBar/MenuItem/Logout';
 import { isActiveMenu, MenuList, mobileIgnoreList } from '@/script/Enum/EMenu';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { MobileIcon } from '@/script/Component/AppBar/MobileIcon';
+import { E_ICON } from '@/script/Enum/EIcon';
 
 interface IProps extends IPropsBase {}
 export const MobileMenu: React.FC<IProps> = () => {
@@ -21,27 +17,57 @@ export const MobileMenu: React.FC<IProps> = () => {
 
   return (
     <>
-      {itemList.map(menu => {
-        return (
-          <MenuItem
-            key={menu.menu}
-            sx={{
-              minHeight: responsiveSize(40),
-            }}
-          >
-            <InertiaLink sx={{ width: '100%' }} href={getPagesHref(menu.pages)}>
-              <TypoText>{menu.name}</TypoText>
-            </InertiaLink>
-          </MenuItem>
-        );
-      })}
+      <Grid
+        sx={{
+          width: '306px',
+        }}
+        container
+      >
+        {itemList.map(menu => {
+          return (
+            <Grid item xs={4} key={menu.menu}>
+              <MobileIcon
+                key={menu.menu}
+                href={getPagesHref(menu.pages)}
+                icon={menu.icon}
+                label={menu.name}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
       <Divider sx={{ margin: responsiveSize(8) }} />
-      <PersonalSetting />
+      <MobileIcon
+        href={getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW)}
+        icon={E_ICON.SETTING}
+        label="個人設定"
+      />
       <Divider sx={{ margin: responsiveSize(8) }} />
-      <Manual />
-      <ReleaseNote />
+      <Grid
+        sx={{
+          width: '306px',
+        }}
+        container
+      >
+        <Grid item xs={4}>
+          <MobileIcon
+            href="https://docs.google.com/document/d/1lREZOhp2aJOwNavq2go9mXaDuJjsrlwRhroe0te9T2c/edit?usp=sharing"
+            icon={E_ICON.LIBRARY_BOOKS}
+            label="操作の手引き"
+            target="_blank"
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <MobileIcon
+            href="https://docs.google.com/spreadsheets/d/1wYJkLvmAX-sCdvwzTAAu8vMQ9Gp6SiLFqKRzDIDwHAY/edit?usp=sharing"
+            icon={E_ICON.DESCRIPTION}
+            label="リリースノート"
+            target="_blank"
+          />
+        </Grid>
+      </Grid>
       <Divider sx={{ margin: '8px' }} />
-      <Logout />
+      <MobileIcon href="/logout" icon={E_ICON.LOGOUT} label="ログアウト" />
     </>
   );
 };

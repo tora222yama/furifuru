@@ -82,7 +82,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.ATTENDANCE_ROOT,
     back: E_PAGES.INVALID,
     name: '勤怠修正',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.MANAGE_HISTORY,
   },
   {
     menu: E_MENU.ATTENDANCE_TABLE,
@@ -98,7 +98,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: '課',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.INVALID,
   },
   {
     menu: E_MENU.DIVISION,
@@ -106,7 +106,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.DIVISION_ROOT,
     back: E_PAGES.INVALID,
     name: '課一覧',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.GROUPS,
   },
   {
     menu: E_MENU.PROJECT_ROOT,
@@ -114,7 +114,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: 'プロジェクト',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.INVALID,
   },
   {
     menu: E_MENU.PROJECT,
@@ -122,7 +122,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.PROJECT_ROOT,
     back: E_PAGES.INVALID,
     name: 'プロジェクト一覧',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.DIVERSITY3,
   },
   {
     menu: E_MENU.USER_ROOT,
@@ -130,7 +130,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: 'メンバー',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.INVALID,
   },
   {
     menu: E_MENU.USER,
@@ -138,7 +138,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.USER_ROOT,
     back: E_PAGES.INVALID,
     name: 'メンバー一覧',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.PERSON,
   },
   {
     menu: E_MENU.ADMIN_ROOT,
@@ -146,7 +146,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
     name: '管理',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.ADMIN_PANEL,
   },
   {
     menu: E_MENU.ADMIN_DATA,
@@ -154,7 +154,7 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.ADMIN_ROOT,
     back: E_PAGES.INVALID,
     name: 'データ',
-    icon: E_ICON.BUILD,
+    icon: E_ICON.ADMIN_PANEL,
   },
   {
     menu: E_MENU.SAMPLE_INTERN_ROOT,
@@ -226,8 +226,8 @@ export const MenuList: IMenu[] = [
  * モバイル表示の除外リスト.
  */
 export const mobileIgnoreList: EMenu[] = [
-  // ダッシュボードはロゴから移動できる.
-  E_MENU.DASHBOARD,
+  // 未実装のため.
+  E_MENU.ATTENDANCE_TABLE,
 
   // サンプルはレスポンシブル対応していないため除外.
   E_MENU.SAMPLE_INTERN_MVC_VALUE,
