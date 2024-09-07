@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { Page } from '@/script/Pages/Page';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { AchievementList } from '@/script/Pages/Reward/AchievementList';
 
 interface IProps extends IPropsBase {}
 export const Reward: React.FC<IProps> = () => {
@@ -37,14 +38,7 @@ export const Reward: React.FC<IProps> = () => {
           報酬リストへのリンク.
         </TypoText>
       </Box>
-      <Paper
-        sx={{
-          marginTop: responsiveSpacing(4),
-          padding: responsiveSpacing(4),
-        }}
-      >
-        TODO:獲得済み要素をここに表示
-      </Paper>
+      <AchievementList />
     </Page>
   );
 };

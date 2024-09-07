@@ -201,6 +201,7 @@ return [
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
     ])->toArray(),
@@ -241,6 +242,7 @@ return [
         'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
         'models\app\trn\trn_user_service'                    => App\Facades\Models\App\Trn\TrnUserService::class,
+        'models\app\trn\trn_user_reward_service'             => App\Facades\Models\App\Trn\TrnUserRewardService::class,
         'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 
     ])->toArray(),

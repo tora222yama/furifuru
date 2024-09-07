@@ -26,8 +26,7 @@ return new class extends Migration
             $table->integer('reward_exp')->default(0);
             $table->integer('e_enable_repeat')->default(EEnableFlag::INVALID->value);
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamps();
         });
     }
 

@@ -21,8 +21,7 @@ return new class extends Migration
             $table->string('batch_identify')->unique();
             $table->integer('execution_count')->default(0);
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamps();
         });
     }
 
