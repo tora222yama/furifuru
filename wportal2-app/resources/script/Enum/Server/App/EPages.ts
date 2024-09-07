@@ -15,6 +15,7 @@ export const E_PAGES = {
   ATTENDANCE__EDIT__UPDATE: 'attendance__edit__update', // 勤怠修正・更新.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   SHOP: 'shop', // ショップ.
+  REWARD: 'reward', // 報酬.
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
@@ -82,6 +83,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.REWARD:
+      return '/reward';
     case E_PAGES.ATTENDANCE__EDIT:
       return '/attendance/edit';
     case E_PAGES.ATTENDANCE__EDIT__UPDATE:
@@ -190,6 +193,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.REWARD:
+      return '獲得報酬';
     case E_PAGES.ATTENDANCE__EDIT:
       return '勤怠修正';
     case E_PAGES.DIVISION:
