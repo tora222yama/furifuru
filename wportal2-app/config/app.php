@@ -191,6 +191,7 @@ return [
 
         // Models.App.Trn.
         App\Providers\Models\App\Trn\TrnAttendanceStateServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnBatchReleaseHistoryServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
@@ -230,6 +231,7 @@ return [
 
         // Models.App.Trn.
         'models\app\trn\trn_attendance_state_service'        => App\Facades\Models\App\Trn\TrnAttendanceStateService::class,
+        'models\app\trn\trn_batch_release_history_service'   => App\Facades\Models\App\Trn\TrnBatchReleaseHistoryService::class,
         'models\app\trn\trn_division_service'                => App\Facades\Models\App\Trn\TrnDivisionService::class,
         'models\app\trn\trn_division_user_service'           => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
         'models\app\trn\trn_project_service'                 => App\Facades\Models\App\Trn\TrnProjectService::class,
