@@ -12,7 +12,7 @@ use Database\Seeders\Batch\Mst\Init\MstInitReward;
 enum EBatchRelease: string
 {
     // 以下に更新用途に応じて追加する
-    case MST_INIT_REWARD = 'mst_init_reward';
+    case MST_INIT_REWARD = 'mst_init_reward'; // 報酬初期化.
 
     /**
      * seederクラス.

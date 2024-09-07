@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders\Batch\Mst\Init;
 
+use App\Models\App\Mst\MstReward;
 use Database\Seeders\Batch\Mst\BatchSeeder;
+use Database\Seeders\Batch\Mst\Init\App\Seeder_MstReward;
 use Throwable;
 
 class MstInitReward extends BatchSeeder
@@ -12,7 +14,9 @@ class MstInitReward extends BatchSeeder
     /**
      * シードするマスタを定義.
      */
-    const MODELS = [];
+    const MODELS = [
+        MstReward::class,
+    ];
 
     /**
      * Run the database seeds.
@@ -40,7 +44,9 @@ class MstInitReward extends BatchSeeder
         });
 
         // データ初期化を実施.
-        $this->call([]);
+        $this->call([
+            Seeder_MstReward::class,
+        ]);
 
         $this->command->info('done ['.__CLASS__.']');
     }

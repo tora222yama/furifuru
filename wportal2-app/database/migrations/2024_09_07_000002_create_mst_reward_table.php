@@ -19,6 +19,8 @@ return new class extends Migration
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->integer('reward_kind');
+            $table->integer('reward_rank');
             $table->string('reward_name');
             $table->integer('reward_gold')->default(0);
             $table->integer('reward_exp')->default(0);
