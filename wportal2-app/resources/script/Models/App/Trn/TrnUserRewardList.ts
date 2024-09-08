@@ -62,4 +62,29 @@ export class AppTrnUserRewardList extends ListBase<IAppTrnUserReward> {
   getPrimary(value: IAppTrnUserReward): number {
     return value.id;
   }
+
+  /**
+   * リストの中に獲得可能な報酬があるかどうか.
+   */
+  public hasAchievableReward(): boolean {
+    return this.list().some(
+      (trnUserReward: IAppTrnUserReward) =>
+        trnUserReward.achievementCount > trnUserReward.receivedCount,
+    );
+  }
+
+  /**
+   * 獲得可能なゴールドの合計.
+   */
+  public totalAchievableGold(): number {
+    return this.list().reduce((prev, trnUserReward) => {
+      const achievableCount = Math.max(
+        trnUserReward.achievementCount - trnUserReward.receivedCount,
+        0,
+      );
+      return (
+        prev + Number(trnUserReward.mstReward?.rewardGold) * achievableCount
+      );
+    }, 0);
+  }
 }

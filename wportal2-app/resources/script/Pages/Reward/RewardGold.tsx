@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IAppMstReward } from '@/script/Models/App/Mst/MstReward';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
 import { responsiveSize } from '@/script/System/Responsive';
 
 interface IProps extends IPropsBase {
-  mstReward?: IAppMstReward;
+  gold: number;
 }
-export const RewardGold: React.FC<IProps> = ({ sx, mstReward }) => {
+export const RewardGold: React.FC<IProps> = ({ sx, gold }) => {
   return (
     <Box
       sx={{
@@ -29,7 +28,7 @@ export const RewardGold: React.FC<IProps> = ({ sx, mstReward }) => {
         }}
       >
         <Icon icon={E_ICON.PAID} />
-        <TypoText bold>{mstReward?.rewardGold}</TypoText>
+        <TypoText bold>{gold}</TypoText>
       </Box>
     </Box>
   );
