@@ -6,7 +6,7 @@ import { useIndexContext } from '@/script/Pages/Reward/Index';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { Paging } from '@/script/Component/Misc/Paging';
-import { AchievementBlock } from '@/script/Pages/Reward/AchievementBlock';
+import { Achievement } from '@/script/Pages/Reward/Achievement/Achievement';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
@@ -93,7 +93,7 @@ export const AchievementList: React.FC<IProps> = ({ sx }) => {
       >
         {trnUserRewardList.list().map(trnUserReward => {
           return (
-            <AchievementBlock
+            <Achievement
               sx={{
                 '&:not(:first-of-type)': {
                   marginTop: responsiveSpacing(4),

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->integer('reward_kind');
             $table->integer('reward_rank');
             $table->string('reward_name');
+            $table->string('reward_explain');
             $table->integer('reward_gold')->default(0);
-            $table->integer('reward_exp')->default(0);
             $table->integer('e_enable_repeat')->default(EEnableFlag::INVALID->value);
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
             $table->timestamps();

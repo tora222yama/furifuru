@@ -20,7 +20,9 @@ class RewardController extends Controller
         return $this->render('Reward/Index', [
 
             // 報酬情報.
-            'paginationReward' => fn () => $this->getPaginationReward($request, []),
+            'paginationReward' => fn () => $this->getPaginationReward($request, [
+                'MstReward',
+            ]),
         ]);
     }
 
@@ -34,6 +36,7 @@ class RewardController extends Controller
         $pageStep         = $request->input('step', 20);
 
         return TrnUserRewardService::offsetPagination(
+            $this->authUser->TrnUser->id,
             $pageIndex,
             $pageStep,
             $with

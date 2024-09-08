@@ -14,11 +14,29 @@ class Seeder_MstReward extends Seeder
     const DATA_ARRAY = [
         [
             'id'              => 1,
+            'reward_kind'     => ERewardKind::ACHIEVE->value,
+            'reward_rank'     => 1,
+            'reward_name'     => '華麗なる登場',
+            'reward_explain'  => 'アカウントを作成する',
+            'reward_gold'     => 100,
+            'e_enable_repeat' => EEnableFlag::ENABLE,
+        ],
+        [
+            'id'              => 2,
+            'reward_kind'     => ERewardKind::ACHIEVE->value,
+            'reward_rank'     => 1,
+            'reward_name'     => '前略プロフィール',
+            'reward_explain'  => '個人設定を更新する',
+            'reward_gold'     => 100,
+            'e_enable_repeat' => EEnableFlag::ENABLE,
+        ],
+        [
+            'id'              => 3,
             'reward_kind'     => ERewardKind::DAILY->value,
             'reward_rank'     => 1,
-            'reward_name'     => '報酬1',
+            'reward_name'     => '紳士の勤怠',
+            'reward_explain'  => "一日の勤怠で出勤・休憩・退勤を行う\n繰り返し獲得できる。一日一回まで。",
             'reward_gold'     => 10,
-            'reward_exp'      => 10,
             'e_enable_repeat' => EEnableFlag::ENABLE,
         ],
     ];

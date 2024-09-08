@@ -18,6 +18,7 @@ return new class extends Migration
     {
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->id();
+            $table->integer('trn_user_id');
             $table->integer('mst_reward_id');
             $table->integer('achievement_count')->default(0);
             $table->integer('received_count')->default(0);

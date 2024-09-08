@@ -31,6 +31,7 @@ export const E_ICON = {
   MENU: 'menu',
   MILITARY_TECH: 'military_tech',
   OFFICE: 'office',
+  PAID: 'paid',
   PERSON: 'person',
   REMOVE: 'remove',
   SETTING: 'setting',
@@ -72,6 +73,7 @@ export const getIconSize = (icon: EIcon): { w: number; h: number } => {
     case E_ICON.MENU:
     case E_ICON.MILITARY_TECH:
     case E_ICON.OFFICE:
+    case E_ICON.PAID:
     case E_ICON.PERSON:
     case E_ICON.REMOVE:
     case E_ICON.SETTING:

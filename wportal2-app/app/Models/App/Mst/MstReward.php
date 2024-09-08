@@ -21,12 +21,12 @@ class MstReward extends ModelBase
     {
         return [
             'id'              => $this->id,
-            'reward_kind'     => $this->reward_kind,
-            'reward_rank'     => $this->reward_rank,
-            'reward_name'     => $this->reward_name,
-            'reward_gold'     => $this->reward_gold,
-            'reward_exp'      => $this->reward_exp,
-            'e_enable_repeat' => $this->e_enable_repeat,
+            'rewardKind'      => $this->reward_kind,
+            'rewardRank'      => $this->reward_rank,
+            'rewardName'      => $this->reward_name,
+            'rewardExplain'   => $this->reward_explain,
+            'rewardGold'      => $this->reward_gold,
+            'eEnableRepeat'   => $this->e_enable_repeat,
         ];
     }
 }

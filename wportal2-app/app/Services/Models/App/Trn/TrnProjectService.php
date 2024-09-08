@@ -68,7 +68,7 @@ class TrnProjectService extends ModelServiceBase
     }
 
     /**
-     * にすみ - プロジェクトの新規追加
+     * プロジェクトの新規追加
      */
     public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
     {
