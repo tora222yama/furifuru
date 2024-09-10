@@ -4,11 +4,56 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EPipeKind;
+use App\Facades\Internal\PipeService;
 use App\Models\App\Trn\TrnUserReward;
+use App\Pipe\App\PipeAppRewardAchieve;
+use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
+use Exception;
+use Illuminate\Support\Collection;
+use Throwable;
 
 class TrnUserRewardService extends ModelServiceBase
 {
+    /**
+     * パイプによる更新.
+     *
+     * @throws Throwable
+     */
+    public function updateByPipe(): void
+    {
+        foreach (PipeService::getPipes(__CLASS__) as $pipe) {
+            $kind = $pipe->getKind();
+            match ($kind) {
+                EPipeKind::APP_REWARD_ACHIEVE => $this->execAppRewardAchieve($pipe),
+                default                       => throw new Exception(),
+            };
+            $pipe->onUpdate(__CLASS__);
+        }
+    }
+
+    /**
+     * 報酬の達成.
+     *
+     * @throws Exception
+     */
+    private function execAppRewardAchieve(
+        PipeAppRewardAchieve|PipeBase $pipe
+    ): void {
+        // 対象となる報酬を取得.
+        $targetReward = TrnUserReward::query()
+            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->whereIn('id', $pipe->trnUserRewardIdList)
+            ->get();
+
+        // 対象のフラグを更新.
+        $targetReward->each(function (TrnUserReward $trnUserReward) {
+            $trnUserReward->received_count = $trnUserReward->achievement_count;
+            $this->updateOrFail($trnUserReward);
+        });
+    }
+
     /**.
      * オフセットページネーション情報の取得.
      */
@@ -39,5 +84,22 @@ class TrnUserRewardService extends ModelServiceBase
             })->toArray(),
             'count' => $trnUserRewardListCount,
         ];
+    }
+
+    /**
+     * 達成可能な報酬をリストで取得.
+     */
+    public function listAchievable(
+        int $trnUserId,
+        int $trnUserRewardId,
+        array $with = [],
+    ): Collection {
+        return TrnUserReward::query()
+            ->where('trn_user_id', $trnUserId)
+            ->where('achievement_count', '>', 'received_count')
+            ->when($trnUserRewardId, fn ($query) => $query->where('id', $trnUserRewardId))
+            ->with($with)
+            ->alive()
+            ->get();
     }
 }

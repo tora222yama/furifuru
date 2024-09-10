@@ -37,6 +37,9 @@ class TrnProjectService extends ModelServiceBase
         }
     }
 
+    /**
+     * プロジェクトの作成.
+     */
     private function execAppProjectCreate(
         PipeAppProjectCreate|PipeBase $pipe
     ): void {

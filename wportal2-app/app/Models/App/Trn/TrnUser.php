@@ -87,6 +87,8 @@ class TrnUser extends ModelBase
             'id'                  => $this->id                ?? 0,
             'authId'              => $this->auth_id           ?? 0,
             'nickname'            => $this->nickname          ?? '',
+            'currentGold'         => $this->current_gold      ?? 0,
+            'accumulationGold'    => $this->accumulation_gold ?? 0,
             'birthDate'           => $this->birth_date        ?? '',
             'selfIntroduction'    => $this->self_introduction ?? '',
             'faceImagePath'       => TrnUserService::getImageUrl($this),

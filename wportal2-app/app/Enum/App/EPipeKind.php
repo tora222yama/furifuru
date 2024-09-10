@@ -15,7 +15,8 @@ enum EPipeKind: string
     case APP_ATTENDANCE_DELETE                  = 'app_attendance_delete';
     case APP_ATTENDANCE_PROJECT_PRIORITY        = 'app_attendance_project_priority';
     case APP_ATTENDANCE_DIVISION_PRIORITY       = 'app_attendance_division_priority';
-    case App_ATTENDANCE_EDIT_UPDATE             = 'app_attendance_edit_update';
+    case APP_ATTENDANCE_EDIT_UPDATE             = 'app_attendance_edit_update';
+    case APP_REWARD_ACHIEVE                     = 'app_reward_achieve';
     case APP_DIVISION_UPDATE                    = 'app_division_update';
     case APP_DIVISION_USER_UPDATE               = 'app_division_user_update';
     case APP_DIVISION_DELETE                    = 'app_division_delete';

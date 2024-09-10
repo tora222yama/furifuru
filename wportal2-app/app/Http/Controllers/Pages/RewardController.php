@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
+use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Mst\MstRewardService;
 use App\Facades\Models\App\Trn\TrnUserRewardService;
+use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppRewardAchieve;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class RewardController extends Controller
 {
@@ -26,6 +34,41 @@ class RewardController extends Controller
         ]);
     }
 
+    public function list(Request $request): Response
+    {
+        return $this->render('Reward/List/Index', [
+            // 報酬マスタ情報.
+            'paginationReward' => fn () => $this->getPaginationMstReward($request, []),
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function achieve(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppRewardAchieve($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::REWARD->getInvokePath());
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // 獲得処理.
+            TrnUserService::updateByPipe();
+
+            // 報酬フラグの更新.
+            TrnUserRewardService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::REWARD->getInvokePath());
+    }
+
     /**
      * ページネーション・報酬.
      */
@@ -37,6 +80,22 @@ class RewardController extends Controller
 
         return TrnUserRewardService::offsetPagination(
             $this->authUser->TrnUser->id,
+            $pageIndex,
+            $pageStep,
+            $with
+        );
+    }
+
+    /**
+     * ページネーション・報酬マスタ.
+     */
+    private function getPaginationMstReward(Request $request, array $with = []): array
+    {
+        // パラメータ受け取り.
+        $pageIndex        = $request->input('index', 0);
+        $pageStep         = $request->input('step', 20);
+
+        return MstRewardService::offsetPagination(
             $pageIndex,
             $pageStep,
             $with

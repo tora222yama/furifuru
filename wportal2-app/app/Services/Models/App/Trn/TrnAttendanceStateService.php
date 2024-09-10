@@ -33,7 +33,7 @@ class TrnAttendanceStateService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_ATTENDANCE_DELETE            => $this->execAppAttendanceStateDelete($pipe),
-                EPipeKind::App_ATTENDANCE_EDIT_UPDATE       => $this->execAppAttendanceEditUpdate($pipe),
+                EPipeKind::APP_ATTENDANCE_EDIT_UPDATE       => $this->execAppAttendanceEditUpdate($pipe),
                 default                                     => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);

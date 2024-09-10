@@ -189,6 +189,9 @@ return [
         // Models.App.Auth.
         App\Providers\Models\App\Auth\AuthUserServiceProvider::class,
 
+        // Models.App.Mst.
+        App\Providers\Models\App\Mst\MstRewardServiceProvider::class,
+
         // Models.App.Trn.
         App\Providers\Models\App\Trn\TrnAttendanceStateServiceProvider::class,
         App\Providers\Models\App\Trn\TrnBatchReleaseHistoryServiceProvider::class,
@@ -229,6 +232,9 @@ return [
 
         // Models.App.Auth.
         'models\app\trn\auth_user_service'                   => App\Facades\Models\App\Auth\AuthUserService::class,
+
+        // Models.App.Mst.
+        'models\app\mst\mst_reward_service'                  => App\Facades\Models\App\Mst\MstRewardService::class,
 
         // Models.App.Trn.
         'models\app\trn\trn_attendance_state_service'        => App\Facades\Models\App\Trn\TrnAttendanceStateService::class,
