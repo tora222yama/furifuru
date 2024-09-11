@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Badge,
   Box,
   Collapse,
   List,
@@ -15,12 +16,14 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_ICON } from '@/script/Enum/EIcon';
 import {
+  E_MENU,
   hasChildMenu,
   IMenu,
   isActiveMenu,
   MenuList,
 } from '@/script/Enum/EMenu';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {
   menu: IMenu;
@@ -28,7 +31,7 @@ interface IProps extends IPropsBase {
 }
 
 export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
-  const { trnUserAuthorityList } = useCommonIndexContext();
+  const { trnUserAuthorityList, achievementCount } = useCommonIndexContext();
   const [open, setOpen] = React.useState<boolean>(false);
   const depthPadding = `${depth * 10 + 20}px`;
 
@@ -84,6 +87,9 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
         >
           <Icon sx={{ marginRight: '10px' }} icon={menu.icon} />
           <ListItemText>{menu.name}</ListItemText>
+          <Closable open={menu.menu === E_MENU.REWARD}>
+            <Badge badgeContent={achievementCount} color="primary" />
+          </Closable>
         </ListItemButton>
       </InertiaLink>
     </ListItem>

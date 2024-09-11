@@ -18,6 +18,7 @@ import {
 } from '@/script/Models/App/Auth/AuthUserList';
 import {
   AppTrnUserAuthorityList,
+  IAppTrnUserAuthority,
   parseAppTrnUserAuthorityPayload,
 } from '@/script/Models/App/Trn/TrnUserAuthorityList';
 
@@ -39,22 +40,31 @@ type CommonIndexContext = {
   authUser: IAppAuthUser;
   location: ILocation;
   trnUserAuthorityList: AppTrnUserAuthorityList;
+  achievementCount: number;
 };
 export const context = React.createContext<CommonIndexContext>({
   csrfToken: '',
   authUser: AppAuthUserList.defaultInterface(),
   location: getDefaultLocation(),
   trnUserAuthorityList: new AppTrnUserAuthorityList([]),
+  achievementCount: 0,
 });
 export const useCommonIndexContext = (): CommonIndexContext =>
   useContext(context);
 
-interface IProps extends IPropsBase {}
+interface IProps extends IPropsBase {
+  csrfToken?: string;
+  authUser?: IAppAuthUser;
+  location?: ILocation;
+  trnUserAuthorityList?: IAppTrnUserAuthority[];
+  achievementCount?: number;
+}
 export const CommonIndexProvider: React.FC<IProps> = ({
   csrfToken,
   authUser,
   location,
   trnUserAuthorityList,
+  achievementCount,
   children,
 }) => {
   /**
@@ -68,8 +78,9 @@ export const CommonIndexProvider: React.FC<IProps> = ({
       trnUserAuthorityList: new AppTrnUserAuthorityList(
         trnUserAuthorityList?.map(v => parseAppTrnUserAuthorityPayload(v)),
       ),
+      achievementCount: achievementCount ?? 0,
     }),
-    [csrfToken, authUser, location, trnUserAuthorityList],
+    [csrfToken, authUser, location, trnUserAuthorityList, achievementCount],
   );
 
   return (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Badge, Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
@@ -12,6 +12,7 @@ interface IProps extends IPropsBase {
   icon: EIcon;
   label: string;
   target?: string;
+  badgeCount?: number;
 }
 export const MobileIcon: React.FC<IProps> = ({
   sx,
@@ -19,6 +20,7 @@ export const MobileIcon: React.FC<IProps> = ({
   icon,
   label,
   target,
+  badgeCount,
 }) => {
   const nodeIcon = (): React.ReactNode => {
     return (
@@ -34,14 +36,16 @@ export const MobileIcon: React.FC<IProps> = ({
             backgroundColor: E_COLOR.PRIMARY_MAIN,
           }}
         >
-          <Icon
-            sx={{
-              width: '60px',
-              height: '60px',
-              color: E_COLOR.WHITE,
-            }}
-            icon={icon}
-          />
+          <Badge badgeContent={badgeCount} color="secondary">
+            <Icon
+              sx={{
+                width: '60px',
+                height: '60px',
+                color: E_COLOR.WHITE,
+              }}
+              icon={icon}
+            />
+          </Badge>
         </Box>
         <TypoText sx={{ marginTop: '4px' }} align="center">
           {label}

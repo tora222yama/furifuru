@@ -6,6 +6,7 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
+use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUserReward;
 use App\Pipe\App\PipeAppRewardAchieve;
 use App\Pipe\PipeBase;
@@ -101,5 +102,29 @@ class TrnUserRewardService extends ModelServiceBase
             ->with($with)
             ->alive()
             ->get();
+    }
+
+    /**
+     * 達成可能な報酬の数を取得.
+     */
+    public function countAchievable(
+        ?AuthUser $authUser,
+    ): int {
+        if (is_null($authUser)) {
+            return 0;
+        }
+
+        // TODO: キャッシュ化を検討する.
+
+        // 対象となる報酬のリストを取得.
+        $trnUserRewardList = TrnUserReward::query()
+            ->where('trn_user_id', $authUser->TrnUser->id)
+            ->where('achievement_count', '>', 'received_count')
+            ->alive()
+            ->get();
+
+        return $trnUserRewardList->reduce(function (int $carry, TrnUserReward $trnUserReward) {
+            return $carry + ($trnUserReward->achievement_count - $trnUserReward->received_count);
+        }, 0);
     }
 }
