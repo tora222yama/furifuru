@@ -16,7 +16,7 @@ import { useIndexContext } from '@/script/Pages/Reward/Index';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { RewardGold } from '@/script/Pages/Reward/RewardGold';
+import { RewardGold } from '@/script/Pages/Reward/Common/RewardGold';
 import { DialogYesNo } from '@/script/Component/Misc/DialogYesNo';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';

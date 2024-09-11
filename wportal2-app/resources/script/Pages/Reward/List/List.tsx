@@ -5,7 +5,7 @@ import { Page } from '@/script/Pages/Page';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { BackLink } from '@/script/Pages/Common/BackLink';
-import { RewardList } from '@/script/Pages/Reward/List/RewardList';
+import { MstRewardList } from '@/script/Pages/Reward/List/MstRewardList';
 
 interface IProps extends IPropsBase {}
 export const List: React.FC<IProps> = () => {
@@ -20,7 +20,7 @@ export const List: React.FC<IProps> = () => {
       >
         <TypoH1>{getPagesName(E_PAGES.REWARD__LIST)}</TypoH1>
       </Box>
-      <RewardList />
+      <MstRewardList />
     </Page>
   );
 };

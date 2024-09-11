@@ -6,7 +6,7 @@ import { useIndexContext } from '@/script/Pages/Reward/Index';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { Paging } from '@/script/Component/Misc/Paging';
-import { Achievement } from '@/script/Pages/Reward/Achievement/Achievement';
+import { Achievement } from '@/script/Pages/Reward/Achievement';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}

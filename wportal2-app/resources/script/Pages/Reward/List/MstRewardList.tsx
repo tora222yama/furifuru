@@ -7,9 +7,10 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { Paging } from '@/script/Component/Misc/Paging';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { Closable } from '@/script/Component/Misc/Closable';
+import { MstReward } from '@/script/Pages/Reward/List/MstReward';
 
 interface IProps extends IPropsBase {}
-export const RewardList: React.FC<IProps> = ({ sx }) => {
+export const MstRewardList: React.FC<IProps> = ({ sx }) => {
   const { mstRewardList, mstRewardListCount } = useIndexContext();
   const { onStart, onFinish } = useProgressContext();
   const pageStep = 20;
@@ -91,7 +92,17 @@ export const RewardList: React.FC<IProps> = ({ sx }) => {
         }}
       >
         {mstRewardList.list().map(mstReward => {
-          return <Box key={mstReward.id}>{mstReward.rewardName}</Box>;
+          return (
+            <MstReward
+              sx={{
+                '&:not(:first-of-type)': {
+                  marginTop: responsiveSpacing(4),
+                },
+              }}
+              key={mstReward.id}
+              mstReward={mstReward}
+            />
+          );
         })}
       </Paper>
       <Closable open={!!mstRewardListCount}>

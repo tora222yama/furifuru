@@ -5,11 +5,11 @@ import { IPropsBase } from '@/script/System/System';
 import { IAppTrnUserReward } from '@/script/Models/App/Trn/TrnUserRewardList';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
-import { RewardGold } from '@/script/Pages/Reward/RewardGold';
-import { AchievementTitle } from '@/script/Pages/Reward/Achievement/AchievementTitle';
+import { RewardGold } from '@/script/Pages/Reward/Common/RewardGold';
+import { RewardTitle } from '@/script/Pages/Reward/Common/RewardTitle';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { TypoText2 } from '@/script/Component/Typography/TypoText2';
-import { AchievementImage } from '@/script/Pages/Reward/Achievement/AchievementImage';
+import { RewardImage } from '@/script/Pages/Reward/Common/RewardImage';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { Closable } from '@/script/Component/Misc/Closable';
@@ -50,15 +50,15 @@ export const Achievement: React.FC<IProps> = ({ sx, trnUserReward }) => {
   return (
     <Paper
       sx={{
-        ...sx,
         border: `1px solid ${E_COLOR.GREY}`,
         display: 'flex',
         padding: responsiveSpacing(2),
         alignItems: 'stretch',
         gap: responsiveSpacing(2),
+        ...sx,
       }}
     >
-      <AchievementImage trnUserReward={trnUserReward} />
+      <RewardImage mstReward={trnUserReward.mstReward} />
       <Box
         sx={{
           flexGrow: 1,
@@ -66,7 +66,10 @@ export const Achievement: React.FC<IProps> = ({ sx, trnUserReward }) => {
           flexDirection: 'column',
         }}
       >
-        <AchievementTitle trnUserReward={trnUserReward} />
+        <RewardTitle
+          mstReward={trnUserReward.mstReward}
+          achievementCount={trnUserReward.achievementCount}
+        />
         <TypoText2
           sx={{
             whiteSpace: 'pre-wrap',
