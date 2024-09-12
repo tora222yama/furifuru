@@ -51,12 +51,19 @@ class TrnAttendanceStateService extends ModelServiceBase
         }
 
         // モデル作成.
-        $new                     = new TrnAttendanceState();
-        $new->trn_user_id        = $pipe->authUser->TrnUser->id;
-        $new->e_attendance_state = $pipe->eAttendanceState->value;
+        $new                            = new TrnAttendanceState();
+        $new->trn_user_id               = $pipe->authUser->TrnUser->id;
+        $new->e_attendance_state        = $pipe->eAttendanceState->value;
 
         // 保存
         $this->insertOrFail($new);
+
+        // 本日の出退勤をすべて格納しておく.
+        $pipe->todayAttendanceStateList = TrnAttendanceState::query()
+            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->whereDate('created_at', Carbon::now())
+            ->alive()
+            ->get();
     }
 
     /**

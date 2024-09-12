@@ -9,12 +9,15 @@ use App\Enum\App\EPipeKind;
 use App\Models\App\Auth\AuthUser;
 use App\Pipe\PipeBase;
 use Auth;
+use Illuminate\Support\Collection;
 
 final class PipeAppAttendanceCreate extends PipeBase
 {
     public EAttendanceState $eAttendanceState = EAttendanceState::INVALID;
 
     public ?AuthUser $authUser;
+
+    public ?Collection $todayAttendanceStateList;
 
     /**
      * constructor.

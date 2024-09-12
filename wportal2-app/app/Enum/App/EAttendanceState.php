@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enum\App;
 
+use App\Models\App\Trn\TrnAttendanceState;
+use Illuminate\Support\Collection;
+
 /**
  * 出退勤ステータス
  *
@@ -36,5 +39,50 @@ enum EAttendanceState: int
             EAttendanceState::SWITCH_TO_TELEWORK  => '在宅勤務へ切替えました',
             EAttendanceState::LEAVING             => '退勤しました',
         };
+    }
+
+    /**
+     * 出勤・退勤・休憩in/outが含まれているか.
+     *
+     * @param  Collection<TrnAttendanceState>  $attendanceStateList
+     */
+    public static function isPerfectAttendance(Collection $attendanceStateList): bool
+    {
+        // 数が4以下の場合.
+        if ($attendanceStateList->count() < 4) {
+            return false;
+        }
+
+        // 出勤.
+        if ($attendanceStateList
+            ->whereIn('e_attendance_state', [
+                EAttendanceState::ATTENDANCE_OFFICE->value,
+                EAttendanceState::ATTENDANCE_TELEWORK->value,
+            ])->isEmpty()) {
+            return false;
+        }
+
+        // 休憩in.
+        if ($attendanceStateList
+            ->where('e_attendance_state', EAttendanceState::BEGIN_BREAK->value)
+            ->isEmpty()) {
+            return false;
+        }
+
+        // 休憩out.
+        if ($attendanceStateList
+            ->where('e_attendance_state', EAttendanceState::END_BREAK->value)
+            ->isEmpty()) {
+            return false;
+        }
+
+        // 退勤.
+        if ($attendanceStateList
+            ->where('e_attendance_state', EAttendanceState::LEAVING->value)
+            ->isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }

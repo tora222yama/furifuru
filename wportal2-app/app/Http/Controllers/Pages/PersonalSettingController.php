@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
 use App\Facades\Internal\PipeService;
+use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Facades\Models\App\Trn\TrnUserSlackProfileService;
 use App\Http\Controllers\Controller;
@@ -84,6 +85,9 @@ class PersonalSettingController extends Controller
 
             // Slack情報の更新.
             TrnUserSlackProfileService::updateByPipe();
+
+            // 報酬情報の更新.
+            TrnUserRewardService::updateByPipe();
         });
 
         return redirect()->action(EPages::PERSONAL_SETTING__SHOW->getInvokePath());

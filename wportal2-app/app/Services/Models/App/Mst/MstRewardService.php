@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Mst;
 
+use App\Enum\App\EEnableFlag;
+use App\Enum\Mst\EMstReward;
 use App\Models\App\Mst\MstReward;
 use App\Services\Models\ModelServiceBase;
 
@@ -36,5 +38,28 @@ class MstRewardService extends ModelServiceBase
             })->toArray(),
             'count' => $mstRewardListCount,
         ];
+    }
+
+    /**
+     * 再達成可能かどうか.
+     */
+    public function isEnableRepeat(EMstReward $eMstReward): bool
+    {
+        $mstReward = $this->findById($eMstReward);
+        if (is_null($mstReward)) {
+            return false;
+        }
+
+        return $mstReward->e_enable_repeat === EEnableFlag::ENABLE->value;
+    }
+
+    /**
+     * ID指定検索.
+     */
+    public function findById(EMstReward $eMstReward): ?MstReward
+    {
+        return MstReward::query()
+            ->where('id', $eMstReward->value)
+            ->first();
     }
 }
