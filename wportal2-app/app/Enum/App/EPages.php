@@ -24,6 +24,8 @@ enum EPages: string
     case DIVISION                          = 'division'; // 課一覧.
     case DIVISION__SHOW                    = 'division__show'; // 課詳細.
     case DIVISION__EDIT                    = 'division__edit'; // 課編集.
+    case DIVISION__NEW                     = 'division__new'; // 課新規作成.
+    case DIVISION__CREATE                  = 'division__create'; // 課新規登録.
     case DIVISION__UPDATE                  = 'division__update'; // 課更新.
     case DIVISION__UPDATE_USER             = 'division__update_user'; // 課メンバー更新.
     case DIVISION__DELETE                  = 'division__delete'; // 課削除.
@@ -82,6 +84,8 @@ enum EPages: string
             self::DIVISION                       => '\App\Http\Controllers\Pages\DivisionController@invoke',
             self::DIVISION__SHOW                 => '\App\Http\Controllers\Pages\DivisionController@show',
             self::DIVISION__EDIT                 => '\App\Http\Controllers\Pages\DivisionController@edit',
+            self::DIVISION__NEW                  => '\App\Http\Controllers\Pages\DivisionController@new',
+            self::DIVISION__CREATE               => '\App\Http\Controllers\Pages\DivisionController@create',
             self::DIVISION__UPDATE               => '\App\Http\Controllers\Pages\DivisionController@update',
             self::DIVISION__DELETE               => '\App\Http\Controllers\Pages\DivisionController@delete',
             self::DIVISION__UPDATE_USER          => '\App\Http\Controllers\Pages\DivisionController@update_user',
