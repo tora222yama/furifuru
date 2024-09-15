@@ -18,6 +18,10 @@ env:
   AWS_ECS_SERVICE: arn:aws:ecs:ap-northeast-1:979109089196:service/wportal2-ecs-cluster/wportal2-ecs-service
   AWS_ECS_TASK: "wportal2-task"
   CONTAINER_NAME: "wportal2-container"
+  # CloudWatch ログのロググループ名
+  TASK_LOG_GROUP: /aws/ecs/wportal2-ecs-batch
+  # CloudWatch ログストリーム名のプレフィックス
+  TASK_LOG_PREFIX: batch
 
 jobs:
   command:
@@ -90,6 +94,40 @@ jobs:
               continue
             fi
             break
+          done
+
+      # タスク出力を表示.
+      - name: Show ECS Task Log
+        id: show-ecs-task-log
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+        run: |
+          TASK_LOG_STREAM="${{ env.TASK_LOG_PREFIX}}/${{ env.CONTAINER_NAME }}/"$(echo "$TASK_ARN" | sed -e "s|.*/||g")
+          echo "* Task log stream: $TASK_LOG_STREAM"
+          echo ""
+          echo "*** タスク実行中 - "$(date +'%Y-%m-%d %H:%M:%S')
+          TASK_NEXT_TOKEN=""
+          while true; do
+            # ログ出力する
+            set +e
+            if [ "$TASK_NEXT_TOKEN" = "" -o "$TASK_NEXT_TOKEN" = "null" ]; then
+              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000 2> /dev/null)
+            else
+              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.$TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000 2> /dev/null)
+            fi
+            TASK_NEXT_TOKEN=$(echo "$TASK_LOG" | jq -r '.nextForwardToken')
+            echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
+            set -e
+            
+            # タスクのステータスを確認
+            TASK_STATUS=$(aws ecs describe-tasks --cluster "${{ env.AWS_ECS_CLUSTER }}" --tasks "$TASK_ARN" | jq -r '.tasks[0].containers[] | select(.name=="${{ env.CONTAINER_NAME }}") | .lastStatus')
+            if [ ! "$TASK_STATUS" = "RUNNING" ]; then
+              # 実行中でなければ、終了
+            break
+            fi
+            
+            # 次のログ出力まで待機
+            sleep 2
           done
 
       # ECSのタスク起動を待つ.
