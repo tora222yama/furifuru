@@ -58,6 +58,7 @@ jobs:
         run: |
           TASK_CMD=$(echo "${{ github.event.inputs.command }}" \
             | sed -z -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\x08/\\b/g' -e 's/\x0c/\\f/')
+          echo "TASK_CMD: $TASK_CMD"
 
       # ECSタスクの実行.
       #      - name: Run ECS Task
