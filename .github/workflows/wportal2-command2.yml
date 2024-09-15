@@ -61,6 +61,40 @@ jobs:
           echo "TASK_CMD: $TASK_CMD"
 
       # ECSタスクの実行.
+      - name: Run ECS Task
+        id: run-ecs-task
+        env:
+          LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
+          ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
+          ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
+          CONTAINER_NAME: "wportal2-container"
+        run: |
+          TASK_CMD=$(echo "${{ github.event.inputs.command }}" \
+            | sed -z -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\x08/\\b/g' -e 's/\x0c/\\f/')
+          TASK_ARN=$(aws ecs run-task \
+            --cluster ${{ env.AWS_ECS_CLUSTER }} \
+            --launch-type FARGATE \
+            --enable-execute-command \
+            --task-definition ${{ env.LATEST_TASK_DEF }} \
+            --network-configuration 'awsvpcConfiguration={subnets=["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"],securityGroups=["sg-04d892c8cc26c7158"],assignPublicIp="DISABLED"}' \
+            --tags key=StartedBy,value=GitHubActions \
+            --count 1 \
+            --overrides '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}","command": ["/bin/bash","-lce","'"$TASK_CMD"'"]}]}' \
+            --query tasks[0].taskArn --output text)
+          echo "TASK_ARN: $TASK_ARN"
+          echo "TASK_ARN=$TASK_ARN" >> $GITHUB_OUTPUT
+
+      # ECSのタスク起動を待つ.
+      - name: Wait ECS Task
+        id: wait-ecs-task
+        continue-on-error: true
+        env:
+          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+        run: |
+          aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
+          sleep 10
+
+      # ECSタスクの実行.
       #      - name: Run ECS Task
       #        id: run-ecs-task
       #        env:
