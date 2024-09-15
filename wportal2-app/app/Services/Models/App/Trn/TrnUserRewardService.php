@@ -107,6 +107,21 @@ class TrnUserRewardService extends ModelServiceBase
         );
     }
 
+    /**
+     * アカウント作成時に呼び出す処理.
+     *
+     * @throws Exception
+     */
+    public function createNewUser(
+        int $trnUserId
+    ): void {
+        $model                    = new TrnUserReward();
+        $model->trn_user_id       = $trnUserId;
+        $model->mst_reward_id     = EMstReward::CREATE_ACCOUNT;
+        $model->achievement_count = 1;
+        $this->insertOrFail($model);
+    }
+
     /**.
      * オフセットページネーション情報の取得.
      */

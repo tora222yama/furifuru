@@ -277,7 +277,7 @@ class TrnUserService extends ModelServiceBase
      *
      * @throws Throwable
      */
-    public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): void
+    public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): TrnUser
     {
         // 新規にユーザーを作成.
         $trnUser                  = new TrnUser();
@@ -298,6 +298,8 @@ class TrnUserService extends ModelServiceBase
         // 画像パスを保存.
         $trnUser->face_image_path = $path;
         $trnUser->saveOrFail();
+
+        return $trnUser;
     }
 
     /**
