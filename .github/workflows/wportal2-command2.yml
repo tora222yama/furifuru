@@ -41,6 +41,7 @@ jobs:
           TASK_FAMILY: ${{ env.AWS_ECS_TASK }}
         run: |
           LATEST_TASK_DEF=$(aws ecs list-task-definitions --family-prefix ${{ env.TASK_FAMILY }} --sort DESC --max-items 1 --query "taskDefinitionArns[0]")
+          echo "DEF: $LATEST_TASK_DEF"
           echo "latest_task_def=$LATEST_TASK_DEF" >> $GITHUB_OUTPUT
 
       # ネットワーク設定の取得.
