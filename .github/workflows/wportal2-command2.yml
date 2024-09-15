@@ -76,8 +76,8 @@ jobs:
           echo "TASK_ARN=$TASK_ARN" >> $GITHUB_OUTPUT
 
       # タスク起動を待機
-      - name: Run ECS Task
-        id: run-ecs-task
+      - name: Wait ECS Task Start
+        id: wait-ecs-task-start
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
