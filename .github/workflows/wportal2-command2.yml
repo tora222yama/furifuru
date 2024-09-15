@@ -102,7 +102,7 @@ jobs:
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          TASK_LOG_STREAM="${{ env.TASK_LOG_PREFIX}}/${{ env.CONTAINER_NAME }}/"$(echo "$TASK_ARN" | sed -e "s|.*/||g")
+          TASK_LOG_STREAM="${{ env.TASK_LOG_PREFIX }}/${{ env.CONTAINER_NAME }}/"$(echo "$TASK_ARN" | sed -e "s|.*/||g")
           echo "* Task log stream: $TASK_LOG_STREAM"
           echo ""
           echo "*** タスク実行中 - "$(date +'%Y-%m-%d %H:%M:%S')
@@ -113,7 +113,7 @@ jobs:
             if [ "$TASK_NEXT_TOKEN" = "" -o "$TASK_NEXT_TOKEN" = "null" ]; then
               TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000 2> /dev/null)
             else
-              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.$TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000 2> /dev/null)
+              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000 2> /dev/null)
             fi
             TASK_NEXT_TOKEN=$(echo "$TASK_LOG" | jq -r '.nextForwardToken')
             echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
