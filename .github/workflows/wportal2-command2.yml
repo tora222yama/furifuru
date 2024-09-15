@@ -52,14 +52,6 @@ jobs:
           echo "subnet=${SUBNET}" >> $GITHUB_OUTPUT
           echo "security_group=${SECURITY_GROUP}" >> $GITHUB_OUTPUT
 
-      # 送信用コマンドの作成.
-      - name : Create Command
-        id: create-command
-        run: |
-          TASK_CMD=$(echo "${{ github.event.inputs.command }}" \
-            | sed -z -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\x08/\\b/g' -e 's/\x0c/\\f/')
-          echo "TASK_CMD: $TASK_CMD"
-
       # ECSタスクの実行.
       - name: Run ECS Task
         id: run-ecs-task
@@ -67,7 +59,6 @@ jobs:
           LATEST_TASK_DEF: ${{ steps.get-latest-task-def.outputs.latest_task_def }}
           ECS_TASK_SUBNET: ${{ steps.get-network-config.outputs.subnet }}
           ECS_TASK_SECURITY_GROUP: ${{ steps.get-network-config.outputs.security_group }}
-          CONTAINER_NAME: "wportal2-container"
         run: |
           TASK_CMD=$(echo "${{ github.event.inputs.command }}" \
             | sed -z -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\x08/\\b/g' -e 's/\x0c/\\f/')
@@ -84,15 +75,32 @@ jobs:
           echo "TASK_ARN: $TASK_ARN"
           echo "TASK_ARN=$TASK_ARN" >> $GITHUB_OUTPUT
 
-      # ECSのタスク起動を待つ.
-      - name: Wait ECS Task
-        id: wait-ecs-task
-        continue-on-error: true
+      # タスク起動を待機
+      - name: Run ECS Task
+        id: run-ecs-task
         env:
           TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
         run: |
-          aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
-          sleep 10
+          echo "* ECSタスク起動中"
+          set +e
+          while true; do
+            TASK_STATUS=$(aws ecs describe-tasks --cluster "${{ env.AWS_ECS_CLUSTER }}" --tasks "$TASK_ARN" | jq -r '.tasks[0].containers[] | select(.name=="${{ env.CONTAINER_NAME }}") | .lastStatus')
+            if [ "$TASK_STATUS" = "PENDING" -o "$TASK_STATUS" = "PROVISIONING" ]; then
+              sleep 2
+              continue
+            fi
+            break
+          done
+
+      # ECSのタスク起動を待つ.
+#      - name: Wait ECS Task
+#        id: wait-ecs-task
+#        continue-on-error: true
+#        env:
+#          TASK_ARN: ${{ steps.run-ecs-task.outputs.TASK_ARN }}
+#        run: |
+#          aws ecs wait tasks-running --cluster ${{ env.AWS_ECS_CLUSTER }} --tasks ${{ env.TASK_ARN }}
+#          sleep 10
 
       # ECSタスクの実行.
       #      - name: Run ECS Task
