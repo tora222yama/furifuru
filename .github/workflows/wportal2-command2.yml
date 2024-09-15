@@ -66,10 +66,10 @@ jobs:
         run: |
           TASK_CMD=$(echo "${{ github.event.inputs.command }}" \
             | sed -z -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\n/\\n/g' -e 's/\r/\\r/g' -e 's/\t/\\t/g' -e 's/\x08/\\b/g' -e 's/\x0c/\\f/')
+          echo "CMD: $TASK_CMD"
           TASK_ARN=$(aws ecs run-task \
             --cluster ${{ env.AWS_ECS_CLUSTER }} \
             --launch-type FARGATE \
-            --enable-execute-command \
             --task-definition ${{ env.LATEST_TASK_DEF }} \
             --network-configuration 'awsvpcConfiguration={subnets=["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"],securityGroups=["sg-04d892c8cc26c7158"],assignPublicIp="DISABLED"}' \
             --tags key=StartedBy,value=GitHubActions \
