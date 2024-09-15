@@ -19,9 +19,9 @@ env:
   AWS_ECS_TASK: "wportal2-task"
   CONTAINER_NAME: "wportal2-container"
   # CloudWatch ログのロググループ名
-  TASK_LOG_GROUP: /aws/ecs/wportal2-ecs-batch
+  TASK_LOG_GROUP: /wportal2/ecs
   # CloudWatch ログストリーム名のプレフィックス
-  TASK_LOG_PREFIX: batch
+  TASK_LOG_PREFIX: httpd
 
 jobs:
   command:
