@@ -124,10 +124,12 @@ jobs:
             TASK_STATUS=$(aws ecs describe-tasks --cluster "${{ env.AWS_ECS_CLUSTER }}" --tasks "$TASK_ARN" | jq -r '.tasks[0].containers[] | select(.name=="${{ env.CONTAINER_NAME }}") | .lastStatus')
             if [ ! "$TASK_STATUS" = "RUNNING" ]; then
               # 実行中でなければ、終了
-            break
+              echo "タスクの終了を検知"
+              break
             fi
             
             # 次のログ出力まで待機
+            echo "タスク実行中"
             sleep 2
           done
 
