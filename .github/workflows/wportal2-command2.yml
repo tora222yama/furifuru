@@ -76,7 +76,7 @@ jobs:
             --network-configuration 'awsvpcConfiguration={subnets=["subnet-09ca2883e479b74dd", "subnet-00cdd25fc7a991867"],securityGroups=["sg-04d892c8cc26c7158"],assignPublicIp="DISABLED"}' \
             --tags key=StartedBy,value=GitHubActions \
             --count 1 \
-            --overrides '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}","command": ["ls"], "entryPoint": [] }]}' \
+            --overrides '{"containerOverrides": [{"name": "${{ env.CONTAINER_NAME }}","command": ["ls"] }]}' \
             --query tasks[0].taskArn --output text)
           echo "TASK_ARN: $TASK_ARN"
           echo "TASK_ARN=$TASK_ARN" >> $GITHUB_OUTPUT
