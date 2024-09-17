@@ -107,6 +107,7 @@ jobs:
           echo "* Task log stream: $TASK_LOG_STREAM"
           echo ""
           echo "*** タスク実行中 - "$(date +'%Y-%m-%d %H:%M:%S')
+          sleep 10
           TASK_NEXT_TOKEN=""
           while true; do
             # ログ出力する
