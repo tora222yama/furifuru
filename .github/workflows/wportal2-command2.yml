@@ -118,7 +118,7 @@ jobs:
               TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000)
             fi
             TASK_NEXT_TOKEN=$(echo "$TASK_LOG" | jq -r '.nextForwardToken')
-            echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
+            echo "$TASK_LOG" | jq -r '.events[].message'
             set -e
             
             # タスクのステータスを確認
