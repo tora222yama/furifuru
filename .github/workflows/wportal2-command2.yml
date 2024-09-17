@@ -107,15 +107,15 @@ jobs:
           echo "* Task log stream: $TASK_LOG_STREAM"
           echo ""
           echo "*** タスク実行中 - "$(date +'%Y-%m-%d %H:%M:%S')
-          sleep 10
+          sleep 2
           TASK_NEXT_TOKEN=""
           while true; do
             # ログ出力する
             set +e
             if [ "$TASK_NEXT_TOKEN" = "" -o "$TASK_NEXT_TOKEN" = "null" ]; then
-              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000 2> /dev/null)
+              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000)
             else
-              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000 2> /dev/null)
+              TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000)
             fi
             TASK_NEXT_TOKEN=$(echo "$TASK_LOG" | jq -r '.nextForwardToken')
             echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
