@@ -113,12 +113,8 @@ jobs:
             set +e
             if [ "$TASK_NEXT_TOKEN" = "" -o "$TASK_NEXT_TOKEN" = "null" ]; then
               TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000 2> /dev/null)
-              echo "初回取得"
-              echo "$TASK_LOG"
             else
               TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --no-start-from-head --next-token $TASK_NEXT_TOKEN --limit 10000 2> /dev/null)
-              echo "次回取得"
-              echo "$TASK_LOG"
             fi
             TASK_NEXT_TOKEN=$(echo "$TASK_LOG" | jq -r '.nextForwardToken')
             echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
@@ -140,8 +136,6 @@ jobs:
           # 最後にもう一度ログ出力する
           set +e
           TASK_LOG=$(aws logs get-log-events --log-group-name "${{ env.TASK_LOG_GROUP }}" --log-stream-name "$TASK_LOG_STREAM" --start-from-head --limit 10000 2> /dev/null)
-          echo "初回取得"
-          echo "$TASK_LOG"
           echo "$TASK_LOG" | jq -r '.events[].message' | jq -r '.log'
           set -e
 
