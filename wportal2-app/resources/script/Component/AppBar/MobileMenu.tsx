@@ -2,7 +2,13 @@ import * as React from 'react';
 import { Divider, Grid } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
-import { isActiveMenu, MenuList, mobileIgnoreList } from '@/script/Enum/EMenu';
+import {
+  E_MENU,
+  EMenu,
+  isActiveMenu,
+  MenuList,
+  mobileIgnoreList,
+} from '@/script/Enum/EMenu';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { MobileIcon } from '@/script/Component/AppBar/MobileIcon';
@@ -10,10 +16,22 @@ import { E_ICON } from '@/script/Enum/EIcon';
 
 interface IProps extends IPropsBase {}
 export const MobileMenu: React.FC<IProps> = () => {
-  const { trnUserAuthorityList } = useCommonIndexContext();
+  const { trnUserAuthorityList, achievementCount } = useCommonIndexContext();
   const itemList = MenuList.filter(v => !mobileIgnoreList.includes(v.menu))
     .filter(v => v.pages !== E_PAGES.INVALID)
     .filter(v => isActiveMenu(v.menu, trnUserAuthorityList));
+
+  /**
+   * バッジの表示数.
+   */
+  const calcBadgeCount = (menu: EMenu): number => {
+    switch (menu) {
+      case E_MENU.REWARD:
+        return achievementCount;
+      default:
+        return 0;
+    }
+  };
 
   return (
     <>
@@ -31,6 +49,7 @@ export const MobileMenu: React.FC<IProps> = () => {
                 href={getPagesHref(menu.pages)}
                 icon={menu.icon}
                 label={menu.name}
+                badgeCount={calcBadgeCount(menu.menu)}
               />
             </Grid>
           );

@@ -34,12 +34,6 @@ export const DialogYesNo: React.FC<IProps> = ({
       sx={{
         ...sx,
       }}
-      PaperProps={{
-        style: {
-          minWidth: '450px',
-          width: '450px',
-        },
-      }}
       open={open}
       onClose={actions.close}
     >

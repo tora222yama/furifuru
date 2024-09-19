@@ -10,6 +10,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnAttendanceStateService;
 use App\Facades\Models\App\Trn\TrnUserDivisionPriorityService;
 use App\Facades\Models\App\Trn\TrnUserProjectPriorityService;
+use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnProject;
@@ -80,6 +81,9 @@ class AttendanceController extends Controller
 
             // Slackへの通知.
             SlackService::updateByPipe();
+
+            // 報酬獲得の処理.
+            TrnUserRewardService::updateByPipe();
         });
 
         return redirect()->action(EPages::ATTENDANCE->getInvokePath());

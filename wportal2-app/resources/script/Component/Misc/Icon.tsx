@@ -22,6 +22,8 @@ import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import MenuIcon from '@mui/icons-material/Menu';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -110,8 +112,12 @@ export const Icon: React.FC<IProps> = ({
       return <ManageHistoryIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.MENU:
       return <MenuIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.MILITARY_TECH:
+      return <MilitaryTechIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.OFFICE:
       return <BusinessIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.PAID:
+      return <PaidIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.PERSON:
       return <PersonIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.REMOVE:

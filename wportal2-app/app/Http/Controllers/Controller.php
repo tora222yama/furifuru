@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUserAuthority;
 use Illuminate\Contracts\Support\Arrayable;
@@ -41,6 +42,7 @@ class Controller extends BaseController
                 ]),
                 'location'             => fn () => $this->getLocation(),
                 'trnUserAuthorityList' => fn () => $this->getUserAuthorityList(),
+                'achievementCount'     => fn () => TrnUserRewardService::countAchievable($this->authUser),
             ],
             $props,
         ));

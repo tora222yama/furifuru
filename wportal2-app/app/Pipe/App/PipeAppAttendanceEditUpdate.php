@@ -20,7 +20,7 @@ final class PipeAppAttendanceEditUpdate extends PipeBase
     public function __construct(array $args)
     {
         $this->eventList = collect();
-        parent::__construct(EPipeKind::App_ATTENDANCE_EDIT_UPDATE, $args);
+        parent::__construct(EPipeKind::APP_ATTENDANCE_EDIT_UPDATE, $args);
     }
 
     /**

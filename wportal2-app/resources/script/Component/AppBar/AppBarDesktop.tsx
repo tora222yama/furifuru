@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { AppBar as MuiAppBar, Box, Toolbar } from '@mui/material';
+import { AppBar as MuiAppBar, Toolbar } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { Logo } from '@/script/Component/AppBar/Logo';
 import { User } from '@/script/Component/AppBar/User';
+import { Gold } from '@/script/Component/AppBar/Gold';
 
 interface IProps extends IPropsBase {}
 export const AppBarDesktop: React.FC<IProps> = () => {
@@ -28,7 +29,7 @@ export const AppBarDesktop: React.FC<IProps> = () => {
             marginRight: 'auto',
           }}
         />
-        <Box>通貨</Box>
+        <Gold />
         <User />
       </Toolbar>
     </MuiAppBar>

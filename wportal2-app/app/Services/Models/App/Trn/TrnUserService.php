@@ -11,6 +11,7 @@ use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
+use App\Pipe\App\PipeAppRewardAchieve;
 use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
@@ -40,6 +41,7 @@ class TrnUserService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_REWARD_ACHIEVE               => $this->execAppRewardAchieve($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
@@ -47,6 +49,23 @@ class TrnUserService extends ModelServiceBase
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    /**
+     * 報酬の達成.
+     *
+     * @throws Exception
+     */
+    private function execAppRewardAchieve(
+        PipeAppRewardAchieve|PipeBase $pipe
+    ): void {
+        // GOLDの獲得.
+        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
+        $trnUser->accumulation_gold += $pipe->achieveGold;
+        $trnUser->current_gold      += $pipe->achieveGold;
+
+        // 保存.
+        $this->updateOrFail($trnUser);
     }
 
     /**
@@ -258,7 +277,7 @@ class TrnUserService extends ModelServiceBase
      *
      * @throws Throwable
      */
-    public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): void
+    public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): TrnUser
     {
         // 新規にユーザーを作成.
         $trnUser                  = new TrnUser();
@@ -279,6 +298,8 @@ class TrnUserService extends ModelServiceBase
         // 画像パスを保存.
         $trnUser->face_image_path = $path;
         $trnUser->saveOrFail();
+
+        return $trnUser;
     }
 
     /**
