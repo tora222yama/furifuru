@@ -40,6 +40,15 @@ class Seeder_MstReward extends Seeder
             'reward_gold'     => 10,
             'e_enable_repeat' => EEnableFlag::ENABLE->value,
         ],
+        [
+            'id'              => EMstReward::GOOD_JOB->value,
+            'reward_kind'     => ERewardKind::DAILY->value,
+            'reward_rank'     => 1,
+            'reward_name'     => 'ささやかながらの花束を',
+            'reward_explain'  => "GOOD JOB!!を送る\n繰り返し獲得できる。一日一回まで。",
+            'reward_gold'     => 10,
+            'e_enable_repeat' => EEnableFlag::ENABLE->value,
+        ],
     ];
 
     /**

@@ -183,6 +183,9 @@ class TrnUserRewardService extends ModelServiceBase
             $this->updateOrFail($targetReward);
         }
 
+        // TODO: ActivityLogの形式にする.
+        Log::info("Archive reward id:[$trnUserId] reward:[$eMstReward->value]");
+
         // TODO: 通知を$pipeに格納することを検討.
     }
 

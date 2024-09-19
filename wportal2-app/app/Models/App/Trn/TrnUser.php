@@ -79,6 +79,18 @@ class TrnUser extends ModelBase
     }
 
     /**
+     * リレーション:TrnUserReward
+     */
+    public function TrnUserReward(): HasMany
+    {
+        return $this->hasMany(
+            TrnUserReward::class,
+            'trn_user_id',
+            'id'
+        )->alive();
+    }
+
+    /**
      * レコードをGraphQLなどでの受け渡し用に変換.
      */
     public function toPayload(array $with = [], array $history = []): array

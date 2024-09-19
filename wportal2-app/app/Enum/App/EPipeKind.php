@@ -39,6 +39,9 @@ enum EPipeKind: string
     case APP_ONETIME_PASSWORD_LOGIN             = 'app_onetime_password_login';
     case APP_SP_LOGIN                           = 'app_sp_login';
 
+    // batch.
+    case COMMAND_BATCH_REWARD_EXIST_USER        = 'command_batch_reward_exist_user';
+
     // sample-queries.
     case SAMPLE_PAGINATION_QUERY                = 'sample_pagination_query';
     case SAMPLE_REDIS_QUERY                     = 'sample_redis_query';
