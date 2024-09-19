@@ -8,6 +8,7 @@ export const E_MENU = {
   DASHBOARD: 'dashboard', // ダッシュボード.
   ATTENDANCE: 'attendance', // 勤怠共有.
   SHOP: 'shop', // ショップ.
+  REWARD: 'reward', // 報酬.
   ATTENDANCE_ROOT: 'attendance_root', // 勤怠確認.
   ATTENDANCE_EDIT: 'attendance_edit', // 勤怠修正.
   ATTENDANCE_TABLE: 'attendance_table', // 勤怠一覧表.
@@ -67,6 +68,14 @@ export const MenuList: IMenu[] = [
     back: E_PAGES.INVALID,
     name: 'ショップ',
     icon: E_ICON.SHOP,
+  },
+  {
+    menu: E_MENU.REWARD,
+    pages: E_PAGES.REWARD,
+    parent: E_MENU.INVALID,
+    back: E_PAGES.INVALID,
+    name: '報酬',
+    icon: E_ICON.MILITARY_TECH,
   },
   {
     menu: E_MENU.ATTENDANCE_ROOT,

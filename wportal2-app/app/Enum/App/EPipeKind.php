@@ -15,7 +15,8 @@ enum EPipeKind: string
     case APP_ATTENDANCE_DELETE                  = 'app_attendance_delete';
     case APP_ATTENDANCE_PROJECT_PRIORITY        = 'app_attendance_project_priority';
     case APP_ATTENDANCE_DIVISION_PRIORITY       = 'app_attendance_division_priority';
-    case App_ATTENDANCE_EDIT_UPDATE             = 'app_attendance_edit_update';
+    case APP_ATTENDANCE_EDIT_UPDATE             = 'app_attendance_edit_update';
+    case APP_REWARD_ACHIEVE                     = 'app_reward_achieve';
     case APP_DIVISION_UPDATE                    = 'app_division_update';
     case APP_DIVISION_USER_UPDATE               = 'app_division_user_update';
     case APP_DIVISION_DELETE                    = 'app_division_delete';
@@ -37,6 +38,9 @@ enum EPipeKind: string
     case APP_LEGACY_LOGIN                       = 'app_legacy_login';
     case APP_ONETIME_PASSWORD_LOGIN             = 'app_onetime_password_login';
     case APP_SP_LOGIN                           = 'app_sp_login';
+
+    // batch.
+    case COMMAND_BATCH_REWARD_EXIST_USER        = 'command_batch_reward_exist_user';
 
     // sample-queries.
     case SAMPLE_PAGINATION_QUERY                = 'sample_pagination_query';

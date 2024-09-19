@@ -16,6 +16,8 @@ export interface IAppTrnUser {
   id: number;
   authId: number;
   nickname: string;
+  currentGold: number;
+  accumulationGold: number;
   birthDate: string;
   selfIntroduction: string;
   faceImagePath: string;
@@ -32,6 +34,10 @@ export const parseAppTrnUserPayload = (payload?: IAppTrnUser): IAppTrnUser => {
     id: payload?.id ? Number(payload.id) : 0,
     authId: payload?.authId ? Number(payload.authId) : 0,
     nickname: payload?.nickname ? String(payload.nickname) : '',
+    currentGold: payload?.currentGold ? Number(payload.currentGold) : 0,
+    accumulationGold: payload?.accumulationGold
+      ? Number(payload.accumulationGold)
+      : 0,
     birthDate: payload?.birthDate ? String(payload.birthDate) : '',
     selfIntroduction: payload?.selfIntroduction
       ? String(payload.selfIntroduction)
@@ -64,6 +70,8 @@ export class AppTrnUserList extends ListBase<IAppTrnUser> {
       id: 0,
       authId: 0,
       nickname: '',
+      currentGold: 0,
+      accumulationGold: 0,
       birthDate: '',
       selfIntroduction: '',
       faceImagePath: '',

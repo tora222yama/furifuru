@@ -12,6 +12,7 @@ use App\Facades\External\RecaptchaService;
 use App\Facades\External\SesService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Auth\AuthUser;
@@ -298,7 +299,10 @@ class LoginController extends Controller
             $authUser->saveOrFail();
 
             // ユーザーを作成.
-            TrnUserService::createNewUser($authUser, $name);
+            $trnUser                     = TrnUserService::createNewUser($authUser, $name);
+
+            // ユーザー作成の報酬.
+            TrnUserRewardService::createNewUser($trnUser->id);
 
             return $authUser;
         });
