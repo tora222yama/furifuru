@@ -168,6 +168,7 @@ class TrnUserRewardService extends ModelServiceBase
         // 対象となる報酬を取得.
         $targetReward = TrnUserReward::query()
             ->where('mst_reward_id', $eMstReward->value)
+            ->where('trn_user_id', $trnUserId)
             ->first();
 
         // 存在しない場合は新規レコードを作成.
