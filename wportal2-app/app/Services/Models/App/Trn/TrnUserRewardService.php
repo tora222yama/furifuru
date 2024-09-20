@@ -56,7 +56,10 @@ class TrnUserRewardService extends ModelServiceBase
         }
 
         // 本日の獲得が存在するなら処理しない.
-        if ($this->isAchieveToday(EMstReward::CREATE_PERFECT_ATTENDANCE)) {
+        if ($this->isAchieveToday(
+            $pipe->authUser->TrnUser->id,
+            EMstReward::CREATE_PERFECT_ATTENDANCE)
+        ) {
             Log::info('獲得済み.');
 
             return;
@@ -193,9 +196,10 @@ class TrnUserRewardService extends ModelServiceBase
     /**
      * 本日の達成があるかどうか.
      */
-    public function isAchieveToday(EMstReward $eMstReward): bool
+    public function isAchieveToday(int $trnUserId, EMstReward $eMstReward): bool
     {
         return TrnUserReward::query()
+            ->where('trn_user_id', $trnUserId)
             ->where('mst_reward_id', $eMstReward->value)
             ->whereDate('updated_at', now())
             ->exists();
