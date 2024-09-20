@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Divider, Grid } from '@mui/material';
+import { Box, Divider, Grid } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
 import {
@@ -13,9 +13,12 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { MobileIcon } from '@/script/Component/AppBar/MobileIcon';
 import { E_ICON } from '@/script/Enum/EIcon';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 
 interface IProps extends IPropsBase {}
 export const MobileMenu: React.FC<IProps> = () => {
+  const { authUser } = useCommonIndexContext();
   const { trnUserAuthorityList, achievementCount } = useCommonIndexContext();
   const itemList = MenuList.filter(v => !mobileIgnoreList.includes(v.menu))
     .filter(v => v.pages !== E_PAGES.INVALID)
@@ -35,6 +38,23 @@ export const MobileMenu: React.FC<IProps> = () => {
 
   return (
     <>
+      <Box
+        sx={{
+          padding: responsiveSize(16),
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Icon icon={E_ICON.PAID} size={32} />
+        <TypoH1
+          sx={{
+            marginLeft: responsiveSize(10),
+          }}
+        >
+          {authUser.trnUser?.currentGold.toLocaleString()}
+        </TypoH1>
+      </Box>
+      <Divider sx={{ margin: responsiveSize(8) }} />
       <Grid
         sx={{
           width: '306px',
