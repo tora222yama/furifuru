@@ -9,6 +9,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnDivisionService;
 use App\Facades\Models\App\Trn\TrnDivisionUserService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppDivisionCreate;
 use App\Pipe\App\PipeAppDivisionDelete;
 use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Pipe\App\PipeAppDivisionUserUpdate;
@@ -76,7 +77,7 @@ class DivisionController extends Controller
         return $this->render('Division/Edit/Index', [
 
             // 課情報.
-            'trnDivision'         => fn () => $this->getDivision($request, [
+            'trnDivision'      => fn () => $this->getDivision($request, [
                 'TrnDivisionUser',
                 'TrnDivisionUser' => [
                     'TrnUser',
@@ -84,7 +85,7 @@ class DivisionController extends Controller
             ]),
 
             // セッションにバリデーション情報があれば取得する.
-            'serverValidation'    => fn () => session('serverValidation') ?? null,
+            'serverValidation' => fn () => session('serverValidation') ?? null,
         ]);
     }
 
@@ -119,6 +120,40 @@ class DivisionController extends Controller
         return redirect()->action(EPages::DIVISION__SHOW->getInvokePath(), [
             'divisionId' => $pipe->trnDivisionId,
         ]);
+    }
+
+    public function new(Request $request): Response
+    {
+        return $this->render('Division/New/Index', [
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation' => fn () => session('serverValidation') ?? null,
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function create(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppDivisionCreate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::DIVISION__NEW->getInvokePath())
+                ->with([
+                    'serverValidation' => PipeService::getValidationResult(),
+                ]);
+        }
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // ユーザー情報の更新.
+            TrnDivisionService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::DIVISION->getInvokePath());
     }
 
     /**

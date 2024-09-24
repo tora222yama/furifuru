@@ -5,6 +5,7 @@ export const E_ICON = {
   INVALID: 'invalid',
 
   ADD: 'add',
+  ADMIN_PANEL: 'admin_panel',
   ARROW_BACK: 'arrow_back',
   ARROW_LEFT: 'arrow_left',
   ARROW_RIGHT: 'arrow_right',
@@ -15,15 +16,25 @@ export const E_ICON = {
   CIRCLE: 'circle',
   CLEAR: 'clear',
   DASHBOARD: 'dashboard',
+  DESCRIPTION: 'description',
+  DIVERSITY3: 'diversity3',
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
   FAVICON: 'favicon.png',
   GOOGLE: 'google_icon.svg',
+  GROUPS: 'groups',
   HELP: 'help',
   HOME: 'home',
+  LIBRARY_BOOKS: 'library_books',
+  LOGOUT: 'logout',
+  MANAGE_HISTORY: 'manage_history',
   MENU: 'menu',
+  MILITARY_TECH: 'military_tech',
   OFFICE: 'office',
+  PAID: 'paid',
+  PERSON: 'person',
   REMOVE: 'remove',
+  SETTING: 'setting',
   SHOP: 'shop',
   STAR: 'star',
   STAR_OUTLINE: 'star_outline',
@@ -41,6 +52,7 @@ export const getIconPath = (icon: EIcon): string => {
 export const getIconSize = (icon: EIcon): { w: number; h: number } => {
   switch (icon) {
     case E_ICON.ADD:
+    case E_ICON.ADMIN_PANEL:
     case E_ICON.ARROW_BACK:
     case E_ICON.ATTENDANCE:
     case E_ICON.BUILD:
@@ -48,13 +60,23 @@ export const getIconSize = (icon: EIcon): { w: number; h: number } => {
     case E_ICON.CIRCLE:
     case E_ICON.CLEAR:
     case E_ICON.DASHBOARD:
+    case E_ICON.DESCRIPTION:
+    case E_ICON.DIVERSITY3:
     case E_ICON.EXPAND_LESS:
     case E_ICON.EXPAND_MORE:
+    case E_ICON.GROUPS:
     case E_ICON.HELP:
     case E_ICON.HOME:
+    case E_ICON.LIBRARY_BOOKS:
+    case E_ICON.LOGOUT:
+    case E_ICON.MANAGE_HISTORY:
     case E_ICON.MENU:
+    case E_ICON.MILITARY_TECH:
     case E_ICON.OFFICE:
+    case E_ICON.PAID:
+    case E_ICON.PERSON:
     case E_ICON.REMOVE:
+    case E_ICON.SETTING:
     case E_ICON.SHOP:
     case E_ICON.STAR:
     case E_ICON.STAR_OUTLINE:

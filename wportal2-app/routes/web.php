@@ -24,6 +24,9 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/attendance/delete', EPages::ATTENDANCE_DELETE->getInvokePath());
     Route::post('/attendance/project_priority', EPages::ATTENDANCE_PROJECT_PRIORITY->getInvokePath());
     Route::post('/attendance/division_priority', EPages::ATTENDANCE_DIVISION_PRIORITY->getInvokePath());
+    Route::match(['get', 'post'], '/reward', EPages::REWARD->getInvokePath());
+    Route::get('/reward/list', EPages::REWARD__LIST->getInvokePath());
+    Route::post('/reward/achieve', EPages::REWARD__ACHIEVE->getInvokePath());
     Route::match(['get', 'post'], '/attendance/edit', EPages::ATTENDANCE__EDIT->getInvokePath());
     Route::post('/attendance/edit/update', EPages::ATTENDANCE__EDIT__UPDATE->getInvokePath());
     Route::match(['get', 'post'], '/division', EPages::DIVISION->getInvokePath());
@@ -33,6 +36,8 @@ Route::group(['middleware' => ['auth:web']], function () {
         ->where('divisionId', '[0-9]+');
     Route::post('/division/update', EPages::DIVISION__UPDATE->getInvokePath());
     Route::post('/division/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
+    Route::get('/division/new', EPages::DIVISION__NEW->getInvokePath());
+    Route::post('/division/create', EPages::DIVISION__CREATE->getInvokePath());
     Route::post('/division/delete', EPages::DIVISION__DELETE->getInvokePath());
     Route::match(['get', 'post'], '/project', EPages::PROJECT->getInvokePath());
     Route::get('/project/{projectId}/show', EPages::PROJECT__SHOW->getInvokePath())

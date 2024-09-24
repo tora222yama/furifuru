@@ -15,9 +15,14 @@ export const E_PAGES = {
   ATTENDANCE__EDIT__UPDATE: 'attendance__edit__update', // 勤怠修正・更新.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   SHOP: 'shop', // ショップ.
+  REWARD: 'reward', // 報酬.
+  REWARD__LIST: 'reward__list', // 報酬一覧.
+  REWARD__ACHIEVE: 'reward__achieve', // 報酬達成.
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
+  DIVISION__NEW: 'division__new', // 課新規作成.
+  DIVISION__CREATE: 'division__create', // 課新規登録.
   DIVISION__UPDATE: 'division__update', // 課更新.
   DIVISION__UPDATE_USER: 'division__update_user', // 課メンバー更新.
   DIVISION__DELETE: 'division__delete', // 課削除.
@@ -82,6 +87,12 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.REWARD:
+      return '/reward';
+    case E_PAGES.REWARD__LIST:
+      return '/reward/list';
+    case E_PAGES.REWARD__ACHIEVE:
+      return '/reward/achieve';
     case E_PAGES.ATTENDANCE__EDIT:
       return '/attendance/edit';
     case E_PAGES.ATTENDANCE__EDIT__UPDATE:
@@ -92,6 +103,10 @@ const getHref = (page: EPages): string => {
       return `/division/$divisionId/show`;
     case E_PAGES.DIVISION__EDIT:
       return `/division/$divisionId/edit`;
+    case E_PAGES.DIVISION__NEW:
+      return `/division/new`;
+    case E_PAGES.DIVISION__CREATE:
+      return `/division/create`;
     case E_PAGES.DIVISION__UPDATE:
       return '/division/update';
     case E_PAGES.DIVISION__UPDATE_USER:
@@ -190,6 +205,10 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.REWARD:
+      return '獲得報酬';
+    case E_PAGES.REWARD__LIST:
+      return '報酬一覧';
     case E_PAGES.ATTENDANCE__EDIT:
       return '勤怠修正';
     case E_PAGES.DIVISION:
@@ -198,6 +217,8 @@ export const getPagesName = (page: EPages): string => {
       return '課詳細';
     case E_PAGES.DIVISION__EDIT:
       return '課編集';
+    case E_PAGES.DIVISION__NEW:
+      return '課追加';
     case E_PAGES.DIVISION__DELETE:
       return '課削除';
     case E_PAGES.PROJECT:
@@ -253,10 +274,14 @@ export const getPagesName = (page: EPages): string => {
  */
 export const getPagesBack = (pages: EPages): EPages[] => {
   switch (pages) {
+    case E_PAGES.REWARD__LIST:
+      return [E_PAGES.REWARD];
     case E_PAGES.DIVISION__SHOW:
       return [E_PAGES.DIVISION];
     case E_PAGES.DIVISION__EDIT:
       return [E_PAGES.DIVISION, E_PAGES.DIVISION__SHOW];
+    case E_PAGES.DIVISION__NEW:
+      return [E_PAGES.DIVISION];
     case E_PAGES.PROJECT__SHOW:
       return [E_PAGES.PROJECT];
     case E_PAGES.PROJECT__EDIT:

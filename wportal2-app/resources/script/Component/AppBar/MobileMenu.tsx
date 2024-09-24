@@ -1,47 +1,88 @@
 import * as React from 'react';
-import { Divider, MenuItem } from '@mui/material';
+import { Box, Divider, Grid } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
-import { PersonalSetting } from '@/script/Component/AppBar/MenuItem/PersonalSetting';
-import { Manual } from '@/script/Component/AppBar/MenuItem/Manual';
-import { ReleaseNote } from '@/script/Component/AppBar/MenuItem/ReleaseNote';
-import { Logout } from '@/script/Component/AppBar/MenuItem/Logout';
-import { isActiveMenu, MenuList, mobileIgnoreList } from '@/script/Enum/EMenu';
+import {
+  E_MENU,
+  EMenu,
+  isActiveMenu,
+  MenuList,
+  mobileIgnoreList,
+} from '@/script/Enum/EMenu';
 import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { MobileIcon } from '@/script/Component/AppBar/MobileIcon';
+import { E_ICON } from '@/script/Enum/EIcon';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 
 interface IProps extends IPropsBase {}
 export const MobileMenu: React.FC<IProps> = () => {
-  const { trnUserAuthorityList } = useCommonIndexContext();
+  const { authUser } = useCommonIndexContext();
+  const { trnUserAuthorityList, achievementCount } = useCommonIndexContext();
   const itemList = MenuList.filter(v => !mobileIgnoreList.includes(v.menu))
     .filter(v => v.pages !== E_PAGES.INVALID)
     .filter(v => isActiveMenu(v.menu, trnUserAuthorityList));
 
+  /**
+   * バッジの表示数.
+   */
+  const calcBadgeCount = (menu: EMenu): number => {
+    switch (menu) {
+      case E_MENU.REWARD:
+        return achievementCount;
+      default:
+        return 0;
+    }
+  };
+
   return (
     <>
-      {itemList.map(menu => {
-        return (
-          <MenuItem
-            key={menu.menu}
-            sx={{
-              minHeight: responsiveSize(40),
-            }}
-          >
-            <InertiaLink sx={{ width: '100%' }} href={getPagesHref(menu.pages)}>
-              <TypoText>{menu.name}</TypoText>
-            </InertiaLink>
-          </MenuItem>
-        );
-      })}
+      <Box
+        sx={{
+          padding: responsiveSize(16),
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Icon icon={E_ICON.PAID} size={32} />
+        <TypoH1
+          sx={{
+            marginLeft: responsiveSize(10),
+          }}
+        >
+          {authUser.trnUser?.currentGold.toLocaleString()}
+        </TypoH1>
+      </Box>
       <Divider sx={{ margin: responsiveSize(8) }} />
-      <PersonalSetting />
+      <Grid
+        sx={{
+          width: '306px',
+        }}
+        container
+      >
+        {itemList.map(menu => {
+          return (
+            <Grid item xs={4} key={menu.menu}>
+              <MobileIcon
+                key={menu.menu}
+                href={getPagesHref(menu.pages)}
+                icon={menu.icon}
+                label={menu.name}
+                badgeCount={calcBadgeCount(menu.menu)}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
       <Divider sx={{ margin: responsiveSize(8) }} />
-      <Manual />
-      <ReleaseNote />
+      <MobileIcon
+        href={getPagesHref(E_PAGES.PERSONAL_SETTING__SHOW)}
+        icon={E_ICON.SETTING}
+        label="個人設定"
+      />
       <Divider sx={{ margin: '8px' }} />
-      <Logout />
+      <MobileIcon href="/logout" icon={E_ICON.LOGOUT} label="ログアウト" />
     </>
   );
 };

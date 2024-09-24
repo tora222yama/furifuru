@@ -86,6 +86,7 @@ data "aws_iam_policy_document" "wportal2_ecr_policy_document" {
         "iam:SimulatePrincipalPolicy",
         "ssm:GetParameter",
         "ssm:GetParameters",
+        "logs:*",
       ]
       resources = ["*"]
     }

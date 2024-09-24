@@ -189,8 +189,12 @@ return [
         // Models.App.Auth.
         App\Providers\Models\App\Auth\AuthUserServiceProvider::class,
 
+        // Models.App.Mst.
+        App\Providers\Models\App\Mst\MstRewardServiceProvider::class,
+
         // Models.App.Trn.
         App\Providers\Models\App\Trn\TrnAttendanceStateServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnBatchReleaseHistoryServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
         App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
@@ -200,6 +204,7 @@ return [
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
     ])->toArray(),
@@ -228,8 +233,12 @@ return [
         // Models.App.Auth.
         'models\app\trn\auth_user_service'                   => App\Facades\Models\App\Auth\AuthUserService::class,
 
+        // Models.App.Mst.
+        'models\app\mst\mst_reward_service'                  => App\Facades\Models\App\Mst\MstRewardService::class,
+
         // Models.App.Trn.
         'models\app\trn\trn_attendance_state_service'        => App\Facades\Models\App\Trn\TrnAttendanceStateService::class,
+        'models\app\trn\trn_batch_release_history_service'   => App\Facades\Models\App\Trn\TrnBatchReleaseHistoryService::class,
         'models\app\trn\trn_division_service'                => App\Facades\Models\App\Trn\TrnDivisionService::class,
         'models\app\trn\trn_division_user_service'           => App\Facades\Models\App\Trn\TrnDivisionUserService::class,
         'models\app\trn\trn_project_service'                 => App\Facades\Models\App\Trn\TrnProjectService::class,
@@ -239,6 +248,7 @@ return [
         'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
         'models\app\trn\trn_user_service'                    => App\Facades\Models\App\Trn\TrnUserService::class,
+        'models\app\trn\trn_user_reward_service'             => App\Facades\Models\App\Trn\TrnUserRewardService::class,
         'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 
     ])->toArray(),

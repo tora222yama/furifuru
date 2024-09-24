@@ -8,6 +8,7 @@ use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Trn\TrnDivision;
+use App\Pipe\App\PipeAppDivisionCreate;
 use App\Pipe\App\PipeAppDivisionDelete;
 use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Pipe\PipeBase;
@@ -29,10 +30,35 @@ class TrnDivisionService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_DIVISION_UPDATE      => $this->execAppDivisionUpdate($pipe),
                 EPipeKind::APP_DIVISION_DELETE      => $this->execAppDivisionDelete($pipe),
+                EPipeKind::APP_DIVISION_CREATE      => $this->execAppDivisionCreate($pipe),
                 default                             => throw new Exception(),
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    private function execAppDivisionCreate(
+        PipeAppDivisionCreate|PipeBase $pipe
+    ): void {
+        // 課の作成.
+        $this->createNewDivision(
+            $pipe->name,
+            $pipe->explain,
+        );
+    }
+
+    /**
+     * 課の新規作成.
+     */
+    public function createNewDivision(string $divisionName, string $divisionExplain, int $id = 0): void
+    {
+        $trnDivision           = new TrnDivision();
+        if ($id !==0) {
+            $trnDivision->id   = $id;
+        }
+        $trnDivision->name     = $divisionName;
+        $trnDivision->explain  = $divisionExplain;
+        $trnDivision->saveOrFail();
     }
 
     /**
