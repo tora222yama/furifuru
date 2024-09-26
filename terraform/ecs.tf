@@ -155,6 +155,10 @@ resource "aws_ecs_task_definition" "wportal2_ecs_task" {
           valueFrom = "/wportal/google_client_secret"
         },
         {
+          name      = "GOOGLE_CALENDAR_SA"
+          valueFrom = "/wportal/google_calendar_sa"
+        },
+        {
           name      = "SLACK_APP_TOKEN"
           valueFrom = "/wportal/slack_app_token"
         },
