@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands\Test;
+namespace App\Console\Commands\Batch;
 
 use App\Enum\Mst\EMstReward;
 use App\Models\App\EloquentBuilder;
