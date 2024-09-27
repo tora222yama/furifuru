@@ -90,6 +90,7 @@ class TrnUserRewardService extends ModelServiceBase
         // 対象のフラグを更新.
         $targetReward->each(function (TrnUserReward $trnUserReward) {
             $trnUserReward->received_count = $trnUserReward->achievement_count;
+            $trnUserReward->received_at    = now();
             $this->updateOrFail($trnUserReward);
         });
     }
@@ -180,10 +181,12 @@ class TrnUserRewardService extends ModelServiceBase
             $newReward->trn_user_id       = $trnUserId;
             $newReward->mst_reward_id     = $eMstReward->value;
             $newReward->achievement_count = 1;
+            $newReward->achieved_at       = now();
             $this->insertOrFail($newReward);
         } elseif (MstRewardService::isEnableRepeat($eMstReward)) {
             // 再達成可能な場合はカウントを増やす.
             $targetReward->achievement_count++;
+            $targetReward->achieved_at = now();
             $this->updateOrFail($targetReward);
         }
 
@@ -201,7 +204,7 @@ class TrnUserRewardService extends ModelServiceBase
         return TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->where('mst_reward_id', $eMstReward->value)
-            ->whereDate('updated_at', now())
+            ->whereDate('achieved_at', now())
             ->exists();
     }
 
