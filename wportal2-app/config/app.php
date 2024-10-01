@@ -190,6 +190,7 @@ return [
         App\Providers\Models\App\Auth\AuthUserServiceProvider::class,
 
         // Models.App.Mst.
+        App\Providers\Models\App\Mst\MstGoodsServiceProvider::class,
         App\Providers\Models\App\Mst\MstRewardServiceProvider::class,
 
         // Models.App.Trn.
@@ -234,6 +235,7 @@ return [
         'models\app\trn\auth_user_service'                   => App\Facades\Models\App\Auth\AuthUserService::class,
 
         // Models.App.Mst.
+        'models\app\mst\mst_goods_service'                   => App\Facades\Models\App\Mst\MstGoodsService::class,
         'models\app\mst\mst_reward_service'                  => App\Facades\Models\App\Mst\MstRewardService::class,
 
         // Models.App.Trn.

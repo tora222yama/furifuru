@@ -82,6 +82,7 @@ enum EPages: string
             self::ATTENDANCE_DELETE              => '\App\Http\Controllers\Pages\AttendanceController@delete',
             self::ATTENDANCE_DIVISION_PRIORITY   => '\App\Http\Controllers\Pages\AttendanceController@division_priority',
             self::ATTENDANCE_PROJECT_PRIORITY    => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
+            self::SHOP                           => '\App\Http\Controllers\Pages\ShopController@invoke',
             self::REWARD                         => '\App\Http\Controllers\Pages\RewardController@invoke',
             self::REWARD__LIST                   => '\App\Http\Controllers\Pages\RewardController@list',
             self::REWARD__ACHIEVE                => '\App\Http\Controllers\Pages\RewardController@achieve',

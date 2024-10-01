@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::post('/attendance/delete', EPages::ATTENDANCE_DELETE->getInvokePath());
     Route::post('/attendance/project_priority', EPages::ATTENDANCE_PROJECT_PRIORITY->getInvokePath());
     Route::post('/attendance/division_priority', EPages::ATTENDANCE_DIVISION_PRIORITY->getInvokePath());
+    Route::get('/shop', EPages::SHOP->getInvokePath());
     Route::match(['get', 'post'], '/reward', EPages::REWARD->getInvokePath());
     Route::get('/reward/list', EPages::REWARD__LIST->getInvokePath());
     Route::post('/reward/achieve', EPages::REWARD__ACHIEVE->getInvokePath());

@@ -87,6 +87,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.SHOP:
+      return '/shop';
     case E_PAGES.REWARD:
       return '/reward';
     case E_PAGES.REWARD__LIST:
@@ -205,6 +207,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.SHOP:
+      return 'ショップ';
     case E_PAGES.REWARD:
       return '獲得報酬';
     case E_PAGES.REWARD__LIST:
