@@ -29,7 +29,9 @@ export const Gold: React.FC<IProps> = ({ sx }) => {
           marginLeft: 'auto',
         }}
       >
-        {authUser.trnUser?.currentGold.toLocaleString()}
+        {authUser.trnUser
+          ? authUser.trnUser?.currentGold.toLocaleString()
+          : '0'}
       </TypoText>
     </Box>
   );

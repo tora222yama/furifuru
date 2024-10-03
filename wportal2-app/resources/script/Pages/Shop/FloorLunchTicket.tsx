@@ -4,10 +4,21 @@ import { IPropsBase } from '@/script/System/System';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { LunchTicket } from '@/script/Pages/Shop/LunchTicket';
 import { useIndexContext } from '@/script/Pages/Shop/Index';
+import { E_COLOR } from '@/script/Enum/EColor';
+import { TypoText2 } from '@/script/Component/Typography/TypoText2';
+import { Log } from '@/script/Common/Log';
+import { IAppMstGoods } from '@/script/Models/App/Mst/MstGoodsList';
 
 interface IProps extends IPropsBase {}
 export const FloorLunchTicket: React.FC<IProps> = () => {
   const { mstGoodsList } = useIndexContext();
+
+  /**
+   * チケットを選択.
+   */
+  const handleClick = (mstGoods: IAppMstGoods) => {
+    Log.info(`チケットを選択:${mstGoods.id}`);
+  };
 
   return (
     <Box
@@ -27,8 +38,35 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
       >
         {mstGoodsList.list().map(mstGoods => {
           return (
-            <Grid item key={mstGoods.id}>
-              <LunchTicket />
+            <Grid key={mstGoods.id} item onClick={() => handleClick(mstGoods)}>
+              <Box>
+                <LunchTicket mstGoods={mstGoods} />
+              </Box>
+              <Box
+                sx={{
+                  marginTop: responsiveSpacing(2),
+                  width: '300px',
+                }}
+              >
+                <TypoText2
+                  sx={{
+                    padding: '4px 10px',
+                    background: E_COLOR.PRIMARY_LIGHT,
+                  }}
+                  bold
+                >
+                  {mstGoods.name}
+                </TypoText2>
+                <TypoText2
+                  sx={{
+                    background: E_COLOR.WHITE,
+                    padding: '4px 10px',
+                    whiteSpace: 'pre-wrap',
+                  }}
+                >
+                  {mstGoods.explain}
+                </TypoText2>
+              </Box>
             </Grid>
           );
         })}
