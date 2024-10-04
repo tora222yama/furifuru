@@ -9,6 +9,7 @@ enum EPipeKind: string
     case INVALID                                = 'invalid';
 
     // queries.
+    case APP_CALENDAR_USER_SCHEDULE_LIST        = 'app_calendar_user_schedule_list';
 
     // mutations.
     case APP_ATTENDANCE_CREATE                  = 'app_attendance_create';

@@ -6,18 +6,22 @@ import { LunchTicket } from '@/script/Pages/Shop/LunchTicket';
 import { useIndexContext } from '@/script/Pages/Shop/Index';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText2 } from '@/script/Component/Typography/TypoText2';
-import { Log } from '@/script/Common/Log';
 import { IAppMstGoods } from '@/script/Models/App/Mst/MstGoodsList';
+import { DialogCalendarUserScheduleSelect } from '@/script/Pages/Common/Dialog/DialogCalendarUserScheduleSelect';
+import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {}
 export const FloorLunchTicket: React.FC<IProps> = () => {
   const { mstGoodsList } = useIndexContext();
+  const [openCalendarDialog, setOpenCalendarDialog] = React.useState<
+    IAppMstGoods | undefined
+  >(undefined);
 
   /**
    * チケットを選択.
    */
   const handleClick = (mstGoods: IAppMstGoods) => {
-    Log.info(`チケットを選択:${mstGoods.id}`);
+    setOpenCalendarDialog(mstGoods);
   };
 
   return (
@@ -26,6 +30,15 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
         padding: responsiveSpacing(4),
       }}
     >
+      <Closable open={!!openCalendarDialog}>
+        <DialogCalendarUserScheduleSelect
+          open={!!openCalendarDialog}
+          emailList={['miki-yoji@919.jp', 'tobaru-hideyasu@919.jp']}
+          startDate=""
+          endDate=""
+          handleClose={() => setOpenCalendarDialog(undefined)}
+        />
+      </Closable>
       <Grid
         sx={{
           display: 'grid',

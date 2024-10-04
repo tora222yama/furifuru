@@ -1,0 +1,14 @@
+# 予定一覧の取得.
+query AppCalendarUserScheduleList(
+  $emailList: [String!]!
+  $startDate: String!
+  $endDate: String!
+) {
+  AppCalendarUserScheduleList(
+    emailList: $emailList
+    startDate: $startDate
+    endDate: $endDate
+  ) {
+    value
+  }
+}
