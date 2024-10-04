@@ -54,9 +54,9 @@ type Response {
 }
 
 # Query/Mutationの定義.
-#import App/Calendar.graphql
 #import App/Common.graphql
 #import App/PersonalSetting.graphql
+#import Usecases/Calendar.graphql
 
 # Sample-Query/Mutationの定義.
 #import Sample/InputForm.graphql

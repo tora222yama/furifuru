@@ -3,7 +3,9 @@ import { Box, Dialog, Divider } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { TypoSubTitle1 } from '@/script/Component/Typography/TypoSubTitle1';
-import { useFetchAppCalendarUserScheduleList } from '@/script/Hooks/App/Queries/useFetchAppCalendarUserScheduleList';
+import { useFetchAppCalendarUserScheduleList } from '@/script/Hooks/Usecases/Queries/useFetchAppCalendarUserScheduleList';
+import { Loading } from '@/script/Component/Misc/Loading';
+import { responsiveSpacing } from '@/script/System/Responsive';
 
 /**
  * 複数ユーザーのスケジュールから、空いている時間を選択するダイアログ.
@@ -23,24 +25,15 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
   endDate,
   handleClose,
 }) => {
-  const [loading, test] = useFetchAppCalendarUserScheduleList({
+  const [loading] = useFetchAppCalendarUserScheduleList({
     emailList,
     startDate,
     endDate,
   });
-  console.log(loading);
-  console.log(test);
 
   return (
     <Dialog
       sx={{
-        '& .MuiDialog-container': {
-          '& .MuiPaper-root': {
-            width: '80vw',
-            minWidth: '600px',
-            maxWidth: '80vw',
-          },
-        },
         ...sx,
       }}
       open={open}
@@ -48,12 +41,14 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
     >
       <Box
         sx={{
-          padding: '20px',
+          padding: responsiveSpacing(4),
         }}
       >
         <TypoSubTitle1>スケジュールを選択してください</TypoSubTitle1>
-        <Divider sx={{ width: '100%' }} />
-        <TypoText>ダイアログの中身</TypoText>
+        <Divider sx={{ width: '100%', my: responsiveSpacing(4) }} />
+        <Loading loading={loading}>
+          <TypoText>ダイアログの中身</TypoText>
+        </Loading>
       </Box>
     </Dialog>
   );

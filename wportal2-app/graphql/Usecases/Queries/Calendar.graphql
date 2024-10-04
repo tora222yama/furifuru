@@ -1,14 +1,19 @@
 # 予定一覧の取得.
-query AppCalendarUserScheduleList(
+query UsecasesCalendarUserScheduleList(
   $emailList: [String!]!
   $startDate: String!
   $endDate: String!
 ) {
-  AppCalendarUserScheduleList(
+  UsecasesCalendarUserScheduleList(
     emailList: $emailList
     startDate: $startDate
     endDate: $endDate
   ) {
-    value
+    id,
+    calendarId,
+    kind,
+    summary,
+    start,
+    end,
   }
 }
