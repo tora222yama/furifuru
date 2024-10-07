@@ -5,11 +5,12 @@ import {
   parseUsecasesCalendarUserSchedulePayload,
   UseCasesCalendarUserScheduleList,
 } from '@/script/Models/Usecases/UsecasesCalendarUserScheduleList';
+import { DateTime } from '@/script/Common/DateTime';
 
 export interface IAppCalendarUserScheduleList {
   emailList: string[];
-  startDate: string;
-  endDate: string;
+  startDate: DateTime;
+  endDate: DateTime;
 }
 
 export function useFetchAppCalendarUserScheduleList(
@@ -20,7 +21,9 @@ export function useFetchAppCalendarUserScheduleList(
    */
   const query = useUsecasesCalendarUserScheduleListQuery({
     variables: {
-      ...fetchParameter,
+      emailList: fetchParameter.emailList,
+      startDate: fetchParameter.startDate.toDateTime(),
+      endDate: fetchParameter.endDate.toDateTime(),
     },
   });
 

@@ -24,27 +24,35 @@ final class UsecasesCalendarUserScheduleListQuery
 
         $ret       = [];
 
-        $eventList = GoogleCalendarService::listSchedule('miki-yoji@919.jp');
+        $eventList = GoogleCalendarService::listSchedule(
+            'miki-yoji@919.jp',
+            $pipe->startDate,
+            $pipe->endDate,
+        );
         $eventList->each(function (Event $event) use (&$ret) {
             $ret[] = [
                 'id'         => $event->id                      ?? '',
                 'calendarId' => 'miki-yoji@919.jp',
-                'kind'       => $event->kind                  ?? '',
-                'summary'    => $event->summary            ?? '',
-                'start'      => $event->getStart()->dateTime ?? '',
-                'end'        => $event->getEnd()->dateTime     ?? '',
+                'kind'       => $event->kind                    ?? '',
+                'summary'    => $event->summary                 ?? '',
+                'start'      => $event->getStart()->dateTime    ?? '',
+                'end'        => $event->getEnd()->dateTime      ?? '',
             ];
         });
 
-        $eventList = GoogleCalendarService::listSchedule('tobaru-hideyasu@919.jp');
+        $eventList = GoogleCalendarService::listSchedule(
+            'tobaru-hideyasu@919.jp',
+            $pipe->startDate,
+            $pipe->endDate,
+        );
         $eventList->each(function (Event $event) use (&$ret) {
             $ret[] = [
                 'id'         => $event->id                      ?? '',
                 'calendarId' => 'tobaru-hideyasu@919.jp',
-                'kind'       => $event->kind                  ?? '',
-                'summary'    => $event->summary            ?? '',
-                'start'      => $event->getStart()->dateTime ?? '',
-                'end'        => $event->getEnd()->dateTime     ?? '',
+                'kind'       => $event->kind                    ?? '',
+                'summary'    => $event->summary                 ?? '',
+                'start'      => $event->getStart()->dateTime    ?? '',
+                'end'        => $event->getEnd()->dateTime      ?? '',
             ];
         });
 

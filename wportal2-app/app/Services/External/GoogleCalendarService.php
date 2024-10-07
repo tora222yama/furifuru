@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\External;
 
+use Carbon\Carbon;
 use Google\Exception;
 use Google\Service\Calendar\Event;
 use Google_Client;
@@ -25,8 +26,11 @@ class GoogleCalendarService
      *
      * @throws Exception
      */
-    public function listSchedule(string $calendarId): Collection
-    {
+    public function listSchedule(
+        string $calendarId,
+        Carbon $startDate,
+        Carbon $endDate
+    ): Collection {
         // サービス取得.
         $service = new Google_Service_Calendar(
             $this->getClient($calendarId)
@@ -37,9 +41,8 @@ class GoogleCalendarService
             $results = $service
                 ->events
                 ->listEvents($calendarId, [
-                    'timeMin'      => date('c'),
-                    'timeMax'      => date('c', strtotime('+1 week')),
-                    'maxResults'   => 5,
+                    'timeMin'      => $startDate->toIso8601String(),
+                    'timeMax'      => $endDate->toIso8601String(),
                     'singleEvents' => true,
                     'orderBy'      => 'startTime',
                 ]);

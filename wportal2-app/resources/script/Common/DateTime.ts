@@ -33,6 +33,14 @@ export class DateTime {
   }
 
   /**
+   * Dateインスタンスを直接参照する.
+   * @constructor
+   */
+  public Date(): Date {
+    return this.date;
+  }
+
+  /**
    * 現在のDateを元に新しいDateのインスタンスを得る.
    * @private
    */
@@ -45,6 +53,32 @@ export class DateTime {
    */
   public getWeekDay(): EWeekDay {
     return this.date.getDay() as EWeekDay;
+  }
+
+  /**
+   * 週初の取得.
+   */
+  public startOfWeek(): DateTime {
+    const ret = this.newDate();
+    ret.setDate(ret.getDate() - ret.getDay());
+    ret.setHours(0);
+    ret.setMinutes(0);
+    ret.setSeconds(0);
+    ret.setMilliseconds(0);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 週末の取得.
+   */
+  public endOfWeek(): DateTime {
+    const ret = this.newDate();
+    ret.setDate(ret.getDate() + (6 - ret.getDay()));
+    ret.setHours(23);
+    ret.setMinutes(59);
+    ret.setSeconds(59);
+    ret.setMilliseconds(999);
+    return new DateTime(ret.getTime());
   }
 
   /**
@@ -111,6 +145,65 @@ export class DateTime {
     }
 
     return true;
+  }
+
+  /**
+   * 日付の差分を取得.
+   * @param target
+   */
+  public getDateDiff(target: DateTime): number {
+    const diff = this.toJsTimeStamp() - target.toJsTimeStamp();
+    return Math.abs(Math.ceil(diff / DateTime.SPAN_DAY_JS));
+  }
+
+  /**
+   * 分の加算.
+   * @param addMinutes
+   */
+  public addMinute(addMinutes = 1): DateTime {
+    const ret = this.newDate();
+    ret.setMinutes(ret.getMinutes() + addMinutes);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 分の減算.
+   * @param subMinutes
+   */
+  public subMinute(subMinutes = 1): DateTime {
+    const ret = this.newDate();
+    ret.setMinutes(ret.getMinutes() + subMinutes);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 時間の加算.
+   * @param addHours
+   */
+  public addHour(addHours = 1): DateTime {
+    const ret = this.newDate();
+    ret.setHours(ret.getHours() + addHours);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 時間の減算.
+   * @param subHours
+   */
+  public subHour(subHours = 1): DateTime {
+    const ret = this.newDate();
+    ret.setHours(ret.getHours() - subHours);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 時間の設定.
+   * @param hour
+   */
+  public setHour(hour: number): DateTime {
+    const ret = this.newDate();
+    ret.setHours(hour);
+    return new DateTime(ret.getTime());
   }
 
   /**
