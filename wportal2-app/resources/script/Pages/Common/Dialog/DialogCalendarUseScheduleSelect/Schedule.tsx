@@ -2,17 +2,27 @@ import * as React from 'react';
 import { Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
-import {
-  IScheduleBlock,
-  ScheduleDate,
-} from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDate';
 import { DateTime } from '@/script/Common/DateTime';
+import { IUsecasesCalendarUserSchedule } from '@/script/Models/Usecases/UsecasesCalendarUserScheduleList';
+import {
+  ColorTable,
+  IScheduleBlock,
+  ScheduleDateArea,
+} from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDateArea';
 
 interface IProps extends IPropsBase {
   dateList: DateTime[];
+  scheduleList: IUsecasesCalendarUserSchedule[];
+  colorTable: ColorTable;
   handleSelect: (block: IScheduleBlock) => void;
 }
-export const Schedule: React.FC<IProps> = ({ sx, dateList, handleSelect }) => {
+export const Schedule: React.FC<IProps> = ({
+  sx,
+  dateList,
+  scheduleList,
+  colorTable,
+  handleSelect,
+}) => {
   return (
     <Box
       sx={{
@@ -25,12 +35,16 @@ export const Schedule: React.FC<IProps> = ({ sx, dateList, handleSelect }) => {
     >
       {dateList.map(date => {
         return (
-          <ScheduleDate
+          <ScheduleDateArea
+            key={date.getWeekDay()}
             sx={{
               width: '200px',
             }}
-            key={date.getWeekDay()}
             date={date}
+            scheduleList={scheduleList.filter(schedule =>
+              date.isSameDay(DateTime.parseString(schedule.start)),
+            )}
+            colorTable={colorTable}
             handleSelect={handleSelect}
           />
         );

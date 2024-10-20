@@ -9,7 +9,11 @@ import { responsiveSpacing } from '@/script/System/Responsive';
 import { DateTime } from '@/script/Common/DateTime';
 import { Header } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/Header';
 import { Schedule } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/Schedule';
-import { IScheduleBlock } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDate';
+import {
+  ColorTable,
+  IScheduleBlock,
+} from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDateArea';
+import { E_COLOR, EColor } from '@/script/Enum/EColor';
 
 /**
  * 複数ユーザーのスケジュールから、空いている時間を選択するダイアログ.
@@ -32,13 +36,25 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
   const [endDate /* setEndDate */] = React.useState<DateTime>(
     DateTime.now().endOfWeek(),
   );
-  // const loading = false;
   const [loading, list] = useFetchAppCalendarUserScheduleList({
     emailList,
     startDate,
     endDate,
   });
-  console.log(list.list());
+
+  /**
+   * emailListからカラーリストを作成する.
+   */
+  const colorTable: ColorTable = React.useMemo(() => {
+    const ret: ColorTable = {};
+    const colorTable: EColor[] = [E_COLOR.GREEN_LIGHT, E_COLOR.BLUE_LIGHT];
+
+    emailList.forEach((email, index) => {
+      ret[email] = colorTable[index % colorTable.length];
+    });
+
+    return ret;
+  }, [emailList]);
 
   /**
    * 表示日付の成形.
@@ -86,7 +102,12 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
         <Divider sx={{ width: '100%', my: responsiveSpacing(4) }} />
         <Loading loading={loading}>
           <Header dateList={dateList} />
-          <Schedule dateList={dateList} handleSelect={handleSelect} />
+          <Schedule
+            dateList={dateList}
+            scheduleList={list.list()}
+            colorTable={colorTable}
+            handleSelect={handleSelect}
+          />
         </Loading>
       </Box>
     </Dialog>

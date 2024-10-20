@@ -157,6 +157,13 @@ export class DateTime {
   }
 
   /**
+   * 分の取得.
+   */
+  public getMinute(): number {
+    return this.date.getMinutes();
+  }
+
+  /**
    * 分の加算.
    * @param addMinutes
    */
@@ -172,7 +179,7 @@ export class DateTime {
    */
   public subMinute(subMinutes = 1): DateTime {
     const ret = this.newDate();
-    ret.setMinutes(ret.getMinutes() + subMinutes);
+    ret.setMinutes(ret.getMinutes() - subMinutes);
     return new DateTime(ret.getTime());
   }
 
@@ -194,6 +201,13 @@ export class DateTime {
     const ret = this.newDate();
     ret.setHours(ret.getHours() - subHours);
     return new DateTime(ret.getTime());
+  }
+
+  /**
+   * 時間の取得.
+   */
+  public getHour(): number {
+    return this.date.getHours();
   }
 
   /**
