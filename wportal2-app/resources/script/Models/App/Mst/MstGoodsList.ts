@@ -4,6 +4,7 @@ export interface IAppMstGoods {
   id: number;
   name: string;
   explain: string;
+  comment: string;
   category: string;
   imagePath: string;
   price: number;
@@ -16,6 +17,7 @@ export const parseAppMstGoodsPayload = (
     id: payload?.id ? Number(payload.id) : 0,
     name: payload?.name ? String(payload.name) : '',
     explain: payload?.explain ? String(payload.explain) : '',
+    comment: payload?.comment ? String(payload.comment) : '',
     category: payload?.category ? String(payload.category) : '',
     imagePath: payload?.imagePath ? String(payload.imagePath) : '',
     price: payload?.price ? Number(payload.price) : 0,
@@ -32,6 +34,7 @@ export class AppMstGoodsList extends ListBase<IAppMstGoods> {
       id: 0,
       name: '',
       explain: '',
+      comment: '',
       category: '',
       imagePath: '',
       price: 0,

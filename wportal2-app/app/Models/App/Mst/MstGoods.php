@@ -22,10 +22,11 @@ class MstGoods extends ModelBase
         return [
             'id'        => $this->id,
             'name'      => $this->name            ?? '',
-            'explain'   => $this->explain      ?? '',
-            'category'  => $this->category    ?? 0,
-            'imagePath' => $this->image_path ?? '',
-            'price'     => $this->price          ?? 0,
+            'explain'   => $this->explain         ?? '',
+            'comment'   => $this->comment         ?? '',
+            'category'  => $this->category        ?? 0,
+            'imagePath' => $this->image_path      ?? '',
+            'price'     => $this->price           ?? 0,
         ];
     }
 }

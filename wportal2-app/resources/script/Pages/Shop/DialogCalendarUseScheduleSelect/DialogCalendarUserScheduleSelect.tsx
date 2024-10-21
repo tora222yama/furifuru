@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { Box, Dialog, Divider } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { TypoText } from '@/script/Component/Typography/TypoText';
-import { TypoSubTitle1 } from '@/script/Component/Typography/TypoSubTitle1';
 import { useFetchAppCalendarUserScheduleList } from '@/script/Hooks/Usecases/Queries/useFetchAppCalendarUserScheduleList';
 import { Loading } from '@/script/Component/Misc/Loading';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { DateTime } from '@/script/Common/DateTime';
-import { Header } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/Header';
-import { Schedule } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/Schedule';
+import { Header } from '@/script/Pages/Shop/DialogCalendarUseScheduleSelect/Header';
+import { Schedule } from '@/script/Pages/Shop/DialogCalendarUseScheduleSelect/Schedule';
 import {
   ColorTable,
   IScheduleBlock,
-} from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDateArea';
+} from '@/script/Pages/Shop/DialogCalendarUseScheduleSelect/ScheduleDateArea';
 import { E_COLOR, EColor } from '@/script/Enum/EColor';
+import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { TypoH3 } from '@/script/Component/Typography/TypoH3';
+import { TypoH2 } from '@/script/Component/Typography/TypoH2';
+import { TypoText } from '@/script/Component/Typography/TypoText';
 
 /**
  * 複数ユーザーのスケジュールから、空いている時間を選択するダイアログ.
@@ -21,19 +23,23 @@ import { E_COLOR, EColor } from '@/script/Enum/EColor';
  */
 interface IProps extends IPropsBase {
   open: boolean;
+  title: string;
+  comment: string;
   emailList: string[];
   handleClose: () => void;
 }
 export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
   sx,
   open,
+  title,
+  comment,
   emailList,
   handleClose,
 }) => {
-  const [startDate /* setStartDate */] = React.useState<DateTime>(
+  const [startDate, setStartDate] = React.useState<DateTime>(
     DateTime.now().startOfWeek(),
   );
-  const [endDate /* setEndDate */] = React.useState<DateTime>(
+  const [endDate, setEndDate] = React.useState<DateTime>(
     DateTime.now().endOfWeek(),
   );
   const [loading, list] = useFetchAppCalendarUserScheduleList({
@@ -70,6 +76,30 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
   }, [startDate, endDate]);
 
   /**
+   * 前の週を選択.
+   */
+  const handleClickPrevWeek = () => {
+    setStartDate(prevState => {
+      return prevState.subDay(7);
+    });
+    setEndDate(prevState => {
+      return prevState.subDay(7);
+    });
+  };
+
+  /**
+   * 次の週を選択.
+   */
+  const handleClickNextWeek = () => {
+    setStartDate(prevState => {
+      return prevState.addDay(7);
+    });
+    setEndDate(prevState => {
+      return prevState.addDay(7);
+    });
+  };
+
+  /**
    * スケジュールを選択した.
    * @param block
    */
@@ -96,11 +126,43 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
           padding: responsiveSpacing(4),
         }}
       >
-        <TypoSubTitle1>スケジュールを選択してください</TypoSubTitle1>
-        <TypoText>START:{startDate.toDateTime()}</TypoText>
-        <TypoText>END:{endDate.toDateTime()}</TypoText>
-        <Divider sx={{ width: '100%', my: responsiveSpacing(4) }} />
-        <Loading loading={loading}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <TypoH2>{title}</TypoH2>
+        </Box>
+        <TypoText
+          sx={{
+            marginTop: responsiveSpacing(2),
+          }}
+        >
+          {comment}
+        </TypoText>
+        <Divider sx={{ width: '100%', marginTop: responsiveSpacing(2) }} />
+        <Loading
+          sx={{
+            height: '500px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          loading={loading}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: responsiveSpacing(2),
+            }}
+          >
+            <ButtonGeneral label="前の週" onClick={handleClickPrevWeek} />
+            <TypoH3>{startDate.toDateJP()}の週</TypoH3>
+            <ButtonGeneral label="次の週" onClick={handleClickNextWeek} />
+          </Box>
           <Header dateList={dateList} />
           <Schedule
             dateList={dateList}

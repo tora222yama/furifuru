@@ -7,7 +7,7 @@ import { useIndexContext } from '@/script/Pages/Shop/Index';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { TypoText2 } from '@/script/Component/Typography/TypoText2';
 import { IAppMstGoods } from '@/script/Models/App/Mst/MstGoodsList';
-import { DialogCalendarUserScheduleSelect } from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/DialogCalendarUserScheduleSelect';
+import { DialogCalendarUserScheduleSelect } from '@/script/Pages/Shop/DialogCalendarUseScheduleSelect/DialogCalendarUserScheduleSelect';
 import { Closable } from '@/script/Component/Misc/Closable';
 
 interface IProps extends IPropsBase {}
@@ -33,6 +33,8 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
       <Closable open={!!openCalendarDialog}>
         <DialogCalendarUserScheduleSelect
           open={!!openCalendarDialog}
+          title={`[${openCalendarDialog?.name}]のスケジュールを選択してください`}
+          comment={openCalendarDialog?.comment ?? ''}
           emailList={['miki-yoji@919.jp', 'tobaru-hideyasu@919.jp']}
           handleClose={() => setOpenCalendarDialog(undefined)}
         />

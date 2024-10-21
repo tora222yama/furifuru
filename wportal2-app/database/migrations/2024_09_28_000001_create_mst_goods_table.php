@@ -20,6 +20,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->comment('商品名');
             $table->string('explain')->comment('商品説明');
+            $table->string('comment')->nullable()->comment('コメント');
             $table->integer('category')->comment('種別');
             $table->string('image_path')->comment('画像パス');
             $table->integer('price')->default(0)->comment('価格');

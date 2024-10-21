@@ -8,7 +8,7 @@ import {
   ColorTable,
   IScheduleBlock,
   ScheduleDateArea,
-} from '@/script/Pages/Common/Dialog/DialogCalendarUseScheduleSelect/ScheduleDateArea';
+} from '@/script/Pages/Shop/DialogCalendarUseScheduleSelect/ScheduleDateArea';
 
 interface IProps extends IPropsBase {
   dateList: DateTime[];
