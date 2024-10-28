@@ -20,13 +20,14 @@ class MstGoods extends ModelBase
     public function toPayload(array $with = [], array $history = []): array
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name            ?? '',
-            'explain'   => $this->explain         ?? '',
-            'comment'   => $this->comment         ?? '',
-            'category'  => $this->category        ?? 0,
-            'imagePath' => $this->image_path      ?? '',
-            'price'     => $this->price           ?? 0,
+            'id'          => $this->id,
+            'name'        => $this->name            ?? '',
+            'explain'     => $this->explain         ?? '',
+            'comment'     => $this->comment         ?? '',
+            'category'    => $this->category        ?? 0,
+            'imagePath'   => $this->image_path      ?? '',
+            'authorEmail' => $this->author_email  ?? '',
+            'price'       => $this->price           ?? 0,
         ];
     }
 }

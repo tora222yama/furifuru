@@ -36,6 +36,13 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
     setOpenCalendarDialog(mstGoods);
   };
 
+  /**
+   * 時間を選択.
+   */
+  const handleSubmit = (target: string) => {
+    console.log(target);
+  };
+
   return (
     <Box
       sx={{
@@ -47,7 +54,8 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
           open={!!openCalendarDialog}
           title={`[${openCalendarDialog?.name}(${openCalendarDialog?.price})]のスケジュールを選択してください`}
           comment={openCalendarDialog?.comment ?? ''}
-          emailList={['miki-yoji@919.jp', 'tobaru-hideyasu@919.jp']}
+          emailList={[authUser.email, openCalendarDialog?.authorEmail ?? '']}
+          handleSubmit={handleSubmit}
           handleClose={() => setOpenCalendarDialog(undefined)}
         />
       </Closable>

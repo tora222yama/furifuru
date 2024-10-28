@@ -148,14 +148,10 @@ export const ScheduleDateArea: React.FC<IProps> = ({
 
     return filteredScheduleList.some(
       schedule =>
-        blockStart.inRange(
-          DateTime.parseString(schedule.start),
-          DateTime.parseString(schedule.end).subMinute(),
-        ) ||
-        blockEnd.inRange(
-          DateTime.parseString(schedule.start).addMinute(),
-          DateTime.parseString(schedule.end),
-        ),
+        DateTime.parseString(schedule.start).toJsTimeStamp() <
+          blockEnd.toJsTimeStamp() &&
+        DateTime.parseString(schedule.end).toJsTimeStamp() >
+          blockStart.toJsTimeStamp(),
     );
   };
 

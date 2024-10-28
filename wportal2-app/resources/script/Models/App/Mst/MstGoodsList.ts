@@ -7,6 +7,7 @@ export interface IAppMstGoods {
   comment: string;
   category: string;
   imagePath: string;
+  authorEmail: string;
   price: number;
 }
 
@@ -20,6 +21,7 @@ export const parseAppMstGoodsPayload = (
     comment: payload?.comment ? String(payload.comment) : '',
     category: payload?.category ? String(payload.category) : '',
     imagePath: payload?.imagePath ? String(payload.imagePath) : '',
+    authorEmail: payload?.authorEmail ? String(payload.authorEmail) : '',
     price: payload?.price ? Number(payload.price) : 0,
   };
 };
@@ -37,6 +39,7 @@ export class AppMstGoodsList extends ListBase<IAppMstGoods> {
       comment: '',
       category: '',
       imagePath: '',
+      authorEmail: '',
       price: 0,
     };
   }

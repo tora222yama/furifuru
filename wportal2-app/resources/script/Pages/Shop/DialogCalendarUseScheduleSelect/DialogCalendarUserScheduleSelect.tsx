@@ -26,6 +26,7 @@ interface IProps extends IPropsBase {
   title: string;
   comment: string;
   emailList: string[];
+  handleSubmit: (target: string) => void;
   handleClose: () => void;
 }
 export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
@@ -34,6 +35,7 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
   title,
   comment,
   emailList,
+  handleSubmit,
   handleClose,
 }) => {
   const [startDate, setStartDate] = React.useState<DateTime>(
@@ -104,7 +106,7 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
    * @param block
    */
   const handleSelect = (block: IScheduleBlock) => {
-    console.log(`${block.index}/${block.start.toDateTime()}が選択`);
+    handleSubmit(block.start.toDateTime());
   };
 
   return (

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('comment')->nullable()->comment('コメント');
             $table->integer('category')->comment('種別');
             $table->string('image_path')->comment('画像パス');
+            $table->string('author_email')->comment('著者メールアドレス');
             $table->integer('price')->default(0)->comment('価格');
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
             $table->timestamps();
