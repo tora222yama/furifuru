@@ -44,7 +44,7 @@ export const DialogConfirm: React.FC<IProps> = ({
           flexDirection: 'column',
         }}
       >
-        <TypoText>{labels.content}</TypoText>
+        <TypoText sx={{ whiteSpace: 'pre-wrap' }}>{labels.content}</TypoText>
         <Box
           sx={{
             marginTop: '24px',

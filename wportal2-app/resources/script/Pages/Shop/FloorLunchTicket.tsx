@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box, Grid } from '@mui/material';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { LunchTicket } from '@/script/Pages/Shop/LunchTicket';
@@ -11,15 +12,20 @@ import { DialogCalendarUserScheduleSelect } from '@/script/Pages/Shop/DialogCale
 import { Closable } from '@/script/Component/Misc/Closable';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { DialogConfirm } from '@/script/Component/Misc/DialogConfirm';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const FloorLunchTicket: React.FC<IProps> = () => {
   const { authUser } = useCommonIndexContext();
   const { mstGoodsList } = useIndexContext();
+  const { onStart, onFinish } = useProgressContext();
   const [openCalendarDialog, setOpenCalendarDialog] = React.useState<
     IAppMstGoods | undefined
   >(undefined);
   const [openNoticeDialog, setOpenNoticeDialog] =
+    React.useState<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] =
     React.useState<boolean>(false);
 
   /**
@@ -40,7 +46,26 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
    * 時間を選択.
    */
   const handleSubmit = (target: string) => {
-    console.log(target);
+    /**
+     * サーバーに送信.
+     */
+    router.post(
+      getPagesHref(E_PAGES.SHOP__LUNCH_TICKET),
+      {
+        mstGoodsId: openCalendarDialog?.id ?? 0,
+        target,
+      },
+      {
+        onStart,
+        onFinish: () => {
+          setOpenCalendarDialog(undefined);
+          setOpenConfirmDialog(true);
+          onFinish();
+        },
+        preserveState: true,
+        preserveScroll: true,
+      },
+    );
   };
 
   return (
@@ -67,6 +92,17 @@ export const FloorLunchTicket: React.FC<IProps> = () => {
           }}
           actions={{
             confirm: () => setOpenNoticeDialog(false),
+          }}
+        />
+      </Closable>
+      <Closable open={openConfirmDialog}>
+        <DialogConfirm
+          open={openConfirmDialog}
+          labels={{
+            content: '予約が完了しました\n以降の調整は直接行ってください',
+          }}
+          actions={{
+            confirm: () => setOpenConfirmDialog(false),
           }}
         />
       </Closable>

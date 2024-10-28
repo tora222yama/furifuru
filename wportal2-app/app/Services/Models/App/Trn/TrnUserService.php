@@ -12,6 +12,7 @@ use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Pipe\App\PipeAppRewardAchieve;
+use App\Pipe\App\PipeAppShopLunchTicket;
 use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
@@ -20,6 +21,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -41,6 +43,7 @@ class TrnUserService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_SHOP_LUNCH_TICKET            => $this->execAppShopLunchTicket($pipe),
                 EPipeKind::APP_REWARD_ACHIEVE               => $this->execAppRewardAchieve($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
@@ -49,6 +52,15 @@ class TrnUserService extends ModelServiceBase
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    /**
+     * ランチチケット予約.
+     */
+    private function execAppShopLunchTicket(
+        PipeAppShopLunchTicket|PipeBase $pipe
+    ): void {
+        Log::info($pipe->mstGoodsId);
     }
 
     /**
