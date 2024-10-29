@@ -89,7 +89,7 @@ class Calendar extends Command
                     'timeZone'     => config('timezone', 'Asia/Tokyo'),
                     'timeMin'      => $this->replaceToISO8601($startDatetime->toDateTimeString()),
                     'timeMax'      => $this->replaceToISO8601($endDatetime->toDateTimeString()),
-                    'maxResults'   => 5,
+                    'maxResults'   => 10,
                 ]);
 
             // イベント一覧を取得.
@@ -100,10 +100,12 @@ class Calendar extends Command
 
                 $this->info("[$event->id] ==========================");
                 $this->info("kind: $event->kind");
+                $this->info("eventType: $event->eventType");
                 $this->info("summary: $event->summary");
                 $this->info("location: $event->location");
                 $this->info("start: $start");
                 $this->info("end: $end");
+                $this->info("etag: $event->etag");
                 $this->info('');
             }
         } catch (\Exception $e) {

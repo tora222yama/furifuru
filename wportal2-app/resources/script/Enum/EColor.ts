@@ -10,6 +10,9 @@ export const E_COLOR = {
   RED_LIGHT: '#FFCDD2',
   GREEN_LIGHT: '#C5E8E1',
   YELLOW: '#F5CD3B',
+  YELLOW_LIGHT: '#FFFD93',
+  BLUE: '#0000ff',
+  BLUE_LIGHT: '#D3ECF6',
 
   // 設定カラー.
   PRIMARY_LIGHT: '#d3ecf6',

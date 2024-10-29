@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IAppMstReward } from '@/script/Models/App/Mst/MstReward';
+import { IAppMstReward } from '@/script/Models/App/Mst/MstRewardList';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { responsiveSpacing } from '@/script/System/Responsive';
 import { RewardImage } from '@/script/Pages/Reward/Common/RewardImage';

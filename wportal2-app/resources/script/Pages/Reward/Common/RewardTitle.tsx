@@ -5,7 +5,7 @@ import { responsiveSpacing } from '@/script/System/Responsive';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { Closable } from '@/script/Component/Misc/Closable';
-import { IAppMstReward } from '@/script/Models/App/Mst/MstReward';
+import { IAppMstReward } from '@/script/Models/App/Mst/MstRewardList';
 
 interface IProps extends IPropsBase {
   mstReward?: IAppMstReward;

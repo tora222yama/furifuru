@@ -2,7 +2,7 @@ import { ListBase } from '@/script/Models/ListBase';
 import {
   IAppMstReward,
   parseAppMstRewardPayload,
-} from '@/script/Models/App/Mst/MstReward';
+} from '@/script/Models/App/Mst/MstRewardList';
 
 export interface IAppTrnUserReward {
   id: number;
