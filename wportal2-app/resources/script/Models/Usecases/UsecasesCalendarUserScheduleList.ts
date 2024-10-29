@@ -1,7 +1,8 @@
 import { ListBase } from '@/script/Models/ListBase';
 
 export interface IUsecasesCalendarUserSchedule {
-  id: string;
+  identify: string;
+  eventId: string;
   calendarId: string;
   kind: string;
   summary: string;
@@ -13,7 +14,8 @@ export const parseUsecasesCalendarUserSchedulePayload = (
   payload?: IUsecasesCalendarUserSchedule,
 ): IUsecasesCalendarUserSchedule => {
   return {
-    id: payload?.id ? String(payload.id) : '',
+    identify: payload?.identify ? String(payload.identify) : '',
+    eventId: payload?.eventId ? String(payload.eventId) : '',
     calendarId: payload?.calendarId ? String(payload.calendarId) : '',
     kind: payload?.kind ? String(payload.kind) : '',
     summary: payload?.summary ? String(payload.summary) : '',
@@ -29,7 +31,8 @@ export class UseCasesCalendarUserScheduleList extends ListBase<IUsecasesCalendar
 
   static defaultInterface(): IUsecasesCalendarUserSchedule {
     return {
-      id: '',
+      identify: '',
+      eventId: '',
       calendarId: '',
       kind: '',
       summary: '',
@@ -45,6 +48,6 @@ export class UseCasesCalendarUserScheduleList extends ListBase<IUsecasesCalendar
 
   // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IUsecasesCalendarUserSchedule): string {
-    return value.id;
+    return value.identify;
   }
 }

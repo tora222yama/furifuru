@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
+use App\Facades\External\GoogleCalendarService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Mst\MstGoodsService;
+use App\Facades\Models\App\Trn\TrnShopAggregateService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Mst\MstGoods;
@@ -54,13 +56,32 @@ class ShopController extends Controller
         $pipe->prepare();
 
         // 更新処理.
-        DB::transaction(function (): void {
+        DB::transaction(function () use ($pipe) {
             // チケット代金の消化.
             TrnUserService::updateByPipe();
 
-            // TODO: 売れ行き情報の記録.
+            // 売れ行き情報の記録.
+            TrnShopAggregateService::updateByPipe();
 
-            // TODO: rakumoのブロック実行.
+            $description = <<<EOF
+【{$pipe->mstGoods->name}】の予約が入りました。
+※{$pipe->mstGoods->price}＄チケット
+
+{$pipe->mstGoods->explain}
+
+※履行されない場合も＄の返金はございませんのでご注意ください
+EOF;
+
+            // rakumoのブロック実行.
+            GoogleCalendarService::blockSchedule(
+                $pipe->authUser->email,
+                collect([$pipe->mstGoods->author_email]),
+                $pipe->start,
+                $pipe->end,
+                $pipe->mstGoods->name,
+                '直接ご相談ください',
+                $description
+            );
         });
 
         return redirect()->action(EPages::SHOP->getInvokePath());

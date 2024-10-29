@@ -125,7 +125,8 @@ export type UsecasesCalendarUserSchedule = {
   __typename?: 'UsecasesCalendarUserSchedule';
   calendarId: Scalars['String']['output'];
   end: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  eventId: Scalars['String']['output'];
+  identify: Scalars['String']['output'];
   kind: Scalars['String']['output'];
   start: Scalars['String']['output'];
   summary: Scalars['String']['output'];
@@ -259,7 +260,8 @@ export type UsecasesCalendarUserScheduleListQuery = {
   __typename?: 'Query';
   UsecasesCalendarUserScheduleList: Array<{
     __typename?: 'UsecasesCalendarUserSchedule';
-    id: string;
+    identify: string;
+    eventId: string;
     calendarId: string;
     kind: string;
     summary: string;
@@ -796,7 +798,8 @@ export const UsecasesCalendarUserScheduleListDocument = gql`
       startDate: $startDate
       endDate: $endDate
     ) {
-      id
+      identify
+      eventId
       calendarId
       kind
       summary

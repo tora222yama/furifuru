@@ -164,6 +164,15 @@ export class DateTime {
   }
 
   /**
+   * 分の設定.
+   */
+  public setMinute(minute: number): DateTime {
+    const ret = this.newDate();
+    ret.setMinutes(minute);
+    return new DateTime(ret.getTime());
+  }
+
+  /**
    * 分の加算.
    * @param addMinutes
    */

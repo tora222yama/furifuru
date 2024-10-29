@@ -9,7 +9,8 @@ extend type Query @guard {
 }
 
 type UsecasesCalendarUserSchedule {
-  id: String!
+  identify: String!
+  eventId: String!
   calendarId: String!
   kind: String!
   summary: String!

@@ -9,7 +9,8 @@ query UsecasesCalendarUserScheduleList(
     startDate: $startDate
     endDate: $endDate
   ) {
-    id,
+    identify,
+    eventId
     calendarId,
     kind,
     summary,

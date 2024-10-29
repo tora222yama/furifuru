@@ -46,9 +46,7 @@ export const ScheduleDateArea: React.FC<IProps> = ({
   const filteredScheduleList = React.useMemo(() => {
     // 重複を削除.
     const uniqueList = Array.from(
-      new Map(
-        scheduleList.map(item => [`${item.id}-${item.calendarId}`, item]),
-      ).values(),
+      new Map(scheduleList.map(item => [item.identify, item])).values(),
     );
 
     return (
@@ -58,9 +56,11 @@ export const ScheduleDateArea: React.FC<IProps> = ({
           // 範囲の開始と終了を取得.
           const startLimitJsTimeStamp = DateTime.parseString(schedule.start)
             .setHour(11)
+            .setMinute(0)
             .toJsTimeStamp();
           const endLimitJsTimeStamp = DateTime.parseString(schedule.start)
             .setHour(14)
+            .setMinute(0)
             .toJsTimeStamp();
 
           // スケジュールの開始と終了を取得.
@@ -323,7 +323,7 @@ export const ScheduleDateArea: React.FC<IProps> = ({
 
     return (
       <Box
-        key={`${schedule.id}-${schedule.calendarId}-${schedule.start}`}
+        key={`${schedule.identify}`}
         sx={{
           padding: '2px',
           position: 'absolute',

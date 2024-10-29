@@ -9,6 +9,7 @@ use App\Facades\Models\App\Mst\MstGoodsService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Mst\MstGoods;
 use App\Pipe\PipeBase;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 final class PipeAppShopLunchTicket extends PipeBase
@@ -22,6 +23,10 @@ final class PipeAppShopLunchTicket extends PipeBase
     public ?AuthUser $authUser = null;
 
     public ?MstGoods $mstGoods = null;
+
+    public ?Carbon $start      = null;
+
+    public ?Carbon $end        = null;
 
     /**
      * constructor.
@@ -57,6 +62,12 @@ final class PipeAppShopLunchTicket extends PipeBase
 
         // データ取得.
         $this->mstGoods            = MstGoodsService::findOrFail($this->mstGoodsId);
+
+        // 開始時間.
+        $this->start               = Carbon::createFromTimeString($this->target);
+
+        // 終了時間.
+        $this->end                 = Carbon::createFromTimeString($this->target)->addHour();
 
         // データ準備完了.
         $this->isReady             = true;

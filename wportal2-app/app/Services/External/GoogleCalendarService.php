@@ -9,6 +9,7 @@ use Google\Exception;
 use Google\Service\Calendar\Event;
 use Google_Client;
 use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
 use Google_Service_Directory;
 use Google_Service_PeopleService;
 use Illuminate\Support\Collection;
@@ -53,6 +54,61 @@ class GoogleCalendarService
 
             return collect();
         }
+    }
+
+    /**
+     * 予定を作成.
+     *
+     * @throws Exception
+     * @throws \Google\Service\Exception
+     */
+    public function blockSchedule(
+        string $authEmail,
+        Collection $calendarIdList,
+        Carbon $start,
+        Carbon $end,
+        string $summary,
+        string $location,
+        string $description,
+    ): void {
+        // サービス取得.
+        $service    = new Google_Service_Calendar(
+            $this->getClient($authEmail)
+        );
+
+        // 全参加者のリスト.
+        $attendList = collect([$authEmail])
+            ->concat($calendarIdList);
+
+        // 登録パラメータ.
+        $params     = new Google_Service_Calendar_Event([
+            'summary'         => $summary,
+            'start'           => [
+                'dateTime' => $start->toIso8601String(),
+                'timeZone' => 'Asia/Tokyo',
+            ],
+            'end'             => [
+                'dateTime' => $end->toIso8601String(),
+                'timeZone' => 'Asia/Tokyo',
+            ],
+            'location'        => $location,
+            'description'     => $description,
+            'guestsCanModify' => true,
+            'attendees'       => $attendList->map(function ($calendarId) {
+                return ['email' => $calendarId];
+            })->toArray(),
+        ]);
+
+        // 登録を実施.
+        // 結果を取得.
+        $result     = $service->events->insert(
+            $authEmail,
+            $params,
+            [
+                'sendUpdates' => 'all',
+            ]
+        );
+        Log::info(print_r($result, true));
     }
 
     /**
