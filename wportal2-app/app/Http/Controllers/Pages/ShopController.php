@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class ShopController extends Controller
 {
@@ -33,11 +34,14 @@ class ShopController extends Controller
 
     /**
      * ランチチケット予約実行.
+     *
+     * @throws Throwable
      */
     public function lunch_ticket(Request $request): RedirectResponse
     {
         // パイプ作成.
-        PipeService::insertNewPipe(
+        /** @var PipeAppShopLunchTicket $pipe */
+        $pipe = PipeService::insertNewPipe(
             new PipeAppShopLunchTicket($request->toArray())
         );
 
@@ -45,6 +49,9 @@ class ShopController extends Controller
         if (! PipeService::isValid()) {
             return redirect()->action(EPages::SHOP->getInvokePath());
         }
+
+        // データ準備.
+        $pipe->prepare();
 
         // 更新処理.
         DB::transaction(function (): void {

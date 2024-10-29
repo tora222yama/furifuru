@@ -7,6 +7,7 @@ namespace App\Services\Models\App\Trn;
 use App\Constant;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
+use App\Facades\Internal\ActivityLogService;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
@@ -21,7 +22,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -56,11 +56,39 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * ランチチケット予約.
+     *
+     * @throws Exception
      */
     private function execAppShopLunchTicket(
         PipeAppShopLunchTicket|PipeBase $pipe
     ): void {
-        Log::info($pipe->mstGoodsId);
+        if (! $pipe->isReady) {
+            throw new Exception('invalid pipe');
+        }
+
+        // 所持金額確認.
+        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
+        if ($trnUser->current_gold < $pipe->mstGoods->price) {
+            throw new Exception('not enough gold');
+        }
+
+        // 所持金額の減算.
+        $trnUser->current_gold -= $pipe->mstGoods->price;
+
+        // ログ出力.
+        ActivityLogService::changeModel(
+            $pipe->authUser,
+            __CLASS__,
+            __FUNCTION__,
+            __LINE__,
+            $trnUser,
+            [
+                'goodsId' => $pipe->mstGoods->id,
+            ]
+        );
+
+        // 保存.
+        $this->updateOrFail($trnUser);
     }
 
     /**

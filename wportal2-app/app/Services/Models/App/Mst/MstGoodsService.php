@@ -20,4 +20,14 @@ class MstGoodsService extends ModelServiceBase
             ->alive()
             ->get();
     }
+
+    /**
+     * ID指定取得.
+     */
+    public function findOrFail(int $goodsId): MstGoods
+    {
+        return MstGoods::query()
+            ->alive()
+            ->findOrFail($goodsId);
+    }
 }

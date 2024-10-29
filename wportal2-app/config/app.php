@@ -185,6 +185,7 @@ return [
         App\Providers\External\SlackServiceProvider::class,
 
         // Internal.
+        App\Providers\Internal\ActivityLogServiceProvider::class,
         App\Providers\Internal\PipeServiceProvider::class,
 
         // Models.App.Auth.
@@ -231,6 +232,7 @@ return [
         'external\slack_service'                             => App\Facades\External\SlackService::class,
 
         // Internal.
+        'internal\activity_log_service'                      => App\Facades\Internal\ActivityLogService::class,
         'internal\pipe_service'                              => App\Facades\Internal\PipeService::class,
 
         // Models.App.Auth.
