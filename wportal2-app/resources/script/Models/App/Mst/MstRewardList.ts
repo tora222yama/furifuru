@@ -15,8 +15,9 @@ export interface IAppMstReward {
   eEnableRepeat: EEnableFlag;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const parseAppMstRewardPayload = (payload: any): IAppMstReward => {
+export const parseAppMstRewardPayload = (
+  payload: IAppMstReward,
+): IAppMstReward => {
   return {
     id: payload?.id ? Number(payload.id) : 0,
     rewardKind: payload?.rewardKind ? Number(payload.rewardKind) : 0,

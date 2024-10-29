@@ -4,7 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { responsiveSize } from '@/script/System/Responsive';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
-import { IAppMstReward } from '@/script/Models/App/Mst/MstReward';
+import { IAppMstReward } from '@/script/Models/App/Mst/MstRewardList';
 
 const StyledImage = styled('img')({});
 

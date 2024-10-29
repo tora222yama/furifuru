@@ -5,7 +5,7 @@ import { List } from '@/script/Pages/Reward/List/List';
 import {
   AppMstRewardList,
   parseAppMstRewardPayload,
-} from '@/script/Models/App/Mst/MstReward';
+} from '@/script/Models/App/Mst/MstRewardList';
 import { IPagination } from '@/script/Provider/IPagination';
 
 /**
