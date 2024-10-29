@@ -11,6 +11,5 @@ enum EMstGoods: int
 {
     case INVALID                    = 0; // 指定なし.
     case LUNCH_TICKET_TOBARU_LOW    = 1; // ランチチケット・桃原LOW.
-    case LUNCH_TICKET_TOBARU_MIDDLE = 2; // ランチチケット・桃原MIDDLE.
-    case LUNCH_TICKET_TOBARU_HIGH   = 3; // ランチチケット・桃原HIGH.
+    case LUNCH_TICKET_YAMADA_LOW    = 2; // ランチチケット・山田LOW.
 }

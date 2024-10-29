@@ -155,7 +155,7 @@ export const LunchTicket: React.FC<IProps> = ({ mstGoods }) => {
             width: '294px',
             height: '94px',
           }}
-          src="/image/ticket/lunch_ticket_0001.png"
+          src={mstGoods.imagePath}
           alt="ランチチケット"
         />
       </Box>
