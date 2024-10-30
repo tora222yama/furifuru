@@ -22,6 +22,7 @@ export interface IScheduleBlock {
 interface IProps extends IPropsBase {
   date: DateTime;
   scheduleList: IUsecasesCalendarUserSchedule[];
+  selected?: IScheduleBlock;
   colorTable: ColorTable;
   handleSelect: (block: IScheduleBlock) => void;
 }
@@ -29,6 +30,7 @@ export const ScheduleDateArea: React.FC<IProps> = ({
   sx,
   date,
   scheduleList,
+  selected,
   colorTable,
   handleSelect,
 }) => {
@@ -378,7 +380,7 @@ export const ScheduleDateArea: React.FC<IProps> = ({
       {filteredScheduleList.map(schedule => {
         return nodeScheduleBlock(schedule);
       })}
-      {/* 選択中の枠 */}
+      {/* マウス選択中の枠 */}
       <Closable open={displayFrame}>
         <Box
           sx={{
@@ -392,6 +394,21 @@ export const ScheduleDateArea: React.FC<IProps> = ({
             outlineColor: isBlockedIndex(selectIndex, 1, 0)
               ? E_COLOR.RED
               : E_COLOR.BLUE,
+          }}
+        />
+      </Closable>
+      {/* 選択中の枠 */}
+      <Closable open={!!selected}>
+        <Box
+          sx={{
+            width: '100%',
+            height: '100px',
+            position: 'absolute',
+            top: `${(selected ? selected.index : 0) * heightUnit + offsetHeight}px`,
+            pointerEvents: 'none',
+            outline: '3px solid #000',
+            outlineOffset: '-3px',
+            outlineColor: E_COLOR.SECONDARY_MAIN,
           }}
         />
       </Closable>
