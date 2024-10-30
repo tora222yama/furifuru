@@ -3,11 +3,13 @@ schema:
   - "./graphql/schema.graphql"
   - "./graphql/App/*.graphql"
   - "./graphql/Sample/*.graphql"
+  - "./graphql/Usecases/*.graphql"
 documents:
   - "./graphql/App/Queries/*.graphql"
   - "./graphql/App/Mutations/*.graphql"
   - "./graphql/Sample/Queries/*.graphql"
   - "./graphql/Sample/Mutations/*.graphql"
+  - "./graphql/Usecases/Queries/*.graphql"
 generates:
   resources/script/Graphql/codegen/graphql.tsx:
     plugins:

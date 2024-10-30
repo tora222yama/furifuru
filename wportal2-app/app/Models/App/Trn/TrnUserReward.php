@@ -39,8 +39,8 @@ class TrnUserReward extends ModelBase
             'mstRewardId'       => $this->mst_reward_id                    ?? 0,
             'achievementCount'  => $this->achievement_count                ?? 0,
             'receivedCount'     => $this->received_count                   ?? 0,
-            'createdAt'         => $this->created_at                       ?? '',
-            'updatedAt'         => $this->updated_at                       ?? '',
+            'achievedAt'        => $this->achieved_at                      ?? '',
+            'receivedAt'        => $this->received_at                      ?? '',
 
             'mstReward'         => $this->isExistKeyInWith($with, 'MstReward', $history)
                 ? $this->MstReward->toPayload($with, [...$history, 'MstUser']) : null,

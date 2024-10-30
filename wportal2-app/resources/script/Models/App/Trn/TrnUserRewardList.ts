@@ -2,7 +2,7 @@ import { ListBase } from '@/script/Models/ListBase';
 import {
   IAppMstReward,
   parseAppMstRewardPayload,
-} from '@/script/Models/App/Mst/MstReward';
+} from '@/script/Models/App/Mst/MstRewardList';
 
 export interface IAppTrnUserReward {
   id: number;
@@ -10,8 +10,8 @@ export interface IAppTrnUserReward {
   mstRewardId: number;
   achievementCount: number;
   receivedCount: number;
-  createdAt: string;
-  updatedAt: string;
+  achievedAt: string;
+  receivedAt: string;
 
   mstReward?: IAppMstReward;
 }
@@ -27,8 +27,8 @@ export const parseAppTrnUserRewardPayload = (
       ? Number(payload.achievementCount)
       : 0,
     receivedCount: payload?.receivedCount ? Number(payload.receivedCount) : 0,
-    createdAt: payload?.createdAt ? String(payload.createdAt) : '',
-    updatedAt: payload?.updatedAt ? String(payload.updatedAt) : '',
+    achievedAt: payload?.achievedAt ? String(payload.achievedAt) : '',
+    receivedAt: payload?.receivedAt ? String(payload.receivedAt) : '',
 
     mstReward: payload?.mstReward
       ? parseAppMstRewardPayload(payload.mstReward)
@@ -48,8 +48,8 @@ export class AppTrnUserRewardList extends ListBase<IAppTrnUserReward> {
       mstRewardId: 0,
       achievementCount: 0,
       receivedCount: 0,
-      createdAt: '',
-      updatedAt: '',
+      achievedAt: '',
+      receivedAt: '',
     };
   }
 

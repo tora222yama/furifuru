@@ -179,17 +179,20 @@ return [
          */
 
         // External.
+        App\Providers\External\GoogleCalendarServiceProvider::class,
         App\Providers\External\RecaptchaServiceProvider::class,
         App\Providers\External\SesServiceProvider::class,
         App\Providers\External\SlackServiceProvider::class,
 
         // Internal.
+        App\Providers\Internal\ActivityLogServiceProvider::class,
         App\Providers\Internal\PipeServiceProvider::class,
 
         // Models.App.Auth.
         App\Providers\Models\App\Auth\AuthUserServiceProvider::class,
 
         // Models.App.Mst.
+        App\Providers\Models\App\Mst\MstGoodsServiceProvider::class,
         App\Providers\Models\App\Mst\MstRewardServiceProvider::class,
 
         // Models.App.Trn.
@@ -200,6 +203,7 @@ return [
         App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectNotificationServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnShopAggregateServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
@@ -223,17 +227,20 @@ return [
     'aliases'             => Facade::defaultAliases()->merge([
 
         // External.
+        'external\google_calendar_service'                   => App\Facades\External\GoogleCalendarService::class,
         'external\recaptcha_service'                         => App\Facades\External\RecaptchaService::class,
         'external\ses_service'                               => App\Facades\External\SesService::class,
         'external\slack_service'                             => App\Facades\External\SlackService::class,
 
         // Internal.
+        'internal\activity_log_service'                      => App\Facades\Internal\ActivityLogService::class,
         'internal\pipe_service'                              => App\Facades\Internal\PipeService::class,
 
         // Models.App.Auth.
         'models\app\trn\auth_user_service'                   => App\Facades\Models\App\Auth\AuthUserService::class,
 
         // Models.App.Mst.
+        'models\app\mst\mst_goods_service'                   => App\Facades\Models\App\Mst\MstGoodsService::class,
         'models\app\mst\mst_reward_service'                  => App\Facades\Models\App\Mst\MstRewardService::class,
 
         // Models.App.Trn.
@@ -244,6 +251,7 @@ return [
         'models\app\trn\trn_project_service'                 => App\Facades\Models\App\Trn\TrnProjectService::class,
         'models\app\trn\trn_project_notification_service'    => App\Facades\Models\App\Trn\TrnProjectNotificationService::class,
         'models\app\trn\trn_project_user_service'            => App\Facades\Models\App\Trn\TrnProjectUserService::class,
+        'models\app\trn\trn_shop_aggregate_service'          => App\Facades\Models\App\Trn\TrnShopAggregateService::class,
         'models\app\trn\trn_user_authority_service'          => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
         'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,

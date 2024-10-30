@@ -7,11 +7,13 @@ namespace App\Services\Models\App\Trn;
 use App\Constant;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
+use App\Facades\Internal\ActivityLogService;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\App\PipeAppPersonalSettingEditUpdate;
 use App\Pipe\App\PipeAppRewardAchieve;
+use App\Pipe\App\PipeAppShopLunchTicket;
 use App\Pipe\App\PipeAppUserCreate;
 use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
@@ -41,6 +43,7 @@ class TrnUserService extends ModelServiceBase
         foreach (PipeService::getPipes(__CLASS__) as $pipe) {
             $kind = $pipe->getKind();
             match ($kind) {
+                EPipeKind::APP_SHOP_LUNCH_TICKET            => $this->execAppShopLunchTicket($pipe),
                 EPipeKind::APP_REWARD_ACHIEVE               => $this->execAppRewardAchieve($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
@@ -49,6 +52,43 @@ class TrnUserService extends ModelServiceBase
             };
             $pipe->onUpdate(__CLASS__);
         }
+    }
+
+    /**
+     * ランチチケット予約.
+     *
+     * @throws Exception
+     */
+    private function execAppShopLunchTicket(
+        PipeAppShopLunchTicket|PipeBase $pipe
+    ): void {
+        if (! $pipe->isReady) {
+            throw new Exception('invalid pipe');
+        }
+
+        // 所持金額確認.
+        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
+        if ($trnUser->current_gold < $pipe->mstGoods->price) {
+            throw new Exception('not enough gold');
+        }
+
+        // 所持金額の減算.
+        $trnUser->current_gold -= $pipe->mstGoods->price;
+
+        // ログ出力.
+        ActivityLogService::changeModel(
+            $pipe->authUser,
+            __CLASS__,
+            __FUNCTION__,
+            __LINE__,
+            $trnUser,
+            [
+                'goodsId' => $pipe->mstGoods->id,
+            ]
+        );
+
+        // 保存.
+        $this->updateOrFail($trnUser);
     }
 
     /**

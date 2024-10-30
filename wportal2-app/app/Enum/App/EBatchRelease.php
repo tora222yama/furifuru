@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enum\App;
 
+use Database\Seeders\Batch\Mst\Init\MstInitGoods;
 use Database\Seeders\Batch\Mst\Init\MstInitReward;
 
 /**
@@ -13,6 +14,7 @@ enum EBatchRelease: string
 {
     // 以下に更新用途に応じて追加する
     case MST_INIT_REWARD = 'mst_init_reward'; // 報酬初期化.
+    case MST_INIT_GOODS  = 'mst_init_goods'; // ショップ商品初期化.
 
     /**
      * seederクラス.
@@ -21,6 +23,7 @@ enum EBatchRelease: string
     {
         return match ($this) {
             self::MST_INIT_REWARD => MstInitReward::class,
+            self::MST_INIT_GOODS  => MstInitGoods::class,
         };
     }
 
@@ -40,7 +43,8 @@ enum EBatchRelease: string
     public function executionLimit(): int
     {
         return match ($this) {
-            self::MST_INIT_REWARD => 0,
+            self::MST_INIT_REWARD,
+            self::MST_INIT_GOODS => 0,
         };
     }
 }

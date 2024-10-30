@@ -85,6 +85,7 @@ export type Query = {
   AppTrnUserList: Array<Maybe<AppTrnUser>>;
   SamplePagination: SamplePagination;
   SampleRedis: SampleRedis;
+  UsecasesCalendarUserScheduleList: Array<Maybe<UsecasesCalendarUserSchedule>>;
 };
 
 export type QuerySamplePaginationArgs = {
@@ -94,6 +95,12 @@ export type QuerySamplePaginationArgs = {
 
 export type QuerySampleRedisArgs = {
   sampleArgument: Scalars['String']['input'];
+};
+
+export type QueryUsecasesCalendarUserScheduleListArgs = {
+  emailList: Array<Scalars['String']['input']>;
+  endDate: Scalars['String']['input'];
+  startDate: Scalars['String']['input'];
 };
 
 export type Response = {
@@ -112,6 +119,17 @@ export type SamplePagination = {
 export type SampleRedis = {
   __typename?: 'SampleRedis';
   storeValue: Scalars['String']['output'];
+};
+
+export type UsecasesCalendarUserSchedule = {
+  __typename?: 'UsecasesCalendarUserSchedule';
+  calendarId: Scalars['String']['output'];
+  end: Scalars['String']['output'];
+  eventId: Scalars['String']['output'];
+  identify: Scalars['String']['output'];
+  kind: Scalars['String']['output'];
+  start: Scalars['String']['output'];
+  summary: Scalars['String']['output'];
 };
 
 export type AppPersonalSettingShowAlignSlackMutationVariables = Exact<{
@@ -230,6 +248,26 @@ export type SampleRedisQueryVariables = Exact<{
 export type SampleRedisQuery = {
   __typename?: 'Query';
   SampleRedis: { __typename?: 'SampleRedis'; storeValue: string };
+};
+
+export type UsecasesCalendarUserScheduleListQueryVariables = Exact<{
+  emailList: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  startDate: Scalars['String']['input'];
+  endDate: Scalars['String']['input'];
+}>;
+
+export type UsecasesCalendarUserScheduleListQuery = {
+  __typename?: 'Query';
+  UsecasesCalendarUserScheduleList: Array<{
+    __typename?: 'UsecasesCalendarUserSchedule';
+    identify: string;
+    eventId: string;
+    calendarId: string;
+    kind: string;
+    summary: string;
+    start: string;
+    end: string;
+  } | null>;
 };
 
 export const AppPersonalSettingShowAlignSlackDocument = gql`
@@ -748,4 +786,99 @@ export type SampleRedisSuspenseQueryHookResult = ReturnType<
 export type SampleRedisQueryResult = Apollo.QueryResult<
   SampleRedisQuery,
   SampleRedisQueryVariables
+>;
+export const UsecasesCalendarUserScheduleListDocument = gql`
+  query UsecasesCalendarUserScheduleList(
+    $emailList: [String!]!
+    $startDate: String!
+    $endDate: String!
+  ) {
+    UsecasesCalendarUserScheduleList(
+      emailList: $emailList
+      startDate: $startDate
+      endDate: $endDate
+    ) {
+      identify
+      eventId
+      calendarId
+      kind
+      summary
+      start
+      end
+    }
+  }
+`;
+
+/**
+ * __useUsecasesCalendarUserScheduleListQuery__
+ *
+ * To run a query within a React component, call `useUsecasesCalendarUserScheduleListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsecasesCalendarUserScheduleListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsecasesCalendarUserScheduleListQuery({
+ *   variables: {
+ *      emailList: // value for 'emailList'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *   },
+ * });
+ */
+export function useUsecasesCalendarUserScheduleListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  > &
+    (
+      | {
+          variables: UsecasesCalendarUserScheduleListQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >(UsecasesCalendarUserScheduleListDocument, options);
+}
+export function useUsecasesCalendarUserScheduleListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >(UsecasesCalendarUserScheduleListDocument, options);
+}
+export function useUsecasesCalendarUserScheduleListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >(UsecasesCalendarUserScheduleListDocument, options);
+}
+export type UsecasesCalendarUserScheduleListQueryHookResult = ReturnType<
+  typeof useUsecasesCalendarUserScheduleListQuery
+>;
+export type UsecasesCalendarUserScheduleListLazyQueryHookResult = ReturnType<
+  typeof useUsecasesCalendarUserScheduleListLazyQuery
+>;
+export type UsecasesCalendarUserScheduleListSuspenseQueryHookResult =
+  ReturnType<typeof useUsecasesCalendarUserScheduleListSuspenseQuery>;
+export type UsecasesCalendarUserScheduleListQueryResult = Apollo.QueryResult<
+  UsecasesCalendarUserScheduleListQuery,
+  UsecasesCalendarUserScheduleListQueryVariables
 >;

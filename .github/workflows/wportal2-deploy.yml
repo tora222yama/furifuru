@@ -61,6 +61,7 @@ jobs:
           echo REDIS_HOST="$(aws ssm get-parameter --name /wportal/redis/host --query Parameter.Value --output text)" >> wportal2-app/.env
           echo GOOGLE_CLIENT_ID="$(aws ssm get-parameter --name /wportal/google_client_id --query Parameter.Value --output text)" >> wportal2-app/.env
           echo GOOGLE_CLIENT_SECRET="$(aws ssm get-parameter --name /wportal/google_client_secret --query Parameter.Value --output text)" >> wportal2-app/.env
+          echo GOOGLE_CALENDAR_SA="$(aws ssm get-parameter --name /wportal/google_calendar_sa --query Parameter.Value --output text)" >> wportal2-app/.env
           echo SLACK_APP_TOKEN="$(aws ssm get-parameter --name /wportal/slack_app_token --query Parameter.Value --output text)" >> wportal2-app/.env
           echo SLACK_BOT_USER_OAUTH_TOKEN="$(aws ssm get-parameter --name /wportal/slack_bot_user_oauth_token --query Parameter.Value --output text)" >> wportal2-app/.env
           echo SLACK_URL_NOTICE="$(aws ssm get-parameter --name /wportal/slack_url_notice --query Parameter.Value --output text)" >> wportal2-app/.env

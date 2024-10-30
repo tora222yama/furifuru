@@ -36,7 +36,6 @@ export const DialogReplaceTrnUser: React.FC<IProps> = ({
   return (
     <Dialog
       sx={{
-        ...sx,
         '& .MuiDialog-container': {
           '& .MuiPaper-root': {
             width: '80vw',
@@ -44,6 +43,7 @@ export const DialogReplaceTrnUser: React.FC<IProps> = ({
             maxWidth: '80vw',
           },
         },
+        ...sx,
       }}
       open={open}
       onClose={handleClose}

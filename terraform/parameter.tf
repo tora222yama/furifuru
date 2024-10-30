@@ -123,6 +123,20 @@ resource "aws_ssm_parameter" "wportal_google_client_secret" {
 }
 
 /**
+ *  GOOGLE_CALENDAR_SA
+ */
+resource "aws_ssm_parameter" "wportal_google_calendar_sa" {
+  name        = "/wportal/google_calendar_sa"
+  type        = "SecureString"
+  value       = "uninitialized"
+  description = "GOOGLE_CLIENT_SECRET"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+/**
  *  SLACK_APP_TOKEN
  */
 #import {
