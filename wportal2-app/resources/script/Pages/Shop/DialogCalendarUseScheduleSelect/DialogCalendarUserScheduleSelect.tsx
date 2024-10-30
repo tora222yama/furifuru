@@ -16,6 +16,7 @@ import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { TypoH3 } from '@/script/Component/Typography/TypoH3';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { TypoText } from '@/script/Component/Typography/TypoText';
+import { E_BUTTON_TYPE } from '@/script/Component/Button/EButtonType';
 
 /**
  * 複数ユーザーのスケジュールから、空いている時間を選択するダイアログ.
@@ -49,6 +50,9 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
     startDate,
     endDate,
   });
+  const [selected, setSelected] = React.useState<IScheduleBlock | undefined>(
+    undefined,
+  );
 
   /**
    * emailListからカラーリストを作成する.
@@ -87,6 +91,7 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
     setEndDate(prevState => {
       return prevState.subDay(7);
     });
+    setSelected(undefined);
   };
 
   /**
@@ -99,6 +104,7 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
     setEndDate(prevState => {
       return prevState.addDay(7);
     });
+    setSelected(undefined);
   };
 
   /**
@@ -106,7 +112,30 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
    * @param block
    */
   const handleSelect = (block: IScheduleBlock) => {
-    handleSubmit(block.start.toDateTime());
+    setSelected(block);
+  };
+
+  /**
+   * 予約ボタンを押した.
+   */
+  const handleClickSubmit = () => {
+    if (!selected) {
+      return;
+    }
+    handleSubmit(selected.start.toDateTime());
+  };
+
+  /**
+   * 選択中スケジュールのテキスト.
+   */
+  const nodeSelectedText = (): string => {
+    if (!selected) {
+      return 'スケジュールを選択してください';
+    }
+
+    const start = `${selected.start.toDateJP()} ${selected.start.toHHMM()}`;
+    const end = selected.start.addHour().toHHMM();
+    return `${start}～${end}`;
   };
 
   return (
@@ -169,9 +198,27 @@ export const DialogCalendarUserScheduleSelect: React.FC<IProps> = ({
           <Schedule
             dateList={dateList}
             scheduleList={list.list()}
+            selected={selected}
             colorTable={colorTable}
             handleSelect={handleSelect}
           />
+          <Box
+            sx={{
+              marginTop: responsiveSpacing(2),
+              display: 'flex',
+              justifyContent: 'end',
+              alignItems: 'center',
+              gap: responsiveSpacing(4),
+            }}
+          >
+            <TypoText>{nodeSelectedText()}</TypoText>
+            <ButtonGeneral
+              disabled={!selected}
+              buttonType={E_BUTTON_TYPE.CONTAINED_SECONDARY}
+              label="選択したスケジュールを予約する"
+              onClick={handleClickSubmit}
+            />
+          </Box>
         </Loading>
       </Box>
     </Dialog>

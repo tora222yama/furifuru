@@ -13,6 +13,7 @@ import {
 interface IProps extends IPropsBase {
   dateList: DateTime[];
   scheduleList: IUsecasesCalendarUserSchedule[];
+  selected?: IScheduleBlock;
   colorTable: ColorTable;
   handleSelect: (block: IScheduleBlock) => void;
 }
@@ -20,9 +21,22 @@ export const Schedule: React.FC<IProps> = ({
   sx,
   dateList,
   scheduleList,
+  selected,
   colorTable,
   handleSelect,
 }) => {
+  /**
+   * 指定日付における選択済み情報.
+   * @param date
+   */
+  const selectedInDate = (date: DateTime): IScheduleBlock | undefined => {
+    if (!selected) {
+      return undefined;
+    }
+
+    return date.isSameDay(selected.start) ? selected : undefined;
+  };
+
   return (
     <Box
       sx={{
@@ -44,6 +58,7 @@ export const Schedule: React.FC<IProps> = ({
             scheduleList={scheduleList.filter(schedule =>
               date.isSameDay(DateTime.parseString(schedule.start)),
             )}
+            selected={selectedInDate(date)}
             colorTable={colorTable}
             handleSelect={handleSelect}
           />

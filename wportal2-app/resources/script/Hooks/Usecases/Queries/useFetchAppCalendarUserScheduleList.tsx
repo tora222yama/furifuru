@@ -25,6 +25,7 @@ export function useFetchAppCalendarUserScheduleList(
       startDate: fetchParameter.startDate.toDateTime(),
       endDate: fetchParameter.endDate.toDateTime(),
     },
+    fetchPolicy: 'no-cache',
   });
 
   // データのparse.
