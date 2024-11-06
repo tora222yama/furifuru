@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth:web']], function () {
         Route::get('/{divisionId}/edit', EPages::DIVISION__EDIT->getInvokePath())
             ->where('divisionId', '[0-9]+');
         Route::post('/update', EPages::DIVISION__UPDATE->getInvokePath());
-        Route::post('n/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
+        Route::post('/update_user', EPages::DIVISION__UPDATE_USER->getInvokePath());
         Route::get('/new', EPages::DIVISION__NEW->getInvokePath());
         Route::post('/create', EPages::DIVISION__CREATE->getInvokePath());
         Route::post('/delete', EPages::DIVISION__DELETE->getInvokePath());
