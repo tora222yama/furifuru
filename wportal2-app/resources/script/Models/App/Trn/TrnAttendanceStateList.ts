@@ -51,12 +51,10 @@ export class AppTrnAttendanceStateList extends ListBase<IAppTrnAttendanceState> 
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnAttendanceState => {
     return AppTrnAttendanceStateList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnAttendanceState): number {
     return value.id;
   }

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Page } from '@/script/Pages/Page';

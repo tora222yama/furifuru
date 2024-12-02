@@ -50,6 +50,7 @@ export const Show: React.FC<IProps> = () => {
       onFinish();
       if (res.statusCode === E_STATUS_CODE.OK) {
         router.reload({
+          // @ts-expect-error inertia-preserve-state
           preserveState: true,
           replace: true,
           onStart,

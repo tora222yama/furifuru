@@ -8,7 +8,6 @@ export class Log {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static info(log: any): void {
-    // eslint-disable-next-line no-console
     console.log(log);
   }
 
@@ -18,7 +17,6 @@ export class Log {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static error(log: any): void {
-    // eslint-disable-next-line no-console
     console.error(log);
   }
 }

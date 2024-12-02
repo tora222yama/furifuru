@@ -39,12 +39,10 @@ export class AppTrnDivisionUserList extends ListBase<IAppTrnDivisionUser> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnDivisionUser => {
     return AppTrnDivisionUserList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnDivisionUser): number {
     return value.id;
   }

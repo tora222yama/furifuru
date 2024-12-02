@@ -39,7 +39,7 @@ export const Index: React.FC<IProps> = ({
   // noinspection TypeScriptValidateTypes
   return (
     <context.Provider value={providerValue}>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      {}
       <CommonIndexProvider {...props}>
         <RedisPostResult />
       </CommonIndexProvider>

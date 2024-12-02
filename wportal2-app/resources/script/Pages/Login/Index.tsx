@@ -8,7 +8,6 @@ interface IProps extends IPropsBase {}
 export const Index: React.FC<IProps> = ({ ...props }) => {
   // noinspection TypeScriptValidateTypes
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <CommonIndexProvider {...props}>
       <GoogleReCaptchaProvider
         reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}

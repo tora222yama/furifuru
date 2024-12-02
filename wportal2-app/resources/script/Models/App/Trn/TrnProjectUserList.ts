@@ -39,12 +39,10 @@ export class AppTrnProjectUserList extends ListBase<IAppTrnProjectUser> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnProjectUser => {
     return AppTrnProjectUserList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnProjectUser): number {
     return value.id;
   }

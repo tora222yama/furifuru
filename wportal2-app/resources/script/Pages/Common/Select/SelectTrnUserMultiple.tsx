@@ -33,7 +33,6 @@ export const SelectTrnUserMultiple: React.FC<IProps> = ({
         return [user.id, `[${user.id}]${user.nickname}`];
       }),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.length]);
 
   /**
@@ -56,7 +55,6 @@ export const SelectTrnUserMultiple: React.FC<IProps> = ({
           onChange={(e, value) => handleChange(value as number[])}
           renderInput={params => (
             <TextField
-              // eslint-disable-next-line react/jsx-props-no-spreading
               {...params}
               sx={{
                 width: '100%',

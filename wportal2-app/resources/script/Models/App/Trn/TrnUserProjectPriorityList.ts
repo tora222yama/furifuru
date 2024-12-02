@@ -34,12 +34,10 @@ export class AppTrnUserProjectPriorityList extends ListBase<IAppTrnUserProjectPr
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUserProjectPriority => {
     return AppTrnUserProjectPriorityList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUserProjectPriority): number {
     return value.id;
   }
