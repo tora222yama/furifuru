@@ -44,6 +44,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
 
     router.reload({
       method: 'post',
+      // @ts-expect-error inertia-preserve-state
       preserveState: true,
       replace: true,
       onStart,
@@ -67,6 +68,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
 
       router.reload({
         method: 'post',
+        // @ts-expect-error inertia-preserve-state
         preserveState: true,
         replace: true,
         onStart,
@@ -93,6 +95,7 @@ export const UserList: React.FC<IProps> = ({ sx }) => {
 
       router.reload({
         method: 'post',
+        // @ts-expect-error inertia-preserve-state
         preserveState: true,
         preserveScroll: true,
         replace: true,

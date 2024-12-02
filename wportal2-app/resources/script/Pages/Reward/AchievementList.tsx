@@ -25,6 +25,7 @@ export const AchievementList: React.FC<IProps> = ({ sx }) => {
 
       router.reload({
         method: 'post',
+        // @ts-expect-error inertia-preserve-state
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -50,6 +51,7 @@ export const AchievementList: React.FC<IProps> = ({ sx }) => {
 
       router.reload({
         method: 'post',
+        // @ts-expect-error inertia-preserve-state
         preserveState: true,
         preserveScroll: true,
         replace: true,
