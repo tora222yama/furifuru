@@ -21,7 +21,6 @@ export const TabMember: React.FC<IProps> = ({ sx }) => {
       .slice(currentIndex * PAGE_STEP, (currentIndex + 1) * PAGE_STEP);
     const userIdList = userList.map(v => v.id);
     return stateList.filter(state => userIdList.includes(state.trnUser.id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex]);
 
   /**

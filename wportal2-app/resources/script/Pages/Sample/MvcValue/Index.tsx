@@ -25,7 +25,6 @@ export const Index: React.FC<IPros> = ({
 }) => {
   // noinspection TypeScriptValidateTypes
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <CommonIndexProvider {...props}>
       <MvcValue
         numberValue={numberValue}

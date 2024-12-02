@@ -68,12 +68,10 @@ export class AppTrnProjectList extends ListBase<IAppTrnProject> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnProject => {
     return AppTrnProjectList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnProject): number {
     return value.id;
   }

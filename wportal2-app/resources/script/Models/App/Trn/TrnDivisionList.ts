@@ -56,12 +56,10 @@ export class AppTrnDivisionList extends ListBase<IAppTrnDivision> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnDivision => {
     return AppTrnDivisionList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnDivision): number {
     return value.id;
   }

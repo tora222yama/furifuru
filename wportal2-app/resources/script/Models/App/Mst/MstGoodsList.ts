@@ -44,12 +44,10 @@ export class AppMstGoodsList extends ListBase<IAppMstGoods> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppMstGoods => {
     return AppMstGoodsList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppMstGoods): number {
     return value.id;
   }
