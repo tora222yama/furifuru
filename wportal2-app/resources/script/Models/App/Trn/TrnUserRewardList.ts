@@ -53,12 +53,10 @@ export class AppTrnUserRewardList extends ListBase<IAppTrnUserReward> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUserReward => {
     return AppTrnUserRewardList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUserReward): number {
     return value.id;
   }

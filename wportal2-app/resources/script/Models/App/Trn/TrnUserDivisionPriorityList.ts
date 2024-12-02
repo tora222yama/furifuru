@@ -34,12 +34,10 @@ export class AppTrnUserDivisionPriorityList extends ListBase<IAppTrnUserDivision
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUserDivisionPriority => {
     return AppTrnUserDivisionPriorityList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUserDivisionPriority): number {
     return value.id;
   }

@@ -11,9 +11,9 @@ type ProgressContext = {
 };
 export const context = React.createContext<ProgressContext>({
   progress: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   onStart: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   onFinish: () => {},
 });
 export const useProgressContext = (): ProgressContext => useContext(context);

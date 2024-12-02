@@ -93,7 +93,6 @@ export const FormEditImageDrop: React.FC<IProps> = ({
    */
   React.useEffect(() => {
     handleUpdate({ upload: files.length !== 0 ? files[0] : undefined });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
   /**
@@ -154,10 +153,9 @@ export const FormEditImageDrop: React.FC<IProps> = ({
             alignItems: 'center',
             gap: responsiveSpacing(2),
           }}
-          /* eslint-disable-next-line react/jsx-props-no-spreading */
           {...getRootProps()}
         >
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          {}
           <input {...getInputProps()} />
           <TypoText>{message}</TypoText>
           <ButtonGeneral label="ファイルを選択" onClick={open} />

@@ -40,12 +40,10 @@ export class AppTrnProjectNotificationList extends ListBase<IAppTrnProjectNotifi
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnProjectNotification => {
     return AppTrnProjectNotificationList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnProjectNotification): number {
     return value.id;
   }

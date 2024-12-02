@@ -48,12 +48,10 @@ export class AppMstRewardList extends ListBase<IAppMstReward> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppMstReward => {
     return AppMstRewardList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppAuthUser): number {
     return value.id;
   }

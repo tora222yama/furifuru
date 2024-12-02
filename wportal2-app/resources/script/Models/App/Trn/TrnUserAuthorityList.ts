@@ -35,12 +35,10 @@ export class AppTrnUserAuthorityList extends ListBase<IAppTrnUserAuthority> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUserAuthority => {
     return AppTrnUserAuthorityList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUserAuthority): number {
     return value.id;
   }
