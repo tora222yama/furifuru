@@ -20,6 +20,10 @@ pre-commit:
       run: |
         ./wportal2-app/vendor/bin/pint {staged_files}
         git add {staged_files}
+    phpstan:
+      glob: '*.{php}'
+      run: |
+        ./wportal2-app/vendor/bin/phpstan analyse -c ./wportal2-app/phpstan.neon {staged_files}
     ide-helper:
       glob: '*.{php}'
       run: |

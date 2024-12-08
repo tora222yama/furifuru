@@ -21,7 +21,7 @@ class Performance
 
     private float $timeEnd             = 0;
 
-    private string $timeLabel          = '';
+    private string $timeDuring         = '';
 
     /**
      * メモリ情報.

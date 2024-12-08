@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\External\SesService;
 
-use JetBrains\PhpStorm\Pure;
-
 use function count;
 
 /**
@@ -43,7 +41,6 @@ class SesParameter
     /**
      * 送信用パラメータの取得.
      */
-    #[Pure]
     public function getParameterArray(): array
     {
         if (! $this->isValid()) {

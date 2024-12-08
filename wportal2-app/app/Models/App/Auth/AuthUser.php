@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use JetBrains\PhpStorm\Pure;
 
 class AuthUser extends Authenticatable
 {
@@ -56,7 +55,6 @@ class AuthUser extends Authenticatable
     /**
      * EloquentBuilderの拡張を行う.
      */
-    #[Pure]
     public function newEloquentBuilder($query): EloquentBuilder
     {
         return new EloquentBuilder($query);
