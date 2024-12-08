@@ -169,7 +169,7 @@ EOF;
      */
     public function notify(string $message, string $url, array $appendParams): void
     {
-        if (! isset($url)) {
+        if (empty($url)) {
             return;
         }
 

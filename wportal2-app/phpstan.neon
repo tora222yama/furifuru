@@ -9,4 +9,8 @@ parameters:
         - database/
 
     # Level 10 is the highest level
-    level: 0
+    level: 1
+
+    ignoreErrors:
+            # 問題ないマジックメソッドの除外.
+            - '#Access to an undefined property App\\Models\\(.*)#'
