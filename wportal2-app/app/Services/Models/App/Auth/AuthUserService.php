@@ -200,6 +200,7 @@ class AuthUserService extends ModelServiceBase
      */
     public function findByIdOrFail(int $id, array $with = []): ?AuthUser
     {
+        /** @var AuthUser|null */
         return AuthUser::query()
             ->with($with)
             ->findOrFail($id);

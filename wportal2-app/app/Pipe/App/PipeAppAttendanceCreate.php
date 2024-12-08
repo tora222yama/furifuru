@@ -37,13 +37,13 @@ final class PipeAppAttendanceCreate extends PipeBase
         );
 
         // 認証ユーザー取得.
-        $this->authUser         = Auth::user();
+        /** @var AuthUser|null $authUser */
+        $authUser               = Auth::user();
+        $this->authUser         = $authUser;
     }
 
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

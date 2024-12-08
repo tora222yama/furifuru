@@ -251,6 +251,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByIdOrFail(int $id, array $with = []): ?TrnUser
     {
+        /** @var TrnUser|null */
         return TrnUser::query()
             ->with($with)
             ->alive()
@@ -262,6 +263,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByAuthId(int $authId): ?TrnUser
     {
+        /** @var TrnUser|null */
         return TrnUser::query()
             ->where('auth_id', $authId)
             ->alive()
@@ -273,6 +275,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByAuthIdOrFail(int $authId): TrnUser
     {
+        /** @var TrnUser|null */
         return TrnUser::query()
             ->where('auth_id', $authId)
             ->alive()

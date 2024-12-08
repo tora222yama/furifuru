@@ -26,6 +26,7 @@ class MstGoodsService extends ModelServiceBase
      */
     public function findOrFail(int $goodsId): MstGoods
     {
+        /** @var MstGoods */
         return MstGoods::query()
             ->alive()
             ->findOrFail($goodsId);

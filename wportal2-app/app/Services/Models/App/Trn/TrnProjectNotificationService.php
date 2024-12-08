@@ -101,6 +101,7 @@ class TrnProjectNotificationService extends ModelServiceBase
         int $id,
         array $with = []
     ): TrnProjectNotification {
+        /** @var TrnProjectNotification */
         return TrnProjectNotification::query()
             ->with($with)
             ->alive()

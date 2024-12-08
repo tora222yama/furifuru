@@ -69,6 +69,7 @@ class TrnUserProjectPriorityService extends ModelServiceBase
         int $trnUserId,
         int $trnProjectId
     ): ?TrnUserProjectPriority {
+        /** @var TrnUserProjectPriority|null */
         return TrnUserProjectPriority::query()
             ->where('trn_user_id', $trnUserId)
             ->where('trn_project_id', $trnProjectId)

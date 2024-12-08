@@ -140,6 +140,7 @@ class TrnProjectService extends ModelServiceBase
         int $id,
         array $with = []
     ): TrnProject {
+        /** @var TrnProject */
         return TrnProject::query()
             ->with($with)
             ->alive()

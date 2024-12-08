@@ -138,6 +138,7 @@ class TrnDivisionService extends ModelServiceBase
         int $id,
         array $with = []
     ): TrnDivision {
+        /** @var TrnDivision */
         return TrnDivision::query()
             ->with($with)
             ->alive()

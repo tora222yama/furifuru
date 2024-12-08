@@ -69,6 +69,7 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
         int $trnUserId,
         int $trnDivisionId
     ): ?TrnUserDivisionPriority {
+        /** @var TrnUserDivisionPriority|null */
         return TrnUserDivisionPriority::query()
             ->where('trn_user_id', $trnUserId)
             ->where('trn_division_id', $trnDivisionId)

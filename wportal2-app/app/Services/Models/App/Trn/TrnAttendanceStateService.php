@@ -112,6 +112,7 @@ class TrnAttendanceStateService extends ModelServiceBase
 
     public function findByIdOrFail(int $id): ?TrnAttendanceState
     {
+        /** @var TrnAttendanceState|null */
         return TrnAttendanceState::query()
             ->alive()
             ->findOrFail($id);

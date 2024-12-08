@@ -58,6 +58,7 @@ class MstRewardService extends ModelServiceBase
      */
     public function findById(EMstReward $eMstReward): ?MstReward
     {
+        /** @var MstReward|null */
         return MstReward::query()
             ->where('id', $eMstReward->value)
             ->first();

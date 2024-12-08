@@ -71,8 +71,6 @@ final class ActivityLogService
 
     /**
      * 改行コードなど、ログに反映させたくないものをフィルタ.
-     *
-     * @return string
      */
     private function filterString(mixed $value): mixed
     {

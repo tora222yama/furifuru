@@ -9,7 +9,7 @@ parameters:
         - database/
 
     # Level 10 is the highest level
-    level: 2
+    level: 3
 
     ignoreErrors:
             # 問題ないマジックメソッドの除外.

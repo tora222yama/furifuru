@@ -51,6 +51,7 @@ class TrnUserAuthorityService extends ModelServiceBase
         int $trnUserId,
         EUserAuthority $eUserAuthority
     ): ?TrnUserAuthority {
+        /** @var TrnUserAuthority|null */
         return TrnUserAuthority::query()
             ->where('trn_user_id', $trnUserId)
             ->where('e_user_authority', $eUserAuthority)

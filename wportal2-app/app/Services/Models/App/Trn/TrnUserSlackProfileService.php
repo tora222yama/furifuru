@@ -87,6 +87,7 @@ class TrnUserSlackProfileService extends ModelServiceBase
      */
     public function findByTrnUserId(int $trnUserId): ?TrnUserSlackProfile
     {
+        /** @var TrnUserSlackProfile|null */
         return TrnUserSlackProfile::query()
             ->where('trn_user_id', $trnUserId)
             ->alive()
