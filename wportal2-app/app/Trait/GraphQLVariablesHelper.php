@@ -17,7 +17,7 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return (int) $args[$key] ?? 0;
+        return (int) ($args[$key] ?? 0);
     }
 
     /**
@@ -53,7 +53,7 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return array_map('intval', (array) $args[$key]) ?? [];
+        return array_map('intval', (array) $args[$key]);
     }
 
     /**
@@ -69,6 +69,6 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return array_map('strval', (array) $args[$key]) ?? [];
+        return array_map('strval', (array) $args[$key]);
     }
 }

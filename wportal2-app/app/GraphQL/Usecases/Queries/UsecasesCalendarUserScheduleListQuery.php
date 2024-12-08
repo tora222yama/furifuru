@@ -41,14 +41,14 @@ final class UsecasesCalendarUserScheduleListQuery
                 })
                 ->each(function (Event $event) use (&$ret, $email) {
                     $ret[] = [
-                        'identify'     => "$email-{$event->id}"           ?? '',
-                        'eventId'      => $event->id                      ?? '',
+                        'identify'     => "$email-{$event->id}",
+                        'eventId'      => $event->id ?: '',
                         'calendarId'   => $email                          ?? '',
-                        'kind'         => $event->kind                    ?? '',
-                        'summary'      => $event->summary                 ?? '',
-                        'start'        => $event->getStart()->dateTime    ?? '',
-                        'end'          => $event->getEnd()->dateTime      ?? '',
-                        'transparency' => $event->transparency            ?? '',
+                        'kind'         => $event->kind ?: '',
+                        'summary'      => $event->summary ?: '',
+                        'start'        => $event->getStart()->dateTime ?: '',
+                        'end'          => $event->getEnd()->dateTime ?: '',
+                        'transparency' => $event->transparency ?: '',
                     ];
                 });
         }

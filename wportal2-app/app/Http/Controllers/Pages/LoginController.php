@@ -64,7 +64,7 @@ class LoginController extends Controller
         }
 
         // 一致する認証ユーザーを取得.
-        /** @var AuthUser $targetAuthUser */
+        /** @var AuthUser|null $targetAuthUser */
         $targetAuthUser       = AuthUser::query()
             ->where('e_enable_legacy_login', EEnableFlag::ENABLE)
             ->where('email', $pipe->email)
@@ -149,7 +149,7 @@ class LoginController extends Controller
         }
 
         // 許可&パスワードが一致し、不正カウンタが問題ない認証ユーザーを取得.
-        /** @var AuthUser $targetAuthUser */
+        /** @var AuthUser|null $targetAuthUser */
         $targetAuthUser       = AuthUser::query()
             ->where('e_enable_sp_login', EEnableFlag::ENABLE)
             ->where('email', $pipe->email)
@@ -271,7 +271,7 @@ class LoginController extends Controller
     private function createNewUserByGoogle($googleUser): AuthUser
     {
         // アーカイブデータの検索.
-        /** @var AuthUser $archiveAuthUser */
+        /** @var AuthUser|null $archiveAuthUser */
         $archiveAuthUser             = AuthUser::query()
             ->where('email', $googleUser->email)
             ->whereNot('e_archive_level', EArchiveLevel::ALIVE)

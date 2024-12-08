@@ -55,6 +55,39 @@ final class ActivityLogService
     }
 
     /**
+     * 発行未確定のログ集積を開始.
+     */
+    public function beginTransaction(): void
+    {
+        // トランザクションログを準備.
+        $this->transactionLogList = collect();
+    }
+
+    /**
+     * 発行未確定のログ出力を確定.
+     */
+    public function commitTransaction(): void
+    {
+        // トランザクション中でなければ処理なし.
+        if ($this->transactionLogList === null) {
+            return;
+        }
+
+        // 準備ログにトランザクションログを結合する.
+        $this->readyLogList       = $this->readyLogList->merge($this->transactionLogList);
+        $this->transactionLogList = null;
+    }
+
+    /**
+     * 発行未確定のログを削除.
+     */
+    public function rollbackTransaction(): void
+    {
+        // トランザクションログを削除.
+        $this->transactionLogList = null;
+    }
+
+    /**
      * ログの出力.
      */
     public function outputLog(): void

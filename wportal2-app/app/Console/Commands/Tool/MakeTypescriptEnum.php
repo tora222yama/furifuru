@@ -68,6 +68,7 @@ class MakeTypescriptEnum extends Command
      * 出力無視ディレクトリ.
      */
     const IGNORE_DIR_LIST  = [
+        '',
     ];
 
     /**
@@ -89,7 +90,7 @@ class MakeTypescriptEnum extends Command
                 continue;
             }
 
-            $pathPair             = new EnumPathPair();
+            $pathPair             = new EnumPathPair;
             $pathPair->inputPath  = $inputFile;
             $pathPair->outputPath = resource_path().'/script/Enum/Server/'.$fileName.'.ts';
             $ret[]                = $pathPair;
@@ -116,7 +117,7 @@ class MakeTypescriptEnum extends Command
                     continue;
                 }
 
-                $pathPair             = new EnumPathPair();
+                $pathPair             = new EnumPathPair;
                 $pathPair->inputPath  = $inputFile;
                 $pathPair->outputPath = resource_path()."/script/Enum/Server/${lastDir}/${fileName}.ts";
                 $ret[]                = $pathPair;

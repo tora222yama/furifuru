@@ -53,7 +53,7 @@ class Controller extends BaseController
      */
     private function getAuthUser(array $with = []): ?array
     {
-        /** @var AuthUser $authUser */
+        /** @var AuthUser|null $authUser */
         $authUser       = AuthUser::query()
             ->with($with)
             ->find(Auth::id());
@@ -64,8 +64,10 @@ class Controller extends BaseController
 
     /**
      * ロケーションの取得.
+     *
+     * @return array<string>
      */
-    private function getLocation(): ?array
+    private function getLocation(): array
     {
         return [
             'current' => Request::url(),
