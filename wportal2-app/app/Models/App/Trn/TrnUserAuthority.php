@@ -8,6 +8,11 @@ use App\Enum\App\EUserAuthority;
 use App\Models\App\ModelBase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnUserAuthority
+ *
+ * @extends ModelBase<TrnUserAuthority>
+ */
 class TrnUserAuthority extends ModelBase
 {
     use HasFactory;

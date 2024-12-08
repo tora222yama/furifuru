@@ -26,7 +26,7 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_DIVISION_PRIORITY => $this->execAppAttendanceDivisionPriority($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -36,8 +36,10 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceDivisionPriority(
-        PipeAppAttendanceDivisionPriority|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceDivisionPriority $pipe */
+
         // 現在の設定の取得.
         $current = $this->findByUserIdAndDivisionId(
             $pipe->authUser->TrnUser->id,
@@ -51,7 +53,7 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
             $this->updateOrFail($current);
         } else {
             // 新規登録の場合.
-            $new                    = new TrnUserDivisionPriority();
+            $new                    = new TrnUserDivisionPriority;
             $new->trn_user_id       = $pipe->authUser->TrnUser->id;
             $new->trn_division_id   = $pipe->divisionId;
             $new->division_priority = $pipe->priority;

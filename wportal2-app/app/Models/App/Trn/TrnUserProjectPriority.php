@@ -7,6 +7,11 @@ namespace App\Models\App\Trn;
 use App\Models\App\ModelBase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnUserProjectPriority
+ *
+ * @extends ModelBase<TrnUserProjectPriority>
+ */
 class TrnUserProjectPriority extends ModelBase
 {
     use HasFactory;

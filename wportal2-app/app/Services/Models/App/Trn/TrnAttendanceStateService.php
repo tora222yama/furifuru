@@ -34,7 +34,7 @@ class TrnAttendanceStateService extends ModelServiceBase
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_ATTENDANCE_DELETE            => $this->execAppAttendanceStateDelete($pipe),
                 EPipeKind::APP_ATTENDANCE_EDIT_UPDATE       => $this->execAppAttendanceEditUpdate($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -44,14 +44,15 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceCreate $pipe */
         if (is_null($pipe->authUser)) {
             throw new Exception('invalid auth user.');
         }
 
         // モデル作成.
-        $new                            = new TrnAttendanceState();
+        $new                            = new TrnAttendanceState;
         $new->trn_user_id               = $pipe->authUser->TrnUser->id;
         $new->e_attendance_state        = $pipe->eAttendanceState->value;
 
@@ -71,8 +72,9 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateDelete(
-        PipeAppAttendanceDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceDelete $pipe */
         if (is_null($pipe->authUser)) {
             throw new Exception('invalid auth user.');
         }
@@ -98,8 +100,9 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppAttendanceEditUpdate(
-        PipeAppAttendanceEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceEditUpdate $pipe */
         $pipe->eventList->each(function (InputEvent $event) {
             $model             = $this->findByIdOrFail($event->uid);
             $model->updated_at = $event->updatedAt;

@@ -36,7 +36,7 @@ class TrnUserRewardService extends ModelServiceBase
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_REWARD_ACHIEVE               => $this->execAppRewardAchieve($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -48,8 +48,10 @@ class TrnUserRewardService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppAttendanceStateCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceCreate $pipe */
+
         // 出勤・退勤・休憩in/outが含まれているかチェックする.
         if (! EAttendanceState::isPerfectAttendance($pipe->todayAttendanceStateList)) {
             return;
@@ -79,8 +81,10 @@ class TrnUserRewardService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppRewardAchieve(
-        PipeAppRewardAchieve|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppRewardAchieve $pipe */
+
         // 対象となる報酬を取得.
         $targetReward = TrnUserReward::query()
             ->where('trn_user_id', $pipe->authUser->TrnUser->id)
@@ -101,8 +105,10 @@ class TrnUserRewardService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppPersonalSettingEditUpdate(
-        PipeAppPersonalSettingEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingEditUpdate $pipe */
+
         // 報酬達成処理.
         $this->achieve(
             $pipe,
@@ -119,7 +125,7 @@ class TrnUserRewardService extends ModelServiceBase
     public function createNewUser(
         int $trnUserId
     ): void {
-        $model                    = new TrnUserReward();
+        $model                    = new TrnUserReward;
         $model->trn_user_id       = $trnUserId;
         $model->mst_reward_id     = EMstReward::CREATE_ACCOUNT;
         $model->achievement_count = 1;
@@ -170,6 +176,7 @@ class TrnUserRewardService extends ModelServiceBase
         EMstReward $eMstReward
     ): void {
         // 対象となる報酬を取得.
+        /** @var TrnUserReward $targetReward */
         $targetReward = TrnUserReward::query()
             ->where('mst_reward_id', $eMstReward->value)
             ->where('trn_user_id', $trnUserId)
@@ -177,7 +184,7 @@ class TrnUserRewardService extends ModelServiceBase
 
         // 存在しない場合は新規レコードを作成.
         if (is_null($targetReward)) {
-            $newReward                    = new TrnUserReward();
+            $newReward                    = new TrnUserReward;
             $newReward->trn_user_id       = $trnUserId;
             $newReward->mst_reward_id     = $eMstReward->value;
             $newReward->achievement_count = 1;

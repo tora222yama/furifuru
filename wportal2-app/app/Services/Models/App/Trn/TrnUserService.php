@@ -48,7 +48,7 @@ class TrnUserService extends ModelServiceBase
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -60,8 +60,9 @@ class TrnUserService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppShopLunchTicket(
-        PipeAppShopLunchTicket|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppShopLunchTicket $pipe */
         if (! $pipe->isReady) {
             throw new Exception('invalid pipe');
         }
@@ -97,8 +98,10 @@ class TrnUserService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppRewardAchieve(
-        PipeAppRewardAchieve|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppRewardAchieve $pipe */
+
         // GOLDの獲得.
         $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
         $trnUser->accumulation_gold += $pipe->achieveGold;
@@ -112,8 +115,10 @@ class TrnUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppPersonalSettingEditUpdate(
-        PipeAppPersonalSettingEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingEditUpdate $pipe */
+
         // 個人設定の更新.
         $trnUser                    = $this->findByIdOrFail($pipe->trnUserId);
         $trnUser->nickname          = $pipe->nickname;
@@ -147,8 +152,9 @@ class TrnUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppUserCreate(
-        PipeAppUserCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserCreate $pipe */
         if (is_null($pipe->createdAuthUser)) {
             throw new Exception('invalid auth user');
         }
@@ -164,13 +170,12 @@ class TrnUserService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppUserDelete(
-        PipeAppUserDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserDelete $pipe */
+
         // 対象データを取得.
-        $target                  = TrnUser::query()
-            ->where('id', $pipe->trnUserId)
-            ->alive()
-            ->firstOrFail();
+        $target                  = $this->findByIdOrFail($pipe->trnUserId);
 
         // 対象データを削除.
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
@@ -320,7 +325,7 @@ class TrnUserService extends ModelServiceBase
     public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): TrnUser
     {
         // 新規にユーザーを作成.
-        $trnUser                  = new TrnUser();
+        $trnUser                  = new TrnUser;
         if ($id !== 0) {
             $trnUser->id   = $id;
         }
@@ -350,9 +355,7 @@ class TrnUserService extends ModelServiceBase
     public function comebackUser(AuthUser $authUser): void
     {
         // ユーザー情報を取得.
-        $trnUser                  = TrnUser::query()
-            ->where('auth_id', $authUser->id)
-            ->firstOrFail();
+        $trnUser                  = $this->findByAuthIdOrFail($authUser->id);
 
         // アーカイブレベルを変更.
         $trnUser->e_archive_level = EArchiveLevel::ALIVE->value;

@@ -9,6 +9,11 @@ use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin TrnDivision
+ *
+ * @extends ModelBase<TrnDivision>
+ */
 class TrnDivision extends ModelBase
 {
     use EagerLoadHelper, hasFactory;
@@ -17,6 +22,8 @@ class TrnDivision extends ModelBase
 
     /**
      * リレーション:TrnDivisionUser
+     *
+     * @return HasMany<TrnDivisionUser, covariant TrnDivision>
      */
     public function TrnDivisionUser(): HasMany
     {
@@ -29,6 +36,8 @@ class TrnDivision extends ModelBase
 
     /**
      * リレーション:TrnUserDivisionPriority
+     *
+     * @return HasMany<TrnUserDivisionPriority, covariant TrnDivision>
      */
     public function TrnUserDivisionPriority(): HasMany
     {

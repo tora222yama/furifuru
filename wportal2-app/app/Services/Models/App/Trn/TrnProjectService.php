@@ -31,7 +31,7 @@ class TrnProjectService extends ModelServiceBase
                 EPipeKind::APP_PROJECT_UPDATE => $this->execAppProjectUpdate($pipe),
                 EPipeKind::APP_PROJECT_DELETE => $this->execAppProjectDelete($pipe),
                 EPipeKind::APP_PROJECT_CREATE => $this->execAppProjectCreate($pipe),
-                default                       => throw new Exception(),
+                default                       => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -41,8 +41,10 @@ class TrnProjectService extends ModelServiceBase
      * プロジェクトの作成.
      */
     private function execAppProjectCreate(
-        PipeAppProjectCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectCreate $pipe */
+
         // プロジェクトの作成.
         $this->createNewProject(
             $pipe->name,
@@ -54,8 +56,10 @@ class TrnProjectService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppProjectDelete(
-        PipeAppProjectDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectDelete $pipe */
+
         // 対象データを取得.
         /** @var TrnProject $target */
         $target                  = TrnProject::query()
@@ -76,7 +80,7 @@ class TrnProjectService extends ModelServiceBase
     public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
     {
         // ユーザーを作成.
-        $trnProject                  = new TrnProject();
+        $trnProject                  = new TrnProject;
         if ($id !== 0) {
             $trnProject->id   = $id;
         }
@@ -89,8 +93,10 @@ class TrnProjectService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppProjectUpdate(
-        PipeAppProjectUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectUpdate $pipe */
+
         // 課基本情報の更新.
         $trnProject          = $this->findByIdOrFail($pipe->trnProjectId);
         $trnProject->name    = $pipe->name;

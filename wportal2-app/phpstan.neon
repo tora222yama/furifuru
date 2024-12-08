@@ -9,8 +9,9 @@ parameters:
         - database/
 
     # Level 10 is the highest level
-    level: 1
+    level: 2
 
     ignoreErrors:
             # 問題ないマジックメソッドの除外.
             - '#Access to an undefined property App\\Models\\(.*)#'
+            - '#Call to an undefined method Laravel\\Socialite\\Contracts\\Provider::stateless\(\)#'

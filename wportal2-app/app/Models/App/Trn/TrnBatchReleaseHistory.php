@@ -8,6 +8,9 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnBatchReleaseHistory
+ */
 class TrnBatchReleaseHistory extends ModelBase
 {
     use EagerLoadHelper, hasFactory;

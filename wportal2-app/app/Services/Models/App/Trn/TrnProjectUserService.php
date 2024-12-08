@@ -30,7 +30,7 @@ class TrnProjectUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_PROJECT_USER_UPDATE  => $this->execAppProjectUserUpdate($pipe),
                 EPipeKind::APP_USER_DELETE          => $this->execAppUserDelete($pipe),
-                default                             => throw new Exception(),
+                default                             => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -40,8 +40,10 @@ class TrnProjectUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppProjectUserUpdate(
-        PipeAppProjectUserUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectUserUpdate $pipe */
+
         // 現在の配列.
         $oldUserList = TrnProjectUser::query()
             ->where('trn_project_id', $pipe->trnProjectId)
@@ -50,7 +52,7 @@ class TrnProjectUserService extends ModelServiceBase
         // 追加する対象.
         $addUserList = $pipe->trnUserIdList->diff($oldUserList)->values();
         $addUserList->each(function (int $trnUserId) use ($pipe) {
-            $addUser                  = new TrnProjectUser();
+            $addUser                  = new TrnProjectUser;
             $addUser->trn_project_id  = $pipe->trnProjectId;
             $addUser->trn_user_id     = $trnUserId;
             $addUser->saveOrFail();
@@ -75,11 +77,13 @@ class TrnProjectUserService extends ModelServiceBase
      * EPipeKind::APP_USER_DELETE
      */
     private function execAppUserDelete(
-        PipeAppUserDelete|PipeBase $pipeAppUserDelete
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserDelete $pipe */
+
         // ユーザーを削除.
         TrnProjectUser::query()
-            ->where('trn_user_id', $pipeAppUserDelete->trnUserId)
+            ->where('trn_user_id', $pipe->trnUserId)
             ->alive()
             ->delete();
     }

@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @mixin TrnUser
+ *
+ * @extends ModelBase<TrnUser>
+ */
 class TrnUser extends ModelBase
 {
     use EagerLoadHelper, HasFactory;
@@ -20,6 +25,8 @@ class TrnUser extends ModelBase
 
     /**
      * リレーション:AuthUser
+     *
+     * @return HasOne<AuthUser, covariant TrnUser>
      */
     public function AuthUser(): HasOne
     {
@@ -32,6 +39,8 @@ class TrnUser extends ModelBase
 
     /**
      * リレーション:TrnAttendanceState
+     *
+     * @return HasMany<TrnAttendanceState, covariant TrnUser>
      */
     public function TrnAttendanceState(): HasMany
     {
@@ -44,6 +53,8 @@ class TrnUser extends ModelBase
 
     /**
      *  リレーション:TrnUserSlackProfile
+     *
+     * @return HasOne<TrnUserSlackProfile, covariant TrnUser>
      */
     public function TrnUserSlackProfile(): HasOne
     {
@@ -56,6 +67,8 @@ class TrnUser extends ModelBase
 
     /**
      *  リレーション:TrnUserDivisionPriority
+     *
+     * @return HasMany<TrnUserDivisionPriority, covariant TrnUser>
      */
     public function TrnUserDivisionPriority(): HasMany
     {
@@ -68,6 +81,8 @@ class TrnUser extends ModelBase
 
     /**
      *  リレーション:TrnUserProjectPriority
+     *
+     * @return HasMany<TrnUserProjectPriority, covariant TrnUser>
      */
     public function TrnUserProjectPriority(): HasMany
     {
@@ -80,6 +95,8 @@ class TrnUser extends ModelBase
 
     /**
      * リレーション:TrnUserReward
+     *
+     * @return HasMany<TrnUserReward, covariant TrnUser>
      */
     public function TrnUserReward(): HasMany
     {

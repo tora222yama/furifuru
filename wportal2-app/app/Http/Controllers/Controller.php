@@ -53,9 +53,11 @@ class Controller extends BaseController
      */
     private function getAuthUser(array $with = []): ?array
     {
-        $this->authUser = AuthUser::query()
+        /** @var AuthUser $authUser */
+        $authUser       = AuthUser::query()
             ->with($with)
             ->find(Auth::id());
+        $this->authUser = $authUser;
 
         return $this->authUser?->toPayload($with);
     }

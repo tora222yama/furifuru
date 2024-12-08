@@ -8,6 +8,11 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnAttendanceState
+ *
+ * @extends ModelBase<TrnAttendanceState>
+ */
 class TrnAttendanceState extends ModelBase
 {
     use EagerLoadHelper, hasFactory;

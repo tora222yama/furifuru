@@ -45,8 +45,10 @@ class SlackService
     }
 
     private function execAppAttendanceCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceCreate $pipe */
+
         // 表示メッセージの作成.
         $localeDate          = Carbon::now()->format('Y-m-d H:i:s');
         $nickName            = $pipe->authUser->TrnUser->nickname;
@@ -68,8 +70,10 @@ class SlackService
     }
 
     private function execAppPersonalSettingShowAlignSlack(
-        PipeAppPersonalSettingShowAlignSlack|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingShowAlignSlack $pipe */
+
         // APIを実行.
         $result      = $this->slackApiLookupByEmail($pipe->email);
 

@@ -10,6 +10,11 @@ use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @mixin TrnUserReward
+ *
+ * @extends ModelBase<TrnUserReward>
+ */
 class TrnUserReward extends ModelBase
 {
     use EagerLoadHelper, HasFactory;
@@ -18,6 +23,8 @@ class TrnUserReward extends ModelBase
 
     /**
      * リレーション:MstReward
+     *
+     * @return HasOne<MstReward, covariant TrnUserReward>
      */
     public function MstReward(): HasOne
     {

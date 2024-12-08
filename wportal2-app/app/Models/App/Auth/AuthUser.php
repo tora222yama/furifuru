@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @mixin AuthUser
+ */
 class AuthUser extends Authenticatable
 {
     use EagerLoadHelper, HasFactory, Notifiable;
@@ -62,6 +65,8 @@ class AuthUser extends Authenticatable
 
     /**
      * リレーション:TrnUser
+     *
+     * @return HasOne<TrnUser, covariant AuthUser>
      */
     public function TrnUser(): HasOne
     {

@@ -9,6 +9,11 @@ use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @mixin TrnDivisionUser
+ *
+ * @extends ModelBase<TrnDivisionUser>
+ */
 class TrnDivisionUser extends ModelBase
 {
     use EagerLoadHelper, hasFactory;
@@ -17,6 +22,8 @@ class TrnDivisionUser extends ModelBase
 
     /**
      * リレーション:TrnUser
+     *
+     * @return HasOne<TrnUser, covariant TrnDivisionUser>
      */
     public function TrnUser(): HasOne
     {

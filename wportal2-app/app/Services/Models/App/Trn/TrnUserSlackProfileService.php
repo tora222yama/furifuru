@@ -28,7 +28,7 @@ class TrnUserSlackProfileService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE      => $this->execAppPersonalSettingEditUpdate($pipe),
-                default                                          => throw new Exception(),
+                default                                          => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -38,12 +38,13 @@ class TrnUserSlackProfileService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppPersonalSettingShowAlignSlack(
-        PipeAppPersonalSettingShowAlignSlack|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingShowAlignSlack $pipe */
         // 更新もしくは生成.
         $trnUserSlackProfile = $this->findByTrnUserId($pipe->trnUserId);
         if (is_null($trnUserSlackProfile)) {
-            $trnUserSlackProfile                  = new TrnUserSlackProfile();
+            $trnUserSlackProfile                  = new TrnUserSlackProfile;
             $trnUserSlackProfile->trn_user_id     = $pipe->trnUserId;
             $trnUserSlackProfile->slack_user_id   = $pipe->slackUserId;
             $trnUserSlackProfile->slack_user_name = $pipe->slackUserName;
@@ -61,12 +62,13 @@ class TrnUserSlackProfileService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppPersonalSettingEditUpdate(
-        PipeAppPersonalSettingEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingEditUpdate $pipe */
         // 更新もしくは生成.
         $trnUserSlackProfile = $this->findByTrnUserId($pipe->trnUserId);
         if (is_null($trnUserSlackProfile)) {
-            $trnUserSlackProfile                  = new TrnUserSlackProfile();
+            $trnUserSlackProfile                  = new TrnUserSlackProfile;
             $trnUserSlackProfile->trn_user_id     = $pipe->trnUserId;
             $trnUserSlackProfile->slack_user_id   = $pipe->slackUserId;
             $trnUserSlackProfile->slack_user_name = $pipe->slackUserName;

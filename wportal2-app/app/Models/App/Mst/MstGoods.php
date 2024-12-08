@@ -8,6 +8,9 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin MstGoods
+ */
 class MstGoods extends ModelBase
 {
     use EagerLoadHelper, hasFactory;
@@ -26,7 +29,7 @@ class MstGoods extends ModelBase
             'comment'     => $this->comment         ?? '',
             'category'    => $this->category        ?? 0,
             'imagePath'   => $this->image_path      ?? '',
-            'authorEmail' => $this->author_email  ?? '',
+            'authorEmail' => $this->author_email    ?? '',
             'price'       => $this->price           ?? 0,
         ];
     }

@@ -8,6 +8,11 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnProjectNotification
+ *
+ * @extends ModelBase<TrnProjectNotification>
+ */
 class TrnProjectNotification extends ModelBase
 {
     use EagerLoadHelper, hasFactory;

@@ -64,10 +64,13 @@ class LoginController extends Controller
         }
 
         // 一致する認証ユーザーを取得.
-        $pipe->targetAuthUser = AuthUser::query()
+        /** @var AuthUser $targetAuthUser */
+        $targetAuthUser       = AuthUser::query()
             ->where('e_enable_legacy_login', EEnableFlag::ENABLE)
             ->where('email', $pipe->email)
             ->first();
+        $pipe->targetAuthUser = $targetAuthUser;
+
         if (is_null($pipe->targetAuthUser) || ! Hash::check($pipe->password, $pipe->targetAuthUser->password)) {
             return $this->render('Login/Index');
         }
@@ -146,11 +149,13 @@ class LoginController extends Controller
         }
 
         // 許可&パスワードが一致し、不正カウンタが問題ない認証ユーザーを取得.
-        $pipe->targetAuthUser = AuthUser::query()
+        /** @var AuthUser $targetAuthUser */
+        $targetAuthUser       = AuthUser::query()
             ->where('e_enable_sp_login', EEnableFlag::ENABLE)
             ->where('email', $pipe->email)
             ->where('sp_login_failed_count', '<', Constant::INVALID_SP_LOGIN_COUNT)
             ->first();
+        $pipe->targetAuthUser = $targetAuthUser;
 
         // 対象が見つからない場合.
         if (is_null($pipe->targetAuthUser)) {
@@ -166,7 +171,7 @@ class LoginController extends Controller
 
         // tokenコードのチェック.
         try {
-            $google2fa   = new Google2FA();
+            $google2fa   = new Google2FA;
             $isValidCode = $google2fa->verifyKey($pipe->targetAuthUser->sp_google_2fa_secret, $pipe->code);
             if (! $isValidCode) {
                 // 不正アクセスカウントを加算.
@@ -266,6 +271,7 @@ class LoginController extends Controller
     private function createNewUserByGoogle($googleUser): AuthUser
     {
         // アーカイブデータの検索.
+        /** @var AuthUser $archiveAuthUser */
         $archiveAuthUser             = AuthUser::query()
             ->where('email', $googleUser->email)
             ->whereNot('e_archive_level', EArchiveLevel::ALIVE)
@@ -290,7 +296,7 @@ class LoginController extends Controller
             $name                        = $googleUser->user['family_name'].' '.$googleUser->user['given_name'];
 
             // 認証ユーザーを作成.
-            $authUser                    = new AuthUser();
+            $authUser                    = new AuthUser;
             $authUser->email             = $googleUser->getEmail();
             $authUser->name              = $name;
             $authUser->email_verified_at = now();
@@ -328,7 +334,7 @@ class LoginController extends Controller
 EOF;
 
         // 送信パラメータの作成.
-        $param   = new SesParameter();
+        $param   = new SesParameter;
         $param->setFrom('no-reply@wportal.org');
         $param->setTo($to);
         $param->setSubject($subject);

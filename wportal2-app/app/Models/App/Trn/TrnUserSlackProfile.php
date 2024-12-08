@@ -8,6 +8,11 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnUserSlackProfile
+ *
+ * @extends ModelBase<TrnUserSlackProfile>
+ */
 class TrnUserSlackProfile extends ModelBase
 {
     use EagerLoadHelper, HasFactory;

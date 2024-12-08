@@ -26,7 +26,7 @@ class TrnUserProjectPriorityService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_PROJECT_PRIORITY => $this->execAppAttendanceProjectPriority($pipe),
-                default                                    => throw new Exception(),
+                default                                    => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -36,8 +36,10 @@ class TrnUserProjectPriorityService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceProjectPriority(
-        PipeAppAttendanceProjectPriority|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceProjectPriority $pipe */
+
         // 現在の設定の取得.
         $current = $this->findByUserIdAndProjectId(
             $pipe->authUser->TrnUser->id,
@@ -51,7 +53,7 @@ class TrnUserProjectPriorityService extends ModelServiceBase
             $this->updateOrFail($current);
         } else {
             // 新規登録の場合.
-            $new                   = new TrnUserProjectPriority();
+            $new                   = new TrnUserProjectPriority;
             $new->trn_user_id      = $pipe->authUser->TrnUser->id;
             $new->trn_project_id   = $pipe->projectId;
             $new->project_priority = $pipe->priority;

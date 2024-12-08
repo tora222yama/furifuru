@@ -9,6 +9,11 @@ use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin TrnProject
+ *
+ * @extends ModelBase<TrnProject>
+ */
 class TrnProject extends ModelBase
 {
     use EagerLoadHelper, hasFactory;
@@ -17,6 +22,8 @@ class TrnProject extends ModelBase
 
     /**
      * リレーション:TrnProjectUser
+     *
+     * @return HasMany<TrnProjectUser, covariant TrnProject>
      */
     public function TrnProjectUser(): HasMany
     {
@@ -29,6 +36,8 @@ class TrnProject extends ModelBase
 
     /**
      * リレーション:TrnUserProjectPriority
+     *
+     * @return HasMany<TrnUserProjectPriority, covariant TrnProject>
      */
     public function TrnUserProjectPriority(): HasMany
     {
@@ -41,6 +50,8 @@ class TrnProject extends ModelBase
 
     /**
      * リレーション:TrnProjectNotification
+     *
+     * @return HasMany<TrnProjectNotification, covariant TrnProject>
      */
     public function TrnProjectNotification(): HasMany
     {

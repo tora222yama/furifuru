@@ -8,6 +8,11 @@ use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnShopAggregate
+ *
+ * @extends ModelBase<TrnShopAggregate>
+ */
 class TrnShopAggregate extends ModelBase
 {
     use EagerLoadHelper, HasFactory;
@@ -21,8 +26,8 @@ class TrnShopAggregate extends ModelBase
     {
         return [
             'id'         => $this->id                   ?? 0,
-            'mstGoodsId' => $this->mst_goods_id ?? 0,
-            'trnUserId'  => $this->trn_user_id   ?? 0,
+            'mstGoodsId' => $this->mst_goods_id         ?? 0,
+            'trnUserId'  => $this->trn_user_id          ?? 0,
         ];
     }
 }
