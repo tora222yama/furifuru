@@ -13,9 +13,12 @@ use Google\Service\Calendar\Event;
 final class UsecasesCalendarUserScheduleListQuery
 {
     /**
+     * @param  array<mixed>  $args
+     * @return array<mixed>
+     *
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         // 早く完了しないように強制遅延.
         localSleep();
@@ -43,7 +46,7 @@ final class UsecasesCalendarUserScheduleListQuery
                     $ret[] = [
                         'identify'     => "$email-{$event->id}",
                         'eventId'      => $event->id ?: '',
-                        'calendarId'   => $email                          ?? '',
+                        'calendarId'   => $email,
                         'kind'         => $event->kind ?: '',
                         'summary'      => $event->summary ?: '',
                         'start'        => $event->getStart()->dateTime ?: '',

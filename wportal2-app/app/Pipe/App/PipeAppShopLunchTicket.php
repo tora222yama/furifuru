@@ -30,6 +30,8 @@ final class PipeAppShopLunchTicket extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -48,9 +50,7 @@ final class PipeAppShopLunchTicket extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 
     /**
      * データ準備

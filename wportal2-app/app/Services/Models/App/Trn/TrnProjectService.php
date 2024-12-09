@@ -111,6 +111,9 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -118,7 +121,7 @@ class TrnProjectService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
-        /** @var Collection<TrnProject> $trnProjectList */
+        /** @var Collection<int, TrnProject> $trnProjectList */
         $trnProjectList      = TrnProject::query()
             ->with($with)
             ->alive()
@@ -139,6 +142,8 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * Idによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,

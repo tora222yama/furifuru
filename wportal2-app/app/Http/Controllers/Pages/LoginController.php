@@ -238,7 +238,7 @@ class LoginController extends Controller
     /**
      * 919ドメインかどうか.
      */
-    private function is919Domain($googleUser): bool
+    private function is919Domain(object $googleUser): bool
     {
         // 919ドメインチェックが無効の場合は919ドメインとして扱う.
         $check919Domain = config('auth.check919Domain');
@@ -270,7 +270,7 @@ class LoginController extends Controller
      *
      * @throws Throwable
      */
-    private function createNewUserByGoogle($googleUser): AuthUser
+    private function createNewUserByGoogle(object $googleUser): AuthUser
     {
         // アーカイブデータの検索.
         /** @var AuthUser|null $archiveAuthUser */

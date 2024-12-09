@@ -186,6 +186,9 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<string>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -195,7 +198,7 @@ class TrnUserService extends ModelServiceBase
         bool $inactiveUserFlag = false,
     ): array {
         // リスト取得.
-        /** @var Collection<TrnUser> $trnUserList */
+        /** @var Collection<int, TrnUser> $trnUserList */
         $trnUserList      = TrnUser::query()
             ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
@@ -238,9 +241,13 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * 全て取得.
+     *
+     * @param  array<string>  $with
+     * @return Collection<int, TrnUser>
      */
     public function list(array $with = []): Collection
     {
+        /** @var Collection<int, TrnUser> */
         return TrnUser::query()
             ->with($with)
             ->alive()
@@ -249,6 +256,8 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * IDで検索(orFail).
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(int $id, array $with = []): ?TrnUser
     {

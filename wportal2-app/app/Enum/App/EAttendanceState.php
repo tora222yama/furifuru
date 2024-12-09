@@ -44,7 +44,7 @@ enum EAttendanceState: int
     /**
      * 出勤・退勤・休憩in/outが含まれているか.
      *
-     * @param  Collection<TrnAttendanceState>  $attendanceStateList
+     * @param  Collection<int, TrnAttendanceState>  $attendanceStateList
      */
     public static function isPerfectAttendance(Collection $attendanceStateList): bool
     {

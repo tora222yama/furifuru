@@ -16,6 +16,7 @@ use App\Pipe\App\PipeAppShopLunchTicket;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Throwable;
@@ -75,7 +76,7 @@ EOF;
             // rakumoのブロック実行.
             GoogleCalendarService::blockSchedule(
                 $pipe->authUser->email,
-                collect([$pipe->mstGoods->author_email]),
+                new Collection([$pipe->mstGoods->author_email]),
                 $pipe->start,
                 $pipe->end,
                 $pipe->mstGoods->name,
@@ -89,8 +90,11 @@ EOF;
 
     /**
      * 商品マスタ取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
-    private function getMstGoodsList($request, array $with = []): array
+    private function getMstGoodsList(Request $request, array $with = []): array
     {
         return MstGoodsService::list($with)
             ->map(fn (MstGoods $mstGoods) => $mstGoods->toPayload($with))

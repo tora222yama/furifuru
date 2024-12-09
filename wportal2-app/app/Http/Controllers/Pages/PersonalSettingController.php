@@ -29,7 +29,7 @@ class PersonalSettingController extends Controller
     public function show(): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('PersonalSetting/Show/Index', [
@@ -45,7 +45,7 @@ class PersonalSettingController extends Controller
     public function edit(): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('PersonalSetting/Edit/Index', [
@@ -95,6 +95,8 @@ class PersonalSettingController extends Controller
 
     /**
      * TrnUserSlackProfileの取得.
+     *
+     * @return array<mixed>
      */
     private function getTrnUserSlackProfile(): array
     {

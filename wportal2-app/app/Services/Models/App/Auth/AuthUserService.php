@@ -197,6 +197,8 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * IDで検索(orFail).
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(int $id, array $with = []): ?AuthUser
     {

@@ -99,6 +99,8 @@ class SlackService
 
     /**
      * 情報チャンネルへの通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notifyNotice(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
@@ -133,6 +135,8 @@ EOF;
 
     /**
      * エラーチャンネルへの通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notifyError(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
@@ -172,6 +176,8 @@ EOF;
 
     /**
      * メッセージ・HooksUrlを指定して通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notify(string $message, string $url, array $appendParams): void
     {

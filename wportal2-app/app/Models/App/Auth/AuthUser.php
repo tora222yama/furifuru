@@ -7,6 +7,7 @@ namespace App\Models\App\Auth;
 use App\Models\App\EloquentBuilder;
 use App\Models\App\Trn\TrnUser;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Auth\AuthUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,6 +18,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class AuthUser extends Authenticatable
 {
+    /** @use HasFactory<AuthUserFactory> */
     use EagerLoadHelper, HasFactory, Notifiable;
 
     protected $table    = 'auth_user';
@@ -79,6 +81,10 @@ class AuthUser extends Authenticatable
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

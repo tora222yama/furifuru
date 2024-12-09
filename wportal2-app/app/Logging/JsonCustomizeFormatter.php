@@ -17,6 +17,8 @@ class JsonCustomizeFormatter extends JsonFormatter
 {
     /**
      * JsonFormatter->normalizeExceptionをoverride
+     *
+     * @return array<mixed>
      */
     protected function normalizeException(Throwable $e, int $depth = 0): array
     {

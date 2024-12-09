@@ -23,7 +23,7 @@ class GoogleCalendarService
     /**
      * 指定期間の予定を取得.
      *
-     * @return Collection<Event>
+     * @return Collection<int, Event>
      *
      * @throws Exception
      */
@@ -48,7 +48,10 @@ class GoogleCalendarService
                     'orderBy'      => 'startTime',
                 ]);
 
-            return collect($results->getItems());
+            /** @var Collection<int, Event> $items */
+            $items   = $results->getItems();
+
+            return collect($items);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -58,6 +61,8 @@ class GoogleCalendarService
 
     /**
      * 予定を作成.
+     *
+     * @param  Collection<int, string>  $calendarIdList
      *
      * @throws Exception
      * @throws \Google\Service\Exception
@@ -131,7 +136,7 @@ class GoogleCalendarService
         ];
 
         // クライアント作成.
-        $client             = new Google_Client();
+        $client             = new Google_Client;
         $client->setApplicationName('wportal カレンダー操作');
         $client->setScopes($scope);
         $client->setAuthConfig($jsonKey);

@@ -71,6 +71,8 @@ class EnumPathPair
 
     /**
      * Enumの配列を取得.
+     *
+     * @return EnumValue[]
      */
     public function getEnumList(): array
     {
@@ -79,6 +81,8 @@ class EnumPathPair
 
     /**
      * 入力パラメータを取得.
+     *
+     * @return array{bool, string}
      */
     public function parseInputParameter(): array
     {

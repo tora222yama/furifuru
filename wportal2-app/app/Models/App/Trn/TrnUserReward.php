@@ -7,7 +7,6 @@ namespace App\Models\App\Trn;
 use App\Models\App\ModelBase;
 use App\Models\App\Mst\MstReward;
 use App\Trait\EagerLoadHelper;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class TrnUserReward extends ModelBase
 {
-    use EagerLoadHelper, HasFactory;
+    use EagerLoadHelper;
 
     protected $table = 'trn_user_reward';
 
@@ -37,6 +36,10 @@ class TrnUserReward extends ModelBase
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

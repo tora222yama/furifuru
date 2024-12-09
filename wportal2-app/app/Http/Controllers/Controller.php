@@ -11,11 +11,11 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Ramsey\Collection\Collection;
 
 class Controller extends BaseController
 {
@@ -27,6 +27,8 @@ class Controller extends BaseController
      * Inertiaを介してhtmlを作成
      *
      * @note ログイン情報など、共通のパラメータを処理.
+     *
+     * @param  array<mixed>|Arrayable<string, mixed>  $props
      */
     protected function render(
         string $component,
@@ -51,6 +53,9 @@ class Controller extends BaseController
 
     /**
      * 認証ユーザー情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>|null
      */
     private function getAuthUser(array $with = []): ?array
     {
@@ -76,6 +81,10 @@ class Controller extends BaseController
         ];
     }
 
+    /**
+     * @param  array<mixed>  $with
+     * @return array<mixed>
+     */
     private function getUserAuthorityList(array $with = []): array
     {
         if (is_null($this->authUser) || is_null($this->authUser->TrnUser)) {
@@ -83,7 +92,7 @@ class Controller extends BaseController
         }
 
         // TODO: サービスへ移動
-        /** @var Collection<TrnUserAuthority> $trnUserAuthorityList */
+        /** @var Collection<int, TrnUserAuthority> $trnUserAuthorityList */
         $trnUserAuthorityList = TrnUserAuthority::query()
             ->with($with)
             ->where('trn_user_id', $this->authUser->TrnUser->id)

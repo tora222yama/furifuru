@@ -60,11 +60,13 @@ class TrnAttendanceStateService extends ModelServiceBase
         $this->insertOrFail($new);
 
         // 本日の出退勤をすべて格納しておく.
-        $pipe->todayAttendanceStateList = TrnAttendanceState::query()
+        /** @var Collection<int, TrnAttendanceState> $stateList */
+        $stateList                      = TrnAttendanceState::query()
             ->where('trn_user_id', $pipe->authUser->TrnUser->id)
             ->whereDate('created_at', Carbon::now())
             ->alive()
             ->get();
+        $pipe->todayAttendanceStateList = $stateList;
     }
 
     /**
@@ -120,12 +122,15 @@ class TrnAttendanceStateService extends ModelServiceBase
 
     /**
      * ユーザーIDと期間を指定して、出退勤情報を取得.
+     *
+     * @return Collection<int, TrnAttendanceState>
      */
     public function listByUserIdAndPeriod(
         int $trnUserId,
         Carbon $startOfMonth,
         Carbon $endOfMonth
     ): Collection {
+        /** @var Collection<int, TrnAttendanceState> */
         return TrnAttendanceState::query()
             ->where('trn_user_id', $trnUserId)
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])

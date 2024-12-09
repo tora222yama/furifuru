@@ -90,9 +90,12 @@ class TrnProjectUserService extends ModelServiceBase
 
     /**
      * ユーザーID指定でリスト取得.
+     *
+     * @return Collection<int, TrnProjectUser>
      */
     public function listByTrnUserId(int $trnUserId): Collection
     {
+        /** @var Collection<int, TrnProjectUser> */
         return TrnProjectUser::query()
             ->where('trn_user_id', $trnUserId)
             ->alive()

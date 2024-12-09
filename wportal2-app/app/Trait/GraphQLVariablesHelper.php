@@ -6,10 +6,13 @@ namespace App\Trait;
 
 trait GraphQLVariablesHelper
 {
+    /** @var array<mixed> */
     protected array $args = [];
 
     /**
      * argumentsから数値の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsInteger(string $key, ?array $args = null): int
     {
@@ -22,6 +25,8 @@ trait GraphQLVariablesHelper
 
     /**
      * argumentsから文字列の引数を取得
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsString(string $key, ?array $args = null): string
     {
@@ -34,6 +39,8 @@ trait GraphQLVariablesHelper
 
     /**
      * argumentsから真偽値の引数を取得
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsBoolean(string $key, ?array $args = null): bool
     {
@@ -46,6 +53,9 @@ trait GraphQLVariablesHelper
 
     /**
      * argumentsから数値の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
+     * @return array<int>
      */
     protected function getArgAsIntArray(string $key, ?array $args = null): array
     {
@@ -62,6 +72,9 @@ trait GraphQLVariablesHelper
 
     /**
      * argumentsから文字列の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
+     * @return array<string>
      */
     protected function getArgAsStringArray(string $key, ?array $args = null): array
     {

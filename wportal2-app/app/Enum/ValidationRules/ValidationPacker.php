@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
  */
 final class ValidationPacker
 {
+    /** @var Collection<int, ValidationPackerData> */
     private Collection $dataList;
 
     /**
@@ -21,11 +22,13 @@ final class ValidationPacker
      */
     public function __construct()
     {
-        $this->dataList = collect();
+        $this->dataList = new Collection;
     }
 
     /**
      * バリデーション指定の追加.
+     *
+     * @param  Collection<int, ValidationRuleSet>  $ruleSetList
      */
     public function addValidation(
         string $tag,
@@ -53,6 +56,8 @@ final class ValidationPacker
 
     /**
      * バリデーション用のデータ配列を取得.
+     *
+     * @return array<string, mixed|null>
      */
     public function getData(): array
     {
@@ -63,6 +68,8 @@ final class ValidationPacker
 
     /**
      * バリデーション用のルール配列を取得.
+     *
+     * @return array<mixed>
      */
     public function getRules(): array
     {
@@ -76,6 +83,8 @@ final class ValidationPacker
 
     /**
      * バリデーション用のメッセージ配列を取得.
+     *
+     * @return array<mixed>
      */
     public function getMessages(): array
     {

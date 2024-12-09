@@ -194,6 +194,9 @@ class ProjectController extends Controller
 
     /**
      * ページネーション・プロジェクト.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationProject(Request $request, array $with = []): array
     {
@@ -210,6 +213,9 @@ class ProjectController extends Controller
 
     /**
      * 単独取得・プロジェクト.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getProject(Request $request, array $with = []): array
     {

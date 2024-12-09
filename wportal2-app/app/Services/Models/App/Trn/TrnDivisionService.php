@@ -107,6 +107,9 @@ class TrnDivisionService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -114,7 +117,7 @@ class TrnDivisionService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
-        /** @var Collection<TrnDivision> $trnDivisionList */
+        /** @var Collection<int, TrnDivision> $trnDivisionList */
         $trnDivisionList      = TrnDivision::query()
             ->with($with)
             ->alive()
@@ -135,6 +138,8 @@ class TrnDivisionService extends ModelServiceBase
 
     /**
      * Idによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,

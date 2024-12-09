@@ -12,8 +12,11 @@ use Illuminate\Support\Collection;
 
 class MstRewardService extends ModelServiceBase
 {
-    /**.
+    /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -21,7 +24,7 @@ class MstRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
-        /** @var Collection<MstReward> $mstRewardList */
+        /** @var Collection<int, MstReward> $mstRewardList */
         $mstRewardList      = MstReward::query()
             ->with($with)
             ->alive()

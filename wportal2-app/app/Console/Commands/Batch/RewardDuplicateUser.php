@@ -42,7 +42,7 @@ class RewardDuplicateUser extends Command
     public function handle(): int
     {
         // 対象リワードの獲得.
-        /** @var Collection<TrnUserReward> $targetList */
+        /** @var Collection<int, TrnUserReward> $targetList */
         $targetList = TrnUserReward::query()
             ->orWhere(function (EloquentBuilder $query) {
                 $query->where('mst_reward_id', EMstReward::CREATE_ACCOUNT->value)

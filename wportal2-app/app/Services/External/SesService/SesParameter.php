@@ -15,6 +15,7 @@ class SesParameter
     private string $from        = '';
 
     // 送信先.
+    /** @var array<string> */
     private array $toArray      = [];
 
     // 題名.
@@ -40,6 +41,8 @@ class SesParameter
 
     /**
      * 送信用パラメータの取得.
+     *
+     * @return array<mixed>
      */
     public function getParameterArray(): array
     {
@@ -86,6 +89,8 @@ class SesParameter
 
     /**
      * 送信先の設定（複数）
+     *
+     * @param  array<string>  $toArray
      */
     public function setToArray(array $toArray): void
     {

@@ -214,6 +214,9 @@ class UserController extends Controller
 
     /**
      * ページネーション・ユーザー
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationUser(Request $request, array $with = []): array
     {
@@ -234,6 +237,9 @@ class UserController extends Controller
 
     /**
      * 単独取得・ユーザー.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getUser(Request $request, array $with = []): array
     {

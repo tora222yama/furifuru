@@ -21,10 +21,13 @@ final class PipeAppProjectUpdate extends PipeBase
 
     public bool $editNotification = false;
 
+    /** @var Collection<int, InputNotification> */
     public Collection $notificationList;
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -58,7 +61,7 @@ final class PipeAppProjectUpdate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // 名前.
         $packer->addValidation(

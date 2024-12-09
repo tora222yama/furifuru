@@ -72,6 +72,8 @@ trait SlackApi
 
     /**
      * curlを実行
+     *
+     * @param  array<mixed>  $options
      */
     private function executeCurl(array $options): bool|string
     {

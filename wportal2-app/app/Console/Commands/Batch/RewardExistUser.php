@@ -44,7 +44,7 @@ class RewardExistUser extends Command
     public function handle(): int
     {
         // 対象ユーザーの取得.
-        /** @var Collection<TrnUser> $targetList */
+        /** @var Collection<int, TrnUser> $targetList */
         $targetList = TrnUser::query()
             ->alive()
             ->whereDoesntHave('TrnUserReward', function (EloquentBuilder $query) {

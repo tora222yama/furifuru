@@ -30,6 +30,8 @@ final class ValidationRuleSet
 
     /**
      * パック情報からルールを取得.
+     *
+     * @return Collection<int, mixed>
      */
     public function rule(): Collection
     {

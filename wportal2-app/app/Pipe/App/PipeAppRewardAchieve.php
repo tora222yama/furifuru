@@ -18,12 +18,15 @@ final class PipeAppRewardAchieve extends PipeBase
 
     public ?AuthUser $authUser;
 
+    /** @var Collection<int, TrnUserReward>|null */
     public ?Collection $trnUserRewardIdList;
 
     public int $achieveGold     = 0;
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -65,7 +68,5 @@ final class PipeAppRewardAchieve extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

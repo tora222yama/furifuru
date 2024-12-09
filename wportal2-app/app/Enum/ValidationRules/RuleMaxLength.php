@@ -16,7 +16,7 @@ class RuleMaxLength implements ValidationRule
      *
      * @return void
      */
-    public function __construct($max)
+    public function __construct(int $max)
     {
         $this->max = $max;
     }

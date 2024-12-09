@@ -24,6 +24,9 @@ class PaginationController extends Controller
 
     /**
      * ページネーション・施設
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationFacility(Request $request, array $with = []): array
     {
@@ -42,8 +45,11 @@ class PaginationController extends Controller
 
     /**
      * 固定リスト・施設.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
-    private function getFixList(array $with = [])
+    private function getFixList(array $with = []): array
     {
         return TrnUser::query()
             ->with($with)

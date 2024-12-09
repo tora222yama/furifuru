@@ -71,6 +71,9 @@ class RewardController extends Controller
 
     /**
      * ページネーション・報酬.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationReward(Request $request, array $with = []): array
     {
@@ -88,6 +91,9 @@ class RewardController extends Controller
 
     /**
      * ページネーション・報酬マスタ.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationMstReward(Request $request, array $with = []): array
     {

@@ -6,7 +6,6 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin TrnUserSlackProfile
@@ -15,12 +14,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class TrnUserSlackProfile extends ModelBase
 {
-    use EagerLoadHelper, HasFactory;
+    use EagerLoadHelper;
 
     protected $table = 'trn_user_slack_profile';
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

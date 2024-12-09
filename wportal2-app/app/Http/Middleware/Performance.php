@@ -39,18 +39,20 @@ class Performance
     /**
      * DB情報.
      */
+    /** @var Collection<int, array<mixed>>|null */
     private ?Collection $queryList     = null;
 
     private int $queryCount            = 0;
 
     private float $queryTime           = 0.0;
 
+    /** @var Collection<int, mixed>|null */
     private ?Collection $querySqlList  = null;
 
     /**
      * フラグが有効の場合に計測を実施する.
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         // 計測開始.
         $this->startMeasure($request);

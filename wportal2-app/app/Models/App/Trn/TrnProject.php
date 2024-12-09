@@ -66,6 +66,10 @@ class TrnProject extends ModelBase
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

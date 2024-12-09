@@ -6,19 +6,24 @@ namespace App\Models\App\Mst;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin MstGoods
+ *
+ * @extends ModelBase<MstGoods>
  */
 class MstGoods extends ModelBase
 {
-    use EagerLoadHelper, hasFactory;
+    use EagerLoadHelper;
 
     protected $table = 'mst_goods';
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

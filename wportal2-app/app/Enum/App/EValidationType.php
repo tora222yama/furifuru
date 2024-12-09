@@ -55,7 +55,8 @@ enum EValidationType: string
     /**
      * バリデーションルールを取得.
      *
-     * @param  Collection<ValidationRuleSet>  $rules
+     * @param  Collection<int, ValidationRuleSet>  $rules
+     * @return array<mixed>
      */
     public static function getRules(
         string $columnTag,
@@ -72,38 +73,43 @@ enum EValidationType: string
      * バリデーションメッセージを取得.
      *
      * @param  Collection<int, ValidationRuleSet>  $rules
+     * @return array<mixed>
      */
     public static function getMessages(
         string $columnTag,
         string $columnName,
         Collection $rules,
     ): array {
-        return $rules->filter(function ($rule) {
+        /** @var Collection<int, ValidationRuleSet> $ruleSetList */
+        $ruleSetList = $rules->filter(function ($rule) {
             /** @phpstan-ignore-next-line */
             return gettype($rule) === 'string';
-        })
-            ->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
-                // ルール内の各指定について処理する.
-                return $pack->rule()->flatMap(function (string $rule) use (
-                    $columnTag,
-                    $pack,
-                    $columnName
-                ) {
-                    // 設定値付きのタグから設定値を除外.
-                    $tag = $rule;
-                    if (Str::contains($tag, ':')) {
-                        $tag = Str::substr($rule, 0, Str::position($rule, ':'));
-                    }
+        });
 
-                    // タグを設定、required|not_inの場合は
-                    // column.requiredとcolumn.not_inの両方を設定しておく必要がある.
-                    return ["$columnTag.".$tag => $pack->message($columnName)];
-                });
-            })->toArray();
+        return $ruleSetList->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
+            // ルール内の各指定について処理する.
+            return $pack->rule()->flatMap(function (string $rule) use (
+                $columnTag,
+                $pack,
+                $columnName
+            ) {
+                // 設定値付きのタグから設定値を除外.
+                $tag = $rule;
+                if (Str::contains($tag, ':')) {
+                    $tag = Str::substr($rule, 0, Str::position($rule, ':'));
+                }
+
+                // タグを設定、required|not_inの場合は
+                // column.requiredとcolumn.not_inの両方を設定しておく必要がある.
+                return ["$columnTag.".$tag => $pack->message($columnName)];
+            });
+        })->toArray();
     }
 
     /**
      * バリデーションルールを返す.
+     *
+     * @return Collection<int, mixed>
      */
     public function getRule(ValidationRuleSet $pack): Collection
     {

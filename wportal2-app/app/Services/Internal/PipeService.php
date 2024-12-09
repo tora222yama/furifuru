@@ -14,13 +14,16 @@ use Exception;
  */
 class PipeService
 {
+    /** @var PipeBase[] */
     protected array $pipes             = [];
 
+    /** @var array<mixed> */
     protected array $pipeArgs          = [];
 
     /**
      * エラートレース用.
      */
+    /** @var array<mixed> */
     protected array $paramArgs         = [];
 
     protected EPipeKind $pipeKind      = EPipeKind::INVALID;
@@ -35,7 +38,6 @@ class PipeService
     public function getPipes(string $class): array
     {
         return array_filter($this->pipes, function ($pipe) use ($class) {
-            /** @var PipeBase $pipe */
             return ! $pipe->isCalled($class);
         });
     }
@@ -52,6 +54,9 @@ class PipeService
 
     /**
      * 実行結果を返す.
+     *
+     * @param  array<mixed>  $attachResult
+     * @return array<mixed>
      */
     public function getResult(array $attachResult = []): array
     {
@@ -65,6 +70,9 @@ class PipeService
 
     /**
      * ステータスを指定して実行結果を返す.
+     *
+     * @param  array<mixed>  $attachResult
+     * @return array<mixed>
      */
     public function getResultWithStatus(EStatusCode $code, string $message = '', array $attachResult = []): array
     {
@@ -85,6 +93,9 @@ class PipeService
 
     /**
      * バリデーション実行結果を返す.
+     *
+     * @param  array<mixed>  $attachResult
+     * @return array<mixed>
      */
     public function getValidationResult(array $attachResult = []): array
     {
@@ -93,7 +104,6 @@ class PipeService
 
         // バリデーションエラーを格納.
         $errorValues    = [];
-        /** @var PipeBase $pipe */
         foreach ($this->pipes as $pipe) {
             $validationErrors = $pipe->getValidationErrors();
             foreach ($validationErrors as $key => $validationError) {
@@ -117,7 +127,6 @@ class PipeService
     public function isValid(): bool
     {
         foreach ($this->pipes as $pipe) {
-            /** @var PipeBase $pipe */
             if (! $pipe->isValid()) {
                 return false;
             }
@@ -139,6 +148,8 @@ class PipeService
 
     /**
      * フロントから渡されたパラメータを取得する.
+     *
+     * @return array<mixed>
      */
     public function getParamArgs(): array
     {
@@ -147,6 +158,8 @@ class PipeService
 
     /**
      * フロントから渡されたパラメータを取得する.
+     *
+     * @return array{EPipeKind, array<mixed>}
      */
     public function getPipeArgs(): array
     {
@@ -155,6 +168,8 @@ class PipeService
 
     /**
      * フロントから渡されたパラメータをエラートレース用に保持しておく.
+     *
+     * @param  array<mixed>  $args
      */
     public function storeParam(array $args): void
     {
@@ -163,6 +178,8 @@ class PipeService
 
     /**
      * フロントから渡されたパラメータをエラートレース用に保持しておく.
+     *
+     * @param  array<mixed>  $args
      */
     public function storePipe(EPipeKind $kind, array $args): void
     {

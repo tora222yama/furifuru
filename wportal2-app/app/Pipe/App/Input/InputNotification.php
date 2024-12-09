@@ -21,7 +21,7 @@ final class InputNotification
 
     public static function createFromObject(object $object): InputNotification
     {
-        $new                    = new InputNotification();
+        $new                    = new InputNotification;
 
         $new->id                = $object->id;
         $new->trnProjectId      = $object->trnProjectId;

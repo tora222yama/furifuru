@@ -96,6 +96,8 @@ class TrnProjectNotificationService extends ModelServiceBase
 
     /**
      * IDによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,
@@ -111,11 +113,12 @@ class TrnProjectNotificationService extends ModelServiceBase
     /**
      * ID配列指定によるリスト取得.
      *
-     * @return Collection<TrnProjectNotification>
+     * @param  array<int>  $projectIdList
+     * @return Collection<int, TrnProjectNotification>
      */
     public function listByTrnProjectId(array $projectIdList): Collection
     {
-        /** @var Collection<TrnProjectNotification> */
+        /** @var Collection<int, TrnProjectNotification> */
         return TrnProjectNotification::query()
             ->whereIn('trn_project_id', $projectIdList)
             ->alive()

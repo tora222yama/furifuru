@@ -30,6 +30,8 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -61,7 +63,7 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // 表示名.
         $packer->addValidation(

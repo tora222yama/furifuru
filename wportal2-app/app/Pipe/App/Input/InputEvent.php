@@ -15,9 +15,12 @@ final class InputEvent
 
     public Carbon $updatedAt;
 
+    /**
+     * @param  array<mixed>  $array
+     */
     public static function createFromArray(array $array): InputEvent
     {
-        $new            = new InputEvent();
+        $new            = new InputEvent;
 
         $new->uid       = (int) $array['uid'];
         $new->updatedAt = Carbon::createFromTimeString($array['updatedAt']);

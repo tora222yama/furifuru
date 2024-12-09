@@ -74,7 +74,7 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー作成.
         $this->beginFactory('TrnUser', 150);
-        /** @var Collection<AuthUser> $authUserList */
+        /** @var Collection<int, AuthUser> $authUserList */
         $authUserList = AuthUser::query()->get();
         $authUserList->each(function (AuthUser $authUser) use ($instance) {
             // 対応するユーザーを作成.
@@ -90,7 +90,7 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー画像更新.
         $this->beginFactory('fix face image', 150);
-        /** @var Collection<TrnUser> $trnUserList */
+        /** @var Collection<int, TrnUser> $trnUserList */
         $trnUserList  = TrnUser::query()->get();
         $trnUserList->each(function (TrnUser $trnUser) use ($instance) {
             // 初期画像を保存.

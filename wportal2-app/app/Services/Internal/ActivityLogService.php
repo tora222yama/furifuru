@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\Log;
  */
 final class ActivityLogService
 {
+    /** @var Collection<int, string>|null */
     private ?Collection $readyLogList       = null;
 
+    /** @var Collection<int, string>|null */
     private ?Collection $transactionLogList = null;
 
     /**
      * Modelの変更を実施.
+     *
+     * @param  array<mixed>  $appendKeyValue
      */
     public function changeModel(
         ?AuthUser $authUser,

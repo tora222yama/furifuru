@@ -189,6 +189,9 @@ class DivisionController extends Controller
 
     /**
      * ページネーション・課
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getPaginationDivision(Request $request, array $with = []): array
     {
@@ -205,6 +208,9 @@ class DivisionController extends Controller
 
     /**
      * 単独取得・課.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getDivision(Request $request, array $with = []): array
     {

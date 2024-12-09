@@ -86,7 +86,7 @@ class TrnUserRewardService extends ModelServiceBase
         /** @var PipeAppRewardAchieve $pipe */
 
         // 対象となる報酬を取得.
-        /** @var Collection<TrnUserReward> $targetReward */
+        /** @var Collection<int, TrnUserReward> $targetReward */
         $targetReward = TrnUserReward::query()
             ->where('trn_user_id', $pipe->authUser->TrnUser->id)
             ->whereIn('id', $pipe->trnUserRewardIdList)
@@ -133,8 +133,11 @@ class TrnUserRewardService extends ModelServiceBase
         $this->insertOrFail($model);
     }
 
-    /**.
+    /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $trnUserId,
@@ -143,7 +146,7 @@ class TrnUserRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
-        /** @var Collection<TrnUserReward> $trnUserRewardList */
+        /** @var Collection<int, TrnUserReward> $trnUserRewardList */
         $trnUserRewardList      = TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->with($with)
@@ -229,12 +232,16 @@ class TrnUserRewardService extends ModelServiceBase
 
     /**
      * 達成可能な報酬をリストで取得.
+     *
+     * @param  array<mixed>  $with
+     * @return Collection<int, TrnUserReward>
      */
     public function listAchievable(
         int $trnUserId,
         int $trnUserRewardId,
         array $with = [],
     ): Collection {
+        /** @var Collection<int, TrnUserReward> */
         return TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->where('achievement_count', '>', 'received_count')
@@ -257,7 +264,7 @@ class TrnUserRewardService extends ModelServiceBase
         // TODO: キャッシュ化を検討する.
 
         // 対象となる報酬のリストを取得.
-        /** @var Collection<TrnUserReward> $trnUserRewardList */
+        /** @var Collection<int, TrnUserReward> $trnUserRewardList */
         $trnUserRewardList = TrnUserReward::query()
             ->where('trn_user_id', $authUser->TrnUser->id)
             ->where('achievement_count', '>', 'received_count')
