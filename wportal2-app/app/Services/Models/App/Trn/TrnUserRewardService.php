@@ -86,6 +86,7 @@ class TrnUserRewardService extends ModelServiceBase
         /** @var PipeAppRewardAchieve $pipe */
 
         // 対象となる報酬を取得.
+        /** @var Collection<TrnUserReward> $targetReward */
         $targetReward = TrnUserReward::query()
             ->where('trn_user_id', $pipe->authUser->TrnUser->id)
             ->whereIn('id', $pipe->trnUserRewardIdList)
@@ -142,6 +143,7 @@ class TrnUserRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
+        /** @var Collection<TrnUserReward> $trnUserRewardList */
         $trnUserRewardList      = TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->with($with)
@@ -255,13 +257,14 @@ class TrnUserRewardService extends ModelServiceBase
         // TODO: キャッシュ化を検討する.
 
         // 対象となる報酬のリストを取得.
+        /** @var Collection<TrnUserReward> $trnUserRewardList */
         $trnUserRewardList = TrnUserReward::query()
             ->where('trn_user_id', $authUser->TrnUser->id)
             ->where('achievement_count', '>', 'received_count')
             ->alive()
             ->get();
 
-        return $trnUserRewardList->reduce(function (int $carry, TrnUserReward $trnUserReward) {
+        return (int) $trnUserRewardList->reduce(function (int $carry, TrnUserReward $trnUserReward) {
             return $carry + ($trnUserReward->achievement_count - $trnUserReward->received_count);
         }, 0);
     }

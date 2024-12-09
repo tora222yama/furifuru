@@ -24,6 +24,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Ramsey\Collection\Collection;
 use Throwable;
 
 class AttendanceController extends Controller
@@ -157,7 +158,8 @@ class AttendanceController extends Controller
      */
     private function getProjectList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<TrnProject> $trnProjectList */
         $trnProjectList = TrnProject::query()
             ->with($with)
             ->alive()
@@ -173,7 +175,8 @@ class AttendanceController extends Controller
      */
     private function getDivisionList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<TrnDivision> $trnDivisionList */
         $trnDivisionList = TrnDivision::query()
             ->with($with)
             ->alive()
@@ -189,7 +192,8 @@ class AttendanceController extends Controller
      */
     private function getUserList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<TrnUser> $trnUserList */
         $trnUserList = TrnUser::query()
             ->with($with)
             ->alive()

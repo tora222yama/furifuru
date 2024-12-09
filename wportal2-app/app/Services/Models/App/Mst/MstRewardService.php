@@ -8,6 +8,7 @@ use App\Enum\App\EEnableFlag;
 use App\Enum\Mst\EMstReward;
 use App\Models\App\Mst\MstReward;
 use App\Services\Models\ModelServiceBase;
+use Illuminate\Support\Collection;
 
 class MstRewardService extends ModelServiceBase
 {
@@ -20,6 +21,7 @@ class MstRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
+        /** @var Collection<MstReward> $mstRewardList */
         $mstRewardList      = MstReward::query()
             ->with($with)
             ->alive()

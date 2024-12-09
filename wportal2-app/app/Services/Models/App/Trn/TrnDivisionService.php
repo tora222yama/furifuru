@@ -14,6 +14,7 @@ use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnDivisionService extends ModelServiceBase
@@ -113,6 +114,7 @@ class TrnDivisionService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
+        /** @var Collection<TrnDivision> $trnDivisionList */
         $trnDivisionList      = TrnDivision::query()
             ->with($with)
             ->alive()

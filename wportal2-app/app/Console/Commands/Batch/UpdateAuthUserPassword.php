@@ -45,7 +45,7 @@ class UpdateAuthUserPassword extends Command
             return self::FAILURE;
         }
 
-        $authUser           = AuthUserService::findByIdOrFail($authUserId);
+        $authUser           = AuthUserService::findByIdOrFail((int) $authUserId);
 
         // 値の更新.
         $authUser->password = $password;

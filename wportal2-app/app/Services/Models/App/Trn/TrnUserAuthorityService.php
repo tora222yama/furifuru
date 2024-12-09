@@ -18,6 +18,7 @@ class TrnUserAuthorityService extends ModelServiceBase
         int $trnUserId,
         Collection $authorityList
     ): bool {
+        /** @var Collection<TrnUserAuthority> $hasList */
         $hasList      = TrnUserAuthority::query()
             ->where('trn_user_id', $trnUserId)
             ->alive()

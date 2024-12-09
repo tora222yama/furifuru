@@ -238,7 +238,7 @@ class UserController extends Controller
     private function getUser(Request $request, array $with = []): array
     {
         return TrnUserService::findByIdOrFail(
-            $request->route('userId'),
+            (int) $request->route('userId'),
             $with
         )->toPayload($with);
     }

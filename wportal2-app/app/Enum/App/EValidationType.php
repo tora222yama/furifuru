@@ -71,7 +71,7 @@ enum EValidationType: string
     /**
      * バリデーションメッセージを取得.
      *
-     * @param  Collection<ValidationRuleSet>  $rules
+     * @param  Collection<int, ValidationRuleSet>  $rules
      */
     public static function getMessages(
         string $columnTag,
@@ -79,6 +79,7 @@ enum EValidationType: string
         Collection $rules,
     ): array {
         return $rules->filter(function ($rule) {
+            /** @phpstan-ignore-next-line */
             return gettype($rule) === 'string';
         })
             ->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {

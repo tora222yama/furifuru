@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
+use Database\Factories\App\Trn\TrnUserDivisionPriorityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class TrnUserDivisionPriority extends ModelBase
 {
+    /** @use HasFactory<TrnUserDivisionPriorityFactory> */
     use HasFactory;
 
     protected $table = 'trn_user_division_priority';

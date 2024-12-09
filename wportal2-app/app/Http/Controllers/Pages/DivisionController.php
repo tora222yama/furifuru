@@ -29,7 +29,7 @@ class DivisionController extends Controller
     public function invoke(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Division/Index', [
@@ -50,7 +50,7 @@ class DivisionController extends Controller
     public function show(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Division/Show/Index', [
@@ -71,7 +71,7 @@ class DivisionController extends Controller
     public function edit(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Division/Edit/Index', [
@@ -209,7 +209,7 @@ class DivisionController extends Controller
     private function getDivision(Request $request, array $with = []): array
     {
         return TrnDivisionService::findByIdOrFail(
-            $request->route('divisionId'),
+            (int) $request->route('divisionId'),
             $with,
         )->toPayload($with);
     }

@@ -16,6 +16,7 @@ use App\Models\App\Trn\TrnUserDivisionPriority;
 use App\Models\App\Trn\TrnUserProjectPriority;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Random\RandomException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -73,6 +74,7 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー作成.
         $this->beginFactory('TrnUser', 150);
+        /** @var Collection<AuthUser> $authUserList */
         $authUserList = AuthUser::query()->get();
         $authUserList->each(function (AuthUser $authUser) use ($instance) {
             // 対応するユーザーを作成.
@@ -88,6 +90,7 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー画像更新.
         $this->beginFactory('fix face image', 150);
+        /** @var Collection<TrnUser> $trnUserList */
         $trnUserList  = TrnUser::query()->get();
         $trnUserList->each(function (TrnUser $trnUser) use ($instance) {
             // 初期画像を保存.

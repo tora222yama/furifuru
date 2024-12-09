@@ -17,6 +17,7 @@ use App\Pipe\PipeBase;
 use App\Trait\SlackApi;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -60,11 +61,12 @@ class SlackService
             ->pluck('trn_project_id')
             ->toArray();
 
-        // 各PJのSlack通知チャンネルを取得し、それぞれに処理する.
+        // 各PJのSlack通知チャンネルを取得
         TrnProjectNotificationService::listByTrnProjectId($targetProjectIdList)
             // 通知タイプがSlackのものを抽出.
             ->where('notification_type', ENotificationType::SLACK_CHANNEL->value)
-            ->each(function (TrnProjectNotification $trnProjectNotification) use ($message) {
+            ->each(function (Model $trnProjectNotification) use ($message) {
+                /** @var TrnProjectNotification $trnProjectNotification */
                 $this->slackApiPostMessage($trnProjectNotification->notification_value, $message);
             });
     }

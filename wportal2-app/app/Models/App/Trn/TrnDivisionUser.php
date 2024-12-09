@@ -6,6 +6,7 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Trn\TrnDivisionUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class TrnDivisionUser extends ModelBase
 {
+    /** @use HasFactory<TrnDivisionUserFactory> */
     use EagerLoadHelper, hasFactory;
 
     protected $table = 'trn_division_user';

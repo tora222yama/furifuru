@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Ramsey\Collection\Collection;
 
 class Controller extends BaseController
 {
@@ -81,7 +82,8 @@ class Controller extends BaseController
             return [];
         }
 
-        // サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<TrnUserAuthority> $trnUserAuthorityList */
         $trnUserAuthorityList = TrnUserAuthority::query()
             ->with($with)
             ->where('trn_user_id', $this->authUser->TrnUser->id)

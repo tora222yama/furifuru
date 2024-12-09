@@ -14,6 +14,7 @@ use App\Pipe\App\PipeAppProjectUpdate;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnProjectService extends ModelServiceBase
@@ -76,6 +77,8 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * プロジェクトの新規追加
+     *
+     * @throws Throwable
      */
     public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
     {
@@ -115,6 +118,7 @@ class TrnProjectService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
+        /** @var Collection<TrnProject> $trnProjectList */
         $trnProjectList      = TrnProject::query()
             ->with($with)
             ->alive()

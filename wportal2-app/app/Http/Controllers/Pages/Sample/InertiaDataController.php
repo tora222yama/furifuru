@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages\Sample;
 
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnUser;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
@@ -55,7 +56,8 @@ class InertiaDataController extends Controller
         $payloadArray  = TrnUser::query()
             ->limit(5)
             ->get()
-            ->map(function (TrnUser $trnUser) {
+            ->map(function (Model $trnUser) {
+                /** @var TrnUser $trnUser */
                 return $trnUser->toPayload();
             })->toArray();
 
@@ -66,7 +68,8 @@ class InertiaDataController extends Controller
         $providerArray = TrnUser::query()
             ->limit(5)
             ->get()
-            ->map(function (TrnUser $trnUser) {
+            ->map(function (Model $trnUser) {
+                /** @var TrnUser $trnUser */
                 return $trnUser->toPayload();
             })->toArray();
 
@@ -77,7 +80,8 @@ class InertiaDataController extends Controller
         $parseArray    = TrnUser::query()
             ->limit(5)
             ->get()
-            ->map(function (TrnUser $trnUser) {
+            ->map(function (Model $trnUser) {
+                /** @var TrnUser $trnUser */
                 return $trnUser->toPayload();
             })->toArray();
 

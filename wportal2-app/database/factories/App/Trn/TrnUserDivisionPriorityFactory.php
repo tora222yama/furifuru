@@ -7,6 +7,9 @@ namespace Database\Factories\App\Trn;
 use App\Models\App\Trn\TrnUserDivisionPriority;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<TrnUserDivisionPriority>
+ */
 class TrnUserDivisionPriorityFactory extends Factory
 {
     protected $model = TrnUserDivisionPriority::class;

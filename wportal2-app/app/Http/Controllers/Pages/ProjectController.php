@@ -30,7 +30,7 @@ class ProjectController extends Controller
     public function invoke(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Index', [
@@ -49,7 +49,7 @@ class ProjectController extends Controller
     public function show(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Show/Index', [
@@ -71,7 +71,7 @@ class ProjectController extends Controller
     public function edit(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Edit/Index', [
@@ -214,7 +214,7 @@ class ProjectController extends Controller
     private function getProject(Request $request, array $with = []): array
     {
         return TrnProjectService::findByIdOrFail(
-            $request->route('projectId'),
+            (int) $request->route('projectId'),
             $with,
         )->toPayload($with);
     }

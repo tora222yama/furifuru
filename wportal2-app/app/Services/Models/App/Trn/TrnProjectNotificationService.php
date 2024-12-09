@@ -110,9 +110,12 @@ class TrnProjectNotificationService extends ModelServiceBase
 
     /**
      * ID配列指定によるリスト取得.
+     *
+     * @return Collection<TrnProjectNotification>
      */
     public function listByTrnProjectId(array $projectIdList): Collection
     {
+        /** @var Collection<TrnProjectNotification> */
         return TrnProjectNotification::query()
             ->whereIn('trn_project_id', $projectIdList)
             ->alive()

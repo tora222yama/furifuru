@@ -106,6 +106,7 @@ class LoginController extends Controller
         );
 
         // id,メルアド,パスワードが一致するレガシーログイン可能な認証ユーザーを確認.
+        /** @var AuthUser|null $authUser */
         $authUser = AuthUser::query()
             ->where('id', $pipe->authId)
             ->where('email', $pipe->email)
@@ -211,6 +212,7 @@ class LoginController extends Controller
         $googleUser = Socialite::driver('google')->stateless()->user();
 
         // アクティブなユーザー情報を検索.
+        /** @var AuthUser|null $authUser */
         $authUser   = AuthUser::query()
             ->where('email', $googleUser->email)
             ->alive()

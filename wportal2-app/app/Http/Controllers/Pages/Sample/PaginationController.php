@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pages\Sample;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnUser;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Response;
@@ -48,7 +49,8 @@ class PaginationController extends Controller
             ->with($with)
             ->limit(5)
             ->get()
-            ->map(function (TrnUser $trnUser) use ($with) {
+            ->map(function (Model $trnUser) use ($with) {
+                /** @var TrnUser $trnUser */
                 return $trnUser->toPayload($with);
             })->toArray();
     }

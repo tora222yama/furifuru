@@ -8,6 +8,7 @@ use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Trn\TrnUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class TrnUser extends ModelBase
 {
+    /** @use HasFactory<TrnUserFactory> */
     use EagerLoadHelper, HasFactory;
 
     protected $table = 'trn_user';

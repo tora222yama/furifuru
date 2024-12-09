@@ -81,7 +81,7 @@ class TrnUserService extends ModelServiceBase
             $pipe->authUser,
             __CLASS__,
             __FUNCTION__,
-            __LINE__,
+            (string) __LINE__,
             $trnUser,
             [
                 'goodsId' => $pipe->mstGoods->id,
@@ -195,6 +195,7 @@ class TrnUserService extends ModelServiceBase
         bool $inactiveUserFlag = false,
     ): array {
         // リスト取得.
+        /** @var Collection<TrnUser> $trnUserList */
         $trnUserList      = TrnUser::query()
             ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.

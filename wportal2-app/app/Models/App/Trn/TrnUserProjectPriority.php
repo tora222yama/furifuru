@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
+use Database\Factories\App\Trn\TrnUserProjectPriorityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class TrnUserProjectPriority extends ModelBase
 {
+    /** @use HasFactory<TrnUserProjectPriorityFactory> */
     use HasFactory;
 
     protected $table = 'trn_user_project_priority';
