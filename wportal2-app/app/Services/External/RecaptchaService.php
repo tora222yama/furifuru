@@ -23,6 +23,9 @@ class RecaptchaService
         // recaptchaにtokenを問い合わせる.
         $url               = "$verifyUrl?secret=$secretKey&response=$recaptchaToken";
         $verifyResponse    = file_get_contents($url);
+        if ($verifyResponse === false) {
+            return false;
+        }
         $recaptchaResponse = json_decode($verifyResponse);
 
         // 結果を判定.

@@ -48,6 +48,7 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * @throws Exception
+     * @throws Throwable
      */
     private function execAppUserCreate(
         PipeBase $pipe
@@ -90,7 +91,7 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppUserDelete(
         PipeBase $pipe
@@ -108,7 +109,7 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppLegacyLogin(
         PipeBase $pipe
@@ -133,7 +134,7 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppPersonalSettingSpPassword(
         PipeBase $pipe
@@ -168,6 +169,7 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * @throws Exception
+     * @throws Throwable
      */
     private function execAppPersonalSettingSpConfirmCode(
         PipeBase $pipe
@@ -186,7 +188,7 @@ class AuthUserService extends ModelServiceBase
 
         // 認証確認.
         $google2fa     = new Google2FA;
-        $pipe->isValid = $google2fa->verifyKey($secret, $code);
+        $pipe->isValid = (bool) $google2fa->verifyKey($secret, $code);
         if ($pipe->isValid) {
             // ログイン失敗回数を0に初期化してSPログインの許可.
             $authUser->e_enable_sp_login     = EEnableFlag::ENABLE->value;
@@ -200,9 +202,9 @@ class AuthUserService extends ModelServiceBase
      *
      * @param  array<mixed>  $with
      */
-    public function findByIdOrFail(int $id, array $with = []): ?AuthUser
+    public function findByIdOrFail(int $id, array $with = []): AuthUser
     {
-        /** @var AuthUser|null */
+        /** @var AuthUser */
         return AuthUser::query()
             ->with($with)
             ->findOrFail($id);

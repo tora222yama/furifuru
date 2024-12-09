@@ -80,7 +80,7 @@ class SlackService
         $result      = $this->slackApiLookupByEmail($pipe->email);
 
         // 結果を取得.
-        $resultArray = json_decode($result, true);
+        $resultArray = json_decode((string) $result, true);
         if (isset($resultArray['ok']) && $resultArray['ok'] === true) {
             $pipe->slackUserId   = $resultArray['user']['id'];
             $pipe->slackUserName = $resultArray['user']['name'];

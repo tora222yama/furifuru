@@ -100,7 +100,7 @@ class PersonalSettingController extends Controller
      */
     private function getTrnUserSlackProfile(): array
     {
-        $authId  = Auth::id();
+        $authId  = (int) Auth::id();
 
         // ユーザー情報を取得.
         $trnUser = TrnUserService::findByAuthId($authId);

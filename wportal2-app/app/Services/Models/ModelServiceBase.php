@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Services\Models;
 
+use App\Models\App\Auth\AuthUser;
+use App\Models\App\ModelBase;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Throwable;
 
 class ModelServiceBase
 {
     /**
      * 新規登録（orFail）
      *
-     * @throws Exception
+     * @param ModelBase<covariant Model>|AuthUser $model
+     *
+     * @throws Throwable
      */
-    public function insertOrFail(object $model): void
+    public function insertOrFail(ModelBase|AuthUser $model): void
     {
         if (! empty($model->id)) {
             throw new Exception('invalid primary key.');
@@ -24,9 +30,11 @@ class ModelServiceBase
     /**
      * 更新処理（orFail)
      *
-     * @throws Exception
+     * @param ModelBase<covariant Model>|AuthUser $model
+     *
+     * @throws Exception|Throwable
      */
-    public function updateOrFail(object $model): void
+    public function updateOrFail(ModelBase|AuthUser $model): void
     {
         if (empty($model->id)) {
             throw new Exception('invalid primary key.');
@@ -37,9 +45,11 @@ class ModelServiceBase
     /**
      * 削除処理（orFail）
      *
-     * @throws Exception
+     * @param ModelBase<covariant Model>|AuthUser $model
+     *
+     * @throws Exception|Throwable
      */
-    public function deleteOrFail(object $model): void
+    public function deleteOrFail(ModelBase|AuthUser $model): void
     {
         if (empty($model->id)) {
             throw new Exception('invalid primary key.');

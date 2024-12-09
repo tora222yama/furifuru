@@ -152,15 +152,15 @@ class Performance
         $sql    = $this->querySqlList->map(function ($sql) {
             $pos = strpos($sql, 'where');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'where')).'...' : $sql;
+            return $pos ? substr($sql, 0, (int) strpos($sql, 'where')).'...' : $sql;
         })->map(function ($sql) {
             $pos = strpos($sql, 'values');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'values')).'...' : $sql;
+            return $pos ? substr($sql, 0, (int) strpos($sql, 'values')).'...' : $sql;
         })->map(function ($sql) {
             $pos = strpos($sql, 'set');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'set')).'...' : $sql;
+            return $pos ? substr($sql, 0, (int) strpos($sql, 'set')).'...' : $sql;
         })
             ->implode("\n");
 

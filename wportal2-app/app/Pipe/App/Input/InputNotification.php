@@ -19,6 +19,9 @@ final class InputNotification
 
     public string $notificationValue            = '';
 
+    /**
+     * @param  object{id: int, trnProjectId: int, notificationType: int, notificationValue: string}  $object
+     */
     public static function createFromObject(object $object): InputNotification
     {
         $new                    = new InputNotification;

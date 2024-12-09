@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\User;
 use PragmaRX\Google2FA\Google2FA;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Throwable;
@@ -209,6 +210,7 @@ class LoginController extends Controller
      */
     public function authGoogleCallback(): object
     {
+        /** @var User $googleUser */
         $googleUser = Socialite::driver('google')->stateless()->user();
 
         // アクティブなユーザー情報を検索.
@@ -238,7 +240,7 @@ class LoginController extends Controller
     /**
      * 919ドメインかどうか.
      */
-    private function is919Domain(object $googleUser): bool
+    private function is919Domain(User $googleUser): bool
     {
         // 919ドメインチェックが無効の場合は919ドメインとして扱う.
         $check919Domain = config('auth.check919Domain');
@@ -268,9 +270,10 @@ class LoginController extends Controller
     /**
      * 新規ユーザーの作成.
      *
+     *
      * @throws Throwable
      */
-    private function createNewUserByGoogle(object $googleUser): AuthUser
+    private function createNewUserByGoogle(User $googleUser): AuthUser
     {
         // アーカイブデータの検索.
         /** @var AuthUser|null $archiveAuthUser */

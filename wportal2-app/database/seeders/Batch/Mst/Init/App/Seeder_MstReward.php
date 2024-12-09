@@ -12,7 +12,10 @@ use Illuminate\Database\Seeder;
 
 class Seeder_MstReward extends Seeder
 {
-    const DATA_ARRAY = [
+    /**
+     * @var array{id: int, reward_kind: int, reward_rank: int, reward_name: string, reward_explain: string, reward_gold: int, e_enable_repeat: int} $DATA_ARRAY
+     */
+    const array DATA_ARRAY = [
         [
             'id'              => EMstReward::CREATE_ACCOUNT->value,
             'reward_kind'     => ERewardKind::ACHIEVE->value,
@@ -57,10 +60,14 @@ class Seeder_MstReward extends Seeder
     public function run(): void
     {
         foreach (self::DATA_ARRAY as $data) {
-            $model = new MstReward();
-            foreach ($data as $key => $value) {
-                $model->$key = $value;
-            }
+            $model                  = new MstReward;
+            $model->id              = $data['id'];
+            $model->reward_kind     = $data['reward_kind'];
+            $model->reward_rank     = $data['reward_rank'];
+            $model->reward_name     = $data['reward_name'];
+            $model->reward_explain  = $data['reward_explain'];
+            $model->reward_gold     = $data['reward_gold'];
+            $model->e_enable_repeat = $data['e_enable_repeat'];
             $model->save();
         }
     }
