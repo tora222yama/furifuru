@@ -92,6 +92,9 @@ class EnumPathPair
 
         // ファイルの内容を取得.
         $fileContents   = file_get_contents($this->inputPath);
+        if (! $fileContents) {
+            return [false, '対象ファイルなし'];
+        }
 
         // 正規表現で改行なしデータからenum説明を取得.
         $regex          = preg_match(

@@ -15,7 +15,7 @@ class ImageController extends Controller
     public function invoke(Request $request): object
     {
         // URIからパスを取得.
-        $path     = $request->route('path');
+        $path     = (string) $request->route('path');
 
         // S3への参照を取得.
         $storage  = Storage::disk('storage');

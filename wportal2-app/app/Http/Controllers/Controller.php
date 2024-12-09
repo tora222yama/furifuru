@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUserAuthority;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -28,11 +27,11 @@ class Controller extends BaseController
      *
      * @note ログイン情報など、共通のパラメータを処理.
      *
-     * @param  array<mixed>|Arrayable<string, mixed>  $props
+     * @param  array<mixed>  $props
      */
     protected function render(
         string $component,
-        array|Arrayable $props = []
+        array $props = []
     ): Response {
         // ローカルで処理が早すぎないように調整する.
         localSleep();

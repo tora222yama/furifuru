@@ -82,6 +82,9 @@ class MakeTypescriptEnum extends Command
 
         // ディレクトリ直下から巡回取得
         $inputFiles = glob(app_path().'/Enum/E*.php');
+        if (! $inputFiles) {
+            return $ret;
+        }
         foreach ($inputFiles as $inputFile) {
             $fileName             = basename($inputFile, '.php');
             if (in_array($fileName, self::IGNORE_LIST, true)) {
@@ -99,6 +102,9 @@ class MakeTypescriptEnum extends Command
         // サブディレクトリから巡回
         $this->info('サブディレクトリへの処理を実施');
         $inputDirs  = glob(app_path().'/Enum/*', GLOB_ONLYDIR);
+        if (! $inputDirs) {
+            return $ret;
+        }
         foreach ($inputDirs as $inputDir) {
             $lastDir    = str_replace(app_path().'/Enum/', '', $inputDir);
             if (in_array($lastDir, self::IGNORE_DIR_LIST, true)) {
@@ -109,6 +115,9 @@ class MakeTypescriptEnum extends Command
 
             // 巡回取得.
             $inputFiles = glob($inputDir.'/E*.php');
+            if (! $inputFiles) {
+                continue;
+            }
             foreach ($inputFiles as $inputFile) {
                 $fileName             = basename($inputFile, '.php');
                 if (in_array($fileName, self::IGNORE_LIST, true)) {
@@ -186,6 +195,9 @@ class MakeTypescriptEnum extends Command
         $this->info('> 更新を開始:'.$pathPair->outputPath);
 
         $existCode       = file_get_contents($pathPair->outputPath);
+        if (! $existCode) {
+            return false;
+        }
 
         $typescriptBlock = $pathPair->toTypescriptBlock();
         $newCode         = preg_replace(

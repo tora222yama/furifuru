@@ -96,7 +96,7 @@ enum EValidationType: string
                 // 設定値付きのタグから設定値を除外.
                 $tag = $rule;
                 if (Str::contains($tag, ':')) {
-                    $tag = Str::substr($rule, 0, Str::position($rule, ':'));
+                    $tag = Str::substr($rule, 0, (int) Str::position($rule, ':'));
                 }
 
                 // タグを設定、required|not_inの場合は

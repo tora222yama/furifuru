@@ -34,7 +34,7 @@ class AttendanceEditController extends Controller
         $endOfMonth     = Carbon::createFromTimeString($dateTimeString)->endOfMonth();
 
         // 取得対象.
-        $trnUser        = TrnUserService::findByAuthIdOrFail(Auth::id());
+        $trnUser        = TrnUserService::findByAuthIdOrFail((int) Auth::id());
 
         return $this->render('AttendanceEdit/Index', [
             'dateTime'               => fn () => $dateTimeString,
