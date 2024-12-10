@@ -51,6 +51,9 @@ class TrnUserRewardService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppAttendanceCreate $pipe */
+        if (is_null($pipe->todayAttendanceStateList)) {
+            throw new Exception('Invalid todayAttendanceStateList.');
+        }
 
         // 出勤・退勤・休憩in/outが含まれているかチェックする.
         if (! EAttendanceState::isPerfectAttendance($pipe->todayAttendanceStateList)) {
@@ -59,7 +62,7 @@ class TrnUserRewardService extends ModelServiceBase
 
         // 本日の獲得が存在するなら処理しない.
         if ($this->isAchieveToday(
-            $pipe->authUser->TrnUser->id,
+            $pipe->authUser?->TrnUser?->id ?: 0,
             EMstReward::CREATE_PERFECT_ATTENDANCE)
         ) {
             Log::info('獲得済み.');
@@ -70,7 +73,7 @@ class TrnUserRewardService extends ModelServiceBase
         // 達成処理を実施.
         $this->achieve(
             $pipe,
-            $pipe->authUser->TrnUser->id,
+            $pipe->authUser?->TrnUser?->id ?: 0,
             EMstReward::CREATE_PERFECT_ATTENDANCE
         );
     }
@@ -78,7 +81,7 @@ class TrnUserRewardService extends ModelServiceBase
     /**
      * 報酬の達成.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppRewardAchieve(
         PipeBase $pipe
@@ -88,7 +91,7 @@ class TrnUserRewardService extends ModelServiceBase
         // 対象となる報酬を取得.
         /** @var Collection<int, TrnUserReward> $targetReward */
         $targetReward = TrnUserReward::query()
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->whereIn('id', $pipe->trnUserRewardIdList)
             ->get();
 
@@ -257,16 +260,12 @@ class TrnUserRewardService extends ModelServiceBase
     public function countAchievable(
         ?AuthUser $authUser,
     ): int {
-        if (is_null($authUser)) {
-            return 0;
-        }
-
         // TODO: キャッシュ化を検討する.
 
         // 対象となる報酬のリストを取得.
         /** @var Collection<int, TrnUserReward> $trnUserRewardList */
         $trnUserRewardList = TrnUserReward::query()
-            ->where('trn_user_id', $authUser->TrnUser->id)
+            ->where('trn_user_id', $authUser?->TrnUser?->id)
             ->where('achievement_count', '>', 'received_count')
             ->alive()
             ->get();

@@ -9,6 +9,7 @@ use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUserReward;
 use App\Pipe\PipeBase;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,8 @@ final class PipeAppRewardAchieve extends PipeBase
 
     /**
      * データ取得.
+     *
+     * @throws Exception
      */
     public function parse(): void
     {
@@ -45,7 +48,7 @@ final class PipeAppRewardAchieve extends PipeBase
 
         // 指定IDもしくは全ての獲得可能な報酬のリストを取得する.
         $trnUserRewardList         = TrnUserRewardService::listAchievable(
-            $this->authUser->TrnUser->id,
+            $this->authUser?->TrnUser?->id ?: 0,
             $this->trnUserRewardId,
             [
                 'MstReward',
@@ -57,6 +60,10 @@ final class PipeAppRewardAchieve extends PipeBase
 
         // 獲得するGoldの総額を保持する.
         $this->achieveGold         = (int) $trnUserRewardList->reduce(function ($carry, TrnUserReward $trnUserReward) {
+            if (is_null($trnUserReward->MstReward)) {
+                return $carry;
+            }
+
             $achievableCount = max($trnUserReward->achievement_count - $trnUserReward->received_count, 0);
 
             return $carry + $trnUserReward->MstReward->reward_gold * $achievableCount;

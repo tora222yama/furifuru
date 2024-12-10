@@ -69,11 +69,13 @@ final class ActivityLogService
 
     /**
      * 発行未確定のログ出力を確定.
+     *
+     * @throws \Exception
      */
     public function commitTransaction(): void
     {
         // トランザクション中でなければ処理なし.
-        if ($this->transactionLogList === null) {
+        if ($this->transactionLogList === null || $this->readyLogList === null) {
             return;
         }
 

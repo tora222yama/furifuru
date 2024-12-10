@@ -38,7 +38,7 @@ class AttendanceController extends Controller
                 'TrnUserProjectPriority' => function ($query) {
                     return $query->where(
                         'trn_user_id',
-                        $this->authUser->TrnUser->id,
+                        $this->authUser?->TrnUser?->id,
                     );
                 },
             ]),
@@ -49,7 +49,7 @@ class AttendanceController extends Controller
                 'TrnUserDivisionPriority' => function ($query) {
                     return $query->where(
                         'trn_user_id',
-                        $this->authUser->TrnUser->id,
+                        $this->authUser?->TrnUser?->id,
                     );
                 },
             ]),

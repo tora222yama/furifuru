@@ -38,7 +38,7 @@ final class PipeAppAttendanceCreate extends PipeBase
     {
         $this->eAttendanceState = EAttendanceState::tryFrom(
             $this->getArgAsInteger('eAttendanceState')
-        );
+        ) ?? EAttendanceState::INVALID;
 
         // 認証ユーザー取得.
         /** @var AuthUser|null $authUser */

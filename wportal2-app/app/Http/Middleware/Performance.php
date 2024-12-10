@@ -91,8 +91,12 @@ class Performance
         $this->memoryInitialLabel = number_format($this->memoryInitial / (1024 * 1024), 3).'MB';
 
         // DB計測.
-        $this->queryList          = collect();
+        $this->queryList          = new Collection;
         DB::listen(function ($query) {
+            if (is_null($this->queryList)) {
+                return;
+            }
+
             // クエリ時間の抽出.
             $queryTime = $query->time;
             $sql       = $query->sql;
@@ -110,7 +114,7 @@ class Performance
      */
     private function endMeasure(): void
     {
-        if (! $this->isActive) {
+        if (! $this->isActive || $this->queryList === null) {
             return;
         }
 
@@ -149,6 +153,10 @@ class Performance
      */
     private function printResult(): void
     {
+        if ($this->querySqlList === null) {
+            return;
+        }
+
         $sql    = $this->querySqlList->map(function ($sql) {
             $pos = strpos($sql, 'where');
 

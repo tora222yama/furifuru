@@ -53,7 +53,7 @@ class TrnUserReward extends ModelBase
             'receivedAt'        => $this->received_at                      ?? '',
 
             'mstReward'         => $this->isExistKeyInWith($with, 'MstReward', $history)
-                ? $this->MstReward->toPayload($with, [...$history, 'MstUser']) : null,
+                ? $this->MstReward?->toPayload($with, [...$history, 'MstUser']) : null,
         ];
     }
 }

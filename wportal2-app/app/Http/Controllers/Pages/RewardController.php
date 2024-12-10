@@ -74,6 +74,8 @@ class RewardController extends Controller
      *
      * @param  array<mixed>  $with
      * @return array<string, mixed>
+     *
+     * @throws Exception
      */
     private function getPaginationReward(Request $request, array $with = []): array
     {
@@ -82,7 +84,7 @@ class RewardController extends Controller
         $pageStep         = $request->input('step', 20);
 
         return TrnUserRewardService::offsetPagination(
-            $this->authUser->TrnUser->id,
+            $this->authUser?->TrnUser?->id ?: 0,
             $pageIndex,
             $pageStep,
             $with

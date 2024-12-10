@@ -39,10 +39,9 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppAttendanceDivisionPriority $pipe */
-
         // 現在の設定の取得.
         $current = $this->findByUserIdAndDivisionId(
-            $pipe->authUser->TrnUser->id,
+            $pipe->authUser?->TrnUser?->id ?: 0,
             $pipe->divisionId
         );
 
@@ -54,7 +53,7 @@ class TrnUserDivisionPriorityService extends ModelServiceBase
         } else {
             // 新規登録の場合.
             $new                    = new TrnUserDivisionPriority;
-            $new->trn_user_id       = $pipe->authUser->TrnUser->id;
+            $new->trn_user_id       = $pipe->authUser?->TrnUser?->id;
             $new->trn_division_id   = $pipe->divisionId;
             $new->division_priority = $pipe->priority;
 

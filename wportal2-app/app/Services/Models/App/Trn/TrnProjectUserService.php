@@ -43,6 +43,9 @@ class TrnProjectUserService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppProjectUserUpdate $pipe */
+        if (is_null($pipe->trnUserIdList)) {
+            throw new Exception('Invalid user list.');
+        }
 
         // 現在の配列.
         $oldUserList = TrnProjectUser::query()

@@ -57,24 +57,21 @@ class TrnUserService extends ModelServiceBase
     /**
      * ランチチケット予約.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppShopLunchTicket(
         PipeBase $pipe
     ): void {
         /** @var PipeAppShopLunchTicket $pipe */
-        if (! $pipe->isReady) {
-            throw new Exception('invalid pipe');
-        }
 
         // 所持金額確認.
-        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
-        if ($trnUser->current_gold < $pipe->mstGoods->price) {
+        $trnUser = $this->findByIdOrFail($pipe->authUser?->TrnUser?->id ?: 0);
+        if ($trnUser->current_gold < $pipe->mstGoods?->price) {
             throw new Exception('not enough gold');
         }
 
         // 所持金額の減算.
-        $trnUser->current_gold -= $pipe->mstGoods->price;
+        $trnUser->current_gold -= $pipe->mstGoods?->price;
 
         // ログ出力.
         ActivityLogService::changeModel(
@@ -84,7 +81,7 @@ class TrnUserService extends ModelServiceBase
             (string) __LINE__,
             $trnUser,
             [
-                'goodsId' => $pipe->mstGoods->id,
+                'goodsId' => $pipe->mstGoods?->id,
             ]
         );
 
@@ -95,7 +92,7 @@ class TrnUserService extends ModelServiceBase
     /**
      * 報酬の達成.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppRewardAchieve(
         PipeBase $pipe
@@ -103,7 +100,7 @@ class TrnUserService extends ModelServiceBase
         /** @var PipeAppRewardAchieve $pipe */
 
         // GOLDの獲得.
-        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
+        $trnUser = $this->findByIdOrFail($pipe->authUser?->TrnUser?->id ?: 0);
         $trnUser->accumulation_gold += $pipe->achieveGold;
         $trnUser->current_gold      += $pipe->achieveGold;
 
@@ -259,9 +256,9 @@ class TrnUserService extends ModelServiceBase
      *
      * @param  array<mixed>  $with
      */
-    public function findByIdOrFail(int $id, array $with = []): ?TrnUser
+    public function findByIdOrFail(int $id, array $with = []): TrnUser
     {
-        /** @var TrnUser|null */
+        /** @var TrnUser */
         return TrnUser::query()
             ->with($with)
             ->alive()
@@ -285,7 +282,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByAuthIdOrFail(int $authId): TrnUser
     {
-        /** @var TrnUser|null */
+        /** @var TrnUser */
         return TrnUser::query()
             ->where('auth_id', $authId)
             ->alive()
@@ -349,6 +346,9 @@ class TrnUserService extends ModelServiceBase
         // 初期画像を保存.
         $defaultPath              = $this->createDefaultFaceImagePath();
         $file                     = Storage::disk('local')->get($defaultPath);
+        if (! $file) {
+            throw new Exception('default image not found');
+        }
         $ext                      = pathinfo($defaultPath, PATHINFO_EXTENSION);
         $path                     = Constant::FACE_IMAGE_S3_PATH."$trnUser->id.$ext";
         Storage::disk('storage')->put($path, $file);

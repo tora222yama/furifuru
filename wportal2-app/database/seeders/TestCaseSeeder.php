@@ -96,6 +96,10 @@ class TestCaseSeeder extends Seeder
             // 初期画像を保存.
             $defaultPath              = TrnUserService::createDefaultFaceImagePath();
             $file                     = Storage::disk('local')->get($defaultPath);
+            if (! $file) {
+                return;
+            }
+
             $ext                      = pathinfo($defaultPath, PATHINFO_EXTENSION);
             $path                     = Constant::FACE_IMAGE_S3_PATH."$trnUser->id.$ext";
             Storage::disk('storage')->put($path, $file);

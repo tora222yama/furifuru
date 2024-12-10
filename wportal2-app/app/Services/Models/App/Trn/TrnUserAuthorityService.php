@@ -14,7 +14,7 @@ class TrnUserAuthorityService extends ModelServiceBase
     /**
      * 指定権限を所有しているかどうか.
      *
-     * @param  Collection<int, covariant EUserAuthority>  $authorityList
+     * @param Collection<int, covariant EUserAuthority> $authorityList
      */
     public function hasAuthority(
         int $trnUserId,

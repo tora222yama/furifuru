@@ -66,12 +66,16 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function edit(Request $request): Response
     {
         // 管理特権が必用.
         $authUser = Auth::user();
+
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -92,8 +96,9 @@ class UserController extends Controller
     {
         // 管理特権が必用.
         $authUser = Auth::user();
+
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -118,12 +123,15 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function new(Request $request): Response
     {
         // 管理特権が必用.
         $authUser = Auth::user();
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -143,7 +151,7 @@ class UserController extends Controller
         // 管理特権が必用.
         $authUser = Auth::user();
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);

@@ -47,13 +47,10 @@ class TrnAttendanceStateService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppAttendanceCreate $pipe */
-        if (is_null($pipe->authUser)) {
-            throw new Exception('invalid auth user.');
-        }
 
         // モデル作成.
         $new                            = new TrnAttendanceState;
-        $new->trn_user_id               = $pipe->authUser->TrnUser->id;
+        $new->trn_user_id               = $pipe->authUser?->TrnUser?->id;
         $new->e_attendance_state        = $pipe->eAttendanceState->value;
 
         // 保存
@@ -62,7 +59,7 @@ class TrnAttendanceStateService extends ModelServiceBase
         // 本日の出退勤をすべて格納しておく.
         /** @var Collection<int, TrnAttendanceState> $stateList */
         $stateList                      = TrnAttendanceState::query()
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->whereDate('created_at', Carbon::now())
             ->alive()
             ->get();
@@ -77,15 +74,12 @@ class TrnAttendanceStateService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppAttendanceDelete $pipe */
-        if (is_null($pipe->authUser)) {
-            throw new Exception('invalid auth user.');
-        }
 
         // 対象データを取得.
         /** @var TrnAttendanceState $target */
         $target                  = TrnAttendanceState::query()
             ->orderByDesc('created_at')
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->alive()
             ->firstOrFail();
 
@@ -99,7 +93,7 @@ class TrnAttendanceStateService extends ModelServiceBase
     /**
      * 勤怠時間の更新.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppAttendanceEditUpdate(
         PipeBase $pipe
@@ -112,9 +106,9 @@ class TrnAttendanceStateService extends ModelServiceBase
         });
     }
 
-    public function findByIdOrFail(int $id): ?TrnAttendanceState
+    public function findByIdOrFail(int $id): TrnAttendanceState
     {
-        /** @var TrnAttendanceState|null */
+        /** @var TrnAttendanceState */
         return TrnAttendanceState::query()
             ->alive()
             ->findOrFail($id);

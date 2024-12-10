@@ -86,15 +86,11 @@ class Controller extends BaseController
      */
     private function getUserAuthorityList(array $with = []): array
     {
-        if (is_null($this->authUser) || is_null($this->authUser->TrnUser)) {
-            return [];
-        }
-
         // TODO: サービスへ移動
         /** @var Collection<int, TrnUserAuthority> $trnUserAuthorityList */
         $trnUserAuthorityList = TrnUserAuthority::query()
             ->with($with)
-            ->where('trn_user_id', $this->authUser->TrnUser->id)
+            ->where('trn_user_id', $this->authUser?->TrnUser?->id)
             ->alive()
             ->get();
 

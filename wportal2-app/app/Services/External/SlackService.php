@@ -45,19 +45,21 @@ class SlackService
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function execAppAttendanceCreate(
         PipeBase $pipe
     ): void {
         /** @var PipeAppAttendanceCreate $pipe */
-
         // 表示メッセージの作成.
         $localeDate          = Carbon::now()->format('Y-m-d H:i:s');
-        $nickName            = $pipe->authUser->TrnUser->nickname;
+        $nickName            = $pipe->authUser?->TrnUser?->nickname ?: '';
         $stateLabel          = $pipe->eAttendanceState->getStateLabel();
         $message             = "${localeDate} ${nickName}さんが${stateLabel}";
 
         // ユーザーの所属するPJのID配列を特定.
-        $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser->TrnUser->id)
+        $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser?->TrnUser?->id ?: 0)
             ->pluck('trn_project_id')
             ->toArray();
 

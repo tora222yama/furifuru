@@ -42,6 +42,9 @@ class TrnDivisionUserService extends ModelServiceBase
         PipeBase $pipe
     ): void {
         /** @var PipeAppDivisionUserUpdate $pipe */
+        if (is_null($pipe->trnUserIdList)) {
+            throw new Exception('Invalid user list.');
+        }
 
         // 現在の配列.
         $oldUserList = TrnDivisionUser::query()
