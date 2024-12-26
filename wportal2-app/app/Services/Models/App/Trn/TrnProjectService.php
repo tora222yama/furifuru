@@ -14,6 +14,7 @@ use App\Pipe\App\PipeAppProjectUpdate;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnProjectService extends ModelServiceBase
@@ -31,7 +32,7 @@ class TrnProjectService extends ModelServiceBase
                 EPipeKind::APP_PROJECT_UPDATE => $this->execAppProjectUpdate($pipe),
                 EPipeKind::APP_PROJECT_DELETE => $this->execAppProjectDelete($pipe),
                 EPipeKind::APP_PROJECT_CREATE => $this->execAppProjectCreate($pipe),
-                default                       => throw new Exception(),
+                default                       => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -41,8 +42,10 @@ class TrnProjectService extends ModelServiceBase
      * プロジェクトの作成.
      */
     private function execAppProjectCreate(
-        PipeAppProjectCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectCreate $pipe */
+
         // プロジェクトの作成.
         $this->createNewProject(
             $pipe->name,
@@ -54,8 +57,10 @@ class TrnProjectService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppProjectDelete(
-        PipeAppProjectDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectDelete $pipe */
+
         // 対象データを取得.
         /** @var TrnProject $target */
         $target                  = TrnProject::query()
@@ -72,11 +77,13 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * プロジェクトの新規追加
+     *
+     * @throws Throwable
      */
     public function createNewProject(string $projectName, string $projectExplain, int $id = 0): void
     {
         // ユーザーを作成.
-        $trnProject                  = new TrnProject();
+        $trnProject                  = new TrnProject;
         if ($id !== 0) {
             $trnProject->id   = $id;
         }
@@ -89,8 +96,10 @@ class TrnProjectService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppProjectUpdate(
-        PipeAppProjectUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectUpdate $pipe */
+
         // 課基本情報の更新.
         $trnProject          = $this->findByIdOrFail($pipe->trnProjectId);
         $trnProject->name    = $pipe->name;
@@ -102,6 +111,9 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -109,6 +121,7 @@ class TrnProjectService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
+        /** @var Collection<int, TrnProject> $trnProjectList */
         $trnProjectList      = TrnProject::query()
             ->with($with)
             ->alive()
@@ -129,11 +142,14 @@ class TrnProjectService extends ModelServiceBase
 
     /**
      * Idによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,
         array $with = []
     ): TrnProject {
+        /** @var TrnProject */
         return TrnProject::query()
             ->with($with)
             ->alive()

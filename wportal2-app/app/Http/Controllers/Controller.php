@@ -7,10 +7,10 @@ namespace App\Http\Controllers;
 use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnUserAuthority;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -26,10 +26,12 @@ class Controller extends BaseController
      * Inertiaを介してhtmlを作成
      *
      * @note ログイン情報など、共通のパラメータを処理.
+     *
+     * @param  array<mixed>  $props
      */
     protected function render(
         string $component,
-        array|Arrayable $props = []
+        array $props = []
     ): Response {
         // ローカルで処理が早すぎないように調整する.
         localSleep();
@@ -50,20 +52,27 @@ class Controller extends BaseController
 
     /**
      * 認証ユーザー情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>|null
      */
     private function getAuthUser(array $with = []): ?array
     {
-        $this->authUser = AuthUser::query()
+        /** @var AuthUser|null $authUser */
+        $authUser       = AuthUser::query()
             ->with($with)
             ->find(Auth::id());
+        $this->authUser = $authUser;
 
         return $this->authUser?->toPayload($with);
     }
 
     /**
      * ロケーションの取得.
+     *
+     * @return array<string>
      */
-    private function getLocation(): ?array
+    private function getLocation(): array
     {
         return [
             'current' => Request::url(),
@@ -71,16 +80,17 @@ class Controller extends BaseController
         ];
     }
 
+    /**
+     * @param  array<mixed>  $with
+     * @return array<mixed>
+     */
     private function getUserAuthorityList(array $with = []): array
     {
-        if (is_null($this->authUser) || is_null($this->authUser->TrnUser)) {
-            return [];
-        }
-
-        // サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<int, TrnUserAuthority> $trnUserAuthorityList */
         $trnUserAuthorityList = TrnUserAuthority::query()
             ->with($with)
-            ->where('trn_user_id', $this->authUser->TrnUser->id)
+            ->where('trn_user_id', $this->authUser?->TrnUser?->id)
             ->alive()
             ->get();
 

@@ -13,7 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->append([
+            // アクティビティログの出力.
+            \App\Http\Middleware\ActivityLog::class,
+
+            // アプリ実行部分のパフォーマンス計測.
+            \App\Http\Middleware\Performance::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -21,7 +21,7 @@ class Performance
 
     private float $timeEnd             = 0;
 
-    private string $timeLabel          = '';
+    private string $timeDuring         = '';
 
     /**
      * メモリ情報.
@@ -39,18 +39,20 @@ class Performance
     /**
      * DB情報.
      */
+    /** @var Collection<int, array<mixed>>|null */
     private ?Collection $queryList     = null;
 
     private int $queryCount            = 0;
 
     private float $queryTime           = 0.0;
 
+    /** @var Collection<int, mixed>|null */
     private ?Collection $querySqlList  = null;
 
     /**
      * フラグが有効の場合に計測を実施する.
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         // 計測開始.
         $this->startMeasure($request);
@@ -89,8 +91,12 @@ class Performance
         $this->memoryInitialLabel = number_format($this->memoryInitial / (1024 * 1024), 3).'MB';
 
         // DB計測.
-        $this->queryList          = collect();
+        $this->queryList          = new Collection;
         DB::listen(function ($query) {
+            if (is_null($this->queryList)) {
+                return;
+            }
+
             // クエリ時間の抽出.
             $queryTime = $query->time;
             $sql       = $query->sql;
@@ -108,7 +114,7 @@ class Performance
      */
     private function endMeasure(): void
     {
-        if (! $this->isActive) {
+        if (! $this->isActive || $this->queryList === null) {
             return;
         }
 
@@ -129,8 +135,8 @@ class Performance
         $this->queryCount     = $this->queryList->count();
 
         // クエリ時間.
-        $this->queryTime      = $this->queryList->sum(
-            fn ($query) => $query['queryTime']
+        $this->queryTime      = (float) $this->queryList->sum(
+            fn ($query) => (float) $query['queryTime']
         );
 
         // クエリSQL.
@@ -147,18 +153,22 @@ class Performance
      */
     private function printResult(): void
     {
+        if ($this->querySqlList === null) {
+            return;
+        }
+
         $sql    = $this->querySqlList->map(function ($sql) {
-            $pos = strpos($sql, 'where');
+            $pos = strpos((string) $sql, 'where');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'where')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'where')).'...' : $sql;
         })->map(function ($sql) {
-            $pos = strpos($sql, 'values');
+            $pos = strpos((string) $sql, 'values');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'values')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'values')).'...' : $sql;
         })->map(function ($sql) {
-            $pos = strpos($sql, 'set');
+            $pos = strpos((string) $sql, 'set');
 
-            return $pos ? substr($sql, 0, strpos($sql, 'set')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'set')).'...' : $sql;
         })
             ->implode("\n");
 

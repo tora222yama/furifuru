@@ -34,7 +34,7 @@ class TrnAttendanceStateService extends ModelServiceBase
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_ATTENDANCE_DELETE            => $this->execAppAttendanceStateDelete($pipe),
                 EPipeKind::APP_ATTENDANCE_EDIT_UPDATE       => $this->execAppAttendanceEditUpdate($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -44,26 +44,26 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
-        if (is_null($pipe->authUser)) {
-            throw new Exception('invalid auth user.');
-        }
+        /** @var PipeAppAttendanceCreate $pipe */
 
         // モデル作成.
-        $new                            = new TrnAttendanceState();
-        $new->trn_user_id               = $pipe->authUser->TrnUser->id;
+        $new                            = new TrnAttendanceState;
+        $new->trn_user_id               = $pipe->authUser?->TrnUser?->id;
         $new->e_attendance_state        = $pipe->eAttendanceState->value;
 
         // 保存
         $this->insertOrFail($new);
 
         // 本日の出退勤をすべて格納しておく.
-        $pipe->todayAttendanceStateList = TrnAttendanceState::query()
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+        /** @var Collection<int, TrnAttendanceState> $stateList */
+        $stateList                      = TrnAttendanceState::query()
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->whereDate('created_at', Carbon::now())
             ->alive()
             ->get();
+        $pipe->todayAttendanceStateList = $stateList;
     }
 
     /**
@@ -71,17 +71,15 @@ class TrnAttendanceStateService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppAttendanceStateDelete(
-        PipeAppAttendanceDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
-        if (is_null($pipe->authUser)) {
-            throw new Exception('invalid auth user.');
-        }
+        /** @var PipeAppAttendanceDelete $pipe */
 
         // 対象データを取得.
         /** @var TrnAttendanceState $target */
         $target                  = TrnAttendanceState::query()
             ->orderByDesc('created_at')
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->alive()
             ->firstOrFail();
 
@@ -95,11 +93,12 @@ class TrnAttendanceStateService extends ModelServiceBase
     /**
      * 勤怠時間の更新.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppAttendanceEditUpdate(
-        PipeAppAttendanceEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceEditUpdate $pipe */
         $pipe->eventList->each(function (InputEvent $event) {
             $model             = $this->findByIdOrFail($event->uid);
             $model->updated_at = $event->updatedAt;
@@ -107,8 +106,9 @@ class TrnAttendanceStateService extends ModelServiceBase
         });
     }
 
-    public function findByIdOrFail(int $id): ?TrnAttendanceState
+    public function findByIdOrFail(int $id): TrnAttendanceState
     {
+        /** @var TrnAttendanceState */
         return TrnAttendanceState::query()
             ->alive()
             ->findOrFail($id);
@@ -116,12 +116,15 @@ class TrnAttendanceStateService extends ModelServiceBase
 
     /**
      * ユーザーIDと期間を指定して、出退勤情報を取得.
+     *
+     * @return Collection<int, TrnAttendanceState>
      */
     public function listByUserIdAndPeriod(
         int $trnUserId,
         Carbon $startOfMonth,
         Carbon $endOfMonth
     ): Collection {
+        /** @var Collection<int, TrnAttendanceState> */
         return TrnAttendanceState::query()
             ->where('trn_user_id', $trnUserId)
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])

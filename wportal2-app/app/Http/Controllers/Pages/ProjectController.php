@@ -30,7 +30,7 @@ class ProjectController extends Controller
     public function invoke(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Index', [
@@ -49,7 +49,7 @@ class ProjectController extends Controller
     public function show(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Show/Index', [
@@ -71,7 +71,7 @@ class ProjectController extends Controller
     public function edit(Request $request): Response
     {
         if (! Auth::check()) {
-            throw new Exception();
+            throw new Exception;
         }
 
         return $this->render('Project/Edit/Index', [
@@ -194,12 +194,15 @@ class ProjectController extends Controller
 
     /**
      * ページネーション・プロジェクト.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationProject(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex = $request->input('index', 0);
-        $pageStep  = $request->input('step', 5);
+        $pageIndex = (int) $request->input('index', 0);
+        $pageStep  = (int) $request->input('step', 5);
 
         return TrnProjectService::offsetPagination(
             $pageIndex,
@@ -210,11 +213,14 @@ class ProjectController extends Controller
 
     /**
      * 単独取得・プロジェクト.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getProject(Request $request, array $with = []): array
     {
         return TrnProjectService::findByIdOrFail(
-            $request->route('projectId'),
+            (int) $request->route('projectId'),
             $with,
         )->toPayload($with);
     }

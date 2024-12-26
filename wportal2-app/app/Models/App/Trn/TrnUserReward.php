@@ -7,17 +7,23 @@ namespace App\Models\App\Trn;
 use App\Models\App\ModelBase;
 use App\Models\App\Mst\MstReward;
 use App\Trait\EagerLoadHelper;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @mixin TrnUserReward
+ *
+ * @extends ModelBase<TrnUserReward>
+ */
 class TrnUserReward extends ModelBase
 {
-    use EagerLoadHelper, HasFactory;
+    use EagerLoadHelper;
 
     protected $table = 'trn_user_reward';
 
     /**
      * リレーション:MstReward
+     *
+     * @return HasOne<MstReward, covariant TrnUserReward>
      */
     public function MstReward(): HasOne
     {
@@ -30,6 +36,10 @@ class TrnUserReward extends ModelBase
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {
@@ -43,7 +53,7 @@ class TrnUserReward extends ModelBase
             'receivedAt'        => $this->received_at                      ?? '',
 
             'mstReward'         => $this->isExistKeyInWith($with, 'MstReward', $history)
-                ? $this->MstReward->toPayload($with, [...$history, 'MstUser']) : null,
+                ? $this->MstReward?->toPayload($with, [...$history, 'MstUser']) : null,
         ];
     }
 }

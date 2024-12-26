@@ -25,6 +25,8 @@ final class PipeSampleInputFormUpdate extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -49,7 +51,7 @@ final class PipeSampleInputFormUpdate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // Input(single).
         $packer->addValidation(

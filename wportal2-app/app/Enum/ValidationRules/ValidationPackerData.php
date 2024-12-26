@@ -17,10 +17,13 @@ final class ValidationPackerData
 
     public mixed $value       = null;
 
+    /** @var Collection<int, ValidationRuleSet> */
     public Collection $ruleSetList;
 
     /**
      * constructor.
+     *
+     * @param  Collection<int, ValidationRuleSet>  $ruleSetList
      */
     public function __construct(
         string $tag,

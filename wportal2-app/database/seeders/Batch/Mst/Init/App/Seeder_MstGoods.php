@@ -11,7 +11,10 @@ use Illuminate\Database\Seeder;
 
 class Seeder_MstGoods extends Seeder
 {
-    const DATA_ARRAY = [
+    /**
+     * @var array{id:int, name:string, explain:string, comment:string, category:int, image_path:string, author_email:string, price:int} $DATA_ARRAY
+     */
+    const array DATA_ARRAY = [
         [
             'id'           => EMstGoods::LUNCH_TICKET_TOBARU_LOW->value,
             'name'         => 'Eng課長と行くお手頃1on1ランチ',
@@ -40,10 +43,15 @@ class Seeder_MstGoods extends Seeder
     public function run(): void
     {
         foreach (self::DATA_ARRAY as $data) {
-            $model = new MstGoods();
-            foreach ($data as $key => $value) {
-                $model->$key = $value;
-            }
+            $model               = new MstGoods;
+            $model->id           = $data['id'];
+            $model->name         = $data['name'];
+            $model->explain      = $data['explain'];
+            $model->comment      = $data['comment'];
+            $model->category     = $data['category'];
+            $model->image_path   = $data['image_path'];
+            $model->author_email = $data['author_email'];
+            $model->price        = $data['price'];
             $model->save();
         }
     }

@@ -66,12 +66,16 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function edit(Request $request): Response
     {
         // 管理特権が必用.
         $authUser = Auth::user();
+
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -92,8 +96,9 @@ class UserController extends Controller
     {
         // 管理特権が必用.
         $authUser = Auth::user();
+
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -118,12 +123,15 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function new(Request $request): Response
     {
         // 管理特権が必用.
         $authUser = Auth::user();
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -143,7 +151,7 @@ class UserController extends Controller
         // 管理特権が必用.
         $authUser = Auth::user();
         if (! TrnUserAuthorityService::hasAuthority(
-            $authUser->TrnUser->id,
+            $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE])
         )) {
             abort(EStatusCode::NOT_FOUND->value);
@@ -214,13 +222,16 @@ class UserController extends Controller
 
     /**
      * ページネーション・ユーザー
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationUser(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex        = $request->input('index', 0);
-        $pageStep         = $request->input('step', 20);
-        $keyword          = $request->input('keyword', '');
+        $pageIndex        = (int) $request->input('index', 0);
+        $pageStep         = (int) $request->input('step', 20);
+        $keyword          = (string) $request->input('keyword', '');
         $inactiveUserFlag = (bool) $request->input('inactiveUserFlag', false);
 
         return TrnUserService::offsetPagination(
@@ -234,11 +245,14 @@ class UserController extends Controller
 
     /**
      * 単独取得・ユーザー.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getUser(Request $request, array $with = []): array
     {
         return TrnUserService::findByIdOrFail(
-            $request->route('userId'),
+            (int) $request->route('userId'),
             $with
         )->toPayload($with);
     }

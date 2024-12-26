@@ -40,7 +40,10 @@ class MstInitReward extends BatchSeeder
 
         // 初期化前にデータ削除を行う.
         $modelList->each(function (string $model) {
-            call_user_func([$model, 'truncate']);
+            $function = "$model::truncate";
+            if (is_callable($function)) {
+                call_user_func($function);
+            }
         });
 
         // データ初期化を実施.

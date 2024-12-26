@@ -28,7 +28,7 @@ class TrnProjectNotificationService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_PROJECT_UPDATE => $this->execAppProjectUpdate($pipe),
-                default                       => throw new Exception(),
+                default                       => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -38,8 +38,10 @@ class TrnProjectNotificationService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppProjectUpdate(
-        PipeAppProjectUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectUpdate $pipe */
+
         // 現在の設定を取得.
         $existIdList  = TrnProjectNotification::query()
             ->where('trn_project_id', $pipe->trnProjectId)
@@ -65,7 +67,7 @@ class TrnProjectNotificationService extends ModelServiceBase
                 return (bool) $input->notificationValue;
             })
             ->each(function (InputNotification $input) use ($pipe) {
-                $new                     = new TrnProjectNotification();
+                $new                     = new TrnProjectNotification;
                 $new->trn_project_id     = $pipe->trnProjectId;
                 $new->notification_type  = $input->eNotificationType->value;
                 $new->notification_value = $input->notificationValue;
@@ -94,11 +96,14 @@ class TrnProjectNotificationService extends ModelServiceBase
 
     /**
      * IDによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,
         array $with = []
     ): TrnProjectNotification {
+        /** @var TrnProjectNotification */
         return TrnProjectNotification::query()
             ->with($with)
             ->alive()
@@ -107,9 +112,13 @@ class TrnProjectNotificationService extends ModelServiceBase
 
     /**
      * ID配列指定によるリスト取得.
+     *
+     * @param  array<int>  $projectIdList
+     * @return Collection<int, TrnProjectNotification>
      */
     public function listByTrnProjectId(array $projectIdList): Collection
     {
+        /** @var Collection<int, TrnProjectNotification> */
         return TrnProjectNotification::query()
             ->whereIn('trn_project_id', $projectIdList)
             ->alive()

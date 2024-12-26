@@ -6,17 +6,26 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Trn\TrnProjectFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin TrnProject
+ *
+ * @extends ModelBase<TrnProject>
+ */
 class TrnProject extends ModelBase
 {
+    /** @use HasFactory<TrnProjectFactory> */
     use EagerLoadHelper, hasFactory;
 
     protected $table = 'trn_project';
 
     /**
      * リレーション:TrnProjectUser
+     *
+     * @return HasMany<TrnProjectUser, covariant TrnProject>
      */
     public function TrnProjectUser(): HasMany
     {
@@ -29,6 +38,8 @@ class TrnProject extends ModelBase
 
     /**
      * リレーション:TrnUserProjectPriority
+     *
+     * @return HasMany<TrnUserProjectPriority, covariant TrnProject>
      */
     public function TrnUserProjectPriority(): HasMany
     {
@@ -41,6 +52,8 @@ class TrnProject extends ModelBase
 
     /**
      * リレーション:TrnProjectNotification
+     *
+     * @return HasMany<TrnProjectNotification, covariant TrnProject>
      */
     public function TrnProjectNotification(): HasMany
     {
@@ -53,6 +66,10 @@ class TrnProject extends ModelBase
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

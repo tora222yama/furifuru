@@ -48,7 +48,7 @@ class TrnUserService extends ModelServiceBase
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
                 EPipeKind::APP_USER_CREATE                  => $this->execAppUserCreate($pipe),
                 EPipeKind::APP_USER_DELETE                  => $this->execAppUserDelete($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -57,33 +57,31 @@ class TrnUserService extends ModelServiceBase
     /**
      * ランチチケット予約.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppShopLunchTicket(
-        PipeAppShopLunchTicket|PipeBase $pipe
+        PipeBase $pipe
     ): void {
-        if (! $pipe->isReady) {
-            throw new Exception('invalid pipe');
-        }
+        /** @var PipeAppShopLunchTicket $pipe */
 
         // 所持金額確認.
-        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
-        if ($trnUser->current_gold < $pipe->mstGoods->price) {
+        $trnUser = $this->findByIdOrFail($pipe->authUser?->TrnUser?->id ?: 0);
+        if ($trnUser->current_gold < $pipe->mstGoods?->price) {
             throw new Exception('not enough gold');
         }
 
         // 所持金額の減算.
-        $trnUser->current_gold -= $pipe->mstGoods->price;
+        $trnUser->current_gold -= $pipe->mstGoods?->price;
 
         // ログ出力.
         ActivityLogService::changeModel(
             $pipe->authUser,
             __CLASS__,
             __FUNCTION__,
-            __LINE__,
+            (string) __LINE__,
             $trnUser,
             [
-                'goodsId' => $pipe->mstGoods->id,
+                'goodsId' => $pipe->mstGoods?->id,
             ]
         );
 
@@ -94,13 +92,15 @@ class TrnUserService extends ModelServiceBase
     /**
      * 報酬の達成.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppRewardAchieve(
-        PipeAppRewardAchieve|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppRewardAchieve $pipe */
+
         // GOLDの獲得.
-        $trnUser = $this->findByIdOrFail($pipe->authUser->TrnUser->id);
+        $trnUser = $this->findByIdOrFail($pipe->authUser?->TrnUser?->id ?: 0);
         $trnUser->accumulation_gold += $pipe->achieveGold;
         $trnUser->current_gold      += $pipe->achieveGold;
 
@@ -112,8 +112,10 @@ class TrnUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppPersonalSettingEditUpdate(
-        PipeAppPersonalSettingEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingEditUpdate $pipe */
+
         // 個人設定の更新.
         $trnUser                    = $this->findByIdOrFail($pipe->trnUserId);
         $trnUser->nickname          = $pipe->nickname;
@@ -147,8 +149,9 @@ class TrnUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppUserCreate(
-        PipeAppUserCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserCreate $pipe */
         if (is_null($pipe->createdAuthUser)) {
             throw new Exception('invalid auth user');
         }
@@ -164,13 +167,12 @@ class TrnUserService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppUserDelete(
-        PipeAppUserDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserDelete $pipe */
+
         // 対象データを取得.
-        $target                  = TrnUser::query()
-            ->where('id', $pipe->trnUserId)
-            ->alive()
-            ->firstOrFail();
+        $target                  = $this->findByIdOrFail($pipe->trnUserId);
 
         // 対象データを削除.
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
@@ -181,6 +183,9 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -190,6 +195,7 @@ class TrnUserService extends ModelServiceBase
         bool $inactiveUserFlag = false,
     ): array {
         // リスト取得.
+        /** @var Collection<int, TrnUser> $trnUserList */
         $trnUserList      = TrnUser::query()
             ->when(! empty($keyword), function ($query) use ($keyword) {
                 // 検索文字列があれば名称から検索.
@@ -232,9 +238,13 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * 全て取得.
+     *
+     * @param  array<string>  $with
+     * @return Collection<int, TrnUser>
      */
     public function list(array $with = []): Collection
     {
+        /** @var Collection<int, TrnUser> */
         return TrnUser::query()
             ->with($with)
             ->alive()
@@ -243,9 +253,12 @@ class TrnUserService extends ModelServiceBase
 
     /**
      * IDで検索(orFail).
+     *
+     * @param  array<mixed>  $with
      */
-    public function findByIdOrFail(int $id, array $with = []): ?TrnUser
+    public function findByIdOrFail(int $id, array $with = []): TrnUser
     {
+        /** @var TrnUser */
         return TrnUser::query()
             ->with($with)
             ->alive()
@@ -257,6 +270,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByAuthId(int $authId): ?TrnUser
     {
+        /** @var TrnUser|null */
         return TrnUser::query()
             ->where('auth_id', $authId)
             ->alive()
@@ -268,6 +282,7 @@ class TrnUserService extends ModelServiceBase
      */
     public function findByAuthIdOrFail(int $authId): TrnUser
     {
+        /** @var TrnUser */
         return TrnUser::query()
             ->where('auth_id', $authId)
             ->alive()
@@ -282,7 +297,7 @@ class TrnUserService extends ModelServiceBase
         // キャッシュから取得する.
         $cacheKey = $this->getCacheKeyFaceImage($trnUser);
 
-        return Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
+        return (string) Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
             // URLを発行.
             return $this->createProfileImageTemporaryUrl($trnUser, self::IMAGE_CACHE_HOUR);
         });
@@ -320,7 +335,7 @@ class TrnUserService extends ModelServiceBase
     public function createNewUser(AuthUser $authUser, string $temporaryName, int $id = 0): TrnUser
     {
         // 新規にユーザーを作成.
-        $trnUser                  = new TrnUser();
+        $trnUser                  = new TrnUser;
         if ($id !== 0) {
             $trnUser->id   = $id;
         }
@@ -331,6 +346,9 @@ class TrnUserService extends ModelServiceBase
         // 初期画像を保存.
         $defaultPath              = $this->createDefaultFaceImagePath();
         $file                     = Storage::disk('local')->get($defaultPath);
+        if (! $file) {
+            throw new Exception('default image not found');
+        }
         $ext                      = pathinfo($defaultPath, PATHINFO_EXTENSION);
         $path                     = Constant::FACE_IMAGE_S3_PATH."$trnUser->id.$ext";
         Storage::disk('storage')->put($path, $file);
@@ -350,9 +368,7 @@ class TrnUserService extends ModelServiceBase
     public function comebackUser(AuthUser $authUser): void
     {
         // ユーザー情報を取得.
-        $trnUser                  = TrnUser::query()
-            ->where('auth_id', $authUser->id)
-            ->firstOrFail();
+        $trnUser                  = $this->findByAuthIdOrFail($authUser->id);
 
         // アーカイブレベルを変更.
         $trnUser->e_archive_level = EArchiveLevel::ALIVE->value;

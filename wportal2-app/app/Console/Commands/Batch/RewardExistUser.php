@@ -10,6 +10,7 @@ use App\Models\App\EloquentBuilder;
 use App\Models\App\Trn\TrnUser;
 use App\Pipe\Command\Batch\PipeCommandBatchRewardExistUser;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class RewardExistUser extends Command
 {
@@ -43,6 +44,7 @@ class RewardExistUser extends Command
     public function handle(): int
     {
         // 対象ユーザーの取得.
+        /** @var Collection<int, TrnUser> $targetList */
         $targetList = TrnUser::query()
             ->alive()
             ->whereDoesntHave('TrnUserReward', function (EloquentBuilder $query) {

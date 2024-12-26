@@ -41,13 +41,13 @@ class SendSes extends Command
     {
         // 引数より対象のemailを取得.
         $toAddress = $this->argument('to');
-        if ($toAddress === null) {
+        if ($toAddress == null) {
             return self::FAILURE;
         }
         $this->info("送信対象:$toAddress");
 
         // 送信パラメータの作成.
-        $param     = new SesParameter();
+        $param     = new SesParameter;
         $param->setFrom('no-reply@wportal.org');
         $param->setTo($toAddress);
         $param->setSubject('テストメール');

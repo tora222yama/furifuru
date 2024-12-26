@@ -16,9 +16,12 @@ use Throwable;
 final class AppPersonalSettingShowAlignSlack
 {
     /**
+     * @param  array<mixed>  $args
+     * @return array<mixed>
+     *
      * @throws Throwable
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         // 早く完了しないように強制遅延.
         localSleep();

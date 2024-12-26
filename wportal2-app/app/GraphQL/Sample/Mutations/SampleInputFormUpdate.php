@@ -9,7 +9,11 @@ use App\Pipe\Sample\PipeSampleInputFormUpdate;
 
 final class SampleInputFormUpdate
 {
-    public function __invoke($_, array $args): array
+    /**
+     * @param  array<mixed>  $args
+     * @return array<mixed>
+     */
+    public function __invoke(mixed $_, array $args): array
     {
         // 早く完了しないように強制遅延.
         localSleep(1);

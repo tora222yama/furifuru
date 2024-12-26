@@ -17,6 +17,7 @@ use App\Pipe\PipeBase;
 use App\Trait\SlackApi;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -44,37 +45,46 @@ class SlackService
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function execAppAttendanceCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceCreate $pipe */
         // 表示メッセージの作成.
         $localeDate          = Carbon::now()->format('Y-m-d H:i:s');
-        $nickName            = $pipe->authUser->TrnUser->nickname;
+        $nickName            = $pipe->authUser?->TrnUser?->nickname ?: '';
         $stateLabel          = $pipe->eAttendanceState->getStateLabel();
         $message             = "${localeDate} ${nickName}さんが${stateLabel}";
 
         // ユーザーの所属するPJのID配列を特定.
-        $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser->TrnUser->id)
+        /** @var array<int> $targetProjectIdList */
+        $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser?->TrnUser?->id ?: 0)
             ->pluck('trn_project_id')
             ->toArray();
 
-        // 各PJのSlack通知チャンネルを取得し、それぞれに処理する.
+        // 各PJのSlack通知チャンネルを取得
         TrnProjectNotificationService::listByTrnProjectId($targetProjectIdList)
             // 通知タイプがSlackのものを抽出.
             ->where('notification_type', ENotificationType::SLACK_CHANNEL->value)
-            ->each(function (TrnProjectNotification $trnProjectNotification) use ($message) {
+            ->each(function (Model $trnProjectNotification) use ($message) {
+                /** @var TrnProjectNotification $trnProjectNotification */
                 $this->slackApiPostMessage($trnProjectNotification->notification_value, $message);
             });
     }
 
     private function execAppPersonalSettingShowAlignSlack(
-        PipeAppPersonalSettingShowAlignSlack|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingShowAlignSlack $pipe */
+
         // APIを実行.
         $result      = $this->slackApiLookupByEmail($pipe->email);
 
         // 結果を取得.
-        $resultArray = json_decode($result, true);
+        /** @var array{ok: bool|null, user: array{id: string, name: string, team_id: string}} $resultArray */
+        $resultArray = json_decode((string) $result, true);
         if (isset($resultArray['ok']) && $resultArray['ok'] === true) {
             $pipe->slackUserId   = $resultArray['user']['id'];
             $pipe->slackUserName = $resultArray['user']['name'];
@@ -93,11 +103,13 @@ class SlackService
 
     /**
      * 情報チャンネルへの通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notifyNotice(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url         = config('slack.NoticeUrl');
-        $env         = config('app.env');
+        $url         = (string) config('slack.NoticeUrl');
+        $env         = (string) config('app.env');
         $fixedTitle  = "[env]:`$env`";
         $fixedFile   = '';
 
@@ -127,11 +139,13 @@ EOF;
 
     /**
      * エラーチャンネルへの通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notifyError(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url         = config('slack.ErrorUrl');
-        $env         = config('app.env');
+        $url         = (string) config('slack.ErrorUrl');
+        $env         = (string) config('app.env');
         $fixedTitle  = "[env]:`$env`";
         $fixedFile   = '';
 
@@ -166,10 +180,12 @@ EOF;
 
     /**
      * メッセージ・HooksUrlを指定して通知を行う.
+     *
+     * @param  array<mixed>  $appendParams
      */
     public function notify(string $message, string $url, array $appendParams): void
     {
-        if (! isset($url)) {
+        if (empty($url)) {
             return;
         }
 

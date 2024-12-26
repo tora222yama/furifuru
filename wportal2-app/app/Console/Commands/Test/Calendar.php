@@ -55,8 +55,8 @@ class Calendar extends Command
         }
 
         // 認証パラメータ.
-        $rawData            = config('services.google.calendar_sa');
-        $jsonKey            = json_decode($rawData, true);
+        $rawData            = (string) config('services.google.calendar_sa');
+        $jsonKey            = (string) json_decode($rawData, true);
 
         // 利用スコープ.
         $scope              = [
@@ -67,7 +67,7 @@ class Calendar extends Command
         ];
 
         // クライアント作成.
-        $client             = new Google_Client();
+        $client             = new Google_Client;
         $client->setApplicationName('wportal カレンダー操作');
         $client->setScopes($scope);
         $client->setAuthConfig($jsonKey);

@@ -13,7 +13,7 @@ class ActivityLog
     /**
      * フラグが有効の場合に計測を実施する.
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $request = $next($request);
 

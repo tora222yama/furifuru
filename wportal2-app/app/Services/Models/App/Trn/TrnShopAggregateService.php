@@ -26,7 +26,7 @@ class TrnShopAggregateService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_SHOP_LUNCH_TICKET => $this->execAppShopLunchTicket($pipe),
-                default                          => throw new Exception(),
+                default                          => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -36,18 +36,16 @@ class TrnShopAggregateService extends ModelServiceBase
      * ランチチケット予約.
      *
      * @throws Exception
+     * @throws Throwable
      */
     private function execAppShopLunchTicket(
-        PipeAppShopLunchTicket|PipeBase $pipe
+        PipeBase $pipe
     ): void {
-        if (! $pipe->isReady) {
-            throw new Exception('invalid pipe');
-        }
-
+        /** @var PipeAppShopLunchTicket $pipe */
         // 新規集計データを作成.
-        $shopAggregate               = new TrnShopAggregate();
-        $shopAggregate->mst_goods_id = $pipe->mstGoods->id;
-        $shopAggregate->trn_user_id  = $pipe->authUser->TrnUser->id;
+        $shopAggregate               = new TrnShopAggregate;
+        $shopAggregate->mst_goods_id = $pipe->mstGoods?->id;
+        $shopAggregate->trn_user_id  = $pipe->authUser?->TrnUser?->id;
 
         // 保存.
         $this->insertOrFail($shopAggregate);

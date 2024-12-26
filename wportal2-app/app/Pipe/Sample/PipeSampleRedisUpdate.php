@@ -15,6 +15,8 @@ final class PipeSampleRedisUpdate extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -34,7 +36,7 @@ final class PipeSampleRedisUpdate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         $packer->addValidation(
             'storeValue',

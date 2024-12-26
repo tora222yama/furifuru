@@ -14,7 +14,7 @@ trait SlackApi
      */
     private function getBotToken(): string
     {
-        return config('slack.BotUserOAuthToken');
+        return (string) config('slack.BotUserOAuthToken');
     }
 
     /**
@@ -72,6 +72,8 @@ trait SlackApi
 
     /**
      * curlを実行
+     *
+     * @param  array<mixed>  $options
      */
     private function executeCurl(array $options): bool|string
     {
