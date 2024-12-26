@@ -9,13 +9,13 @@ parameters:
         - database/
 
     # Level 10 is the highest level
-    level: 9
+    # 9以降は不毛な指摘やstanそのものに不具合がある、プロジェクトのさじ加減で調整してください
+    level: 8
 
     ignoreErrors:
         # 問題ないマジックメソッドの除外.
         - '#Access to an undefined property App\\Models\\(.*)#'
-        - '#Illuminate\\Database\\Eloquent\\Builder<Illuminate\\Database\\Eloquent\\Model>::with\(\) expects (.*) given#'
         - '#Call to an undefined method Laravel\\Socialite\\Contracts\\Provider::stateless\(\)#'
         - identifier: cast.int
         - identifier: cast.string
-        - identifier: cast.double
+
