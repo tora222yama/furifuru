@@ -20,6 +20,8 @@ final class PipeAppDivisionCreate extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -40,7 +42,7 @@ final class PipeAppDivisionCreate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // 名前.
         $packer->addValidation(

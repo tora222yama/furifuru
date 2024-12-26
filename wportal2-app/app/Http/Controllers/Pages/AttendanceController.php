@@ -22,6 +22,7 @@ use App\Pipe\App\PipeAppAttendanceProjectPriority;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Throwable;
@@ -37,7 +38,7 @@ class AttendanceController extends Controller
                 'TrnUserProjectPriority' => function ($query) {
                     return $query->where(
                         'trn_user_id',
-                        $this->authUser->TrnUser->id,
+                        $this->authUser?->TrnUser?->id,
                     );
                 },
             ]),
@@ -48,7 +49,7 @@ class AttendanceController extends Controller
                 'TrnUserDivisionPriority' => function ($query) {
                     return $query->where(
                         'trn_user_id',
-                        $this->authUser->TrnUser->id,
+                        $this->authUser?->TrnUser?->id,
                     );
                 },
             ]),
@@ -154,10 +155,14 @@ class AttendanceController extends Controller
 
     /**
      * プロジェクト情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getProjectList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<int, TrnProject> $trnProjectList */
         $trnProjectList = TrnProject::query()
             ->with($with)
             ->alive()
@@ -170,10 +175,14 @@ class AttendanceController extends Controller
 
     /**
      * 課情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getDivisionList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<int, TrnDivision> $trnDivisionList */
         $trnDivisionList = TrnDivision::query()
             ->with($with)
             ->alive()
@@ -186,10 +195,14 @@ class AttendanceController extends Controller
 
     /**
      * ユーザー情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
     private function getUserList(array $with = []): array
     {
-        // TODO: サービスへ移動.
+        // TODO: サービスへ移動
+        /** @var Collection<int, TrnUser> $trnUserList */
         $trnUserList = TrnUser::query()
             ->with($with)
             ->alive()

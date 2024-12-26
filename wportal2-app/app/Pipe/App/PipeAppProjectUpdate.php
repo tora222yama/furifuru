@@ -21,10 +21,13 @@ final class PipeAppProjectUpdate extends PipeBase
 
     public bool $editNotification = false;
 
+    /** @var Collection<int, InputNotification> */
     public Collection $notificationList;
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -47,6 +50,7 @@ final class PipeAppProjectUpdate extends PipeBase
         $notificationList       = json_decode($notificationListJson);
         if ($this->editNotification && is_array($notificationList)) {
             array_map(function ($notification) {
+                /** @var object{id: int, trnProjectId: int, notificationType: int, notificationValue: string} $notification */
                 $new = InputNotification::createFromObject($notification);
                 $this->notificationList->add($new);
             }, $notificationList);
@@ -58,7 +62,7 @@ final class PipeAppProjectUpdate extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // 名前.
         $packer->addValidation(

@@ -19,12 +19,17 @@ class Handler extends ExceptionHandler
      **/
     protected $dontReport      = [];
 
-    protected array $dontSlack = [];
+    /**
+     * @var array<string>
+     */
+    protected array $dontSlack = [
+        '',
+    ];
 
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $dontFlash       = [
         'current_password',

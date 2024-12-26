@@ -11,6 +11,8 @@ final class PipeCommandBatchRewardExistUser extends PipeBase
 {
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -20,14 +22,10 @@ final class PipeCommandBatchRewardExistUser extends PipeBase
     /**
      * データ取得.
      */
-    public function parse(): void
-    {
-    }
+    public function parse(): void {}
 
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

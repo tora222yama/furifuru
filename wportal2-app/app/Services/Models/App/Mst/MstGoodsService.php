@@ -12,10 +12,14 @@ class MstGoodsService extends ModelServiceBase
 {
     /**
      * 全取得.
+     *
+     * @param  array<mixed>  $with
+     * @return Collection<int, MstGoods>
      */
     public function list(
         array $with = []
     ): Collection {
+        /** @var Collection<int, MstGoods> */
         return MstGoods::query()
             ->alive()
             ->get();
@@ -26,6 +30,7 @@ class MstGoodsService extends ModelServiceBase
      */
     public function findOrFail(int $goodsId): MstGoods
     {
+        /** @var MstGoods */
         return MstGoods::query()
             ->alive()
             ->findOrFail($goodsId);

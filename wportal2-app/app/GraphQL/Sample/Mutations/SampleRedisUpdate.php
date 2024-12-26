@@ -13,9 +13,12 @@ use Psr\SimpleCache\InvalidArgumentException;
 final class SampleRedisUpdate
 {
     /**
+     * @param  array<mixed>  $args
+     * @return array<mixed>
+     *
      * @throws InvalidArgumentException
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         // 早く完了しないように強制遅延.
         localSleep(1);

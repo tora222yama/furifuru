@@ -23,6 +23,8 @@ final class PipeAppPersonalSettingSpPassword extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -44,7 +46,7 @@ final class PipeAppPersonalSettingSpPassword extends PipeBase
      */
     public function validate(): void
     {
-        $packer    = new ValidationPacker();
+        $packer    = new ValidationPacker;
 
         // パスワード.
         $packer->addValidation(

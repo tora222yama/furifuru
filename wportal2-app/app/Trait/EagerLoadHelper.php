@@ -8,6 +8,9 @@ trait EagerLoadHelper
 {
     /**
      * eager-load指定に特定のキーが存在するかどうか.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
      */
     protected function isExistKeyInWith(array $with, string $key, array $history = []): bool
     {
@@ -34,6 +37,10 @@ trait EagerLoadHelper
 
     /**
      * historyをarrayに変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     private function historyToArray(array $with, array $history): array
     {

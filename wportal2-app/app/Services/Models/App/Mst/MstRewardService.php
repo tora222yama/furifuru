@@ -8,11 +8,15 @@ use App\Enum\App\EEnableFlag;
 use App\Enum\Mst\EMstReward;
 use App\Models\App\Mst\MstReward;
 use App\Services\Models\ModelServiceBase;
+use Illuminate\Support\Collection;
 
 class MstRewardService extends ModelServiceBase
 {
-    /**.
+    /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -20,6 +24,7 @@ class MstRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
+        /** @var Collection<int, MstReward> $mstRewardList */
         $mstRewardList      = MstReward::query()
             ->with($with)
             ->alive()
@@ -58,6 +63,7 @@ class MstRewardService extends ModelServiceBase
      */
     public function findById(EMstReward $eMstReward): ?MstReward
     {
+        /** @var MstReward|null */
         return MstReward::query()
             ->where('id', $eMstReward->value)
             ->first();

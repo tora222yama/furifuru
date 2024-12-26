@@ -16,6 +16,7 @@ use App\Pipe\App\PipeAppShopLunchTicket;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Throwable;
@@ -54,6 +55,9 @@ class ShopController extends Controller
 
         // データ準備.
         $pipe->prepare();
+        if (is_null($pipe->start) || is_null($pipe->end)) {
+            throw new Exception('Invalid date');
+        }
 
         // 更新処理.
         DB::transaction(function () use ($pipe) {
@@ -64,21 +68,21 @@ class ShopController extends Controller
             TrnShopAggregateService::updateByPipe();
 
             $description = <<<EOF
-【{$pipe->mstGoods->name}】の予約が入りました。
-※{$pipe->mstGoods->price}＄チケット
+【{$pipe->mstGoods?->name}】の予約が入りました。
+※{$pipe->mstGoods?->price}＄チケット
 
-{$pipe->mstGoods->explain}
+{$pipe->mstGoods?->explain}
 
 ※履行されない場合も＄の返金はございませんのでご注意ください
 EOF;
 
             // rakumoのブロック実行.
             GoogleCalendarService::blockSchedule(
-                $pipe->authUser->email,
-                collect([$pipe->mstGoods->author_email]),
+                $pipe->authUser?->email,
+                new Collection([(string) $pipe->mstGoods?->author_email]),
                 $pipe->start,
                 $pipe->end,
-                $pipe->mstGoods->name,
+                $pipe->mstGoods?->name,
                 '直接ご相談ください',
                 $description
             );
@@ -89,8 +93,11 @@ EOF;
 
     /**
      * 商品マスタ取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
-    private function getMstGoodsList($request, array $with = []): array
+    private function getMstGoodsList(Request $request, array $with = []): array
     {
         return MstGoodsService::list($with)
             ->map(fn (MstGoods $mstGoods) => $mstGoods->toPayload($with))

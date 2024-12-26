@@ -14,6 +14,7 @@ use App\Pipe\App\PipeAppDivisionUpdate;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class TrnDivisionService extends ModelServiceBase
@@ -31,15 +32,17 @@ class TrnDivisionService extends ModelServiceBase
                 EPipeKind::APP_DIVISION_UPDATE      => $this->execAppDivisionUpdate($pipe),
                 EPipeKind::APP_DIVISION_DELETE      => $this->execAppDivisionDelete($pipe),
                 EPipeKind::APP_DIVISION_CREATE      => $this->execAppDivisionCreate($pipe),
-                default                             => throw new Exception(),
+                default                             => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
     }
 
     private function execAppDivisionCreate(
-        PipeAppDivisionCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppDivisionCreate $pipe */
+
         // 課の作成.
         $this->createNewDivision(
             $pipe->name,
@@ -52,7 +55,7 @@ class TrnDivisionService extends ModelServiceBase
      */
     public function createNewDivision(string $divisionName, string $divisionExplain, int $id = 0): void
     {
-        $trnDivision           = new TrnDivision();
+        $trnDivision           = new TrnDivision;
         if ($id !==0) {
             $trnDivision->id   = $id;
         }
@@ -65,8 +68,10 @@ class TrnDivisionService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppDivisionUpdate(
-        PipeAppDivisionUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppDivisionUpdate $pipe */
+
         // 課基本情報の更新.
         $trnDivision          = $this->findByIdOrFail($pipe->trnDivisionId);
         $trnDivision->name    = $pipe->name;
@@ -82,8 +87,10 @@ class TrnDivisionService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppDivisionDelete(
-        PipeAppDivisionDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppDivisionDelete $pipe */
+
         // 対象データを取得.
         /** @var TrnDivision $target */
         $target                  = TrnDivision::query()
@@ -100,6 +107,9 @@ class TrnDivisionService extends ModelServiceBase
 
     /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $index,
@@ -107,6 +117,7 @@ class TrnDivisionService extends ModelServiceBase
         array $with = []
     ): array {
         // リスト取得.
+        /** @var Collection<int, TrnDivision> $trnDivisionList */
         $trnDivisionList      = TrnDivision::query()
             ->with($with)
             ->alive()
@@ -127,11 +138,14 @@ class TrnDivisionService extends ModelServiceBase
 
     /**
      * Idによる検索(orFail)
+     *
+     * @param  array<mixed>  $with
      */
     public function findByIdOrFail(
         int $id,
         array $with = []
     ): TrnDivision {
+        /** @var TrnDivision */
         return TrnDivision::query()
             ->with($with)
             ->alive()

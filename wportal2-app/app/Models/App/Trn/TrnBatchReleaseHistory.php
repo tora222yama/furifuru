@@ -6,11 +6,15 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnBatchReleaseHistory
+ *
+ * @extends ModelBase<TrnBatchReleaseHistory>
+ */
 class TrnBatchReleaseHistory extends ModelBase
 {
-    use EagerLoadHelper, hasFactory;
+    use EagerLoadHelper;
 
     protected $table = 'trn_batch_release_history';
 }

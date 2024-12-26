@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 
 final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
 {
+    /** @var Collection<int, string> */
     public Collection $emailList;
 
     public Carbon $startDate;
@@ -19,6 +20,8 @@ final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -38,7 +41,5 @@ final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

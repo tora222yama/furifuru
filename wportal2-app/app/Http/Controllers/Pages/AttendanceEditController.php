@@ -34,7 +34,7 @@ class AttendanceEditController extends Controller
         $endOfMonth     = Carbon::createFromTimeString($dateTimeString)->endOfMonth();
 
         // 取得対象.
-        $trnUser        = TrnUserService::findByAuthIdOrFail(Auth::id());
+        $trnUser        = TrnUserService::findByAuthIdOrFail((int) Auth::id());
 
         return $this->render('AttendanceEdit/Index', [
             'dateTime'               => fn () => $dateTimeString,
@@ -80,7 +80,7 @@ class AttendanceEditController extends Controller
     private function parseDateTime(Request $request): string
     {
         return $request->has('dateTime')
-            ? $request->input('dateTime')
+            ? (string) $request->input('dateTime')
             : Carbon::now()->toString();
     }
 }

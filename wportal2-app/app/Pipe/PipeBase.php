@@ -15,16 +15,19 @@ abstract class PipeBase
 
     protected EPipeKind $kind     = EPipeKind::INVALID;
 
+    /** @var array<mixed> */
     protected array $caller       = [];
 
     protected ?MessageBag $errors = null;
 
-    abstract protected function parse();
+    abstract protected function parse(): void;
 
-    abstract public function validate();
+    abstract public function validate(): void;
 
     /**
      * PipeBase constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(EPipeKind $kind, array $args)
     {
@@ -47,6 +50,8 @@ abstract class PipeBase
 
     /**
      * 発生エラー一覧を取得.
+     *
+     * @return array<mixed>
      */
     public function getValidationErrors(): array
     {

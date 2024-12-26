@@ -13,7 +13,11 @@ final class SampleRedisQuery
 {
     public const string REDIS_QUERY_STORE_KEY = 'redis_query_store_key';
 
-    public function __invoke($_, array $args): array
+    /**
+     * @param  array<mixed>  $args
+     * @return array<mixed>
+     */
+    public function __invoke(mixed $_, array $args): array
     {
         // 早く完了しないように強制遅延.
         localSleep(1);
