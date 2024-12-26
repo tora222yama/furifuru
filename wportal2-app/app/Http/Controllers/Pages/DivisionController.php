@@ -196,8 +196,8 @@ class DivisionController extends Controller
     private function getPaginationDivision(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex            = $request->input('index', 0);
-        $pageStep             = $request->input('step', 5);
+        $pageIndex            = (int) $request->input('index', 0);
+        $pageStep             = (int) $request->input('step', 5);
 
         return TrnDivisionService::offsetPagination(
             $pageIndex,

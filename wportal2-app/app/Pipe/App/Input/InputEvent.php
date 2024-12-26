@@ -23,7 +23,7 @@ final class InputEvent
         $new            = new InputEvent;
 
         $new->uid       = (int) $array['uid'];
-        $new->updatedAt = Carbon::createFromTimeString($array['updatedAt']);
+        $new->updatedAt = Carbon::createFromTimeString((string) $array['updatedAt']);
 
         return $new;
     }

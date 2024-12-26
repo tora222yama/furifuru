@@ -48,6 +48,7 @@ class TrnProjectUserService extends ModelServiceBase
         }
 
         // 現在の配列.
+        /** @var Collection<int, int> $oldUserList */
         $oldUserList = TrnProjectUser::query()
             ->where('trn_project_id', $pipe->trnProjectId)
             ->pluck('trn_user_id');

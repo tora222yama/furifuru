@@ -80,8 +80,8 @@ class RewardController extends Controller
     private function getPaginationReward(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex        = $request->input('index', 0);
-        $pageStep         = $request->input('step', 20);
+        $pageIndex        = (int) $request->input('index', 0);
+        $pageStep         = (int) $request->input('step', 20);
 
         return TrnUserRewardService::offsetPagination(
             $this->authUser?->TrnUser?->id ?: 0,
@@ -100,8 +100,8 @@ class RewardController extends Controller
     private function getPaginationMstReward(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex        = $request->input('index', 0);
-        $pageStep         = $request->input('step', 20);
+        $pageIndex        = (int) $request->input('index', 0);
+        $pageStep         = (int) $request->input('step', 20);
 
         return MstRewardService::offsetPagination(
             $pageIndex,

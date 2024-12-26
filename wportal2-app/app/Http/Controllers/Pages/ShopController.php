@@ -79,7 +79,7 @@ EOF;
             // rakumoのブロック実行.
             GoogleCalendarService::blockSchedule(
                 $pipe->authUser?->email,
-                new Collection([$pipe->mstGoods?->author_email]),
+                new Collection([(string) $pipe->mstGoods?->author_email]),
                 $pipe->start,
                 $pipe->end,
                 $pipe->mstGoods?->name,

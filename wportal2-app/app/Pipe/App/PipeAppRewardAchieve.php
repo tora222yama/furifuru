@@ -19,7 +19,7 @@ final class PipeAppRewardAchieve extends PipeBase
 
     public ?AuthUser $authUser;
 
-    /** @var Collection<int, TrnUserReward>|null */
+    /** @var Collection<int, mixed>|null */
     public ?Collection $trnUserRewardIdList;
 
     public int $achieveGold     = 0;
@@ -66,7 +66,7 @@ final class PipeAppRewardAchieve extends PipeBase
 
             $achievableCount = max($trnUserReward->achievement_count - $trnUserReward->received_count, 0);
 
-            return $carry + $trnUserReward->MstReward->reward_gold * $achievableCount;
+            return (int) $carry + $trnUserReward->MstReward->reward_gold * $achievableCount;
         }, 0);
 
         // その他獲得対象があれば.

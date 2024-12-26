@@ -33,23 +33,24 @@ final class ActivityLogService
         Model $model,
         array $appendKeyValue
     ): void {
+        $id     = (string) $model->getKey();
         $authId = $authUser ? $authUser->id : 0;
         $output = '[changeDB] ';
         $output .= "Auth:$authId ";
         $output .= "$className:$functionName:$line ";
-        $output .= 'Id:'.$model->getKey().' ';
+        $output .= "Id:$id";
 
         // Modelのdirty確認.
         foreach ($model->getDirty() as $key => $value) {
-            $value    = $this->filterString($value);
-            $original = $this->filterString($model->getOriginal($key));
+            $value    = (string) $this->filterString($value);
+            $original = (string) $this->filterString($model->getOriginal($key));
 
             $output .= "$key:$original => $value ";
         }
 
         // 追加項目.
         foreach ($appendKeyValue as $key => $value) {
-            $value = $this->filterString($value);
+            $value = (string) $this->filterString($value);
 
             $output .= "$key:$value ";
         }

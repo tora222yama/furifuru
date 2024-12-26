@@ -32,7 +32,7 @@ class RuleMaxLength implements ValidationRule
         }
 
         // 改行コードを統一する.
-        $replacedValue = str_replace("\r\n", "\n", $value);
+        $replacedValue = str_replace("\r\n", "\n", (string) $value);
 
         if (mb_strlen($replacedValue) > $this->max) {
             $fail($this->message());

@@ -107,7 +107,7 @@ class PipeService
         foreach ($this->pipes as $pipe) {
             $validationErrors = $pipe->getValidationErrors();
             foreach ($validationErrors as $key => $validationError) {
-                foreach ($validationError as $message) {
+                foreach ((array) $validationError as $message) {
                     $errorValues[$key][] = $message;
                 }
             }

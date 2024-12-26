@@ -80,7 +80,7 @@ class AttendanceEditController extends Controller
     private function parseDateTime(Request $request): string
     {
         return $request->has('dateTime')
-            ? $request->input('dateTime')
+            ? (string) $request->input('dateTime')
             : Carbon::now()->toString();
     }
 }

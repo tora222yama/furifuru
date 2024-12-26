@@ -88,15 +88,16 @@ enum EValidationType: string
 
         return $ruleSetList->flatMap(function (ValidationRuleSet $pack) use ($columnTag, $columnName) {
             // ルール内の各指定について処理する.
-            return $pack->rule()->flatMap(function (string $rule) use (
+            return $pack->rule()->flatMap(function ($rule) use (
                 $columnTag,
                 $pack,
                 $columnName
             ) {
                 // 設定値付きのタグから設定値を除外.
+                /** @var string $rule */
                 $tag = $rule;
                 if (Str::contains($tag, ':')) {
-                    $tag = Str::substr($rule, 0, (int) Str::position($rule, ':'));
+                    $tag = Str::substr((string) $rule, 0, (int) Str::position((string) $rule, ':'));
                 }
 
                 // タグを設定、required|not_inの場合は
@@ -116,7 +117,8 @@ enum EValidationType: string
         $value1 = $pack->value1;
         $value2 = $pack->value2;
 
-        return match ($this) {
+        /** @var Collection<int, mixed> $ret */
+        $ret    = match ($this) {
             self::REQUIRED          => collect(['required']),
             self::REQUIRED_NOT_ZERO => collect(['required', 'not_in:0']),
             self::NUMBER            => collect(['numeric']),
@@ -133,6 +135,8 @@ enum EValidationType: string
             self::DATE              => collect(['date', 'nullable']),
             default                 => throw new Exception('バリデーションルールが未設定です'),
         };
+
+        return $ret;
     }
 
     /**

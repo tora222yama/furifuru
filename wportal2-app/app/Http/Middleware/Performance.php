@@ -135,8 +135,8 @@ class Performance
         $this->queryCount     = $this->queryList->count();
 
         // クエリ時間.
-        $this->queryTime      = $this->queryList->sum(
-            fn ($query) => $query['queryTime']
+        $this->queryTime      = (float) $this->queryList->sum(
+            fn ($query) => (float) $query['queryTime']
         );
 
         // クエリSQL.
@@ -158,17 +158,17 @@ class Performance
         }
 
         $sql    = $this->querySqlList->map(function ($sql) {
-            $pos = strpos($sql, 'where');
+            $pos = strpos((string) $sql, 'where');
 
-            return $pos ? substr($sql, 0, (int) strpos($sql, 'where')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'where')).'...' : $sql;
         })->map(function ($sql) {
-            $pos = strpos($sql, 'values');
+            $pos = strpos((string) $sql, 'values');
 
-            return $pos ? substr($sql, 0, (int) strpos($sql, 'values')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'values')).'...' : $sql;
         })->map(function ($sql) {
-            $pos = strpos($sql, 'set');
+            $pos = strpos((string) $sql, 'set');
 
-            return $pos ? substr($sql, 0, (int) strpos($sql, 'set')).'...' : $sql;
+            return $pos ? substr((string) $sql, 0, (int) strpos((string) $sql, 'set')).'...' : $sql;
         })
             ->implode("\n");
 

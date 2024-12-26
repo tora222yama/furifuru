@@ -124,8 +124,8 @@ class GoogleCalendarService
     private function getClient(string $executorCalendarId): Google_Client
     {
         // 認証パラメータ.
-        $rawData            = config('services.google.calendar_sa');
-        $jsonKey            = json_decode($rawData, true);
+        $rawData            = (string) config('services.google.calendar_sa');
+        $jsonKey            = (string) json_decode($rawData, true);
 
         // 利用スコープ.
         $scope              = [

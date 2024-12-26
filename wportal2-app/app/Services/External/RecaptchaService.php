@@ -15,10 +15,10 @@ class RecaptchaService
     public function isValidToken(string $recaptchaToken): bool
     {
         // シークレットキーは環境変数から取得する.
-        $secretKey         = config('recaptcha.SecretKey');
+        $secretKey         = (string) config('recaptcha.SecretKey');
 
         // URLを取得.
-        $verifyUrl         = config('recaptcha.VerifyUrl');
+        $verifyUrl         = (string) config('recaptcha.VerifyUrl');
 
         // recaptchaにtokenを問い合わせる.
         $url               = "$verifyUrl?secret=$secretKey&response=$recaptchaToken";
@@ -26,6 +26,8 @@ class RecaptchaService
         if ($verifyResponse === false) {
             return false;
         }
+
+        /** @var object{success: bool} $recaptchaResponse */
         $recaptchaResponse = json_decode($verifyResponse);
 
         // 結果を判定.

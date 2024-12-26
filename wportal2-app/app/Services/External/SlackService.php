@@ -59,6 +59,7 @@ class SlackService
         $message             = "${localeDate} ${nickName}さんが${stateLabel}";
 
         // ユーザーの所属するPJのID配列を特定.
+        /** @var array<int> $targetProjectIdList */
         $targetProjectIdList = TrnProjectUserService::listByTrnUserId($pipe->authUser?->TrnUser?->id ?: 0)
             ->pluck('trn_project_id')
             ->toArray();
@@ -82,6 +83,7 @@ class SlackService
         $result      = $this->slackApiLookupByEmail($pipe->email);
 
         // 結果を取得.
+        /** @var array{ok: bool|null, user: array{id: string, name: string, team_id: string}} $resultArray */
         $resultArray = json_decode((string) $result, true);
         if (isset($resultArray['ok']) && $resultArray['ok'] === true) {
             $pipe->slackUserId   = $resultArray['user']['id'];
@@ -106,8 +108,8 @@ class SlackService
      */
     public function notifyNotice(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url         = config('slack.NoticeUrl');
-        $env         = config('app.env');
+        $url         = (string) config('slack.NoticeUrl');
+        $env         = (string) config('app.env');
         $fixedTitle  = "[env]:`$env`";
         $fixedFile   = '';
 
@@ -142,8 +144,8 @@ EOF;
      */
     public function notifyError(?string $message, ?string $title = null, ?string $file = null, array $appendParams = []): void
     {
-        $url         = config('slack.ErrorUrl');
-        $env         = config('app.env');
+        $url         = (string) config('slack.ErrorUrl');
+        $env         = (string) config('app.env');
         $fixedTitle  = "[env]:`$env`";
         $fixedFile   = '';
 

@@ -184,7 +184,7 @@ class TrnUserService extends ModelServiceBase
     /**
      * オフセットページネーション情報の取得.
      *
-     * @param  array<string>  $with
+     * @param  array<mixed>  $with
      * @return array<string, mixed>
      */
     public function offsetPagination(
@@ -297,7 +297,7 @@ class TrnUserService extends ModelServiceBase
         // キャッシュから取得する.
         $cacheKey = $this->getCacheKeyFaceImage($trnUser);
 
-        return Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
+        return (string) Cache::remember($cacheKey, self::IMAGE_CACHE_TTL, function () use ($trnUser) {
             // URLを発行.
             return $this->createProfileImageTemporaryUrl($trnUser, self::IMAGE_CACHE_HOUR);
         });

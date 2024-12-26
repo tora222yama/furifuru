@@ -12,6 +12,7 @@ use App\Pipe\App\PipeAppUserDelete;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -47,6 +48,7 @@ class TrnDivisionUserService extends ModelServiceBase
         }
 
         // 現在の配列.
+        /** @var Collection<int, int> $oldUserList */
         $oldUserList = TrnDivisionUser::query()
             ->where('trn_division_id', $pipe->trnDivisionId)
             ->pluck('trn_user_id');

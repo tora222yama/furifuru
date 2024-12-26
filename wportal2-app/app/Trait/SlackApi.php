@@ -14,7 +14,7 @@ trait SlackApi
      */
     private function getBotToken(): string
     {
-        return config('slack.BotUserOAuthToken');
+        return (string) config('slack.BotUserOAuthToken');
     }
 
     /**

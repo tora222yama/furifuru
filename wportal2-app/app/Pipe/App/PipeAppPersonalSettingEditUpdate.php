@@ -54,7 +54,9 @@ final class PipeAppPersonalSettingEditUpdate extends PipeBase
 
         // image file upload.
         if (isset($this->args['upload'])) {
-            $this->upload        = $this->args['upload'];
+            /** @var UploadedFile $upload */
+            $upload              = $this->args['upload'];
+            $this->upload        = $upload;
         }
     }
 

@@ -31,8 +31,9 @@ final class PipeAppAttendanceEditUpdate extends PipeBase
     public function parse(): void
     {
         // 修正時間のリストを取得.
-        $eventList = $this->args['eventList'];
+        $eventList = (array) $this->args['eventList'];
         foreach ($eventList as $event) {
+            /** @var array<mixed> $event */
             $this->eventList->add(InputEvent::createFromArray($event));
         }
     }

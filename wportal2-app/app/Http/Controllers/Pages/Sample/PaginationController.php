@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 
 class PaginationController extends Controller
@@ -31,10 +30,8 @@ class PaginationController extends Controller
     private function getPaginationFacility(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex = $request->input('index', 0);
-        $pageStep  = $request->input('step', 3);
-
-        Log::info($pageIndex);
+        $pageIndex = (int) $request->input('index', 0);
+        $pageStep  = (int) $request->input('step', 3);
 
         return TrnUserService::offsetPagination(
             $pageIndex,
