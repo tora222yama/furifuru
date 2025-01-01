@@ -213,6 +213,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.SHUFFLE_LUNCH:
+      return 'シャッフルランチ';
     case E_PAGES.SHOP:
       return 'ショップ';
     case E_PAGES.REWARD:

@@ -3,20 +3,35 @@ import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import { ShuffleLunch } from '@/script/Pages/ShuffleLunch/ShuffleLunch';
+import {
+  E_TIME_ZONE,
+  ETimeZone,
+} from '@/script/Enum/Server/App/ShuffleLunch/ETimeZone';
 
 /**
  * コントローラーからグローバルに受取保持する値.
  */
-type IndexContext = {};
-export const context = React.createContext<IndexContext>({});
+type IndexContext = {
+  timezone: ETimeZone;
+};
+export const context = React.createContext<IndexContext>({
+  timezone: E_TIME_ZONE.INVALID,
+});
 export const useIndexContext = (): IndexContext => useContext(context);
 
-interface IProps extends IPropsBase {}
-export const Index: React.FC<IProps> = ({ ...props }) => {
+interface IProps extends IPropsBase {
+  timezone: number;
+}
+export const Index: React.FC<IProps> = ({ timezone, ...props }) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const providerValue: IndexContext = useMemo(() => ({}), []);
+  const providerValue: IndexContext = useMemo(
+    () => ({
+      timezone: timezone as ETimeZone,
+    }),
+    [timezone],
+  );
 
   return (
     <CommonIndexProvider {...props}>
