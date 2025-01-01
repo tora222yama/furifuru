@@ -27,6 +27,7 @@ export const E_ICON = {
   HOME: 'home',
   LIBRARY_BOOKS: 'library_books',
   LOGOUT: 'logout',
+  LUNCH: 'lunch',
   MANAGE_HISTORY: 'manage_history',
   MENU: 'menu',
   MILITARY_TECH: 'military_tech',
@@ -69,6 +70,7 @@ export const getIconSize = (icon: EIcon): { w: number; h: number } => {
     case E_ICON.HOME:
     case E_ICON.LIBRARY_BOOKS:
     case E_ICON.LOGOUT:
+    case E_ICON.LUNCH:
     case E_ICON.MANAGE_HISTORY:
     case E_ICON.MENU:
     case E_ICON.MILITARY_TECH:

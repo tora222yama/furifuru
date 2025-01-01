@@ -14,6 +14,7 @@ export const E_PAGES = {
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__EDIT__UPDATE: 'attendance__edit__update', // 勤怠修正・更新.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
+  SHUFFLE_LUNCH: 'shuffle_lunch', // シャッフルランチ.
   SHOP: 'shop', // ショップ.
   SHOP__LUNCH_TICKET: 'shop__lunch_ticket', // ショップ・ランチチケット.
   REWARD: 'reward', // 報酬.
@@ -88,6 +89,8 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.SHUFFLE_LUNCH:
+      return '/shuffle_lunch';
     case E_PAGES.SHOP:
       return '/shop';
     case E_PAGES.SHOP__LUNCH_TICKET:

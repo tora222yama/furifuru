@@ -32,6 +32,13 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
+     * シャッフルランチ.
+     */
+    Route::prefix('/shuffle_lunch')->group(function () {
+        Route::get('/', EPages::SHUFFLE_LUNCH->getInvokePath());
+    });
+
+    /**
      * ショップ
      */
     Route::prefix('/shop')->group(function () {

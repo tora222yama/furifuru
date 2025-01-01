@@ -20,6 +20,7 @@ enum EPages: string
     case ATTENDANCE__EDIT                  = 'attendance__edit'; // 勤怠修正.
     case ATTENDANCE__EDIT__UPDATE          = 'attendance__edit__update'; // 勤怠修正・更新.
     case ATTENDANCE__TABLE                 = 'attendance__table'; // 勤怠一覧表.
+    case SHUFFLE_LUNCH                     = 'shuffle_lunch'; // シャッフルランチ.
     case SHOP                              = 'shop'; // ショップ.
     case SHOP__LUNCH_TICKET                = 'shop__lunch_ticket'; // ショップ・ランチチケット.
     case REWARD                            = 'reward'; // 報酬.
@@ -83,6 +84,7 @@ enum EPages: string
             self::ATTENDANCE_DELETE              => '\App\Http\Controllers\Pages\AttendanceController@delete',
             self::ATTENDANCE_DIVISION_PRIORITY   => '\App\Http\Controllers\Pages\AttendanceController@division_priority',
             self::ATTENDANCE_PROJECT_PRIORITY    => '\App\Http\Controllers\Pages\AttendanceController@project_priority',
+            self::SHUFFLE_LUNCH                  => '\App\Http\Controllers\Pages\ShuffleLunchController@invoke',
             self::SHOP                           => '\App\Http\Controllers\Pages\ShopController@invoke',
             self::SHOP__LUNCH_TICKET             => '\App\Http\Controllers\Pages\ShopController@lunch_ticket',
             self::REWARD                         => '\App\Http\Controllers\Pages\RewardController@invoke',
