@@ -6,7 +6,7 @@ import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { useIndexContext } from '@/script/Pages/ShuffleLunch/Index';
 import { E_TIME_ZONE } from '@/script/Enum/Server/App/ShuffleLunch/ETimeZone';
-import { ShuffleLunchStandBy } from '@/script/Pages/ShuffleLunch/ShuffleLunchStandBy';
+import { StandBy } from '@/script/Pages/ShuffleLunch/StandBy/StandBy';
 import { DateTime } from '@/script/Common/DateTime';
 
 interface IProps extends IPropsBase {}
@@ -19,7 +19,7 @@ export const ShuffleLunch: React.FC<IProps> = () => {
   const nodeContent = (): React.ReactNode => {
     switch (timezone) {
       case E_TIME_ZONE.STANDBY:
-        return <ShuffleLunchStandBy />;
+        return <StandBy />;
       default:
         return null;
     }
