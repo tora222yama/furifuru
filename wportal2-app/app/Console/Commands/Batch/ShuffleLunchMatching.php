@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Batch;
 
+use App\Console\Commands\Batch\ShuffleLunchMatching\Group;
 use App\Console\Commands\Batch\ShuffleLunchMatching\GroupPack;
 use App\Enum\App\ShuffleLunch\ECalculate;
 use App\Enum\App\ShuffleLunch\EEventTimeZone;
@@ -13,6 +14,7 @@ use App\Models\App\Trn\TrnShuffleLunchEntry;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class ShuffleLunchMatching extends Command
@@ -80,8 +82,30 @@ class ShuffleLunchMatching extends Command
         );
 
         // グループパックを作成.
-        $groupPack      = GroupPack::createGroupPackByTotal($targetUserList->count());
+        $groupPack      = GroupPack::createGroupPackByTotal($eventTimeZone, $targetUserList->count());
 
-        // TODO: 作成したグループパックにメンバーを当てはめていく.
+        // 作成したグループパックにメンバーを当てはめていく.
+        $targetUserList
+            ->shuffle()
+            ->each(function (TrnShuffleLunchEntry $entry) use ($groupPack) {
+                $group = $groupPack->findAvailableGroup();
+                if (is_null($group)) {
+                    Log::error('fatal, group is full.');
+
+                    return true;
+                }
+
+                // エントリ情報のユーザーをグループに追加.
+                $group->addUser($entry->trn_user_id);
+
+                return true;
+            });
+
+        // デバッグ.
+        $groupPack->getGroupList()->each(function (Group $group) use ($groupPack) {
+            Log::info('group id: '.$group->getGroupId());
+            Log::info('event time zone: '.$groupPack->getEventTimeZone()->value);
+            Log::info(print_r($group->getTargetUserIdList()->toArray(), true));
+        });
     }
 }
