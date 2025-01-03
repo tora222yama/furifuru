@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::prefix('/shuffle_lunch')->group(function () {
         Route::get('/', EPages::SHUFFLE_LUNCH->getInvokePath());
         Route::post('/register', EPages::SHUFFLE_LUNCH__REGISTER->getInvokePath());
+        Route::post('/cancel', EPages::SHUFFLE_LUNCH__CANCEL->getInvokePath());
     });
 
     /**

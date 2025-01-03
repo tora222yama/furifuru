@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Models\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
+use App\Pipe\App\PipeAppShuffleLunchCancel;
 use App\Pipe\App\PipeAppShuffleLunchRegister;
 use App\Pipe\PipeBase;
 use App\Services\Models\ModelServiceBase;
@@ -28,6 +30,7 @@ class TrnShuffleLunchEntryService extends ModelServiceBase
             $kind = $pipe->getKind();
             match ($kind) {
                 EPipeKind::APP_SHUFFLE_LUNCH_REGISTER => $this->execAppShuffleLunchRegister($pipe),
+                EPipeKind::APP_SHUFFLE_LUNCH_CANCEL   => $this->execAppShuffleLunchCancel($pipe),
                 default                               => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
@@ -50,6 +53,24 @@ class TrnShuffleLunchEntryService extends ModelServiceBase
     }
 
     /**
+     * @throws Throwable
+     */
+    private function execAppShuffleLunchCancel(
+        PipeBase $pipe
+    ): void {
+        /** @var PipeAppShuffleLunchCancel $pipe */
+
+        // 本日のエントリーを取得する.
+        $entry                  = $this->findByUserIdInTodayOrFail(
+            $pipe->authUser?->TrnUser?->id ?: 0
+        );
+
+        // archiveに更新する.
+        $entry->e_archive_level = EArchiveLevel::ARCHIVE;
+        $this->updateOrFail($entry);
+    }
+
+    /**
      * 本日の参加者を取得する.
      *
      * @return Collection<int, TrnShuffleLunchEntry>
@@ -61,5 +82,19 @@ class TrnShuffleLunchEntryService extends ModelServiceBase
             ->whereDate('event_date', Carbon::now())
             ->alive()
             ->get();
+    }
+
+    /**
+     * ユーザーIDを指定して本日のエントリーを取得する.
+     */
+    public function findByUserIdInTodayOrFail(
+        int $trnUserId
+    ): TrnShuffleLunchEntry {
+        /** @var TrnShuffleLunchEntry */
+        return TrnShuffleLunchEntry::query()
+            ->where('trn_user_id', $trnUserId)
+            ->whereDate('event_date', Carbon::now())
+            ->alive()
+            ->firstOrFail();
     }
 }

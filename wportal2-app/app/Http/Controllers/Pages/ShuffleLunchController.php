@@ -12,6 +12,7 @@ use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
+use App\Pipe\App\PipeAppShuffleLunchCancel;
 use App\Pipe\App\PipeAppShuffleLunchRegister;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,9 +40,37 @@ class ShuffleLunchController extends Controller
      */
     public function register(Request $request): RedirectResponse
     {
+        // TODO: 計算済み状態かどうかのチェックを追加する.
+
         // パイプ作成.
         PipeService::insertNewPipe(
             new PipeAppShuffleLunchRegister($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // エントリ情報の更新.
+            TrnShuffleLunchEntryService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+    }
+
+    /**
+     * シャッフルランチのキャンセル.
+     */
+    public function cancel(Request $request): RedirectResponse
+    {
+        // TODO: 計算済み状態かどうかのチェックを追加する.
+
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppShuffleLunchCancel($request->toArray())
         );
 
         // バリデーションチェック.

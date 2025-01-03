@@ -11,9 +11,14 @@ import {
 } from '@/script/Enum/Server/App/ShuffleLunch/EEventTimeZone';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { router } from '@inertiajs/react';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {}
 export const StatusRegistered: React.FC<IProps> = () => {
+  const { onStart, onFinish } = useProgressContext();
   const { trnShuffleLunchEntryList } = useIndexContext();
   const { authUser } = useCommonIndexContext();
 
@@ -23,6 +28,20 @@ export const StatusRegistered: React.FC<IProps> = () => {
       .list()
       .find(v => v.trnUserId === authUser.trnUser?.id)?.eventTimeZone ??
     E_EVENT_TIME_ZONE.INVALID;
+
+  /**
+   * キャンセル処理.
+   */
+  const handleClickCancel = () => {
+    router.post(
+      getPagesHref(E_PAGES.SHUFFLE_LUNCH__CANCEL),
+      {},
+      {
+        onStart,
+        onFinish,
+      },
+    );
+  };
 
   return (
     <Paper
@@ -41,7 +60,6 @@ export const StatusRegistered: React.FC<IProps> = () => {
           gap: responsiveSpacing(4),
         }}
       >
-        <TypoText>参加表明済みです、マッチングをお待ちください</TypoText>
         <Box
           sx={{
             padding: responsiveSpacing(2),
@@ -52,8 +70,12 @@ export const StatusRegistered: React.FC<IProps> = () => {
             background: E_COLOR.PRIMARY_LIGHT,
           }}
         >
-          <TypoText>{getEventTimeZoneName(registeredZone)}</TypoText>
+          <TypoText>
+            [{getEventTimeZoneName(registeredZone)}
+            ]に参加表明済みです、マッチングをお待ちください
+          </TypoText>
         </Box>
+        <ButtonGeneral label="キャンセルする" onClick={handleClickCancel} />
       </Box>
     </Paper>
   );

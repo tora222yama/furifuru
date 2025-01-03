@@ -16,6 +16,7 @@ export const E_PAGES = {
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
   SHUFFLE_LUNCH: 'shuffle_lunch', // シャッフルランチ.
   SHUFFLE_LUNCH__REGISTER: 'shuffle_lunch__register', // シャッフルランチ登録.
+  SHUFFLE_LUNCH__CANCEL: 'shuffle_lunch__cancel', // シャッフルランチキャンセル.
   SHOP: 'shop', // ショップ.
   SHOP__LUNCH_TICKET: 'shop__lunch_ticket', // ショップ・ランチチケット.
   REWARD: 'reward', // 報酬.
@@ -94,6 +95,8 @@ const getHref = (page: EPages): string => {
       return '/shuffle_lunch';
     case E_PAGES.SHUFFLE_LUNCH__REGISTER:
       return '/shuffle_lunch/register';
+    case E_PAGES.SHUFFLE_LUNCH__CANCEL:
+      return '/shuffle_lunch/cancel';
     case E_PAGES.SHOP:
       return '/shop';
     case E_PAGES.SHOP__LUNCH_TICKET:

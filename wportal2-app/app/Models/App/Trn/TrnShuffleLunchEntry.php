@@ -6,6 +6,8 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Trn\TrnShuffleLunchEntryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @mixin TrnShuffleLunchEntry
@@ -14,7 +16,8 @@ use App\Trait\EagerLoadHelper;
  */
 class TrnShuffleLunchEntry extends ModelBase
 {
-    use EagerLoadHelper;
+    /** @use HasFactory<TrnShuffleLunchEntryFactory> */
+    use EagerLoadHelper, HasFactory;
 
     protected $table = 'trn_shuffle_lunch_entry';
 
