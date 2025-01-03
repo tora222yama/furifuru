@@ -6,8 +6,8 @@ namespace App\Enum\App\ShuffleLunch;
 
 enum ETimeZone: int
 {
-    case INVALID = 0; // 無効値.
+    case INVALID  = 0; // 無効値.
 
-    case STANDBY = 1; // 準備時間.
-    case ACTIVE  = 2; // 実施時間.
+    case STANDBY  = 1; // 準備時間.
+    case MATCHED  = 2; // マッチング済時間.
 }

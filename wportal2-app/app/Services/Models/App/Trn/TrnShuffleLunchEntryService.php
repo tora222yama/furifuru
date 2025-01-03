@@ -6,6 +6,7 @@ namespace App\Services\Models\App\Trn;
 
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EPipeKind;
+use App\Enum\App\ShuffleLunch\EEventTimeZone;
 use App\Facades\Internal\PipeService;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Pipe\App\PipeAppShuffleLunchCancel;
@@ -80,6 +81,19 @@ class TrnShuffleLunchEntryService extends ModelServiceBase
         /** @var Collection<int, TrnShuffleLunchEntry> */
         return TrnShuffleLunchEntry::query()
             ->whereDate('event_date', Carbon::now())
+            ->alive()
+            ->get();
+    }
+
+    /**
+     * @return Collection<int, TrnShuffleLunchEntry>
+     */
+    public function listTodayByEventTimeZone(EEventTimeZone $eventTimeZone): Collection
+    {
+        /** @var Collection<int, TrnShuffleLunchEntry> */
+        return TrnShuffleLunchEntry::query()
+            ->whereDate('event_date', Carbon::now())
+            ->where('event_time_zone', $eventTimeZone)
             ->alive()
             ->get();
     }

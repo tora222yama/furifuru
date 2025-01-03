@@ -12,27 +12,39 @@ import {
   IAppTrnShuffleLunchEntry,
   parseAppTrnShuffleLunchEntryPayload,
 } from '@/script/Models/App/Trn/TrnShuffleLunchEntry';
+import {
+  E_CALCULATE,
+  ECalculate,
+} from '@/script/Enum/Server/App/ShuffleLunch/ECalculate';
 
 /**
  * コントローラーからグローバルに受取保持する値.
  */
 type IndexContext = {
   timezone: ETimeZone;
+  calculate: ECalculate;
   trnShuffleLunchEntryList: AppTrnShuffleLunchEntryList;
+  errorMessage: string;
 };
 export const context = React.createContext<IndexContext>({
   timezone: E_TIME_ZONE.INVALID,
+  calculate: E_CALCULATE.INVALID,
   trnShuffleLunchEntryList: new AppTrnShuffleLunchEntryList(),
+  errorMessage: '',
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {
   timezone: number;
+  calculate: number;
   trnShuffleLunchEntryList: IAppTrnShuffleLunchEntry[];
+  errorMessage: string;
 }
 export const Index: React.FC<IProps> = ({
   timezone,
+  calculate,
   trnShuffleLunchEntryList,
+  errorMessage,
   ...props
 }) => {
   /**
@@ -41,11 +53,13 @@ export const Index: React.FC<IProps> = ({
   const providerValue: IndexContext = useMemo(
     () => ({
       timezone: timezone as ETimeZone,
+      calculate: calculate as ECalculate,
       trnShuffleLunchEntryList: new AppTrnShuffleLunchEntryList(
         trnShuffleLunchEntryList.map(v =>
           parseAppTrnShuffleLunchEntryPayload(v),
         ),
       ),
+      errorMessage,
     }),
     [timezone, trnShuffleLunchEntryList],
   );

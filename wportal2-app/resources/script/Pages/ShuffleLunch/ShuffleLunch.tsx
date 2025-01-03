@@ -5,13 +5,23 @@ import { Page } from '@/script/Pages/Page';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { useIndexContext } from '@/script/Pages/ShuffleLunch/Index';
+import { useSnackbar } from '@/script/Provider/SnackbarProvider';
 import { E_TIME_ZONE } from '@/script/Enum/Server/App/ShuffleLunch/ETimeZone';
 import { StandBy } from '@/script/Pages/ShuffleLunch/StandBy/StandBy';
 import { DateTime } from '@/script/Common/DateTime';
+import { useEffect } from 'react';
+import { Established } from '@/script/Pages/ShuffleLunch/Established/Established';
+import { E_CALCULATE } from '@/script/Enum/Server/App/ShuffleLunch/ECalculate';
+import { Calculating } from '@/script/Pages/ShuffleLunch/Calculating';
 
 interface IProps extends IPropsBase {}
 export const ShuffleLunch: React.FC<IProps> = () => {
-  const { timezone } = useIndexContext();
+  const { timezone, calculate, errorMessage } = useIndexContext();
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    snackbar(errorMessage);
+  }, [errorMessage]);
 
   /**
    * コンテンツ表示.
@@ -20,6 +30,14 @@ export const ShuffleLunch: React.FC<IProps> = () => {
     switch (timezone) {
       case E_TIME_ZONE.STANDBY:
         return <StandBy />;
+      case E_TIME_ZONE.MATCHED:
+        if (calculate === E_CALCULATE.CALCULATING) {
+          return <Calculating />;
+        }
+        if (calculate === E_CALCULATE.ESTABLISHED) {
+          return <Established />;
+        }
+        return null;
       default:
         return null;
     }

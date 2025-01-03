@@ -5,42 +5,68 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
-use App\Enum\App\ShuffleLunch\ECalculate;
 use App\Enum\App\ShuffleLunch\ERegister;
 use App\Enum\App\ShuffleLunch\ETimeZone;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
+use App\Facades\Usecases\UsecasesShuffleLunchService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Pipe\App\PipeAppShuffleLunchCancel;
 use App\Pipe\App\PipeAppShuffleLunchRegister;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
+use Throwable;
 
 class ShuffleLunchController extends Controller
 {
+    /**
+     * シャッフルランチ基本ページ表示処理.
+     */
     public function invoke(): Response
     {
+        // マッチ済みのtimezone&calculateが未計算なら計算処理を実施する.
+        $timezone  = UsecasesShuffleLunchService::getTodayTimeZone();
+        $calculate = UsecasesShuffleLunchService::getTodayCalculate();
+        if ($timezone === ETimeZone::MATCHED && $calculate->isStandBy()) {
+            UsecasesShuffleLunchService::execMatching();
+        }
+
         return $this->render('ShuffleLunch/Index', [
 
             // マッチング情報.
-            'timezone'                 => fn () => ETimeZone::STANDBY,
-            'calculate'                => fn () => ECalculate::INVALID,
+            'timezone'                 => fn () => UsecasesShuffleLunchService::getTodayTimeZone(),
+            'calculate'                => fn () => UsecasesShuffleLunchService::getTodayCalculate(),
             'registered'               => fn () => ERegister::INVALID,
 
             // 本日のエントリー.
             'trnShuffleLunchEntryList' => fn () => $this->getTodayEntryList(),
+
+            // エラーメッセージ.
+            'errorMessage'             => fn () => session('errorMessage') ?? null,
         ]);
     }
 
     /**
      * シャッフルランチへの参加表明.
+     *
+     * @throws Throwable
      */
     public function register(Request $request): RedirectResponse
     {
-        // TODO: 計算済み状態かどうかのチェックを追加する.
+        // 計算済み状態ならば処理不可.
+        $todayCalculate = UsecasesShuffleLunchService::getTodayCalculate();
+        if (! $todayCalculate->isStandBy()) {
+            $time = Carbon::now()->format('[H:i:s]');
+
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
+                ->with([
+                    'errorMessage' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
+                ]);
+        }
 
         // パイプ作成.
         PipeService::insertNewPipe(
@@ -63,10 +89,21 @@ class ShuffleLunchController extends Controller
 
     /**
      * シャッフルランチのキャンセル.
+     *
+     * @throws Throwable
      */
     public function cancel(Request $request): RedirectResponse
     {
-        // TODO: 計算済み状態かどうかのチェックを追加する.
+        // 計算済み状態ならば処理不可.
+        $todayCalculate = UsecasesShuffleLunchService::getTodayCalculate();
+        if (! $todayCalculate->isStandBy()) {
+            $time = Carbon::now()->format('[H:i:s]');
+
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
+                ->with([
+                    'errorMessage' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
+                ]);
+        }
 
         // パイプ作成.
         PipeService::insertNewPipe(

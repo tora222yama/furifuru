@@ -53,4 +53,7 @@ return [
     App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
+
+    // Usecases.
+    App\Providers\Usecases\UsecasesShuffleLunchServiceProvider::class,
 ];

@@ -217,6 +217,9 @@ return [
         App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
+        // Usecases.
+        App\Providers\Usecases\UsecasesShuffleLunchServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -265,6 +268,9 @@ return [
         'models\app\trn\trn_user_service'                    => App\Facades\Models\App\Trn\TrnUserService::class,
         'models\app\trn\trn_user_reward_service'             => App\Facades\Models\App\Trn\TrnUserRewardService::class,
         'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
+
+        // Usecases.
+        'usecases\usecases_shuffle_lunch_service'            => App\Facades\Usecases\UsecasesShuffleLunchService::class,
 
     ])->toArray(),
 ];
