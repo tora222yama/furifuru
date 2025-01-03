@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
-use App\Enum\App\ShuffleLunch\ERegister;
 use App\Enum\App\ShuffleLunch\ETimeZone;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
+use App\Facades\Models\App\Trn\TrnShuffleLunchGroupService;
 use App\Facades\Usecases\UsecasesShuffleLunchService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
+use App\Models\App\Trn\TrnShuffleLunchGroup;
 use App\Pipe\App\PipeAppShuffleLunchCancel;
 use App\Pipe\App\PipeAppShuffleLunchRegister;
 use Carbon\Carbon;
@@ -40,10 +41,14 @@ class ShuffleLunchController extends Controller
             // マッチング情報.
             'timezone'                 => fn () => UsecasesShuffleLunchService::getTodayTimeZone(),
             'calculate'                => fn () => UsecasesShuffleLunchService::getTodayCalculate(),
-            'registered'               => fn () => ERegister::INVALID,
 
             // 本日のエントリー.
             'trnShuffleLunchEntryList' => fn () => $this->getTodayEntryList(),
+
+            // 本日のグループ.
+            'trnShuffleLunchGroupList' => fn () => $this->getTodayGroupList([
+                'TrnUser',
+            ]),
 
             // エラーメッセージ.
             'errorMessage'             => fn () => session('errorMessage') ?? null,
@@ -132,9 +137,33 @@ class ShuffleLunchController extends Controller
      */
     private function getTodayEntryList(array $with = []): array
     {
+        // 必要なのは準備中の時のみ.
+        if (! UsecasesShuffleLunchService::getTodayCalculate()->isStandBy()) {
+            return [];
+        }
+
         return TrnShuffleLunchEntryService::listToday()
             ->map(function (TrnShuffleLunchEntry $trnShuffleLunchEntry) use ($with) {
                 return $trnShuffleLunchEntry->toPayload($with);
+            })->toArray();
+    }
+
+    /**
+     * 今日の成立済グループの取得
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
+     */
+    private function getTodayGroupList(array $with = []): array
+    {
+        // 必要なのは成立後のみ.
+        if (UsecasesShuffleLunchService::getTodayCalculate()->isStandBy()) {
+            return [];
+        }
+
+        return TrnShuffleLunchGroupService::listToday($with)
+            ->map(function (TrnShuffleLunchGroup $trnShuffleLunchGroup) use ($with) {
+                return $trnShuffleLunchGroup->toPayload($with);
             })->toArray();
     }
 }

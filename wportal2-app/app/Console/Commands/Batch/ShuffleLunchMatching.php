@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Batch;
 
-use App\Console\Commands\Batch\ShuffleLunchMatching\Group;
 use App\Console\Commands\Batch\ShuffleLunchMatching\GroupPack;
 use App\Enum\App\ShuffleLunch\ECalculate;
 use App\Enum\App\ShuffleLunch\EEventTimeZone;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
+use App\Facades\Models\App\Trn\TrnShuffleLunchGroupService;
 use App\Facades\Usecases\UsecasesShuffleLunchService;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Psr\SimpleCache\InvalidArgumentException;
+use Throwable;
 
 class ShuffleLunchMatching extends Command
 {
@@ -47,9 +49,14 @@ class ShuffleLunchMatching extends Command
      * Execute the console command.
      *
      * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function handle(): int
     {
+        // マッチ結果.
+        /** @var Collection<int, GroupPack> $matchingList */
+        $matchingList      = new Collection;
+
         // マッチング処理を実施.
         $eventTimeZoneList = EEventTimeZone::cases();
         foreach ($eventTimeZoneList as $eventTimeZone) {
@@ -57,8 +64,19 @@ class ShuffleLunchMatching extends Command
                 continue;
             }
 
-            $this->matching($eventTimeZone);
+            $matchingList->add($this->matching($eventTimeZone));
         }
+
+        // トランザクション処理.
+        DB::transaction(function () use ($matchingList) {
+            // ランチグループを削除.
+            TrnShuffleLunchGroupService::clearGroup();
+
+            // グループパックからランチグループを作成.
+            $matchingList->each(function (GroupPack $groupPack) {
+                TrnShuffleLunchGroupService::createByGroupPack($groupPack);
+            });
+        });
 
         // 計算済みを登録.
         Cache::set(
@@ -72,8 +90,10 @@ class ShuffleLunchMatching extends Command
 
     /**
      * 指定タイムゾーンのマッチング処理を実施.
+     *
+     * @throws Throwable
      */
-    private function matching(EEventTimeZone $eventTimeZone): void
+    private function matching(EEventTimeZone $eventTimeZone): GroupPack
     {
         // 対象となるユーザーの取得.
         /** @var Collection<int, TrnShuffleLunchEntry> $targetUserList */
@@ -101,11 +121,6 @@ class ShuffleLunchMatching extends Command
                 return true;
             });
 
-        // デバッグ.
-        $groupPack->getGroupList()->each(function (Group $group) use ($groupPack) {
-            Log::info('group id: '.$group->getGroupId());
-            Log::info('event time zone: '.$groupPack->getEventTimeZone()->value);
-            Log::info(print_r($group->getTargetUserIdList()->toArray(), true));
-        });
+        return $groupPack;
     }
 }

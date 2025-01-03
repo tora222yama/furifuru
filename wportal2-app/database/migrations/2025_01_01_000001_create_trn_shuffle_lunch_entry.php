@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('event_time_zone')->comment('ランチ時間幅');
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
             $table->timestamps();
+
+            $table->index('event_date');
         });
     }
 

@@ -175,8 +175,8 @@ class TestCaseSeeder extends Seeder
         $this->endFactory();
 
         // ランチエントリー.
-        $this->beginFactory('TrnShuffleLunchEntry', 20);
-        TrnShuffleLunchEntry::factory(20)
+        $this->beginFactory('TrnShuffleLunchEntry', 40);
+        TrnShuffleLunchEntry::factory(40)
             ->sequence(function (Sequence $sequence) use ($instance) {
                 $index = $sequence->index + 1;
                 $instance->advanceFactory();

@@ -16,6 +16,11 @@ import {
   E_CALCULATE,
   ECalculate,
 } from '@/script/Enum/Server/App/ShuffleLunch/ECalculate';
+import {
+  AppTrnShuffleLunchGroupList,
+  IAppTrnShuffleLunchGroup,
+  parseAppTrnShuffleLunchGroupPayload,
+} from '@/script/Models/App/Trn/TrnShuffleLunchGroup';
 
 /**
  * コントローラーからグローバルに受取保持する値.
@@ -24,12 +29,14 @@ type IndexContext = {
   timezone: ETimeZone;
   calculate: ECalculate;
   trnShuffleLunchEntryList: AppTrnShuffleLunchEntryList;
+  trnShuffleLunchGroupList: AppTrnShuffleLunchGroupList;
   errorMessage: string;
 };
 export const context = React.createContext<IndexContext>({
   timezone: E_TIME_ZONE.INVALID,
   calculate: E_CALCULATE.INVALID,
   trnShuffleLunchEntryList: new AppTrnShuffleLunchEntryList(),
+  trnShuffleLunchGroupList: new AppTrnShuffleLunchGroupList(),
   errorMessage: '',
 });
 export const useIndexContext = (): IndexContext => useContext(context);
@@ -38,12 +45,14 @@ interface IProps extends IPropsBase {
   timezone: number;
   calculate: number;
   trnShuffleLunchEntryList: IAppTrnShuffleLunchEntry[];
+  trnShuffleLunchGroupList: IAppTrnShuffleLunchGroup[];
   errorMessage: string;
 }
 export const Index: React.FC<IProps> = ({
   timezone,
   calculate,
   trnShuffleLunchEntryList,
+  trnShuffleLunchGroupList,
   errorMessage,
   ...props
 }) => {
@@ -52,18 +61,31 @@ export const Index: React.FC<IProps> = ({
    */
   const providerValue: IndexContext = useMemo(
     () => ({
+      // マッチング情報.
       timezone: timezone as ETimeZone,
       calculate: calculate as ECalculate,
+
+      // 本日のエントリー.
       trnShuffleLunchEntryList: new AppTrnShuffleLunchEntryList(
         trnShuffleLunchEntryList.map(v =>
           parseAppTrnShuffleLunchEntryPayload(v),
         ),
       ),
+
+      // 本日のグループ.
+      trnShuffleLunchGroupList: new AppTrnShuffleLunchGroupList(
+        trnShuffleLunchGroupList.map(v =>
+          parseAppTrnShuffleLunchGroupPayload(v),
+        ),
+      ),
+
+      // エラーメッセージ.
       errorMessage,
     }),
     [timezone, trnShuffleLunchEntryList],
   );
 
+  // noinspection TypeScriptValidateTypes
   return (
     <CommonIndexProvider {...props}>
       <context.Provider value={providerValue}>
