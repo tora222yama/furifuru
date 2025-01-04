@@ -54,6 +54,7 @@ class TestCaseSeeder extends Seeder
         TrnDivisionUser::truncate();
         TrnProject::truncate();
         TrnProjectUser::truncate();
+        TrnShuffleLunchEntry::truncate();
 
         $instance     = $this;
 

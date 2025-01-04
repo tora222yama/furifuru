@@ -23,7 +23,7 @@ export const EstablishedResult: React.FC<IProps> = ({ sx }) => {
         ...sx,
       }}
     >
-      <TypoH2>本日のマッチング結果</TypoH2>
+      <TypoH2>本日のマッチング結果 - 全体</TypoH2>
       {timeZoneList.map(zone => {
         return (
           <Box

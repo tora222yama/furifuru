@@ -26,7 +26,7 @@ export const EventGroup: React.FC<IProps> = ({ eventTimeZone, groupId }) => {
         padding: responsiveSpacing(4),
       }}
     >
-      <TypoH3>{`グループ [${groupId}]`}</TypoH3>
+      <TypoH3>{`グループ [${eventTimeZone}-${groupId}]`}</TypoH3>
       <Divider sx={{ marginTop: responsiveSpacing(2) }} />
       {filteredGroupList.map(group => {
         return (

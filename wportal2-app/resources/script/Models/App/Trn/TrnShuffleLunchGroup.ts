@@ -83,4 +83,22 @@ export class AppTrnShuffleLunchGroupList extends ListBase<IAppTrnShuffleLunchGro
       v => v.eventTimeZone === eventTimeZone && v.groupId === groupId,
     );
   };
+
+  /**
+   * 指定ユーザーIDによるグループの検索.
+   */
+  findGroupListByTrnUserId = (
+    trnUserId: number,
+  ): IAppTrnShuffleLunchGroup[] => {
+    const targetGroup = this.list().find(v => v.trnUserId === trnUserId);
+    if (!targetGroup) {
+      return [];
+    }
+
+    return this.list().filter(
+      v =>
+        v.groupId === targetGroup.groupId &&
+        v.eventTimeZone === targetGroup.eventTimeZone,
+    );
+  };
 }
