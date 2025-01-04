@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('event_time_zone')->comment('ランチ時間幅');
             $table->integer('group_id')->comment('グループID');
             $table->integer('trn_user_id')->comment('ユーザID');
+            $table->integer('rakumo_blocked')->default(0)->comment('rakumoがブロック済みかどうか');
             $table->integer('e_archive_level')->default(EArchiveLevel::ALIVE->value);
             $table->timestamps();
 

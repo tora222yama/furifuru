@@ -125,7 +125,7 @@ class GoogleCalendarService
     {
         // 認証パラメータ.
         $rawData            = (string) config('services.google.calendar_sa');
-        $jsonKey            = (string) json_decode($rawData, true);
+        $jsonKey            = (array) json_decode($rawData, true);
 
         // 利用スコープ.
         $scope              = [

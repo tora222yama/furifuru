@@ -66,7 +66,7 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
-                    'email' => "wportal2-dummy-$count@919.jp",
+                    'email' => "wportal2-dummy-$count@919dummy.jp",
                 ];
             })
             ->create([

@@ -48,6 +48,7 @@ class TrnShuffleLunchGroup extends ModelBase
             'eventTimeZone' => $this->event_time_zone    ?? 0,
             'groupId'       => $this->group_id           ?? 0,
             'trnUserId'     => $this->trn_user_id        ?? 0,
+            'rakumoBlocked' => $this->rakumo_blocked     ?? 0,
 
             'trnUser'       => $this->isExistKeyInWith($with, 'TrnUser', $history)
                 ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])

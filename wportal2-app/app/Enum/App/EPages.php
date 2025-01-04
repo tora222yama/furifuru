@@ -23,6 +23,7 @@ enum EPages: string
     case SHUFFLE_LUNCH                     = 'shuffle_lunch'; // シャッフルランチ.
     case SHUFFLE_LUNCH__REGISTER           = 'shuffle_lunch__register'; // シャッフルランチ登録.
     case SHUFFLE_LUNCH__CANCEL             = 'shuffle_lunch__cancel'; // シャッフルランチキャンセル.
+    case SHUFFLE_LUNCH__RAKUMO             = 'shuffle_lunch__rakumo'; // rakumoブロック.
     case SHOP                              = 'shop'; // ショップ.
     case SHOP__LUNCH_TICKET                = 'shop__lunch_ticket'; // ショップ・ランチチケット.
     case REWARD                            = 'reward'; // 報酬.
@@ -89,6 +90,7 @@ enum EPages: string
             self::SHUFFLE_LUNCH                  => '\App\Http\Controllers\Pages\ShuffleLunchController@invoke',
             self::SHUFFLE_LUNCH__REGISTER        => '\App\Http\Controllers\Pages\ShuffleLunchController@register',
             self::SHUFFLE_LUNCH__CANCEL          => '\App\Http\Controllers\Pages\ShuffleLunchController@cancel',
+            self::SHUFFLE_LUNCH__RAKUMO          => '\App\Http\Controllers\Pages\ShuffleLunchController@rakumo',
             self::SHOP                           => '\App\Http\Controllers\Pages\ShopController@invoke',
             self::SHOP__LUNCH_TICKET             => '\App\Http\Controllers\Pages\ShopController@lunch_ticket',
             self::REWARD                         => '\App\Http\Controllers\Pages\RewardController@invoke',

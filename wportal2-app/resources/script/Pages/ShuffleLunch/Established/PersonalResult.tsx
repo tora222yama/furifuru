@@ -11,9 +11,13 @@ import { LabelValue } from '@/script/Pages/Common/LabelValue';
 import { Avatar } from '@/script/Pages/Common/Avatar';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { router } from '@inertiajs/react';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
 interface IProps extends IPropsBase {}
 export const PersonalResult: React.FC<IProps> = ({ sx }) => {
+  const { onStart, onFinish } = useProgressContext();
   const { trnShuffleLunchGroupList } = useIndexContext();
   const { authUser } = useCommonIndexContext();
   const groupList = trnShuffleLunchGroupList.findGroupListByTrnUserId(
@@ -24,7 +28,16 @@ export const PersonalResult: React.FC<IProps> = ({ sx }) => {
    * rakumoブロックの実施.
    */
   const handleClickRakumo = () => {
-    console.log('rakumoブロックの実施.');
+    router.post(
+      getPagesHref(E_PAGES.SHUFFLE_LUNCH__RAKUMO),
+      {
+        idList: groupList.map(v => v.id),
+      },
+      {
+        onStart,
+        onFinish,
+      },
+    );
   };
 
   /**
@@ -125,9 +138,11 @@ export const PersonalResult: React.FC<IProps> = ({ sx }) => {
           }}
         >
           <TypoText>
-            マッチング時のrakumo自動ブロックは未実装です
+            ※マッチング時の自動ブロックは未実装です、右のボタンをご利用ください
             <br />
-            参加者同士で声をかけあって出発してください
+            ※919.jpのアドレス保持者のみ有効です
+            <br />
+            ※参加者同士で声をかけあって出発してください
           </TypoText>
           <ButtonGeneral
             sx={{
@@ -135,7 +150,7 @@ export const PersonalResult: React.FC<IProps> = ({ sx }) => {
             }}
             label="rakumoブロック"
             onClick={handleClickRakumo}
-            disabled
+            disabled={!!group.rakumoBlocked}
           />
         </Box>
       </Paper>

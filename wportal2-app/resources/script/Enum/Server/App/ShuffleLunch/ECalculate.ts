@@ -1,7 +1,6 @@
 // #ENUM_DEFINE_START#
 /**
  * 待機中(マッチング登録可能)かどうか.
- * @return bool
  */
 export const E_CALCULATE = {
   INVALID: 0, // 無効値.

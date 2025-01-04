@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EPages;
 use App\Enum\App\ShuffleLunch\ETimeZone;
+use App\Facades\External\GoogleCalendarService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchGroupService;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Models\App\Trn\TrnShuffleLunchGroup;
 use App\Pipe\App\PipeAppShuffleLunchCancel;
+use App\Pipe\App\PipeAppShuffleLunchRakumo;
 use App\Pipe\App\PipeAppShuffleLunchRegister;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -80,7 +82,7 @@ class ShuffleLunchController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
         }
 
         // 更新処理.
@@ -117,7 +119,7 @@ class ShuffleLunchController extends Controller
 
         // バリデーションチェック.
         if (! PipeService::isValid()) {
-            redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
         }
 
         // 更新処理.
@@ -127,6 +129,72 @@ class ShuffleLunchController extends Controller
         });
 
         return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+    }
+
+    /**
+     * シャッフルランチのキャンセル.
+     *
+     * @throws Throwable
+     */
+    public function rakumo(Request $request): RedirectResponse
+    {
+        // 計算済前ならば処理不可.
+        $todayCalculate = UsecasesShuffleLunchService::getTodayCalculate();
+        if ($todayCalculate->isStandBy()) {
+            $time = Carbon::now()->format('[H:i:s]');
+
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
+                ->with([
+                    'errorMessage' => "{$time}マッチング前のため実施できません",
+                ]);
+        }
+
+        // パイプ作成.
+        /** @var PipeAppShuffleLunchRakumo $pipe */
+        $pipe           = PipeService::insertNewPipe(
+            new PipeAppShuffleLunchRakumo($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
+        }
+
+        // 操作者が919.jpでない場合.
+        if (! str_contains($pipe->authUser?->email ?: '', '@919.jp')) {
+            $time = Carbon::now()->format('[H:i:s]');
+
+            return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
+                ->with([
+                    'errorMessage' => "{$time}カレンダー操作権限がありません",
+                ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function () use ($pipe): void {
+            // rakumoのブロック実行.
+            if (! $pipe->isBlocked) {
+                GoogleCalendarService::blockSchedule(
+                    $pipe->authUser?->email,
+                    $pipe->emailList,
+                    $pipe->start,
+                    $pipe->end,
+                    $pipe->summary,
+                    '※ここは直接指定できるようにします',
+                    '※ここは直接指定できるようにします'
+                );
+            }
+
+            // groupのblockedフラグ設定.
+            TrnShuffleLunchGroupService::updateByPipe();
+        });
+
+        $time           = Carbon::now()->format('[H:i:s]');
+
+        return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
+            ->with([
+                'errorMessage' => "{$time}rakumoのブロックが完了しました",
+            ]);
     }
 
     /**

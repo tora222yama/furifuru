@@ -14,6 +14,7 @@ export interface IAppTrnShuffleLunchGroup {
   eventTimeZone: EEventTimeZone;
   groupId: number;
   trnUserId: number;
+  rakumoBlocked: number;
 
   trnUser?: IAppTrnUser;
 }
@@ -29,6 +30,7 @@ export const parseAppTrnShuffleLunchGroupPayload = (
       : 0,
     groupId: payload.groupId ? Number(payload.groupId) : 0,
     trnUserId: payload.trnUserId ? Number(payload.trnUserId) : 0,
+    rakumoBlocked: payload.rakumoBlocked ? Number(payload.rakumoBlocked) : 0,
 
     trnUser: payload.trnUser
       ? parseAppTrnUserPayload(payload.trnUser)
@@ -48,6 +50,7 @@ export class AppTrnShuffleLunchGroupList extends ListBase<IAppTrnShuffleLunchGro
       eventTimeZone: E_EVENT_TIME_ZONE.INVALID,
       groupId: 0,
       trnUserId: 0,
+      rakumoBlocked: 0,
     };
   }
 
