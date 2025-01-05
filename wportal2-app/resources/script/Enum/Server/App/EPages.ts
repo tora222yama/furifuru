@@ -14,6 +14,10 @@ export const E_PAGES = {
   ATTENDANCE__EDIT: 'attendance__edit', // 勤怠修正.
   ATTENDANCE__EDIT__UPDATE: 'attendance__edit__update', // 勤怠修正・更新.
   ATTENDANCE__TABLE: 'attendance__table', // 勤怠一覧表.
+  SHUFFLE_LUNCH: 'shuffle_lunch', // シャッフルランチ.
+  SHUFFLE_LUNCH__REGISTER: 'shuffle_lunch__register', // シャッフルランチ登録.
+  SHUFFLE_LUNCH__CANCEL: 'shuffle_lunch__cancel', // シャッフルランチキャンセル.
+  SHUFFLE_LUNCH__RAKUMO: 'shuffle_lunch__rakumo', // rakumoブロック.
   SHOP: 'shop', // ショップ.
   SHOP__LUNCH_TICKET: 'shop__lunch_ticket', // ショップ・ランチチケット.
   REWARD: 'reward', // 報酬.
@@ -88,6 +92,14 @@ const getHref = (page: EPages): string => {
       return '/attendance/division_priority';
     case E_PAGES.ATTENDANCE_PROJECT_PRIORITY:
       return '/attendance/project_priority';
+    case E_PAGES.SHUFFLE_LUNCH:
+      return '/shuffle_lunch';
+    case E_PAGES.SHUFFLE_LUNCH__REGISTER:
+      return '/shuffle_lunch/register';
+    case E_PAGES.SHUFFLE_LUNCH__CANCEL:
+      return '/shuffle_lunch/cancel';
+    case E_PAGES.SHUFFLE_LUNCH__RAKUMO:
+      return '/shuffle_lunch/rakumo';
     case E_PAGES.SHOP:
       return '/shop';
     case E_PAGES.SHOP__LUNCH_TICKET:
@@ -210,6 +222,8 @@ export const getPagesName = (page: EPages): string => {
       return 'ダッシュボード';
     case E_PAGES.ATTENDANCE:
       return '勤怠共有';
+    case E_PAGES.SHUFFLE_LUNCH:
+      return 'シャッフルランチ';
     case E_PAGES.SHOP:
       return 'ショップ';
     case E_PAGES.REWARD:

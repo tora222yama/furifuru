@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Constant;
+use App\Enum\App\ShuffleLunch\EEventTimeZone;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnDivisionUser;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnProjectUser;
+use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Models\App\Trn\TrnUser;
 use App\Models\App\Trn\TrnUserDivisionPriority;
 use App\Models\App\Trn\TrnUserProjectPriority;
@@ -52,6 +54,7 @@ class TestCaseSeeder extends Seeder
         TrnDivisionUser::truncate();
         TrnProject::truncate();
         TrnProjectUser::truncate();
+        TrnShuffleLunchEntry::truncate();
 
         $instance     = $this;
 
@@ -63,7 +66,7 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
-                    'email' => "wportal2-dummy-$count@919.jp",
+                    'email' => "wportal2-dummy-$count@919dummy.jp",
                 ];
             })
             ->create([
@@ -170,6 +173,22 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
             });
 
+        $this->endFactory();
+
+        // ランチエントリー.
+        $this->beginFactory('TrnShuffleLunchEntry', 40);
+        TrnShuffleLunchEntry::factory(40)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'     => $index,
+                    'event_time_zone' => $index % 2 === 0 ? EEventTimeZone::EARLY->value : EEventTimeZone::NORMAL->value,
+                ];
+            })->create([
+                'event_date'      => now(),
+            ]);
         $this->endFactory();
 
         $this->command->info('******* initialize done. ********');

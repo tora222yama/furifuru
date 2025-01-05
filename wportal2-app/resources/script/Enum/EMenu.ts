@@ -7,6 +7,7 @@ export const E_MENU = {
   INVALID: 'invalid', // 無効.
   DASHBOARD: 'dashboard', // ダッシュボード.
   ATTENDANCE: 'attendance', // 勤怠共有.
+  SHUFFLE_LUNCH: 'shuffle_lunch', // シャッフルランチ.
   SHOP: 'shop', // ショップ.
   REWARD: 'reward', // 報酬.
   ATTENDANCE_ROOT: 'attendance_root', // 勤怠確認.
@@ -60,6 +61,14 @@ export const MenuList: IMenu[] = [
     back: E_PAGES.INVALID,
     name: '勤怠共有',
     icon: E_ICON.ATTENDANCE,
+  },
+  {
+    menu: E_MENU.SHUFFLE_LUNCH,
+    pages: E_PAGES.SHUFFLE_LUNCH,
+    parent: E_PAGES.INVALID,
+    back: E_PAGES.INVALID,
+    name: 'シャッフルランチ',
+    icon: E_ICON.LUNCH,
   },
   {
     menu: E_MENU.SHOP,
