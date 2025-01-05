@@ -6,9 +6,12 @@ namespace App\Models\App;
 
 use App\Enum\App\EArchiveLevel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * EloquentBuilder拡張.
+ *
+ * @extends Builder<Model>
  */
 class EloquentBuilder extends Builder
 {

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as React from 'react';
 import { Box, Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';

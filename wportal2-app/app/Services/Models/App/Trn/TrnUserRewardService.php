@@ -36,7 +36,7 @@ class TrnUserRewardService extends ModelServiceBase
                 EPipeKind::APP_ATTENDANCE_CREATE            => $this->execAppAttendanceStateCreate($pipe),
                 EPipeKind::APP_REWARD_ACHIEVE               => $this->execAppRewardAchieve($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_EDIT_UPDATE => $this->execAppPersonalSettingEditUpdate($pipe),
-                default                                     => throw new Exception(),
+                default                                     => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -48,8 +48,13 @@ class TrnUserRewardService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppAttendanceStateCreate(
-        PipeAppAttendanceCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppAttendanceCreate $pipe */
+        if (is_null($pipe->todayAttendanceStateList)) {
+            throw new Exception('Invalid todayAttendanceStateList.');
+        }
+
         // 出勤・退勤・休憩in/outが含まれているかチェックする.
         if (! EAttendanceState::isPerfectAttendance($pipe->todayAttendanceStateList)) {
             return;
@@ -57,7 +62,7 @@ class TrnUserRewardService extends ModelServiceBase
 
         // 本日の獲得が存在するなら処理しない.
         if ($this->isAchieveToday(
-            $pipe->authUser->TrnUser->id,
+            $pipe->authUser?->TrnUser?->id ?: 0,
             EMstReward::CREATE_PERFECT_ATTENDANCE)
         ) {
             Log::info('獲得済み.');
@@ -68,7 +73,7 @@ class TrnUserRewardService extends ModelServiceBase
         // 達成処理を実施.
         $this->achieve(
             $pipe,
-            $pipe->authUser->TrnUser->id,
+            $pipe->authUser?->TrnUser?->id ?: 0,
             EMstReward::CREATE_PERFECT_ATTENDANCE
         );
     }
@@ -76,14 +81,17 @@ class TrnUserRewardService extends ModelServiceBase
     /**
      * 報酬の達成.
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppRewardAchieve(
-        PipeAppRewardAchieve|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppRewardAchieve $pipe */
+
         // 対象となる報酬を取得.
+        /** @var Collection<int, TrnUserReward> $targetReward */
         $targetReward = TrnUserReward::query()
-            ->where('trn_user_id', $pipe->authUser->TrnUser->id)
+            ->where('trn_user_id', $pipe->authUser?->TrnUser?->id)
             ->whereIn('id', $pipe->trnUserRewardIdList)
             ->get();
 
@@ -101,8 +109,10 @@ class TrnUserRewardService extends ModelServiceBase
      * @throws Exception
      */
     private function execAppPersonalSettingEditUpdate(
-        PipeAppPersonalSettingEditUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingEditUpdate $pipe */
+
         // 報酬達成処理.
         $this->achieve(
             $pipe,
@@ -119,15 +129,18 @@ class TrnUserRewardService extends ModelServiceBase
     public function createNewUser(
         int $trnUserId
     ): void {
-        $model                    = new TrnUserReward();
+        $model                    = new TrnUserReward;
         $model->trn_user_id       = $trnUserId;
         $model->mst_reward_id     = EMstReward::CREATE_ACCOUNT;
         $model->achievement_count = 1;
         $this->insertOrFail($model);
     }
 
-    /**.
+    /**
      * オフセットページネーション情報の取得.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     public function offsetPagination(
         int $trnUserId,
@@ -136,6 +149,7 @@ class TrnUserRewardService extends ModelServiceBase
         array $with = [],
     ): array {
         // リスト取得.
+        /** @var Collection<int, TrnUserReward> $trnUserRewardList */
         $trnUserRewardList      = TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->with($with)
@@ -170,6 +184,7 @@ class TrnUserRewardService extends ModelServiceBase
         EMstReward $eMstReward
     ): void {
         // 対象となる報酬を取得.
+        /** @var TrnUserReward|null $targetReward */
         $targetReward = TrnUserReward::query()
             ->where('mst_reward_id', $eMstReward->value)
             ->where('trn_user_id', $trnUserId)
@@ -177,7 +192,7 @@ class TrnUserRewardService extends ModelServiceBase
 
         // 存在しない場合は新規レコードを作成.
         if (is_null($targetReward)) {
-            $newReward                    = new TrnUserReward();
+            $newReward                    = new TrnUserReward;
             $newReward->trn_user_id       = $trnUserId;
             $newReward->mst_reward_id     = $eMstReward->value;
             $newReward->achievement_count = 1;
@@ -220,12 +235,16 @@ class TrnUserRewardService extends ModelServiceBase
 
     /**
      * 達成可能な報酬をリストで取得.
+     *
+     * @param  array<mixed>  $with
+     * @return Collection<int, TrnUserReward>
      */
     public function listAchievable(
         int $trnUserId,
         int $trnUserRewardId,
         array $with = [],
     ): Collection {
+        /** @var Collection<int, TrnUserReward> */
         return TrnUserReward::query()
             ->where('trn_user_id', $trnUserId)
             ->where('achievement_count', '>', 'received_count')
@@ -241,20 +260,17 @@ class TrnUserRewardService extends ModelServiceBase
     public function countAchievable(
         ?AuthUser $authUser,
     ): int {
-        if (is_null($authUser)) {
-            return 0;
-        }
-
         // TODO: キャッシュ化を検討する.
 
         // 対象となる報酬のリストを取得.
+        /** @var Collection<int, TrnUserReward> $trnUserRewardList */
         $trnUserRewardList = TrnUserReward::query()
-            ->where('trn_user_id', $authUser->TrnUser->id)
+            ->where('trn_user_id', $authUser?->TrnUser?->id)
             ->where('achievement_count', '>', 'received_count')
             ->alive()
             ->get();
 
-        return $trnUserRewardList->reduce(function (int $carry, TrnUserReward $trnUserReward) {
+        return (int) $trnUserRewardList->reduce(function (int $carry, TrnUserReward $trnUserReward) {
             return $carry + ($trnUserReward->achievement_count - $trnUserReward->received_count);
         }, 0);
     }

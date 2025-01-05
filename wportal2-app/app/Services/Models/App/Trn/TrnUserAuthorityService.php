@@ -13,11 +13,14 @@ class TrnUserAuthorityService extends ModelServiceBase
 {
     /**
      * 指定権限を所有しているかどうか.
+     *
+     * @param Collection<int, covariant EUserAuthority> $authorityList
      */
     public function hasAuthority(
         int $trnUserId,
         Collection $authorityList
     ): bool {
+        /** @var Collection<int, TrnUserAuthority> $hasList */
         $hasList      = TrnUserAuthority::query()
             ->where('trn_user_id', $trnUserId)
             ->alive()
@@ -51,6 +54,7 @@ class TrnUserAuthorityService extends ModelServiceBase
         int $trnUserId,
         EUserAuthority $eUserAuthority
     ): ?TrnUserAuthority {
+        /** @var TrnUserAuthority|null */
         return TrnUserAuthority::query()
             ->where('trn_user_id', $trnUserId)
             ->where('e_user_authority', $eUserAuthority)

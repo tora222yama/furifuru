@@ -41,12 +41,10 @@ export class UseCasesCalendarUserScheduleList extends ListBase<IUsecasesCalendar
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IUsecasesCalendarUserSchedule => {
     return UseCasesCalendarUserScheduleList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IUsecasesCalendarUserSchedule): string {
     return value.identify;
   }

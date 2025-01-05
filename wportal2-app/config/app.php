@@ -149,6 +149,11 @@ return [
         // 'store' => 'redis',
     ],
 
+    /**
+     * 以下はide-helperに認識させるために記載、実際のロードは
+     * wportal2-app/bootstrap/providers.phpで行う
+     */
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -204,12 +209,17 @@ return [
         App\Providers\Models\App\Trn\TrnProjectNotificationServiceProvider::class,
         App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnShopAggregateServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnShuffleLunchEntryServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnShuffleLunchGroupServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
+
+        // Usecases.
+        App\Providers\Usecases\UsecasesShuffleLunchServiceProvider::class,
 
     ])->toArray(),
 
@@ -252,6 +262,8 @@ return [
         'models\app\trn\trn_project_notification_service'    => App\Facades\Models\App\Trn\TrnProjectNotificationService::class,
         'models\app\trn\trn_project_user_service'            => App\Facades\Models\App\Trn\TrnProjectUserService::class,
         'models\app\trn\trn_shop_aggregate_service'          => App\Facades\Models\App\Trn\TrnShopAggregateService::class,
+        'models\app\trn\trn_shuffle_lunch_entry_service'     => App\Facades\Models\App\Trn\TrnShuffleLunchEntryService::class,
+        'models\app\trn\trn_shuffle_lunch_group_service'     => App\Facades\Models\App\Trn\TrnShuffleLunchGroupService::class,
         'models\app\trn\trn_user_authority_service'          => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
         'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
@@ -259,6 +271,8 @@ return [
         'models\app\trn\trn_user_reward_service'             => App\Facades\Models\App\Trn\TrnUserRewardService::class,
         'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
 
-    ])->toArray(),
+        // Usecases.
+        'usecases\usecases_shuffle_lunch_service'            => App\Facades\Usecases\UsecasesShuffleLunchService::class,
 
+    ])->toArray(),
 ];

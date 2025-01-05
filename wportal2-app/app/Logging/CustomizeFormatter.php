@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Logging;
 
-//use App\Models\Scat\Auth\AuthUser;
-//use Auth;
-use Monolog\Logger;
+use Illuminate\Log\Logger;
+use Monolog\Handler\HandlerWrapper;
 use Monolog\Processor\IntrospectionProcessor;
 use Monolog\Processor\ProcessIdProcessor;
 use Monolog\Processor\WebProcessor;
@@ -15,22 +14,21 @@ class CustomizeFormatter
 {
     /**
      * 渡されたloggerをカスタマイズする
-     *
-     * @return void
      */
-    public function __invoke($logger)
+    public function __invoke(Logger $logger): void
     {
-        $formatter = new JsonCustomizeFormatter();
+        $formatter = new JsonCustomizeFormatter;
         $formatter->includeStacktraces();
 
         // extraフィールドを追加
-        $backtrace = new IntrospectionProcessor(Logger::DEBUG, ['Illuminate\\']);
+        $backtrace = new IntrospectionProcessor(\Monolog\Logger::DEBUG, ['Illuminate\\']);
         // extraフィールドにurl, ip, http_method, server, referrer追加
-        $wp        = new WebProcessor();
+        $wp        = new WebProcessor;
         // extraフィールドにprocess_id追加
-        $pid       = new ProcessIdProcessor();
+        $pid       = new ProcessIdProcessor;
 
         foreach ($logger->getHandlers() as $handler) {
+            /** @var HandlerWrapper $handler */
             $handler->setFormatter($formatter);
             $handler->pushProcessor($backtrace);
             $handler->pushProcessor($wp);

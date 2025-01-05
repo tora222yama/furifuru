@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as React from 'react';
 import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
@@ -106,7 +105,7 @@ export const Index: React.FC<IPros> = ({
   // noinspection TypeScriptValidateTypes
   return (
     <context.Provider value={providerValue}>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      {}
       <CommonIndexProvider {...props}>
         <InertiaData
           fixArray={fixArray}

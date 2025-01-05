@@ -21,6 +21,7 @@ export const Header: React.FC<IProps> = ({ sx }) => {
   const handlePrevMonth = () => {
     router.reload({
       method: 'post',
+      // @ts-expect-error inertia-preserve-state
       preserveState: true,
       preserveScroll: true,
       onStart,
@@ -37,6 +38,7 @@ export const Header: React.FC<IProps> = ({ sx }) => {
   const handleNextMonth = () => {
     router.reload({
       method: 'post',
+      // @ts-expect-error inertia-preserve-state
       preserveState: true,
       preserveScroll: true,
       onStart,

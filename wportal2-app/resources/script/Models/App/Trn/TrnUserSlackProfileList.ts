@@ -35,12 +35,10 @@ export class AppTrnUserSlackProfileList extends ListBase<IAppTrnUserSlackProfile
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUserSlackProfile => {
     return AppTrnUserSlackProfileList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUserSlackProfile): number {
     return value.id;
   }

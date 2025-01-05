@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Factories\App\Auth;
 
+use App\Models\App\Auth\AuthUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<AuthUser>
+ */
 class AuthUserFactory extends Factory
 {
     /**

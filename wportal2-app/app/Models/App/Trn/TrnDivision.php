@@ -6,17 +6,26 @@ namespace App\Models\App\Trn;
 
 use App\Models\App\ModelBase;
 use App\Trait\EagerLoadHelper;
+use Database\Factories\App\Trn\TrnDivisionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin TrnDivision
+ *
+ * @extends ModelBase<TrnDivision>
+ */
 class TrnDivision extends ModelBase
 {
+    /** @use HasFactory<TrnDivisionFactory> */
     use EagerLoadHelper, hasFactory;
 
     protected $table = 'trn_division';
 
     /**
      * リレーション:TrnDivisionUser
+     *
+     * @return HasMany<TrnDivisionUser, covariant TrnDivision>
      */
     public function TrnDivisionUser(): HasMany
     {
@@ -29,6 +38,8 @@ class TrnDivision extends ModelBase
 
     /**
      * リレーション:TrnUserDivisionPriority
+     *
+     * @return HasMany<TrnUserDivisionPriority, covariant TrnDivision>
      */
     public function TrnUserDivisionPriority(): HasMany
     {
@@ -41,6 +52,10 @@ class TrnDivision extends ModelBase
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

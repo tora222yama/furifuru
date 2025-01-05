@@ -40,7 +40,7 @@ class AuthUserService extends ModelServiceBase
                 EPipeKind::APP_LEGACY_LOGIN                     => $this->execAppLegacyLogin($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SP_PASSWORD     => $this->execAppPersonalSettingSpPassword($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SP_CONFIRM_CODE => $this->execAppPersonalSettingSpConfirmCode($pipe),
-                default                                         => throw new Exception(),
+                default                                         => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -48,12 +48,15 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * @throws Exception
+     * @throws Throwable
      */
     private function execAppUserCreate(
-        PipeAppUserCreate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserCreate $pipe */
+
         // 新規認証ユーザーを追加.
-        $new                   = new AuthUser();
+        $new                   = new AuthUser;
         $new->name             = $pipe->name;
         $new->email            = $pipe->email;
         $new->password         = substr(bin2hex(random_bytes(16)), 0, 16);
@@ -69,8 +72,9 @@ class AuthUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppUserUpdate(
-        PipeAppUserUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserUpdate $pipe */
         $authUser                        = $this->findByIdOrFail($pipe->authId);
 
         // レガシーログイン許可の更新.
@@ -87,16 +91,15 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppUserDelete(
-        PipeAppUserDelete|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserDelete $pipe */
+
         // 対象データを取得.
-        $target                  = AuthUser::query()
-            ->where('id', $pipe->authUserId)
-            ->alive()
-            ->firstOrFail();
+        $target                  = $this->findByIdOrFail($pipe->authUserId);
 
         // 対象データを削除.
         $target->e_archive_level = EArchiveLevel::ARCHIVE->value;
@@ -106,13 +109,14 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppLegacyLogin(
-        PipeAppLegacyLogin|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppLegacyLogin $pipe */
         if (is_null($pipe->targetAuthUser)) {
-            throw new Exception();
+            throw new Exception;
         }
 
         // ワンタイムパスワードの作成(6桁数値).
@@ -130,13 +134,14 @@ class AuthUserService extends ModelServiceBase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     private function execAppPersonalSettingSpPassword(
-        PipeAppPersonalSettingSpPassword|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingSpPassword $pipe */
         if (is_null($pipe->authUser)) {
-            throw new Exception();
+            throw new Exception;
         }
         $authUser                       = $pipe->authUser;
 
@@ -147,7 +152,7 @@ class AuthUserService extends ModelServiceBase
         $authUser->sp_password          = $pipe->password;
 
         // シークレットの更新.
-        $google2fa                      = new Google2FA();
+        $google2fa                      = new Google2FA;
         $authUser->sp_google_2fa_secret = $google2fa->generateSecretKey();
 
         // DB保存.
@@ -164,12 +169,14 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * @throws Exception
+     * @throws Throwable
      */
     private function execAppPersonalSettingSpConfirmCode(
-        PipeAppPersonalSettingSpConfirmCode|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppPersonalSettingSpConfirmCode $pipe */
         if (is_null($pipe->authUser)) {
-            throw new Exception();
+            throw new Exception;
         }
         $authUser      = $pipe->authUser;
 
@@ -180,8 +187,8 @@ class AuthUserService extends ModelServiceBase
         $secret        = $authUser->sp_google_2fa_secret;
 
         // 認証確認.
-        $google2fa     = new Google2FA();
-        $pipe->isValid = $google2fa->verifyKey($secret, $code);
+        $google2fa     = new Google2FA;
+        $pipe->isValid = (bool) $google2fa->verifyKey($secret, $code);
         if ($pipe->isValid) {
             // ログイン失敗回数を0に初期化してSPログインの許可.
             $authUser->e_enable_sp_login     = EEnableFlag::ENABLE->value;
@@ -192,9 +199,12 @@ class AuthUserService extends ModelServiceBase
 
     /**
      * IDで検索(orFail).
+     *
+     * @param  array<mixed>  $with
      */
-    public function findByIdOrFail(int $id, array $with = []): ?AuthUser
+    public function findByIdOrFail(int $id, array $with = []): AuthUser
     {
+        /** @var AuthUser */
         return AuthUser::query()
             ->with($with)
             ->findOrFail($id);

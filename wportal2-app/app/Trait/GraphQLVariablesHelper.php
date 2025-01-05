@@ -6,10 +6,13 @@ namespace App\Trait;
 
 trait GraphQLVariablesHelper
 {
+    /** @var array<mixed> */
     protected array $args = [];
 
     /**
      * argumentsから数値の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsInteger(string $key, ?array $args = null): int
     {
@@ -17,11 +20,13 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return (int) $args[$key] ?? 0;
+        return (int) ($args[$key] ?? 0);
     }
 
     /**
      * argumentsから文字列の引数を取得
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsString(string $key, ?array $args = null): string
     {
@@ -29,11 +34,13 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return $args[$key] ?? '';
+        return (string) ($args[$key] ?? '');
     }
 
     /**
      * argumentsから真偽値の引数を取得
+     *
+     * @param  array<mixed>|null  $args
      */
     protected function getArgAsBoolean(string $key, ?array $args = null): bool
     {
@@ -41,11 +48,14 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return $args[$key] ?? false;
+        return (bool) ($args[$key] ?? false);
     }
 
     /**
      * argumentsから数値の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
+     * @return array<int>
      */
     protected function getArgAsIntArray(string $key, ?array $args = null): array
     {
@@ -53,7 +63,10 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return array_map('intval', (array) $args[$key]) ?? [];
+        /** @var callable $callable */
+        $callable = 'intval';
+
+        return array_map($callable, (array) $args[$key]);
     }
 
     /**
@@ -62,6 +75,9 @@ trait GraphQLVariablesHelper
 
     /**
      * argumentsから文字列の引数を取得.
+     *
+     * @param  array<mixed>|null  $args
+     * @return array<string>
      */
     protected function getArgAsStringArray(string $key, ?array $args = null): array
     {
@@ -69,6 +85,9 @@ trait GraphQLVariablesHelper
             $args = $this->args;
         }
 
-        return array_map('strval', (array) $args[$key]) ?? [];
+        /** @var callable $callable */
+        $callable = 'strval';
+
+        return array_map($callable, (array) $args[$key]);
     }
 }

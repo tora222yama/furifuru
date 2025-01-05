@@ -15,6 +15,8 @@ final class PipeSamplePaginationQuery extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -33,7 +35,5 @@ final class PipeSamplePaginationQuery extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

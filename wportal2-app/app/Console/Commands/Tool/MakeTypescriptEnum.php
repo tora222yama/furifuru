@@ -68,6 +68,7 @@ class MakeTypescriptEnum extends Command
      * 出力無視ディレクトリ.
      */
     const IGNORE_DIR_LIST  = [
+        '',
     ];
 
     /**
@@ -81,6 +82,9 @@ class MakeTypescriptEnum extends Command
 
         // ディレクトリ直下から巡回取得
         $inputFiles = glob(app_path().'/Enum/E*.php');
+        if ($inputFiles === false) {
+            return $ret;
+        }
         foreach ($inputFiles as $inputFile) {
             $fileName             = basename($inputFile, '.php');
             if (in_array($fileName, self::IGNORE_LIST, true)) {
@@ -89,7 +93,7 @@ class MakeTypescriptEnum extends Command
                 continue;
             }
 
-            $pathPair             = new EnumPathPair();
+            $pathPair             = new EnumPathPair;
             $pathPair->inputPath  = $inputFile;
             $pathPair->outputPath = resource_path().'/script/Enum/Server/'.$fileName.'.ts';
             $ret[]                = $pathPair;
@@ -98,32 +102,66 @@ class MakeTypescriptEnum extends Command
         // サブディレクトリから巡回
         $this->info('サブディレクトリへの処理を実施');
         $inputDirs  = glob(app_path().'/Enum/*', GLOB_ONLYDIR);
+        if ($inputDirs === false) {
+            return $ret;
+        }
         foreach ($inputDirs as $inputDir) {
-            $lastDir    = str_replace(app_path().'/Enum/', '', $inputDir);
-            if (in_array($lastDir, self::IGNORE_DIR_LIST, true)) {
-                $this->info("${lastDir}を除外");
+            $distDir    = str_replace(app_path().'/Enum/', '', $inputDir);
+            if (in_array($distDir, self::IGNORE_DIR_LIST, true)) {
+                $this->info("{$distDir}を除外");
 
                 continue;
             }
 
-            // 巡回取得.
-            $inputFiles = glob($inputDir.'/E*.php');
-            foreach ($inputFiles as $inputFile) {
-                $fileName             = basename($inputFile, '.php');
-                if (in_array($fileName, self::IGNORE_LIST, true)) {
-                    $this->info("${fileName}を除外");
-
-                    continue;
-                }
-
-                $pathPair             = new EnumPathPair();
-                $pathPair->inputPath  = $inputFile;
-                $pathPair->outputPath = resource_path()."/script/Enum/Server/${lastDir}/${fileName}.ts";
-                $ret[]                = $pathPair;
-            }
+            // 再帰的に取得する.
+            $this->getPathPairRecursive($inputDir, $distDir, $ret);
         }
 
         return $ret;
+    }
+
+    /**
+     * 指定ディレクトリから対象ファイルを取得
+     *
+     * @param  EnumPathPair[]  $ret
+     */
+    private function getPathPairRecursive(string $inputDir, string $distDir, array &$ret): void
+    {
+        // 直下から巡回取得.
+        $inputFiles = glob($inputDir.'/E*.php');
+        if ($inputFiles === false) {
+            return;
+        }
+        foreach ($inputFiles as $inputFile) {
+            $fileName             = basename($inputFile, '.php');
+            if (in_array($fileName, self::IGNORE_LIST, true)) {
+                $this->info("{$fileName}を除外");
+
+                continue;
+            }
+
+            $pathPair             = new EnumPathPair;
+            $pathPair->inputPath  = $inputFile;
+            $pathPair->outputPath = resource_path()."/script/Enum/Server/$distDir/$fileName.ts";
+            $ret[]                = $pathPair;
+        }
+
+        // サブディレクトリがあればさらに巡回.
+        $subDirs    = glob("$inputDir/*", GLOB_ONLYDIR);
+        if ($subDirs === false) {
+            return;
+        }
+        foreach ($subDirs as $subDir) {
+            $distDir    = str_replace(app_path().'/Enum/', '', $subDir);
+            if (in_array($distDir, self::IGNORE_DIR_LIST, true)) {
+                $this->info("{$distDir}を除外");
+
+                continue;
+            }
+
+            // 再帰的に取得する.
+            $this->getPathPairRecursive($subDir, $distDir, $ret);
+        }
     }
 
     /**
@@ -185,6 +223,9 @@ class MakeTypescriptEnum extends Command
         $this->info('> 更新を開始:'.$pathPair->outputPath);
 
         $existCode       = file_get_contents($pathPair->outputPath);
+        if (! $existCode) {
+            return false;
+        }
 
         $typescriptBlock = $pathPair->toTypescriptBlock();
         $newCode         = preg_replace(

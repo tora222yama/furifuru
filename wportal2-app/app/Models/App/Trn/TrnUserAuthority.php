@@ -6,16 +6,22 @@ namespace App\Models\App\Trn;
 
 use App\Enum\App\EUserAuthority;
 use App\Models\App\ModelBase;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @mixin TrnUserAuthority
+ *
+ * @extends ModelBase<TrnUserAuthority>
+ */
 class TrnUserAuthority extends ModelBase
 {
-    use HasFactory;
-
     protected $table = 'trn_user_authority';
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.
+     *
+     * @param  array<mixed>  $with
+     * @param  array<string>  $history
+     * @return array<mixed>
      */
     public function toPayload(array $with = [], array $history = []): array
     {

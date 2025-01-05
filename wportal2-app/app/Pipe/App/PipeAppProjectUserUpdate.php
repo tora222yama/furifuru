@@ -12,10 +12,13 @@ final class PipeAppProjectUserUpdate extends PipeBase
 {
     public int $trnProjectId = 0;
 
+    /** @var Collection<int, int>|null */
     public ?Collection $trnUserIdList;
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -36,7 +39,5 @@ final class PipeAppProjectUserUpdate extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

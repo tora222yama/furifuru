@@ -43,13 +43,13 @@ class BatchRelease extends Command
     {
         // 識別子を取得.
         $identify       = $this->argument('identify');
-        if ($identify === null) {
+        if ($identify == null) {
             return self::FAILURE;
         }
 
         // 識別子を判定.
         $eIdentify      = EBatchRelease::tryFrom($identify);
-        if ($eIdentify === null) {
+        if ($eIdentify == null) {
             $this->error("識別子の指定が不正です:$identify");
 
             return self::FAILURE;
@@ -63,8 +63,8 @@ class BatchRelease extends Command
 
         // 開始表示.
         $this->info("バッチ[$identify]を実行します");
-        $this->info('dryRun：'.$dryRun ? 'Yes' : 'No');
-        $this->info('confirmLimit:'.$confirmLimit ? 'Yes' : 'No');
+        $this->info('dryRun：'.($dryRun ? 'Yes' : 'No'));
+        $this->info('confirmLimit:'.($confirmLimit ? 'Yes' : 'No'));
         if ($dryRun) {
             $this->info('dryRunモードのため、更新内容は記録されません');
         }
@@ -102,7 +102,7 @@ class BatchRelease extends Command
         if (! $dryRun) {
             if ($history === null) {
                 // 新規登録.
-                $history                  = new TrnBatchReleaseHistory();
+                $history                  = new TrnBatchReleaseHistory;
                 $history->batch_identify  = $eIdentify;
                 $history->execution_count = 1;
                 TrnBatchReleaseHistoryService::insertOrFail($history);

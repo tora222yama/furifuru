@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Constant;
+use App\Enum\App\ShuffleLunch\EEventTimeZone;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnDivisionUser;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnProjectUser;
+use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Models\App\Trn\TrnUser;
 use App\Models\App\Trn\TrnUserDivisionPriority;
 use App\Models\App\Trn\TrnUserProjectPriority;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Random\RandomException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -51,6 +54,7 @@ class TestCaseSeeder extends Seeder
         TrnDivisionUser::truncate();
         TrnProject::truncate();
         TrnProjectUser::truncate();
+        TrnShuffleLunchEntry::truncate();
 
         $instance     = $this;
 
@@ -62,7 +66,7 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
-                    'email' => "wportal2-dummy-$count@919.jp",
+                    'email' => "wportal2-dummy-$count@919dummy.jp",
                 ];
             })
             ->create([
@@ -73,6 +77,7 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー作成.
         $this->beginFactory('TrnUser', 150);
+        /** @var Collection<int, AuthUser> $authUserList */
         $authUserList = AuthUser::query()->get();
         $authUserList->each(function (AuthUser $authUser) use ($instance) {
             // 対応するユーザーを作成.
@@ -88,11 +93,16 @@ class TestCaseSeeder extends Seeder
 
         // ユーザー画像更新.
         $this->beginFactory('fix face image', 150);
+        /** @var Collection<int, TrnUser> $trnUserList */
         $trnUserList  = TrnUser::query()->get();
         $trnUserList->each(function (TrnUser $trnUser) use ($instance) {
             // 初期画像を保存.
             $defaultPath              = TrnUserService::createDefaultFaceImagePath();
             $file                     = Storage::disk('local')->get($defaultPath);
+            if (! $file) {
+                return;
+            }
+
             $ext                      = pathinfo($defaultPath, PATHINFO_EXTENSION);
             $path                     = Constant::FACE_IMAGE_S3_PATH."$trnUser->id.$ext";
             Storage::disk('storage')->put($path, $file);
@@ -163,6 +173,22 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
             });
 
+        $this->endFactory();
+
+        // ランチエントリー.
+        $this->beginFactory('TrnShuffleLunchEntry', 40);
+        TrnShuffleLunchEntry::factory(40)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'     => $index,
+                    'event_time_zone' => $index % 2 === 0 ? EEventTimeZone::EARLY->value : EEventTimeZone::NORMAL->value,
+                ];
+            })->create([
+                'event_date'      => now(),
+            ]);
         $this->endFactory();
 
         $this->command->info('******* initialize done. ********');

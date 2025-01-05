@@ -21,6 +21,7 @@ import {
   IAppTrnUserAuthority,
   parseAppTrnUserAuthorityPayload,
 } from '@/script/Models/App/Trn/TrnUserAuthorityList';
+import { SnackbarProvider } from '@/script/Provider/SnackbarProvider';
 
 const link = createUploadLink({
   uri: '/graphql',
@@ -88,8 +89,10 @@ export const CommonIndexProvider: React.FC<IProps> = ({
       <ThemeProvider theme={themeCommon}>
         <ApolloProvider client={client}>
           <ProgressProvider>
-            <CssBaseline />
-            {children}
+            <SnackbarProvider>
+              <CssBaseline />
+              {children}
+            </SnackbarProvider>
           </ProgressProvider>
         </ApolloProvider>
       </ThemeProvider>

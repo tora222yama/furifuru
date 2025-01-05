@@ -11,11 +11,13 @@ use Illuminate\Support\Collection;
 
 final class PipeAppAttendanceEditUpdate extends PipeBase
 {
-    /** @var Collection<InputEvent> */
+    /** @var Collection<int, InputEvent> */
     public Collection $eventList;
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -29,8 +31,9 @@ final class PipeAppAttendanceEditUpdate extends PipeBase
     public function parse(): void
     {
         // 修正時間のリストを取得.
-        $eventList = $this->args['eventList'];
+        $eventList = (array) $this->args['eventList'];
         foreach ($eventList as $event) {
+            /** @var array<mixed> $event */
             $this->eventList->add(InputEvent::createFromArray($event));
         }
     }
@@ -38,7 +41,5 @@ final class PipeAppAttendanceEditUpdate extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Pages\Sample;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnUser;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 
 class PaginationController extends Controller
@@ -23,14 +23,15 @@ class PaginationController extends Controller
 
     /**
      * ページネーション・施設
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationFacility(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex = $request->input('index', 0);
-        $pageStep  = $request->input('step', 3);
-
-        Log::info($pageIndex);
+        $pageIndex = (int) $request->input('index', 0);
+        $pageStep  = (int) $request->input('step', 3);
 
         return TrnUserService::offsetPagination(
             $pageIndex,
@@ -41,14 +42,18 @@ class PaginationController extends Controller
 
     /**
      * 固定リスト・施設.
+     *
+     * @param  array<mixed>  $with
+     * @return array<mixed>
      */
-    private function getFixList(array $with = [])
+    private function getFixList(array $with = []): array
     {
         return TrnUser::query()
             ->with($with)
             ->limit(5)
             ->get()
-            ->map(function (TrnUser $trnUser) use ($with) {
+            ->map(function (Model $trnUser) use ($with) {
+                /** @var TrnUser $trnUser */
                 return $trnUser->toPayload($with);
             })->toArray();
     }

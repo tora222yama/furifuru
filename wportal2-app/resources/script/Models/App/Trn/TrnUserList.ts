@@ -78,12 +78,10 @@ export class AppTrnUserList extends ListBase<IAppTrnUser> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppTrnUser => {
     return AppTrnUserList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppTrnUser): number {
     return value.id;
   }

@@ -71,15 +71,20 @@ class RewardController extends Controller
 
     /**
      * ページネーション・報酬.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
+     *
+     * @throws Exception
      */
     private function getPaginationReward(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex        = $request->input('index', 0);
-        $pageStep         = $request->input('step', 20);
+        $pageIndex        = (int) $request->input('index', 0);
+        $pageStep         = (int) $request->input('step', 20);
 
         return TrnUserRewardService::offsetPagination(
-            $this->authUser->TrnUser->id,
+            $this->authUser?->TrnUser?->id ?: 0,
             $pageIndex,
             $pageStep,
             $with
@@ -88,12 +93,15 @@ class RewardController extends Controller
 
     /**
      * ページネーション・報酬マスタ.
+     *
+     * @param  array<mixed>  $with
+     * @return array<string, mixed>
      */
     private function getPaginationMstReward(Request $request, array $with = []): array
     {
         // パラメータ受け取り.
-        $pageIndex        = $request->input('index', 0);
-        $pageStep         = $request->input('step', 20);
+        $pageIndex        = (int) $request->input('index', 0);
+        $pageStep         = (int) $request->input('step', 20);
 
         return MstRewardService::offsetPagination(
             $pageIndex,

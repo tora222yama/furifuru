@@ -28,6 +28,7 @@ export const Attendance: React.FC<IProps> = () => {
     // 再取得.
     router.reload({
       method: 'post',
+      // @ts-expect-error inertia-preserve-state
       preserveState: true,
       preserveScroll: true,
       onStart,

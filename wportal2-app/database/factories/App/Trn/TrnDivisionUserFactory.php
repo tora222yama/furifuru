@@ -7,6 +7,9 @@ namespace Database\Factories\App\Trn;
 use App\Models\App\Trn\TrnDivisionUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<TrnDivisionUser>
+ */
 class TrnDivisionUserFactory extends Factory
 {
     protected $model = TrnDivisionUser::class;

@@ -19,6 +19,8 @@ final class PipeAppAttendanceDivisionPriority extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -40,7 +42,5 @@ final class PipeAppAttendanceDivisionPriority extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 }

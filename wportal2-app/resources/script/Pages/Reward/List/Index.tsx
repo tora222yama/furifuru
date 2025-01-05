@@ -40,7 +40,6 @@ export const Index: React.FC<IProps> = ({ paginationReward, ...props }) => {
 
   // noinspection TypeScriptValidateTypes
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <CommonIndexProvider {...props}>
       <context.Provider value={providerValue}>
         <List />

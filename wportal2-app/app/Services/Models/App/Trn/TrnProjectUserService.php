@@ -30,7 +30,7 @@ class TrnProjectUserService extends ModelServiceBase
             match ($kind) {
                 EPipeKind::APP_PROJECT_USER_UPDATE  => $this->execAppProjectUserUpdate($pipe),
                 EPipeKind::APP_USER_DELETE          => $this->execAppUserDelete($pipe),
-                default                             => throw new Exception(),
+                default                             => throw new Exception,
             };
             $pipe->onUpdate(__CLASS__);
         }
@@ -40,9 +40,15 @@ class TrnProjectUserService extends ModelServiceBase
      * @throws Throwable
      */
     private function execAppProjectUserUpdate(
-        PipeAppProjectUserUpdate|PipeBase $pipe
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppProjectUserUpdate $pipe */
+        if (is_null($pipe->trnUserIdList)) {
+            throw new Exception('Invalid user list.');
+        }
+
         // 現在の配列.
+        /** @var Collection<int, int> $oldUserList */
         $oldUserList = TrnProjectUser::query()
             ->where('trn_project_id', $pipe->trnProjectId)
             ->pluck('trn_user_id');
@@ -50,7 +56,7 @@ class TrnProjectUserService extends ModelServiceBase
         // 追加する対象.
         $addUserList = $pipe->trnUserIdList->diff($oldUserList)->values();
         $addUserList->each(function (int $trnUserId) use ($pipe) {
-            $addUser                  = new TrnProjectUser();
+            $addUser                  = new TrnProjectUser;
             $addUser->trn_project_id  = $pipe->trnProjectId;
             $addUser->trn_user_id     = $trnUserId;
             $addUser->saveOrFail();
@@ -75,20 +81,25 @@ class TrnProjectUserService extends ModelServiceBase
      * EPipeKind::APP_USER_DELETE
      */
     private function execAppUserDelete(
-        PipeAppUserDelete|PipeBase $pipeAppUserDelete
+        PipeBase $pipe
     ): void {
+        /** @var PipeAppUserDelete $pipe */
+
         // ユーザーを削除.
         TrnProjectUser::query()
-            ->where('trn_user_id', $pipeAppUserDelete->trnUserId)
+            ->where('trn_user_id', $pipe->trnUserId)
             ->alive()
             ->delete();
     }
 
     /**
      * ユーザーID指定でリスト取得.
+     *
+     * @return Collection<int, TrnProjectUser>
      */
     public function listByTrnUserId(int $trnUserId): Collection
     {
+        /** @var Collection<int, TrnProjectUser> */
         return TrnProjectUser::query()
             ->where('trn_user_id', $trnUserId)
             ->alive()

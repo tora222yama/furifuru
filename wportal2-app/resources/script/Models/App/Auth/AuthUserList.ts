@@ -53,12 +53,10 @@ export class AppAuthUserList extends ListBase<IAppAuthUser> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   default = (): IAppAuthUser => {
     return AppAuthUserList.defaultInterface();
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getPrimary(value: IAppAuthUser): number {
     return value.id;
   }

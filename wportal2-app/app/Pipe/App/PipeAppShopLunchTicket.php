@@ -18,8 +18,6 @@ final class PipeAppShopLunchTicket extends PipeBase
 
     public string $target      = '';
 
-    public bool $isReady       = false;
-
     public ?AuthUser $authUser = null;
 
     public ?MstGoods $mstGoods = null;
@@ -30,6 +28,8 @@ final class PipeAppShopLunchTicket extends PipeBase
 
     /**
      * constructor.
+     *
+     * @param  array<mixed>  $args
      */
     public function __construct(array $args)
     {
@@ -48,9 +48,7 @@ final class PipeAppShopLunchTicket extends PipeBase
     /**
      * バリデーション実行.
      */
-    public function validate(): void
-    {
-    }
+    public function validate(): void {}
 
     /**
      * データ準備
@@ -68,8 +66,5 @@ final class PipeAppShopLunchTicket extends PipeBase
 
         // 終了時間.
         $this->end                 = Carbon::createFromTimeString($this->target)->addHour();
-
-        // データ準備完了.
-        $this->isReady             = true;
     }
 }
