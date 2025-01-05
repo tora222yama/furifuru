@@ -26,6 +26,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import PaidIcon from '@mui/icons-material/Paid';
 import PersonIcon from '@mui/icons-material/Person';
 import RemoveIcon from '@mui/icons-material/Remove';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
@@ -108,6 +109,8 @@ export const Icon: React.FC<IProps> = ({
       return <LibraryBooksIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.LOGOUT:
       return <LogoutIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.LUNCH:
+      return <RestaurantIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.MANAGE_HISTORY:
       return <ManageHistoryIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.MENU:
