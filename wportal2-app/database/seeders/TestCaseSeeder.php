@@ -214,6 +214,7 @@ class TestCaseSeeder extends Seeder
                 ];
             })->create([
                 'from_target_type'     => ETargetType::USER->value,
+                'to_target_type'       => ETargetType::USER->value,
             ]);
 
         // GoodJob: 課.
@@ -231,6 +232,7 @@ class TestCaseSeeder extends Seeder
                 ];
             })->create([
                 'from_target_type'     => ETargetType::DIVISION->value,
+                'to_target_type'       => ETargetType::DIVISION->value,
             ]);
 
         // GoodJob: プロジェクト.
@@ -248,6 +250,7 @@ class TestCaseSeeder extends Seeder
                 ];
             })->create([
                 'from_target_type'     => ETargetType::PROJECT->value,
+                'to_target_type'       => ETargetType::PROJECT->value,
             ]);
 
         // GoodJob: その他.
@@ -265,6 +268,7 @@ class TestCaseSeeder extends Seeder
                 ];
             })->create([
                 'from_target_type'     => ETargetType::LABEL->value,
+                'to_target_type'       => ETargetType::LABEL->value,
             ]);
 
         $this->endFactory();

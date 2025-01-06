@@ -9,8 +9,9 @@ import {
 } from '@/script/Enum/Server/App/EPages';
 import { Page } from '@/script/Pages/Page';
 import { ButtonGeneral } from '@/script/Component/Button/ButtonGeneral';
-import { responsiveSize } from '@/script/System/Responsive';
+import { responsiveSize, responsiveSpacing } from '@/script/System/Responsive';
 import { InertiaLink } from '@/script/Component/Misc/InertiaLink';
+import { GoodJobList } from '@/script/Pages/GoodJob/GoodJobList';
 
 interface IProps extends IPropsBase {}
 export const GoodJob: React.FC<IProps> = () => {
@@ -32,6 +33,7 @@ export const GoodJob: React.FC<IProps> = () => {
           />
         </InertiaLink>
       </Box>
+      <GoodJobList sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
 };
