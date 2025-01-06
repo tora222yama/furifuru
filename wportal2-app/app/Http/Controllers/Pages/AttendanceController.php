@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EAttendanceState;
 use App\Enum\App\EPages;
 use App\Facades\External\SlackService;
 use App\Facades\Internal\PipeService;
@@ -60,6 +61,9 @@ class AttendanceController extends Controller
                     $query->whereDate('updated_at', Carbon::now());
                 },
             ]),
+
+            // メッセージ.
+            'message'            => fn () => session('message') ?? null,
         ]);
     }
 
@@ -71,7 +75,8 @@ class AttendanceController extends Controller
     public function create(Request $request): RedirectResponse
     {
         // パイプ作成.
-        PipeService::insertNewPipe(
+        /** @var PipeAppAttendanceCreate $pipe */
+        $pipe    = PipeService::insertNewPipe(
             new PipeAppAttendanceCreate($request->toArray())
         );
 
@@ -87,7 +92,17 @@ class AttendanceController extends Controller
             TrnUserRewardService::updateByPipe();
         });
 
-        return redirect()->action(EPages::ATTENDANCE->getInvokePath());
+        // メッセージの設定.
+        $time    = Carbon::now()->format('[H:i:s]');
+        $message = match ($pipe->eAttendanceState) {
+            EAttendanceState::ATTENDANCE_OFFICE => "{$time}オフィスへの出勤お疲れ様です。是非シャッフルランチにご参加ください！",
+            default                             => '',
+        };
+
+        return redirect()->action(EPages::ATTENDANCE->getInvokePath())
+            ->with([
+                'message' => $message,
+            ]);
     }
 
     /**
