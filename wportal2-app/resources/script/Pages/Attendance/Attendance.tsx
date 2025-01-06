@@ -16,10 +16,22 @@ import { E_COLOR } from '@/script/Enum/EColor';
 import { E_ICON } from '@/script/Enum/EIcon';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { useSnackbar } from '@/script/Provider/SnackbarProvider';
+import { useIndexContext } from '@/script/Pages/Attendance/Index';
+import { useEffect } from 'react';
 
 interface IProps extends IPropsBase {}
 export const Attendance: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
+  const { message } = useIndexContext();
+  const snackbar = useSnackbar();
+
+  /**
+   * メッセージがあればスナックバー表示.
+   */
+  useEffect(() => {
+    snackbar(message);
+  }, [message]);
 
   /**
    * リロード処理

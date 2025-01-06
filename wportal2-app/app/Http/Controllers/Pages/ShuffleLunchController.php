@@ -53,7 +53,7 @@ class ShuffleLunchController extends Controller
             ]),
 
             // エラーメッセージ.
-            'errorMessage'             => fn () => session('errorMessage') ?? null,
+            'message'                  => fn () => session('message') ?? null,
         ]);
     }
 
@@ -71,7 +71,7 @@ class ShuffleLunchController extends Controller
 
             return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
                 ->with([
-                    'errorMessage' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
+                    'message' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
                 ]);
         }
 
@@ -108,7 +108,7 @@ class ShuffleLunchController extends Controller
 
             return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
                 ->with([
-                    'errorMessage' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
+                    'message' => "{$time}本日のシャッフルランチは既にマッチング済みのため処理できませんでした",
                 ]);
         }
 
@@ -145,7 +145,7 @@ class ShuffleLunchController extends Controller
 
             return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
                 ->with([
-                    'errorMessage' => "{$time}マッチング前のため実施できません",
+                    'message' => "{$time}マッチング前のため実施できません",
                 ]);
         }
 
@@ -166,7 +166,7 @@ class ShuffleLunchController extends Controller
 
             return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
                 ->with([
-                    'errorMessage' => "{$time}カレンダー操作権限がありません",
+                    'message' => "{$time}カレンダー操作権限がありません",
                 ]);
         }
 
@@ -193,7 +193,7 @@ class ShuffleLunchController extends Controller
 
         return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath())
             ->with([
-                'errorMessage' => "{$time}rakumoのブロックが完了しました",
+                'message' => "{$time}rakumoのブロックが完了しました",
             ]);
     }
 
