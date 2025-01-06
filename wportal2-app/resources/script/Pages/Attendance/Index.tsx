@@ -29,12 +29,14 @@ type IndexContext = {
   trnDivisionList: AppTrnDivisionList;
   trnUserList: AppTrnUserList;
   stateList: IAttendanceState[];
+  message: string;
 };
 export const context = React.createContext<IndexContext>({
   trnProjectList: new AppTrnProjectList(),
   trnDivisionList: new AppTrnDivisionList(),
   trnUserList: new AppTrnUserList(),
   stateList: [],
+  message: '',
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
@@ -42,11 +44,13 @@ interface IProps extends IPropsBase {
   trnProjectList: IAppTrnProject[];
   trnDivisionList: IAppTrnDivision[];
   trnUserList: IAppTrnUser[];
+  message: string;
 }
 export const Index: React.FC<IProps> = ({
   trnProjectList,
   trnDivisionList,
   trnUserList,
+  message,
   ...props
 }) => {
   /**
@@ -84,8 +88,11 @@ export const Index: React.FC<IProps> = ({
           ),
         };
       }),
+
+      // メッセージ.
+      message,
     };
-  }, [trnDivisionList, trnProjectList, trnUserList]);
+  }, [trnDivisionList, trnProjectList, trnUserList, message]);
 
   // noinspection TypeScriptValidateTypes
   return (

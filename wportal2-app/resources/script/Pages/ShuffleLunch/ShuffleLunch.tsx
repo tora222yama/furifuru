@@ -16,12 +16,15 @@ import { Calculating } from '@/script/Pages/ShuffleLunch/Calculating';
 
 interface IProps extends IPropsBase {}
 export const ShuffleLunch: React.FC<IProps> = () => {
-  const { timezone, calculate, errorMessage } = useIndexContext();
+  const { timezone, calculate, message } = useIndexContext();
   const snackbar = useSnackbar();
 
+  /**
+   * メッセージがあればスナックバー表示.
+   */
   useEffect(() => {
-    snackbar(errorMessage);
-  }, [errorMessage]);
+    snackbar(message);
+  }, [message]);
 
   /**
    * コンテンツ表示.

@@ -30,14 +30,14 @@ type IndexContext = {
   calculate: ECalculate;
   trnShuffleLunchEntryList: AppTrnShuffleLunchEntryList;
   trnShuffleLunchGroupList: AppTrnShuffleLunchGroupList;
-  errorMessage: string;
+  message: string;
 };
 export const context = React.createContext<IndexContext>({
   timezone: E_TIME_ZONE.INVALID,
   calculate: E_CALCULATE.INVALID,
   trnShuffleLunchEntryList: new AppTrnShuffleLunchEntryList(),
   trnShuffleLunchGroupList: new AppTrnShuffleLunchGroupList(),
-  errorMessage: '',
+  message: '',
 });
 export const useIndexContext = (): IndexContext => useContext(context);
 
@@ -46,14 +46,14 @@ interface IProps extends IPropsBase {
   calculate: number;
   trnShuffleLunchEntryList: IAppTrnShuffleLunchEntry[];
   trnShuffleLunchGroupList: IAppTrnShuffleLunchGroup[];
-  errorMessage: string;
+  message: string;
 }
 export const Index: React.FC<IProps> = ({
   timezone,
   calculate,
   trnShuffleLunchEntryList,
   trnShuffleLunchGroupList,
-  errorMessage,
+  message,
   ...props
 }) => {
   /**
@@ -80,7 +80,7 @@ export const Index: React.FC<IProps> = ({
       ),
 
       // エラーメッセージ.
-      errorMessage,
+      message,
     }),
     [timezone, trnShuffleLunchEntryList],
   );
