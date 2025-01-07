@@ -92,35 +92,35 @@ jobs:
           docker compose -f docker-compose-for-service.yml ps
 
       # ECRへのpush.
-#      - name: Build step - docker-compose push
-#        run: |
-#          echo "docker-composeでビルドしたイメージをECRにpush"
-#          docker compose -f docker-compose-for-service.yml push
+      - name: Build step - docker-compose push
+        run: |
+          echo "docker-composeでビルドしたイメージをECRにpush"
+          docker compose -f docker-compose-for-service.yml push
 
       # タスク定義作成.
-#      - name: Deploy step - render task
-#        id: render-task
-#        uses: aws-actions/amazon-ecs-render-task-definition@v1
-#        with:
-#          task-definition: task-definition.json
-#          container-name: wportal2-container
-#          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
+      - name: Deploy step - render task
+        id: render-task
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: wportal2-container
+          image: 979109089196.dkr.ecr.ap-northeast-1.amazonaws.com/wportal2_ecr_service_container:latest
 
       # タスク定義のデプロイ.
-#      - name: Deploy step - deploy task
-#        id: deploy-task
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#        with:
-#          task-definition: ${{ steps.render-task.outputs.task-definition }}
-#          service: wportal2-ecs-service
-#          cluster: wportal2-ecs-cluster
-#          wait-for-service-stability: true
+      - name: Deploy step - deploy task
+        id: deploy-task
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task.outputs.task-definition }}
+          service: wportal2-ecs-service
+          cluster: wportal2-ecs-cluster
+          wait-for-service-stability: true
 
       # Slack通知.
-#      - name: slack notice
-#        run: |
-#          echo "Notice to slack"
-#          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルのdeployが完了しました:${{ github.sha }}"}' https://hooks.slack.com/services/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
+      - name: slack notice
+        run: |
+          echo "Notice to slack"
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"web本部ポータルのdeployが完了しました:${{ github.sha }}"}' https://hooks.slack.com/services/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
 
       # キャッシュ削除.
       - name: Move cache
