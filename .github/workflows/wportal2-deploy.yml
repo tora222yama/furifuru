@@ -33,7 +33,7 @@ jobs:
       # ビルド設定.
       - name: Build step - setup buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       # キャッシュ対応.
       - name: Cache step
