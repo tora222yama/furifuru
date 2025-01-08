@@ -20,6 +20,9 @@ return new class extends Migration
         Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->id();
 
+            // 作成者.
+            $table->integer('trn_user_id')->comment('作成者ユーザID');
+
             // 発信元情報.
             $table->integer('from_target_type')
                 ->default(ETargetType::INVALID->value)

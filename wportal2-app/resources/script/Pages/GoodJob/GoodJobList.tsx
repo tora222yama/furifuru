@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import { useIndexContext } from '@/script/Pages/GoodJob/Index';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { Paging } from '@/script/Component/Misc/Paging';
 import { responsiveSpacing } from '@/script/System/Responsive';
-import { Icon } from '@/script/Component/Misc/Icon';
-import { E_ICON } from '@/script/Enum/EIcon';
-import { E_TARGET, GoodJobTarget } from '@/script/Pages/GoodJob/GoodJobTarget';
+import { GoodJobItem } from '@/script/Pages/GoodJob/GoodJobItem';
 
 interface IProps extends IPropsBase {}
 export const GoodJobList: React.FC<IProps> = ({ sx }) => {
@@ -80,29 +78,7 @@ export const GoodJobList: React.FC<IProps> = ({ sx }) => {
         handleNext={handleNext}
       />
       {trnGoodJobList.list().map(goodJob => {
-        return (
-          <Paper
-            key={goodJob.id}
-            sx={{
-              padding: responsiveSpacing(4),
-              '&:not(:first-of-type)': {
-                marginTop: responsiveSpacing(2),
-              },
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: responsiveSpacing(4),
-              }}
-            >
-              <GoodJobTarget target={E_TARGET.FROM} trnGoodJob={goodJob} />
-              <Icon icon={E_ICON.ARROW_RIGHT} />
-              <GoodJobTarget target={E_TARGET.TO} trnGoodJob={goodJob} />
-            </Box>
-          </Paper>
-        );
+        return <GoodJobItem key={goodJob.id} trnGoodJob={goodJob} />;
       })}
       <Paging
         sx={{

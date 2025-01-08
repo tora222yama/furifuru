@@ -3,9 +3,15 @@ import {
   E_TARGET_TYPE,
   ETargetType,
 } from '@/script/Enum/Server/App/GoodJob/ETargetType';
+import { IAppTrnUser } from '@/script/Models/App/Trn/TrnUserList';
+import { IAppTrnDivision } from '@/script/Models/App/Trn/TrnDivisionList';
+import { IAppTrnProject } from '@/script/Models/App/Trn/TrnProjectList';
 
 export interface IAppTrnGoodJob {
   id: number;
+
+  trnUserId: number;
+
   fromTargetType: ETargetType;
   fromTrnUserId: number;
   fromTrnDivisionId: number;
@@ -19,6 +25,13 @@ export interface IAppTrnGoodJob {
   title: string;
   content: string;
   createdAt: string;
+
+  fromTrnUser?: IAppTrnUser;
+  fromTrnDivision?: IAppTrnDivision;
+  fromTrnProject?: IAppTrnProject;
+  toTrnUser?: IAppTrnUser;
+  toTrnDivision?: IAppTrnDivision;
+  toTrnProject?: IAppTrnProject;
 }
 
 export const parseAppTrnGoodJobPayload = (
@@ -26,6 +39,9 @@ export const parseAppTrnGoodJobPayload = (
 ): IAppTrnGoodJob => {
   return {
     id: payload.id ? Number(payload.id) : 0,
+
+    trnUserId: payload.trnUserId ? Number(payload.trnUserId) : 0,
+
     fromTargetType: payload.fromTargetType
       ? (Number(payload.fromTargetType) as ETargetType)
       : 0,
@@ -51,6 +67,26 @@ export const parseAppTrnGoodJobPayload = (
     title: payload.title ? String(payload.title) : '',
     content: payload.content ? String(payload.content) : '',
     createdAt: payload.createdAt ? String(payload.createdAt) : '',
+
+    // FromTrnUser.
+    fromTrnUser: payload.fromTrnUser ? payload.fromTrnUser : undefined,
+
+    // FromTrnDivision.
+    fromTrnDivision: payload.fromTrnDivision
+      ? payload.fromTrnDivision
+      : undefined,
+
+    // FromTrnProject.
+    fromTrnProject: payload.fromTrnProject ? payload.fromTrnProject : undefined,
+
+    // ToTrnUser.
+    toTrnUser: payload.toTrnUser ? payload.toTrnUser : undefined,
+
+    // ToTrnDivision.
+    toTrnDivision: payload.toTrnDivision ? payload.toTrnDivision : undefined,
+
+    // ToTrnProject.
+    toTrnProject: payload.toTrnProject ? payload.toTrnProject : undefined,
   };
 };
 
@@ -62,6 +98,7 @@ export class AppTrnGoodJobList extends ListBase<IAppTrnGoodJob> {
   static defaultInterface(): IAppTrnGoodJob {
     return {
       id: 0,
+      trnUserId: 0,
       fromTargetType: E_TARGET_TYPE.INVALID,
       fromTrnUserId: 0,
       fromTrnDivisionId: 0,

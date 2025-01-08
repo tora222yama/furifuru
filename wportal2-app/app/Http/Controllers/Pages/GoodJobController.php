@@ -12,7 +12,7 @@ use Inertia\Response;
 class GoodJobController extends Controller
 {
     /**
-     * 感謝を伝える基本ページ表示処理.
+     * 感謝を記録する基本ページ表示処理.
      */
     public function invoke(Request $request): Response
     {
@@ -20,10 +20,24 @@ class GoodJobController extends Controller
 
             // GoodJob情報.
             'paginationGoodJob' => fn () => $this->getPaginationGoodJob($request, [
+                'FromTrnUser',
+                'FromTrnDivision',
+                'FromTrnProject',
 
+                'ToTrnUser',
+                'ToTrnDivision',
+                'ToTrnProject',
             ]),
 
         ]);
+    }
+
+    /**
+     * 感謝を記録する・新規作成.
+     */
+    public function create(Request $request): Response
+    {
+        return $this->render('GoodJob/Create/Index', []);
     }
 
     /**

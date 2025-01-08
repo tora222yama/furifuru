@@ -26,6 +26,8 @@ class TrnGoodJobService extends ModelServiceBase
         $trnGoodJobList      = TrnGoodJob::query()
             ->with($with)
             ->alive()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->offset($index * $step)
             ->limit($step)
             ->get();

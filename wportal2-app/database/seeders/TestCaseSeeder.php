@@ -207,8 +207,9 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
+                    'trn_user_id'      => $index,
                     'from_trn_user_id' => $index,
-                    'to_trn_user_id'   => $index + 20,
+                    'to_trn_user_id'   => $index + 10,
                     'title'            => "title-$type-$index",
                     'content'          => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
                 ];
@@ -225,8 +226,9 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
+                    'trn_user_id'          => $index,
                     'from_trn_division_id' => $index,
-                    'to_trn_division_id'   => $index + 20,
+                    'to_trn_division_id'   => $index + 10,
                     'title'                => "title-$type-$index",
                     'content'              => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
                 ];
@@ -243,8 +245,9 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
+                    'trn_user_id'         => $index,
                     'from_trn_project_id' => $index,
-                    'to_trn_project_id'   => $index + 20,
+                    'to_trn_project_id'   => $index + 10,
                     'title'               => "title-$type-$index",
                     'content'             => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
                 ];
@@ -261,6 +264,7 @@ class TestCaseSeeder extends Seeder
                 $instance->advanceFactory();
 
                 return [
+                    'trn_user_id'      => $index,
                     'from_other_label' => "other-$index",
                     'to_other_label'   => "other-$index",
                     'title'            => "title-$type-$index",

@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
-     * 感謝を伝える.
+     * 感謝を記録する.
      */
     Route::prefix('/good_job')->group(function () {
         Route::match(['get', 'post'], '/', EPages::GOOD_JOB->getInvokePath());

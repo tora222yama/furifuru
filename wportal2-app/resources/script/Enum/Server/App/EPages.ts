@@ -231,7 +231,9 @@ export const getPagesName = (page: EPages): string => {
     case E_PAGES.SHUFFLE_LUNCH:
       return 'シャッフルランチ';
     case E_PAGES.GOOD_JOB:
-      return '感謝を伝える';
+      return '感謝を記録する';
+    case E_PAGES.GOOD_JOB__CREATE:
+      return '感謝の新規登録';
     case E_PAGES.SHOP:
       return 'ショップ';
     case E_PAGES.REWARD:
@@ -303,6 +305,8 @@ export const getPagesName = (page: EPages): string => {
  */
 export const getPagesBack = (pages: EPages): EPages[] => {
   switch (pages) {
+    case E_PAGES.GOOD_JOB__CREATE:
+      return [E_PAGES.GOOD_JOB];
     case E_PAGES.REWARD__LIST:
       return [E_PAGES.REWARD];
     case E_PAGES.DIVISION__SHOW:

@@ -4,6 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { IAppTrnGoodJob } from '@/script/Models/App/Trn/TrnGoodJobList';
 import { E_TARGET_TYPE } from '@/script/Enum/Server/App/GoodJob/ETargetType';
 import { Avatar } from '@/script/Pages/Common/Avatar';
+import { TypoText } from '@/script/Component/Typography/TypoText';
 
 export const E_TARGET = {
   FROM: 'from',
@@ -15,7 +16,11 @@ interface IProps extends IPropsBase {
   target: ETarget;
   trnGoodJob: IAppTrnGoodJob;
 }
-export const GoodJobTarget: React.FC<IProps> = ({ sx, target, trnGoodJob }) => {
+export const GoodJobItemTarget: React.FC<IProps> = ({
+  sx,
+  target,
+  trnGoodJob,
+}) => {
   const type =
     target === E_TARGET.FROM
       ? trnGoodJob.fromTargetType
@@ -27,13 +32,29 @@ export const GoodJobTarget: React.FC<IProps> = ({ sx, target, trnGoodJob }) => {
   const nodeFrom = (): React.ReactNode => {
     switch (type) {
       case E_TARGET_TYPE.USER:
-        return <Avatar />;
+        const trnUser =
+          target === E_TARGET.FROM
+            ? trnGoodJob.fromTrnUser
+            : trnGoodJob.toTrnUser;
+        return <Avatar trnUser={trnUser} />;
       case E_TARGET_TYPE.DIVISION:
-        return <Box>課</Box>;
+        const trnDivision =
+          target === E_TARGET.FROM
+            ? trnGoodJob.fromTrnDivision
+            : trnGoodJob.toTrnDivision;
+        return <TypoText>{trnDivision?.name}</TypoText>;
       case E_TARGET_TYPE.PROJECT:
-        return <Box>プロジェクト</Box>;
+        const trnProject =
+          target === E_TARGET.FROM
+            ? trnGoodJob.fromTrnProject
+            : trnGoodJob.toTrnProject;
+        return <TypoText>{trnProject?.name}</TypoText>;
       case E_TARGET_TYPE.LABEL:
-        return <Box>ラベル</Box>;
+        const label =
+          target === E_TARGET.FROM
+            ? trnGoodJob.fromOtherLabel
+            : trnGoodJob.toOtherLabel;
+        return <TypoText>{label}</TypoText>;
       default:
         return null;
     }
