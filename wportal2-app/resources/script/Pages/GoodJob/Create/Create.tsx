@@ -2,7 +2,11 @@ import * as React from 'react';
 import { Paper } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoH1 } from '@/script/Component/Typography/TypoH1';
-import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
+import {
+  E_PAGES,
+  getPagesHref,
+  getPagesName,
+} from '@/script/Enum/Server/App/EPages';
 import { Page } from '@/script/Pages/Page';
 import { BackLink } from '@/script/Pages/Common/BackLink';
 import { responsiveSpacing } from '@/script/System/Responsive';
@@ -11,11 +15,21 @@ import {
   FormCreate,
   IFormCreate,
 } from '@/script/Pages/GoodJob/Create/FormCreate';
+import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
+import { router } from '@inertiajs/react';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { useIndexContext } from '@/script/Pages/GoodJob/Create/Index';
+import { validateAll } from '@/script/Pages/GoodJob/Create/FormCreateValidation';
 
 interface IProps extends IPropsBase {}
 export const Create: React.FC<IProps> = () => {
-  const [formCreate, setFormCreate] =
-    React.useState<IFormCreate>(defaultInterface);
+  const { onStart, onFinish } = useProgressContext();
+  const { validation, setValidation } = useIndexContext();
+  const { authUser } = useCommonIndexContext();
+  const [formCreate, setFormCreate] = React.useState<IFormCreate>({
+    ...defaultInterface,
+    fromTrnUserId: authUser.trnUser?.id || 0,
+  });
 
   /**
    * 値の更新.
@@ -30,7 +44,25 @@ export const Create: React.FC<IProps> = () => {
   /**
    * 値の送信.
    */
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    // バリデーション関連.
+    const validation = validateAll(formCreate);
+    setValidation(validation);
+
+    // エラーがある場合は処理をしない.
+    if (validation.hasError) {
+      return;
+    }
+
+    router.visit(getPagesHref(E_PAGES.GOOD_JOB__CREATE), {
+      method: 'post',
+      data: {
+        ...formCreate,
+      },
+      onStart,
+      onFinish,
+    });
+  };
 
   return (
     <Page>
@@ -44,6 +76,7 @@ export const Create: React.FC<IProps> = () => {
       >
         <FormCreate
           formCreate={formCreate}
+          validation={validation}
           handleUpdate={handleUpdate}
           handleSubmit={handleSubmit}
         />

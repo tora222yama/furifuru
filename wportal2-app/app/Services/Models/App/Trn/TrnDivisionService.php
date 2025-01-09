@@ -137,6 +137,21 @@ class TrnDivisionService extends ModelServiceBase
     }
 
     /**
+     * 全て取得.
+     *
+     * @param  array<string>  $with
+     * @return Collection<int, TrnDivision>
+     */
+    public function list(array $with = []): Collection
+    {
+        /** @var Collection<int, TrnDivision> */
+        return TrnDivision::query()
+            ->with($with)
+            ->alive()
+            ->get();
+    }
+
+    /**
      * Idによる検索(orFail)
      *
      * @param  array<mixed>  $with
