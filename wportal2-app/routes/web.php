@@ -46,7 +46,8 @@ Route::group(['middleware' => ['auth:web']], function () {
      */
     Route::prefix('/good_job')->group(function () {
         Route::match(['get', 'post'], '/', EPages::GOOD_JOB->getInvokePath());
-        Route::get('/create', EPages::GOOD_JOB__CREATE->getInvokePath());
+        Route::get('/new', EPages::GOOD_JOB__NEW->getInvokePath());
+        Route::post('/create', EPages::GOOD_JOB__CREATE->getInvokePath());
     });
 
     /**

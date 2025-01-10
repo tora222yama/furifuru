@@ -14,15 +14,15 @@ import {
   defaultInterface,
   FormCreate,
   IFormCreate,
-} from '@/script/Pages/GoodJob/Create/FormCreate';
+} from '@/script/Pages/GoodJob/New/FormCreate';
 import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { router } from '@inertiajs/react';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
-import { useIndexContext } from '@/script/Pages/GoodJob/Create/Index';
-import { validateAll } from '@/script/Pages/GoodJob/Create/FormCreateValidation';
+import { useIndexContext } from '@/script/Pages/GoodJob/New/Index';
+import { validateAll } from '@/script/Pages/GoodJob/New/FormCreateValidation';
 
 interface IProps extends IPropsBase {}
-export const Create: React.FC<IProps> = () => {
+export const New: React.FC<IProps> = () => {
   const { onStart, onFinish } = useProgressContext();
   const { validation, setValidation } = useIndexContext();
   const { authUser } = useCommonIndexContext();
@@ -66,8 +66,8 @@ export const Create: React.FC<IProps> = () => {
 
   return (
     <Page>
-      <BackLink current={E_PAGES.GOOD_JOB__CREATE} />
-      <TypoH1>{getPagesName(E_PAGES.GOOD_JOB__CREATE)}</TypoH1>
+      <BackLink current={E_PAGES.GOOD_JOB__NEW} />
+      <TypoH1>{getPagesName(E_PAGES.GOOD_JOB__NEW)}</TypoH1>
       <Paper
         sx={{
           marginTop: responsiveSpacing(4),

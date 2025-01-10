@@ -19,7 +19,7 @@ import { useCommonIndexContext } from '@/script/Provider/CommonIndexProvider';
 import { SelectTrnUserSingle } from '@/script/Pages/Common/Select/SelectTrnUserSingle';
 import { SelectTrnDivisionSingle } from '@/script/Pages/Common/Select/SelectTrnDivisionSingle';
 import { SelectTrnProjectSingle } from '@/script/Pages/Common/Select/SelectTrnProjectSingle';
-import { IFormCreateValidationResult } from '@/script/Pages/GoodJob/Create/FormCreateValidation';
+import { IFormCreateValidationResult } from '@/script/Pages/GoodJob/New/FormCreateValidation';
 import { InputError } from '@/script/Component/Form/InputError';
 
 export interface IFormCreate {

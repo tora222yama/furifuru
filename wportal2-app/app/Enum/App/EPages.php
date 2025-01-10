@@ -25,7 +25,8 @@ enum EPages: string
     case SHUFFLE_LUNCH__CANCEL             = 'shuffle_lunch__cancel'; // シャッフルランチキャンセル.
     case SHUFFLE_LUNCH__RAKUMO             = 'shuffle_lunch__rakumo'; // rakumoブロック.
     case GOOD_JOB                          = 'good_job'; // GoodJob.
-    case GOOD_JOB__CREATE                  = 'good_job__create'; // GoodJob登録.
+    case GOOD_JOB__NEW                     = 'good_job__new'; // GoodJob新規登録ページ.
+    case GOOD_JOB__CREATE                  = 'good_job__create'; // GoodJob新規登録.
     case SHOP                              = 'shop'; // ショップ.
     case SHOP__LUNCH_TICKET                = 'shop__lunch_ticket'; // ショップ・ランチチケット.
     case REWARD                            = 'reward'; // 報酬.
@@ -94,6 +95,7 @@ enum EPages: string
             self::SHUFFLE_LUNCH__CANCEL          => '\App\Http\Controllers\Pages\ShuffleLunchController@cancel',
             self::SHUFFLE_LUNCH__RAKUMO          => '\App\Http\Controllers\Pages\ShuffleLunchController@rakumo',
             self::GOOD_JOB                       => '\App\Http\Controllers\Pages\GoodJobController@invoke',
+            self::GOOD_JOB__NEW                  => '\App\Http\Controllers\Pages\GoodJobController@new',
             self::GOOD_JOB__CREATE               => '\App\Http\Controllers\Pages\GoodJobController@create',
             self::SHOP                           => '\App\Http\Controllers\Pages\ShopController@invoke',
             self::SHOP__LUNCH_TICKET             => '\App\Http\Controllers\Pages\ShopController@lunch_ticket',

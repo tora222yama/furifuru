@@ -1,4 +1,4 @@
-import { IFormCreate } from '@/script/Pages/GoodJob/Create/FormCreate';
+import { IFormCreate } from '@/script/Pages/GoodJob/New/FormCreate';
 import {
   EValidationLevel,
   parseErrorMessage,
@@ -32,6 +32,16 @@ export const parseServerValidation = (
     return initialResult;
   }
   const ret: IFormCreateValidation = {
+    fromTargetType: parseErrorMessage('fromTargetType', result),
+    fromTrnUserId: parseErrorMessage('fromTrnUserId', result),
+    fromTrnDivisionId: parseErrorMessage('fromTrnDivisionId', result),
+    fromTrnProjectId: parseErrorMessage('fromTrnProjectId', result),
+    fromOtherLabel: parseErrorMessage('fromOtherLabel', result),
+    toTargetType: parseErrorMessage('toTargetType', result),
+    toTrnUserId: parseErrorMessage('toTrnUserId', result),
+    toTrnDivisionId: parseErrorMessage('toTrnDivisionId', result),
+    toTrnProjectId: parseErrorMessage('toTrnProjectId', result),
+    toOtherLabel: parseErrorMessage('toOtherLabel', result),
     title: parseErrorMessage('title', result),
     content: parseErrorMessage('content', result),
   };

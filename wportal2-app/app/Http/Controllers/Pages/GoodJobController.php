@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Enum\App\EPages;
+use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnGoodJobService;
 use App\Http\Controllers\Controller;
+use App\Pipe\App\PipeAppGoodJobCreate;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class GoodJobController extends Controller
@@ -28,16 +33,47 @@ class GoodJobController extends Controller
                 'ToTrnDivision',
                 'ToTrnProject',
             ]),
-
         ]);
     }
 
     /**
      * 感謝を記録する・新規作成.
      */
-    public function create(Request $request): Response
+    public function new(Request $request): Response
     {
-        return $this->render('GoodJob/Create/Index', []);
+        return $this->render('GoodJob/New/Index', [
+            // セッションにバリデーション情報があれば取得する.
+            'serverValidation' => fn () => session('serverValidation') ?? null,
+        ]);
+    }
+
+    /**
+     * 感謝を記録する・登録処理.
+     *
+     * @throws \Throwable
+     */
+    public function create(Request $request): RedirectResponse
+    {
+        // パイプ作成.
+        PipeService::insertNewPipe(
+            new PipeAppGoodJobCreate($request->toArray())
+        );
+
+        // バリデーションチェック.
+        if (! PipeService::isValid()) {
+            return redirect()->action(EPages::GOOD_JOB__NEW->getInvokePath())
+                ->with([
+                    'serverValidation' => PipeService::getValidationResult(),
+                ]);
+        }
+
+        // 更新処理.
+        DB::transaction(static function (): void {
+            // GoodJob情報の更新.
+            TrnGoodJobService::updateByPipe();
+        });
+
+        return redirect()->action(EPages::GOOD_JOB->getInvokePath());
     }
 
     /**

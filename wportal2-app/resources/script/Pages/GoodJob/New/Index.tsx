@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useContext, useMemo } from 'react';
 import { IPropsBase } from '@/script/System/System';
-import { Create } from '@/script/Pages/GoodJob/Create/Create';
+import { New } from '@/script/Pages/GoodJob/New/New';
 import { CommonIndexProvider } from '@/script/Provider/CommonIndexProvider';
 import {
   IFormCreateValidationResult,
   initialResult,
   parseServerValidation,
-} from '@/script/Pages/GoodJob/Create/FormCreateValidation';
+} from '@/script/Pages/GoodJob/New/FormCreateValidation';
 import { IMutationResult, parseErrors } from '@/script/Hooks/IMutationResult';
 
 /**
@@ -61,7 +61,7 @@ export const Index: React.FC<IProps> = ({ serverValidation, ...props }) => {
   return (
     <CommonIndexProvider {...props}>
       <context.Provider value={providerValue}>
-        <Create />
+        <New />
       </context.Provider>
     </CommonIndexProvider>
   );

@@ -24,7 +24,7 @@ export const GoodJob: React.FC<IProps> = () => {
         }}
       >
         <TypoH1>{getPagesName(E_PAGES.GOOD_JOB)}</TypoH1>
-        <InertiaLink href={getPagesHref(E_PAGES.GOOD_JOB__CREATE)}>
+        <InertiaLink href={getPagesHref(E_PAGES.GOOD_JOB__NEW)}>
           <ButtonGeneral
             sx={{
               width: responsiveSize(140),
