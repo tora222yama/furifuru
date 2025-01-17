@@ -71,6 +71,7 @@ export const MenuList: IMenu[] = [
     name: 'シャッフルランチ',
     icon: E_ICON.LUNCH,
   },
+  /*
   {
     menu: E_MENU.GOOD_JOB,
     pages: E_PAGES.GOOD_JOB,
@@ -79,6 +80,7 @@ export const MenuList: IMenu[] = [
     name: '感謝を記録する',
     icon: E_ICON.FAVORITE,
   },
+   */
   {
     menu: E_MENU.SHOP,
     pages: E_PAGES.SHOP,
