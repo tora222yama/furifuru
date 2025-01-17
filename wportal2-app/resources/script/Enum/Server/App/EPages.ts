@@ -18,6 +18,9 @@ export const E_PAGES = {
   SHUFFLE_LUNCH__REGISTER: 'shuffle_lunch__register', // シャッフルランチ登録.
   SHUFFLE_LUNCH__CANCEL: 'shuffle_lunch__cancel', // シャッフルランチキャンセル.
   SHUFFLE_LUNCH__RAKUMO: 'shuffle_lunch__rakumo', // rakumoブロック.
+  GOOD_JOB: 'good_job', // GoodJob.
+  GOOD_JOB__NEW: 'good_job__new', // GoodJob新規登録ページ.
+  GOOD_JOB__CREATE: 'good_job__create', // GoodJob新規登録.
   SHOP: 'shop', // ショップ.
   SHOP__LUNCH_TICKET: 'shop__lunch_ticket', // ショップ・ランチチケット.
   REWARD: 'reward', // 報酬.
@@ -100,6 +103,12 @@ const getHref = (page: EPages): string => {
       return '/shuffle_lunch/cancel';
     case E_PAGES.SHUFFLE_LUNCH__RAKUMO:
       return '/shuffle_lunch/rakumo';
+    case E_PAGES.GOOD_JOB:
+      return '/good_job';
+    case E_PAGES.GOOD_JOB__NEW:
+      return '/good_job/new';
+    case E_PAGES.GOOD_JOB__CREATE:
+      return '/good_job/create';
     case E_PAGES.SHOP:
       return '/shop';
     case E_PAGES.SHOP__LUNCH_TICKET:
@@ -224,6 +233,10 @@ export const getPagesName = (page: EPages): string => {
       return '勤怠共有';
     case E_PAGES.SHUFFLE_LUNCH:
       return 'シャッフルランチ';
+    case E_PAGES.GOOD_JOB:
+      return '感謝を記録する';
+    case E_PAGES.GOOD_JOB__NEW:
+      return '感謝の新規登録';
     case E_PAGES.SHOP:
       return 'ショップ';
     case E_PAGES.REWARD:
@@ -295,6 +308,8 @@ export const getPagesName = (page: EPages): string => {
  */
 export const getPagesBack = (pages: EPages): EPages[] => {
   switch (pages) {
+    case E_PAGES.GOOD_JOB__NEW:
+      return [E_PAGES.GOOD_JOB];
     case E_PAGES.REWARD__LIST:
       return [E_PAGES.REWARD];
     case E_PAGES.DIVISION__SHOW:

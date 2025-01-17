@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Constant;
+use App\Enum\App\GoodJob\ETargetType;
 use App\Enum\App\ShuffleLunch\EEventTimeZone;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Models\App\Auth\AuthUser;
 use App\Models\App\Trn\TrnDivision;
 use App\Models\App\Trn\TrnDivisionUser;
+use App\Models\App\Trn\TrnGoodJob;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnProjectUser;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Models\App\Trn\TrnUser;
 use App\Models\App\Trn\TrnUserDivisionPriority;
 use App\Models\App\Trn\TrnUserProjectPriority;
+use App\Models\App\Trn\TrnUserReward;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -54,7 +57,9 @@ class TestCaseSeeder extends Seeder
         TrnDivisionUser::truncate();
         TrnProject::truncate();
         TrnProjectUser::truncate();
+        TrnUserReward::truncate();
         TrnShuffleLunchEntry::truncate();
+        TrnGoodJob::truncate();
 
         $instance     = $this;
 
@@ -189,6 +194,87 @@ class TestCaseSeeder extends Seeder
             })->create([
                 'event_date'      => now(),
             ]);
+        $this->endFactory();
+
+        // GoodJob.
+        $this->beginFactory('TrnGoodJob', 40);
+
+        // GoodJob: ユーザー.
+        TrnGoodJob::factory(10)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $type  = ETargetType::USER->value;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'      => $index,
+                    'from_trn_user_id' => $index,
+                    'to_trn_user_id'   => $index + 10,
+                    'title'            => "title-$type-$index",
+                    'content'          => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
+                ];
+            })->create([
+                'from_target_type'     => ETargetType::USER->value,
+                'to_target_type'       => ETargetType::USER->value,
+            ]);
+
+        // GoodJob: 課.
+        TrnGoodJob::factory(10)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $type  = ETargetType::USER->value;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'          => $index,
+                    'from_trn_division_id' => $index,
+                    'to_trn_division_id'   => $index + 10,
+                    'title'                => "title-$type-$index",
+                    'content'              => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
+                ];
+            })->create([
+                'from_target_type'     => ETargetType::DIVISION->value,
+                'to_target_type'       => ETargetType::DIVISION->value,
+            ]);
+
+        // GoodJob: プロジェクト.
+        TrnGoodJob::factory(10)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $type  = ETargetType::USER->value;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'         => $index,
+                    'from_trn_project_id' => $index,
+                    'to_trn_project_id'   => $index + 10,
+                    'title'               => "title-$type-$index",
+                    'content'             => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
+                ];
+            })->create([
+                'from_target_type'     => ETargetType::PROJECT->value,
+                'to_target_type'       => ETargetType::PROJECT->value,
+            ]);
+
+        // GoodJob: その他.
+        TrnGoodJob::factory(10)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $type  = ETargetType::USER->value;
+                $instance->advanceFactory();
+
+                return [
+                    'trn_user_id'      => $index,
+                    'from_other_label' => "other-$index",
+                    'to_other_label'   => "other-$index",
+                    'title'            => "title-$type-$index",
+                    'content'          => "content-$type-$index\ncontent-$type-$index\ncontent-$type-$index",
+                ];
+            })->create([
+                'from_target_type'     => ETargetType::LABEL->value,
+                'to_target_type'       => ETargetType::LABEL->value,
+            ]);
+
         $this->endFactory();
 
         $this->command->info('******* initialize done. ********');

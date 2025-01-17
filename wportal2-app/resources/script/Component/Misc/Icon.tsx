@@ -15,6 +15,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import GroupsIcon from '@mui/icons-material/Groups';
 import HomeIcon from '@mui/icons-material/Home';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
@@ -101,6 +102,8 @@ export const Icon: React.FC<IProps> = ({
       return <ExpandLess sx={iconSx} onClick={onClick} />;
     case E_ICON.EXPAND_MORE:
       return <ExpandMore sx={iconSx} onClick={onClick} />;
+    case E_ICON.FAVORITE:
+      return <FavoriteIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.GROUPS:
       return <GroupsIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.HOME:

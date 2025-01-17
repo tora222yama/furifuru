@@ -4,6 +4,16 @@ extend type Query @guard {
   AppTrnUserList: [AppTrnUser]! @field(
     resolver: "App\\GraphQL\\App\\Queries\\AppTrnUserListQuery"
   )
+
+  # 部署一覧の取得.
+  AppTrnDivisionList: [AppTrnDivision]! @field(
+    resolver: "App\\GraphQL\\App\\Queries\\AppTrnDivisionListQuery"
+  )
+
+  # プロジェクト一覧の取得.
+  AppTrnProjectList: [AppTrnProject]! @field(
+    resolver: "App\\GraphQL\\App\\Queries\\AppTrnProjectListQuery"
+  )
 }
 
 type AppTrnUser {
@@ -11,4 +21,14 @@ type AppTrnUser {
   authId: Int!
   nickname: String
   faceImagePath: String
+}
+
+type AppTrnDivision {
+  id: Int!
+  name: String
+}
+
+type AppTrnProject {
+  id: Int!
+  name: String
 }
