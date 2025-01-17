@@ -1,4 +1,9 @@
 // #ENUM_DEFINE_START#
+/**
+ * 開始時間を取得.
+ *
+ * @throws Exception
+ */
 export const E_EVENT_TIME_ZONE = {
   INVALID: 0, // 無効値.
   EARLY: 1, // 11:30-12:30.

@@ -8,6 +8,7 @@ export const E_MENU = {
   DASHBOARD: 'dashboard', // ダッシュボード.
   ATTENDANCE: 'attendance', // 勤怠共有.
   SHUFFLE_LUNCH: 'shuffle_lunch', // シャッフルランチ.
+  GOOD_JOB: 'good_job', // 感謝を記録する.
   SHOP: 'shop', // ショップ.
   REWARD: 'reward', // 報酬.
   ATTENDANCE_ROOT: 'attendance_root', // 勤怠確認.
@@ -70,6 +71,16 @@ export const MenuList: IMenu[] = [
     name: 'シャッフルランチ',
     icon: E_ICON.LUNCH,
   },
+  /*
+  {
+    menu: E_MENU.GOOD_JOB,
+    pages: E_PAGES.GOOD_JOB,
+    parent: E_PAGES.INVALID,
+    back: E_PAGES.INVALID,
+    name: '感謝を記録する',
+    icon: E_ICON.FAVORITE,
+  },
+   */
   {
     menu: E_MENU.SHOP,
     pages: E_PAGES.SHOP,

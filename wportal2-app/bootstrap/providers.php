@@ -42,6 +42,7 @@ return [
     App\Providers\Models\App\Trn\TrnBatchReleaseHistoryServiceProvider::class,
     App\Providers\Models\App\Trn\TrnDivisionServiceProvider::class,
     App\Providers\Models\App\Trn\TrnDivisionUserServiceProvider::class,
+    App\Providers\Models\App\Trn\TrnGoodJobServiceProvider::class,
     App\Providers\Models\App\Trn\TrnProjectServiceProvider::class,
     App\Providers\Models\App\Trn\TrnProjectNotificationServiceProvider::class,
     App\Providers\Models\App\Trn\TrnProjectUserServiceProvider::class,

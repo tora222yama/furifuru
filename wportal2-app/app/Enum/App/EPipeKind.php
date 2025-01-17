@@ -20,6 +20,7 @@ enum EPipeKind: string
     case APP_SHUFFLE_LUNCH_REGISTER                  = 'app_shuffle_lunch_register';
     case APP_SHUFFLE_LUNCH_CANCEL                    = 'app_shuffle_lunch_cancel';
     case APP_SHUFFLE_LUNCH_RAKUMO                    = 'app_shuffle_lunch_rakumo';
+    case APP_GOOD_JOB_CREATE                         = 'app_good_job_create';
     case APP_SHOP_LUNCH_TICKET                       = 'app_shop_lunch_ticket';
     case APP_REWARD_ACHIEVE                          = 'app_reward_achieve';
     case APP_DIVISION_UPDATE                         = 'app_division_update';
