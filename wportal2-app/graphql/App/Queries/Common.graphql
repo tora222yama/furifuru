@@ -7,3 +7,19 @@ query AppTrnUserList {
     faceImagePath,
   }
 }
+
+# 部署一覧の取得.
+query AppTrnDivisionList {
+  AppTrnDivisionList {
+    id,
+    name,
+  }
+}
+
+# プロジェクト一覧の取得.
+query AppTrnProjectList {
+  AppTrnProjectList {
+    id,
+    name,
+  }
+}

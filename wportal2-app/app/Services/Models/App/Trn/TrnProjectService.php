@@ -141,6 +141,21 @@ class TrnProjectService extends ModelServiceBase
     }
 
     /**
+     * 全て取得.
+     *
+     * @param  array<string>  $with
+     * @return Collection<int, TrnProject>
+     */
+    public function list(array $with = []): Collection
+    {
+        /** @var Collection<int, TrnProject> */
+        return TrnProject::query()
+            ->with($with)
+            ->alive()
+            ->get();
+    }
+
+    /**
      * Idによる検索(orFail)
      *
      * @param  array<mixed>  $with

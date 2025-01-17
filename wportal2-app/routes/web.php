@@ -42,6 +42,15 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
+     * 感謝を記録する.
+     */
+    Route::prefix('/good_job')->group(function () {
+        Route::match(['get', 'post'], '/', EPages::GOOD_JOB->getInvokePath());
+        Route::get('/new', EPages::GOOD_JOB__NEW->getInvokePath());
+        Route::post('/create', EPages::GOOD_JOB__CREATE->getInvokePath());
+    });
+
+    /**
      * ショップ
      */
     Route::prefix('/shop')->group(function () {

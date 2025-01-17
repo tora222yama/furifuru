@@ -21,6 +21,7 @@ export const E_ICON = {
   EXPAND_LESS: 'expand_less',
   EXPAND_MORE: 'expand_more',
   FAVICON: 'favicon.png',
+  FAVORITE: 'favorite',
   GOOGLE: 'google_icon.svg',
   GROUPS: 'groups',
   HELP: 'help',
@@ -65,6 +66,7 @@ export const getIconSize = (icon: EIcon): { w: number; h: number } => {
     case E_ICON.DIVERSITY3:
     case E_ICON.EXPAND_LESS:
     case E_ICON.EXPAND_MORE:
+    case E_ICON.FAVORITE:
     case E_ICON.GROUPS:
     case E_ICON.HELP:
     case E_ICON.HOME:
