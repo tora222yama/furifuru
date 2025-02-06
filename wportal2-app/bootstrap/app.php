@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
             // アプリ実行部分のパフォーマンス計測.
             \App\Http\Middleware\Performance::class,
+
+            // Inertia.js
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
