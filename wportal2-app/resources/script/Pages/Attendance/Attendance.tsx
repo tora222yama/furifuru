@@ -19,6 +19,7 @@ import { useProgressContext } from '@/script/Provider/ProgressProvider';
 import { useSnackbar } from '@/script/Provider/SnackbarProvider';
 import { useIndexContext } from '@/script/Pages/Attendance/Index';
 import { useEffect } from 'react';
+import { Office } from '@/script/Pages/Attendance/Office/Office';
 
 interface IProps extends IPropsBase {}
 export const Attendance: React.FC<IProps> = () => {
@@ -102,6 +103,7 @@ export const Attendance: React.FC<IProps> = () => {
           <TypoText>取得日時：{DateTime.now().toDateTime()}</TypoText>
         </Box>
       </Box>
+      <Office sx={{ marginTop: responsiveSpacing(2) }} />
       <Member sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
