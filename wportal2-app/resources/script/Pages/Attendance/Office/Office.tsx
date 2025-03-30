@@ -36,6 +36,7 @@ interface ICanvasParameterTest {
   mouseOriginR: IVector2D;
   prevPosition: IVector2D;
   currentPosition: IVector2D;
+  overlayObject: IObjectTest | null;
   captureObject: IObjectTest | null;
 }
 
@@ -64,6 +65,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       mouseOriginR: vectorOrigin,
       prevPosition: vectorOrigin,
       currentPosition: vectorOrigin,
+      overlayObject: null,
       captureObject: null,
     });
   const [canvasWidth, setCanvasWidth] = React.useState<number>(0);
@@ -103,6 +105,11 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     document
       ?.getElementById('canvas')
       ?.addEventListener('wheel', handleMouseWheel);
+
+    // 画面がリサイズされたらキャンバスのサイズを修正するイベントを登録.
+    window.addEventListener('resize', () => {
+      setCanvasWidth(document?.getElementById('wrapper')?.clientWidth ?? 0);
+    });
 
     // キャンバスのサイズを画面幅一杯に修正.
     setCanvasWidth(document?.getElementById('wrapper')?.clientWidth ?? 0);
@@ -176,7 +183,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
   /**
    * キャンバスの座標をオブジェクト座標に変換する.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const convertCanvas2Object = (
     ctx: CanvasRenderingContext2D,
     pos: IVector2D,
@@ -205,9 +212,14 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     }
     const scale = canvasParameter.scale;
 
+    // キャンバスのクリア.
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // オブジェクト描画.
     objectList.map(object => {
+      // オブジェクト自体の描画.
+      ctx.beginPath();
       ctx.fillStyle = object.color;
       const canvasX =
         convertObject2CanvasX(ctx, object.position.x) -
@@ -215,12 +227,27 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       const canvasY =
         convertObject2CanvasY(ctx, object.position.y) -
         (object.size.y / 2) * scale;
-      ctx.fillRect(
-        canvasX,
-        canvasY,
-        object.size.x * scale,
-        object.size.y * scale,
-      );
+      ctx.rect(canvasX, canvasY, object.size.x * scale, object.size.y * scale);
+      ctx.fill();
+
+      // 選択枠の描画.
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      ctx.rect(canvasX, canvasY, object.size.x * scale, object.size.y * scale);
+      ctx.stroke();
+
+      // オーバーレイ枠の描画.
+      if (canvasParameter.overlayObject?.id === object.id) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'yellow';
+        ctx.rect(
+          canvasX,
+          canvasY,
+          object.size.x * scale,
+          object.size.y * scale,
+        );
+        ctx.stroke();
+      }
     });
 
     ctx.font = '20px serif';
@@ -237,7 +264,8 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    */
   const handleMouseMove = (e: React.WheelEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) {
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) {
       return;
     }
     const rect = canvas.getBoundingClientRect();
@@ -260,6 +288,26 @@ export const Office: React.FC<IProps> = ({ sx }) => {
           y: prevState.offset.y + deltaY,
         },
       }));
+    } else {
+      const objectPos = convertCanvas2Object(ctx, pos);
+
+      // レイキャストを発生させてオブジェクトを探索する.
+      const target = objectList.find(object => {
+        return (
+          object.position.x - object.size.x / 2 < objectPos.x &&
+          object.position.x + object.size.x / 2 > objectPos.x &&
+          object.position.y - object.size.y / 2 < objectPos.y &&
+          object.position.y + object.size.y / 2 > objectPos.y
+        );
+      });
+
+      // オーバーレイしているオブジェクトが存在するなら.
+      if (target) {
+        setCanvasParameter(prevState => ({
+          ...prevState,
+          overlayObject: target,
+        }));
+      }
     }
   };
 
@@ -375,11 +423,13 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     });
 
     if (!!target) {
+      // 対象が見つかる場合.
       setCanvasParameter(prevState => ({
         ...prevState,
         captureObject: target,
       }));
     } else {
+      // 対象が見つからない場合.
       setCanvasParameter(prevState => ({
         ...prevState,
         captureObject: null,
