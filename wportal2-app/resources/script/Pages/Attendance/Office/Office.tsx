@@ -3,74 +3,33 @@ import { IPropsBase } from '@/script/System/System';
 import { Box } from '@mui/material';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { DialogConfirm } from '@/script/Component/Misc/DialogConfirm';
-
-interface IObjectTest {
-  id: number;
-  name: string;
-  position: IVector2D;
-  size: IVector2D;
-  color: string;
-  zIndex: number;
-}
-
-/**
- * 基本型.
- */
-interface IVector2D {
-  x: number;
-  y: number;
-}
-const vectorOrigin: IVector2D = { x: 0, y: 0 };
-
-/**
- * キャンバスに持たせたいパラメータ.
- */
-interface ICanvasParameterTest {
-  scale: number;
-  offset: IVector2D;
-  mouseDownL: boolean;
-  mouseOriginL: IVector2D;
-  mouseDownM: boolean;
-  mouseOriginM: IVector2D;
-  mouseDownR: boolean;
-  mouseOriginR: IVector2D;
-  prevPosition: IVector2D;
-  currentPosition: IVector2D;
-  overlayObject: IObjectTest | null;
-  captureObject: IObjectTest | null;
-}
-
-/**
- * マウスのボタン判定.
- */
-export const E_MOUSE_BUTTON = {
-  LEFT: 0,
-  MIDDLE: 1,
-  RIGHT: 2,
-} as const;
-export type EMouseButton = (typeof E_MOUSE_BUTTON)[keyof typeof E_MOUSE_BUTTON];
+import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
+import { E_MOUSE_BUTTON } from '@/script/Common/Canvas/Enum/EMouseButton';
+import { Canvas } from '@/script/Common/Canvas/Canvas';
+import { IParameter } from '@/script/Common/Canvas/Parameter';
+import { IObject } from '@/script/Common/Canvas/Object';
+import { MathVector } from '@/script/Common/Canvas/Math/MathVector';
 
 interface IProps extends IPropsBase {}
 export const Office: React.FC<IProps> = ({ sx }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const [canvasParameter, setCanvasParameter] =
-    React.useState<ICanvasParameterTest>({
-      scale: 1,
-      offset: vectorOrigin,
-      mouseDownL: false,
-      mouseOriginL: vectorOrigin,
-      mouseDownM: false,
-      mouseOriginM: vectorOrigin,
-      mouseDownR: false,
-      mouseOriginR: vectorOrigin,
-      prevPosition: vectorOrigin,
-      currentPosition: vectorOrigin,
-      overlayObject: null,
-      captureObject: null,
-    });
-  const [canvasWidth, setCanvasWidth] = React.useState<number>(0);
+  const [canvas, setCanvas] = React.useState<Canvas>(new Canvas());
+  const [canvasParameter, setCanvasParameter] = React.useState<IParameter>({
+    scale: 1,
+    offset: Vector2D.ZERO,
+    mouseDownL: false,
+    mouseOriginL: Vector2D.ZERO,
+    mouseDownM: false,
+    mouseOriginM: Vector2D.ZERO,
+    mouseDownR: false,
+    mouseOriginR: Vector2D.ZERO,
+    prevPosition: Vector2D.ZERO,
+    currentPosition: Vector2D.ZERO,
+    overlayObject: null,
+    captureObject: null,
+  });
 
-  const objectList: IObjectTest[] = [
+  const objectList: IObject[] = [
     {
       id: 1,
       name: 'Object1',
@@ -101,6 +60,20 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    * 初期化処理.
    */
   React.useEffect(() => {
+    // 画面幅を取得.
+    const clientWidth = document?.getElementById('wrapper')?.clientWidth ?? 0;
+    const clientHeight = document?.getElementById('wrapper')?.clientHeight ?? 0;
+
+    // 初期化.
+    canvas.init(
+      canvasRef.current as HTMLCanvasElement,
+      clientWidth,
+      clientHeight,
+    );
+
+    // キャンバスのサイズを画面幅一杯に修正.
+    setCanvas(canvas.resizeInstance(clientWidth, canvas.getSize().y));
+
     // キャンバスにホイールイベント登録.
     document
       ?.getElementById('canvas')
@@ -108,152 +81,70 @@ export const Office: React.FC<IProps> = ({ sx }) => {
 
     // 画面がリサイズされたらキャンバスのサイズを修正するイベントを登録.
     window.addEventListener('resize', () => {
-      setCanvasWidth(document?.getElementById('wrapper')?.clientWidth ?? 0);
+      const width = document?.getElementById('wrapper')?.clientWidth ?? 0;
+      setCanvas(canvas.resizeInstance(width, canvas.getSize().y));
     });
-
-    // キャンバスのサイズを画面幅一杯に修正.
-    setCanvasWidth(document?.getElementById('wrapper')?.clientWidth ?? 0);
   }, []);
-
-  /**
-   * 汎用関数.
-   */
-
-  /**
-   * オブジェクトのX座標をキャンバスX座標に変換する.
-   */
-  const convertObject2CanvasX = (ctx: CanvasRenderingContext2D, x: number) => {
-    return (
-      canvasParameter.offset.x * canvasParameter.scale +
-      x * canvasParameter.scale +
-      ctx.canvas.width / 2
-    );
-  };
-
-  /**
-   * キャンバスのX座標をオブジェクトX座標に変換する.
-   */
-  const convertCanvas2ObjectX = (ctx: CanvasRenderingContext2D, x: number) => {
-    return (
-      (x -
-        ctx.canvas.width / 2 -
-        canvasParameter.offset.x * canvasParameter.scale) /
-      canvasParameter.scale
-    );
-  };
-
-  /**
-   * オブジェクトのY座標をキャンバスY座標に変換する.
-   */
-  const convertObject2CanvasY = (ctx: CanvasRenderingContext2D, y: number) => {
-    return (
-      canvasParameter.offset.y * canvasParameter.scale +
-      -y * canvasParameter.scale +
-      ctx.canvas.height / 2
-    );
-  };
-
-  /**
-   * キャンバスのY座標をオブジェクトのY座標に変換する.
-   */
-  const convertCanvas2ObjectY = (ctx: CanvasRenderingContext2D, y: number) => {
-    return (
-      -(
-        y -
-        ctx.canvas.height / 2 -
-        canvasParameter.offset.y * canvasParameter.scale
-      ) / canvasParameter.scale
-    );
-  };
-
-  /**
-   * オブジェクトの座標をキャンバス座標に変換する.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const convertObject2Canvas = (
-    ctx: CanvasRenderingContext2D,
-    pos: IVector2D,
-  ) => {
-    return {
-      x: convertObject2CanvasX(ctx, pos.x),
-      y: convertObject2CanvasY(ctx, pos.y),
-    };
-  };
-
-  /**
-   * キャンバスの座標をオブジェクト座標に変換する.
-   */
-
-  const convertCanvas2Object = (
-    ctx: CanvasRenderingContext2D,
-    pos: IVector2D,
-  ) => {
-    return {
-      x: convertCanvas2ObjectX(ctx, pos.x),
-      y: convertCanvas2ObjectY(ctx, pos.y),
-    };
-  };
-
-  /**
-   * 2点間の距離を得る.
-   */
-  const distance2D = (a: IVector2D, b: IVector2D) => {
-    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-  };
 
   /**
    * キャンバスの再描画.
    */
   React.useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      return;
-    }
+    const context = canvas.getContext();
     const scale = canvasParameter.scale;
 
     // キャンバスのクリア.
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, canvas.getSize().x, canvas.getSize().y);
 
     // オブジェクト描画.
     objectList.map(object => {
       // オブジェクト自体の描画.
-      ctx.beginPath();
-      ctx.fillStyle = object.color;
+      context.beginPath();
+      context.fillStyle = object.color;
       const canvasX =
-        convertObject2CanvasX(ctx, object.position.x) -
+        MathVector.object2CanvasX(canvas, canvasParameter, object.position.x) -
         (object.size.x / 2) * scale;
       const canvasY =
-        convertObject2CanvasY(ctx, object.position.y) -
+        MathVector.object2CanvasY(canvas, canvasParameter, object.position.y) -
         (object.size.y / 2) * scale;
-      ctx.rect(canvasX, canvasY, object.size.x * scale, object.size.y * scale);
-      ctx.fill();
+      context.rect(
+        canvasX,
+        canvasY,
+        object.size.x * scale,
+        object.size.y * scale,
+      );
+      context.fill();
 
       // 選択枠の描画.
-      ctx.beginPath();
-      ctx.strokeStyle = 'black';
-      ctx.rect(canvasX, canvasY, object.size.x * scale, object.size.y * scale);
-      ctx.stroke();
+      context.beginPath();
+      context.strokeStyle = 'black';
+      context.rect(
+        canvasX,
+        canvasY,
+        object.size.x * scale,
+        object.size.y * scale,
+      );
+      context.stroke();
 
       // オーバーレイ枠の描画.
       if (canvasParameter.overlayObject?.id === object.id) {
-        ctx.beginPath();
-        ctx.strokeStyle = 'yellow';
-        ctx.rect(
+        context.beginPath();
+        context.strokeStyle = 'yellow';
+        context.rect(
           canvasX,
           canvasY,
           object.size.x * scale,
           object.size.y * scale,
         );
-        ctx.stroke();
+        context.stroke();
       }
     });
 
-    ctx.font = '20px serif';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`Scale:${scale}`, 0, 20);
-  }, [canvasWidth, canvasParameter]);
+    context.font = '20px serif';
+    context.fillStyle = 'black';
+    context.fillText(`Scale:${scale}`, 0, 20);
+  }, [canvas, canvasParameter]);
 
   /**
    * キャンバス操作.
@@ -263,12 +154,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    * マウスの移動時.
    */
   const handleMouseMove = (e: React.WheelEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      return;
-    }
-    const rect = canvas.getBoundingClientRect();
+    const rect = canvasRef?.current?.getBoundingClientRect() ?? new DOMRect();
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
 
     // 何れかのボタンが押されている時.
@@ -289,7 +175,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
         },
       }));
     } else {
-      const objectPos = convertCanvas2Object(ctx, pos);
+      const objectPos = MathVector.canvas2Object(canvas, canvasParameter, pos);
 
       // レイキャストを発生させてオブジェクトを探索する.
       const target = objectList.find(object => {
@@ -389,7 +275,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     // Lの時にOriginと距離が近い場合はクリックと判断する.
     if (
       e.button === E_MOUSE_BUTTON.LEFT &&
-      distance2D(pos, canvasParameter.mouseOriginL) < 5
+      MathVector.distance2D(pos, canvasParameter.mouseOriginL) < 5
     ) {
       handleMouseClick(e);
     }
@@ -401,15 +287,18 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    * マウスクリック時.
    */
   const handleMouseClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) {
-      return;
-    }
-    const rect = canvas.getBoundingClientRect();
+    const rect = canvasRef?.current?.getBoundingClientRect() ?? new DOMRect();
     const pos = {
-      x: convertCanvas2ObjectX(ctx, e.clientX - rect.left),
-      y: convertCanvas2ObjectY(ctx, e.clientY - rect.top),
+      x: MathVector.canvas2ObjectX(
+        canvas,
+        canvasParameter,
+        e.clientX - rect.left,
+      ),
+      y: MathVector.canvas2ObjectY(
+        canvas,
+        canvasParameter,
+        e.clientY - rect.top,
+      ),
     };
 
     // レイキャストを発生させてオブジェクトを探索する.
@@ -474,7 +363,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       <canvas
         id={'canvas'}
         ref={canvasRef}
-        width={canvasWidth}
+        width={canvas.getSize().x}
         height={400}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
