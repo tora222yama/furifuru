@@ -160,6 +160,11 @@ Route::get('/auth/google', '\App\Http\Controllers\Pages\LoginController@getGoogl
 Route::get('/login/googleCallback', '\App\Http\Controllers\Pages\LoginController@authGoogleCallback');
 Route::get('/logout', '\App\Http\Controllers\Pages\LoginController@logout');
 
+// ローカル用ゲストログイン
+if (isLocal()) {
+    Route::get('/login/guest', '\App\Http\Controllers\Pages\LoginController@guestLogin');
+}
+
 // 認証前はログイン、認証後は404にフォールバックする
 Route::fallback(EPages::LOGIN->getInvokePath());
 Route::group(['middleware' => ['auth:web']], function () {
