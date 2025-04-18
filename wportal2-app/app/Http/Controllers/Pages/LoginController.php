@@ -42,6 +42,50 @@ class LoginController extends Controller
     }
 
     /**
+     * ローカル用ログイン.
+     *
+     * @throws Throwable
+     */
+    public function guestLogin(): RedirectResponse
+    {
+        // ローカル専用のrouteで呼ばれるはずがないため.
+        if (! isLocal()) {
+            abort(404);
+        }
+
+        // ゲスト用メールアドレス.
+        $email      = 'guest@919.jp';
+
+        // アクティブなユーザー情報を検索.
+        /** @var AuthUser|null $authUser */
+        $authUser   = AuthUser::query()
+            ->where('email', $email)
+            ->first();
+
+        // 新規ユーザーの作成.
+        if ($authUser === null) {
+            // 認証ユーザーを作成.
+            $authUser                    = new AuthUser;
+            $authUser->email             = $email;
+            $authUser->name              = '名字 名前';
+            $authUser->email_verified_at = now();
+            $authUser->password          = substr(bin2hex(random_bytes(16)), 0, 16);
+            $authUser->google_id         = '';
+            $authUser->saveOrFail();
+
+            // ユーザーを作成.
+            $trnUser                     = TrnUserService::createNewUser($authUser, '名字 名前');
+
+            // ユーザー作成の報酬.
+            TrnUserRewardService::createNewUser($trnUser->id);
+        }
+
+        Auth::login($authUser, true);
+
+        return redirect('/');
+    }
+
+    /**
      * ワンタイムパスワードの発行.
      *
      * @throws Throwable
