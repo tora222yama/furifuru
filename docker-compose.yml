@@ -82,7 +82,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.246.0/24 # 他と衝突しなければなんでも良い認識
+        - subnet: 172.16.245.0/24 # 他と衝突しなければなんでも良い認識
 
 volumes:
   wportal2_db_volume:
