@@ -3,31 +3,15 @@ import { IPropsBase } from '@/script/System/System';
 import { Box } from '@mui/material';
 import { Closable } from '@/script/Component/Misc/Closable';
 import { DialogConfirm } from '@/script/Component/Misc/DialogConfirm';
-import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
 import { E_MOUSE_BUTTON } from '@/script/Common/Canvas/Enum/EMouseButton';
 import { Canvas } from '@/script/Common/Canvas/Canvas';
-import { IParameter } from '@/script/Common/Canvas/Parameter';
 import { IObject } from '@/script/Common/Canvas/Object';
 import { MathVector } from '@/script/Common/Canvas/Math/MathVector';
 
 interface IProps extends IPropsBase {}
 export const Office: React.FC<IProps> = ({ sx }) => {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = React.useState<Canvas>(new Canvas());
-  const [canvasParameter, setCanvasParameter] = React.useState<IParameter>({
-    scale: 1,
-    offset: Vector2D.ZERO,
-    mouseDownL: false,
-    mouseOriginL: Vector2D.ZERO,
-    mouseDownM: false,
-    mouseOriginM: Vector2D.ZERO,
-    mouseDownR: false,
-    mouseOriginR: Vector2D.ZERO,
-    prevPosition: Vector2D.ZERO,
-    currentPosition: Vector2D.ZERO,
-    overlayObject: null,
-    captureObject: null,
-  });
 
   const objectList: IObject[] = [
     {
@@ -91,7 +75,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    */
   React.useEffect(() => {
     const context = canvas.getContext();
-    const scale = canvasParameter.scale;
+    const scale = canvas.getParameter().scale;
 
     // キャンバスのクリア.
     context.fillStyle = 'white';
@@ -103,10 +87,10 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       context.beginPath();
       context.fillStyle = object.color;
       const canvasX =
-        MathVector.object2CanvasX(canvas, canvasParameter, object.position.x) -
+        MathVector.object2CanvasX(canvas, object.position.x) -
         (object.size.x / 2) * scale;
       const canvasY =
-        MathVector.object2CanvasY(canvas, canvasParameter, object.position.y) -
+        MathVector.object2CanvasY(canvas, object.position.y) -
         (object.size.y / 2) * scale;
       context.rect(
         canvasX,
@@ -128,7 +112,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       context.stroke();
 
       // オーバーレイ枠の描画.
-      if (canvasParameter.overlayObject?.id === object.id) {
+      if (canvas.getParameter().overlayObject?.id === object.id) {
         context.beginPath();
         context.strokeStyle = 'yellow';
         context.rect(
@@ -144,7 +128,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     context.font = '20px serif';
     context.fillStyle = 'black';
     context.fillText(`Scale:${scale}`, 0, 20);
-  }, [canvas, canvasParameter]);
+  }, [canvas]);
 
   /**
    * キャンバス操作.
@@ -156,26 +140,25 @@ export const Office: React.FC<IProps> = ({ sx }) => {
   const handleMouseMove = (e: React.WheelEvent<HTMLCanvasElement>) => {
     const rect = canvasRef?.current?.getBoundingClientRect() ?? new DOMRect();
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    const parameter = canvas.getParameter();
 
     // 何れかのボタンが押されている時.
-    if (
-      canvasParameter.mouseDownL ||
-      canvasParameter.mouseDownM ||
-      canvasParameter.mouseDownR
-    ) {
-      const deltaX = pos.x - canvasParameter.currentPosition.x;
-      const deltaY = pos.y - canvasParameter.currentPosition.y;
-      setCanvasParameter(prevState => ({
-        ...prevState,
-        prevPosition: prevState.currentPosition,
-        currentPosition: pos,
-        offset: {
-          x: prevState.offset.x + deltaX,
-          y: prevState.offset.y + deltaY,
-        },
-      }));
+    if (parameter.mouseDownL || parameter.mouseDownM || parameter.mouseDownR) {
+      const deltaX = pos.x - parameter.currentPosition.x;
+      const deltaY = pos.y - parameter.currentPosition.y;
+      setCanvas(prevState => {
+        return prevState.setParameter({
+          ...prevState.getParameter(),
+          prevPosition: prevState.getParameter().currentPosition,
+          currentPosition: pos,
+          offset: {
+            x: prevState.getParameter().offset.x + deltaX,
+            y: prevState.getParameter().offset.y + deltaY,
+          },
+        });
+      });
     } else {
-      const objectPos = MathVector.canvas2Object(canvas, canvasParameter, pos);
+      const objectPos = MathVector.canvas2Object(canvas, parameter, pos);
 
       // レイキャストを発生させてオブジェクトを探索する.
       const target = objectList.find(object => {
@@ -189,10 +172,12 @@ export const Office: React.FC<IProps> = ({ sx }) => {
 
       // オーバーレイしているオブジェクトが存在するなら.
       if (target) {
-        setCanvasParameter(prevState => ({
-          ...prevState,
-          overlayObject: target,
-        }));
+        setCanvas(prevState => {
+          return prevState.setParameter({
+            ...prevState.getParameter(),
+            overlayObject: target,
+          });
+        });
       }
     }
   };
@@ -202,16 +187,20 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    */
   const handleMouseWheel = (e: WheelEvent) => {
     if (e.deltaY > 0) {
-      setCanvasParameter(prevState => ({
-        ...prevState,
-        scale: Math.max(0.2, prevState.scale - 0.04),
-      }));
+      setCanvas(prevState => {
+        return prevState.setParameter({
+          ...prevState.getParameter(),
+          scale: Math.max(0.2, prevState.getParameter().scale - 0.04),
+        });
+      });
     }
     if (e.deltaY < 0) {
-      setCanvasParameter(prevState => ({
-        ...prevState,
-        scale: Math.min(2.0, prevState.scale + 0.04),
-      }));
+      setCanvas(prevState => {
+        return prevState.setParameter({
+          ...prevState.getParameter(),
+          scale: Math.min(2.0, prevState.getParameter().scale + 0.04),
+        });
+      });
     }
     e.preventDefault();
   };
@@ -226,27 +215,40 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     }
     const rect = canvas.getBoundingClientRect();
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    setCanvasParameter(prevState => ({
-      ...prevState,
+    setCanvas(prevState => {
+      return prevState.setParameter({
+        ...prevState.getParameter(),
+        mouseDownL:
+          e.button === E_MOUSE_BUTTON.LEFT
+            ? true
+            : prevState.getParameter().mouseDownL,
+        mouseOriginL:
+          e.button === E_MOUSE_BUTTON.LEFT
+            ? pos
+            : prevState.getParameter().mouseOriginL,
 
-      mouseDownL:
-        e.button === E_MOUSE_BUTTON.LEFT ? true : prevState.mouseDownL,
-      mouseOriginL:
-        e.button === E_MOUSE_BUTTON.LEFT ? pos : prevState.mouseOriginL,
+        mouseDownM:
+          e.button === E_MOUSE_BUTTON.MIDDLE
+            ? true
+            : prevState.getParameter().mouseDownM,
+        mouseOriginM:
+          e.button === E_MOUSE_BUTTON.MIDDLE
+            ? pos
+            : prevState.getParameter().mouseOriginM,
 
-      mouseDownM:
-        e.button === E_MOUSE_BUTTON.MIDDLE ? true : prevState.mouseDownM,
-      mouseOriginM:
-        e.button === E_MOUSE_BUTTON.MIDDLE ? pos : prevState.mouseOriginM,
+        mouseDownR:
+          e.button === E_MOUSE_BUTTON.RIGHT
+            ? true
+            : prevState.getParameter().mouseDownR,
+        mouseOriginR:
+          e.button === E_MOUSE_BUTTON.RIGHT
+            ? pos
+            : prevState.getParameter().mouseOriginR,
 
-      mouseDownR:
-        e.button === E_MOUSE_BUTTON.RIGHT ? true : prevState.mouseDownR,
-      mouseOriginR:
-        e.button === E_MOUSE_BUTTON.RIGHT ? pos : prevState.mouseOriginR,
-
-      prevPosition: pos,
-      currentPosition: pos,
-    }));
+        prevPosition: pos,
+        currentPosition: pos,
+      });
+    });
     e.preventDefault();
   };
 
@@ -254,28 +256,37 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    * マウスUp時.
    */
   const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
+    const canvasRefCurrent = canvasRef.current;
+    if (!canvasRefCurrent) {
       return;
     }
-    const rect = canvas.getBoundingClientRect();
+    const rect = canvasRefCurrent.getBoundingClientRect();
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    setCanvasParameter(prevState => ({
-      ...prevState,
-      mouseDownL:
-        e.button === E_MOUSE_BUTTON.LEFT ? false : prevState.mouseDownL,
-      mouseDownM:
-        e.button === E_MOUSE_BUTTON.MIDDLE ? false : prevState.mouseDownM,
-      mouseDownR:
-        e.button === E_MOUSE_BUTTON.RIGHT ? false : prevState.mouseDownR,
-      prevPosition: pos,
-      currentPosition: pos,
-    }));
+
+    setCanvas(prevState => {
+      return prevState.setParameter({
+        ...prevState.getParameter(),
+        mouseDownL:
+          e.button === E_MOUSE_BUTTON.LEFT
+            ? false
+            : prevState.getParameter().mouseDownL,
+        mouseDownM:
+          e.button === E_MOUSE_BUTTON.MIDDLE
+            ? false
+            : prevState.getParameter().mouseDownM,
+        mouseDownR:
+          e.button === E_MOUSE_BUTTON.RIGHT
+            ? false
+            : prevState.getParameter().mouseDownR,
+        prevPosition: pos,
+        currentPosition: pos,
+      });
+    });
 
     // Lの時にOriginと距離が近い場合はクリックと判断する.
     if (
       e.button === E_MOUSE_BUTTON.LEFT &&
-      MathVector.distance2D(pos, canvasParameter.mouseOriginL) < 5
+      MathVector.distance2D(pos, canvas.getParameter().mouseOriginL) < 5
     ) {
       handleMouseClick(e);
     }
@@ -291,12 +302,12 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     const pos = {
       x: MathVector.canvas2ObjectX(
         canvas,
-        canvasParameter,
+        canvas.getParameter(),
         e.clientX - rect.left,
       ),
       y: MathVector.canvas2ObjectY(
         canvas,
-        canvasParameter,
+        canvas.getParameter(),
         e.clientY - rect.top,
       ),
     };
@@ -313,16 +324,20 @@ export const Office: React.FC<IProps> = ({ sx }) => {
 
     if (!!target) {
       // 対象が見つかる場合.
-      setCanvasParameter(prevState => ({
-        ...prevState,
-        captureObject: target,
-      }));
+      setCanvas(prevState => {
+        return prevState.setParameter({
+          ...prevState.getParameter(),
+          captureObject: target,
+        });
+      });
     } else {
       // 対象が見つからない場合.
-      setCanvasParameter(prevState => ({
-        ...prevState,
-        captureObject: null,
-      }));
+      setCanvas(prevState => {
+        return prevState.setParameter({
+          ...prevState.getParameter(),
+          captureObject: null,
+        });
+      });
     }
   };
 
@@ -330,10 +345,12 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    * マウスが離れた時.
    */
   const handleMouseLeave = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    setCanvasParameter(prevState => ({
-      ...prevState,
-      mouseDownL: false,
-    }));
+    setCanvas(prevState => {
+      return prevState.setParameter({
+        ...prevState.getParameter(),
+        mouseDownL: false,
+      });
+    });
     e.preventDefault();
   };
 
@@ -344,19 +361,21 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       }}
       id={'wrapper'}
     >
-      <Closable open={!!canvasParameter.captureObject}>
+      <Closable open={!!canvas.getParameter().captureObject}>
         <DialogConfirm
-          open={!!canvasParameter.captureObject}
+          open={!!canvas.getParameter().captureObject}
           labels={{
-            content: `オブジェクト${canvasParameter.captureObject?.name}を選択しました。`,
+            content: `オブジェクト${canvas.getParameter().captureObject?.name}を選択しました。`,
             confirm: '閉じる',
           }}
           actions={{
             confirm: () =>
-              setCanvasParameter(prevState => ({
-                ...prevState,
-                captureObject: null,
-              })),
+              setCanvas(prevState => {
+                return prevState.setParameter({
+                  ...prevState.getParameter(),
+                  captureObject: null,
+                });
+              }),
           }}
         />
       </Closable>

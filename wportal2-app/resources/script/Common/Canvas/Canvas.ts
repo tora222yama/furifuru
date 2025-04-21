@@ -1,9 +1,11 @@
 import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
+import { defaultParameter, IParameter } from '@/script/Common/Canvas/Parameter';
 
 export class Canvas {
   private canvas: HTMLCanvasElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
   private size: Vector2D = Vector2D.ZERO;
+  private parameter: IParameter | null = null;
   private initialized = false;
 
   /**
@@ -26,6 +28,9 @@ export class Canvas {
 
     // サイズを保持.
     this.size = new Vector2D(width, height);
+
+    // 初期パラメータ―を設定.
+    this.parameter = defaultParameter;
 
     this.initialized = true;
 
@@ -66,6 +71,28 @@ export class Canvas {
   public setSize(width: number, height: number): Canvas {
     this.size.x = width;
     this.size.y = height;
+    return this;
+  }
+
+  /**
+   * パラメータの取得.
+   */
+  public getParameter(): IParameter {
+    return this.parameter ?? defaultParameter;
+  }
+
+  /**
+   * パラメータの設定.
+   */
+  public setParameter(parameter: IParameter): Canvas {
+    return this.clone().setParameterInternal(parameter);
+  }
+
+  /**
+   * パラメータの設定(内部利用).
+   */
+  private setParameterInternal(parameter: IParameter): Canvas {
+    this.parameter = parameter;
     return this;
   }
 }

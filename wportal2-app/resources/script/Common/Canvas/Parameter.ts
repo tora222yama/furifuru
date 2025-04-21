@@ -15,3 +15,18 @@ export interface IParameter {
   overlayObject: IObject | null;
   captureObject: IObject | null;
 }
+
+export const defaultParameter: IParameter = {
+  scale: 1,
+  offset: Vector2D.ZERO,
+  mouseDownL: false,
+  mouseOriginL: Vector2D.ZERO,
+  mouseDownM: false,
+  mouseOriginM: Vector2D.ZERO,
+  mouseDownR: false,
+  mouseOriginR: Vector2D.ZERO,
+  prevPosition: Vector2D.ZERO,
+  currentPosition: Vector2D.ZERO,
+  overlayObject: null,
+  captureObject: null,
+};

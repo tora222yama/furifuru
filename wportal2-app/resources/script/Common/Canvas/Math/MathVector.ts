@@ -6,13 +6,9 @@ export class MathVector {
   /**
    * オブジェクトのX座標をキャンバスX座標に変換する.
    */
-  public static object2CanvasX(
-    canvas: Canvas,
-    parameter: IParameter,
-    x: number,
-  ): number {
-    const offset = parameter.offset;
-    const scale = parameter.scale;
+  public static object2CanvasX(canvas: Canvas, x: number): number {
+    const offset = canvas.getParameter().offset;
+    const scale = canvas.getParameter().scale;
 
     return offset.x * scale + x * scale + canvas.getContext().canvas.width / 2;
   }
@@ -20,13 +16,9 @@ export class MathVector {
   /**
    * オブジェクトのY座標をキャンバスY座標に変換する.
    */
-  public static object2CanvasY(
-    canvas: Canvas,
-    parameter: IParameter,
-    y: number,
-  ): number {
-    const offset = parameter.offset;
-    const scale = parameter.scale;
+  public static object2CanvasY(canvas: Canvas, y: number): number {
+    const offset = canvas.getParameter().offset;
+    const scale = canvas.getParameter().scale;
 
     return (
       offset.y * scale + -y * scale + canvas.getContext().canvas.height / 2
@@ -36,14 +28,10 @@ export class MathVector {
   /**
    * オブジェクトの座標をキャンバス座標に変換する.
    */
-  public static object2Canvas(
-    canvas: Canvas,
-    parameter: IParameter,
-    pos: Vector2D,
-  ): Vector2D {
+  public static object2Canvas(canvas: Canvas, pos: Vector2D): Vector2D {
     return new Vector2D(
-      MathVector.object2CanvasX(canvas, parameter, pos.x),
-      MathVector.object2CanvasY(canvas, parameter, pos.y),
+      MathVector.object2CanvasX(canvas, pos.x),
+      MathVector.object2CanvasY(canvas, pos.y),
     );
   }
 
