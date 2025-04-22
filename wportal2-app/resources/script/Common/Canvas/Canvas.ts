@@ -65,7 +65,10 @@ export class Canvas {
    * コンテキストの取得.
    */
   public getContext(): CanvasRenderingContext2D {
-    return this.context ?? new CanvasRenderingContext2D();
+    if (!this.context) {
+      throw new Error("CanvasRenderingContext2D is not initialized. Ensure the canvas is properly initialized before accessing the context.");
+    }
+    return this.context;
   }
 
   /**
