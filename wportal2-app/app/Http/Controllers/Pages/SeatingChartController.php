@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
+use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Http\Controllers\Controller;
-use App\Services\Models\App\Trn\TrnUserAuthorityService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
@@ -15,9 +15,10 @@ class SeatingChartController extends Controller
 {
     public function invoke(): Response
     {
+        // 管理特権が必用.
         $authUser         = Auth::user();
-        $authorityService = new TrnUserAuthorityService;
-        if (! $authorityService->hasAuthority(
+
+        if (! TrnUserAuthorityService::hasAuthority(
             $authUser?->TrnUser?->id ?: 0,
             collect([EUserAuthority::ADMIN_PRIVILEGE, EUserAuthority::ADMIN_COMMAND])
         )) {
