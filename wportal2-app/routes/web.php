@@ -146,6 +146,11 @@ Route::group(['middleware' => ['auth:web']], function () {
         Route::get('/intern', '\App\Http\Controllers\Pages\Sample\InternController@invoke');
         Route::get('/inertia_data', '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke');
     });
+
+    /**
+     * 座席表
+     */
+    Route::get('/seating_chart', EPages::SEATING_CHART->getInvokePath());
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
