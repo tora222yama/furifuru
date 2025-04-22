@@ -10,7 +10,7 @@ export interface IObject {
 }
 
 export class CanvasObject {
-  private readonly uid: string = '';
+  private readonly uid: string;
 
   constructor(uid: string) {
     this.uid = uid;
