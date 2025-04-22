@@ -177,7 +177,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       const deltaX = pos.x - parameter.currentPosition.x;
       const deltaY = pos.y - parameter.currentPosition.y;
       setCanvas(prevState => {
-        return prevState.setCanvasParameter({
+        return prevState.setCanvasParameterValue({
           prevPosition: prevState.getCanvasParameterValue().currentPosition,
           currentPosition: pos,
           offset: {
@@ -202,7 +202,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
       // オーバーレイしているオブジェクトが存在するなら.
       if (target) {
         setCanvas(prevState => {
-          return prevState.setCanvasParameter({
+          return prevState.setCanvasParameterValue({
             overlayObject: target,
           });
         });
@@ -216,7 +216,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
   const handleMouseWheel = (e: WheelEvent) => {
     if (e.deltaY > 0) {
       setCanvas(prevState => {
-        return prevState.setCanvasParameter({
+        return prevState.setCanvasParameterValue({
           scale: Math.max(
             0.2,
             prevState.getCanvasParameterValue().scale - 0.04,
@@ -226,7 +226,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     }
     if (e.deltaY < 0) {
       setCanvas(prevState => {
-        return prevState.setCanvasParameter({
+        return prevState.setCanvasParameterValue({
           scale: Math.min(
             2.0,
             prevState.getCanvasParameterValue().scale + 0.04,
@@ -248,7 +248,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     const rect = canvas.getBoundingClientRect();
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     setCanvas(prevState => {
-      return prevState.setCanvasParameter({
+      return prevState.setCanvasParameterValue({
         mouseDownL:
           e.button === E_MOUSE_BUTTON.LEFT
             ? true
@@ -295,7 +295,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
 
     setCanvas(prevState => {
-      return prevState.setCanvasParameter({
+      return prevState.setCanvasParameterValue({
         mouseDownL:
           e.button === E_MOUSE_BUTTON.LEFT
             ? false
@@ -350,14 +350,14 @@ export const Office: React.FC<IProps> = ({ sx }) => {
     if (!!target) {
       // 対象が見つかる場合.
       setCanvas(prevState => {
-        return prevState.setCanvasParameter({
+        return prevState.setCanvasParameterValue({
           captureObject: target,
         });
       });
     } else {
       // 対象が見つからない場合.
       setCanvas(prevState => {
-        return prevState.setCanvasParameter({
+        return prevState.setCanvasParameterValue({
           captureObject: null,
         });
       });
@@ -369,7 +369,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
    */
   const handleMouseLeave = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setCanvas(prevState => {
-      return prevState.setCanvasParameter({
+      return prevState.setCanvasParameterValue({
         mouseDownL: false,
       });
     });
@@ -395,7 +395,7 @@ export const Office: React.FC<IProps> = ({ sx }) => {
           actions={{
             confirm: () =>
               setCanvas(prevState => {
-                return prevState.setCanvasParameter({
+                return prevState.setCanvasParameterValue({
                   captureObject: null,
                 });
               }),

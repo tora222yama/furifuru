@@ -101,7 +101,7 @@ export class Canvas {
   /**
    * パラメータの設定.
    */
-  public setCanvasParameter(value: Partial<IParameter>): Canvas {
+  public setCanvasParameterValue(value: Partial<IParameter>): Canvas {
     const ret = this.clone();
     ret.getCanvasParameter().setValue({
       ...this.canvasParameter.getValue(),
