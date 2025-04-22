@@ -1,5 +1,27 @@
 import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
-import { IObject } from '@/script/Common/Canvas/Object';
+import { CanvasObject } from '@/script/Common/Canvas/CanvasObject';
+
+export class CanvasParameter {
+  private value: IParameter = defaultParameter;
+
+  constructor() {}
+
+  public getValue(): IParameter {
+    return this.value;
+  }
+
+  public setValue(value: IParameter): void {
+    this.value = value;
+  }
+
+  public getOverlayObject<T>(): T | null {
+    return this.value.overlayObject as T;
+  }
+
+  public getCaptureObject<T>(): T | null {
+    return this.value.captureObject as T;
+  }
+}
 
 export interface IParameter {
   scale: number;
@@ -12,8 +34,8 @@ export interface IParameter {
   mouseOriginR: Vector2D;
   prevPosition: Vector2D;
   currentPosition: Vector2D;
-  overlayObject: IObject | null;
-  captureObject: IObject | null;
+  overlayObject: CanvasObject | null;
+  captureObject: CanvasObject | null;
 }
 
 export const defaultParameter: IParameter = {

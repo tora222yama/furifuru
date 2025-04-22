@@ -1,12 +1,22 @@
 import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
-import { defaultParameter, IParameter } from '@/script/Common/Canvas/Parameter';
+import {
+  CanvasParameter,
+  IParameter,
+} from '@/script/Common/Canvas/CanvasParameter';
 
 export class Canvas {
   private canvas: HTMLCanvasElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
   private size: Vector2D = Vector2D.ZERO;
-  private parameter: IParameter | null = null;
+  private canvasParameter: CanvasParameter;
   private initialized = false;
+
+  /**
+   * コンストラクタ.
+   */
+  public constructor() {
+    this.canvasParameter = new CanvasParameter();
+  }
 
   /**
    * キャンバスの初期化を実施.
@@ -30,7 +40,7 @@ export class Canvas {
     this.size = new Vector2D(width, height);
 
     // 初期パラメータ―を設定.
-    this.parameter = defaultParameter;
+    this.canvasParameter = new CanvasParameter();
 
     this.initialized = true;
 
@@ -77,22 +87,26 @@ export class Canvas {
   /**
    * パラメータの取得.
    */
-  public getParameter(): IParameter {
-    return this.parameter ?? defaultParameter;
+  public getCanvasParameter(): CanvasParameter {
+    return this.canvasParameter;
+  }
+
+  /**
+   * パラメータの直接取得.
+   */
+  public getCanvasParameterValue(): IParameter {
+    return this.canvasParameter.getValue();
   }
 
   /**
    * パラメータの設定.
    */
-  public setParameter(parameter: IParameter): Canvas {
-    return this.clone().setParameterInternal(parameter);
-  }
-
-  /**
-   * パラメータの設定(内部利用).
-   */
-  private setParameterInternal(parameter: IParameter): Canvas {
-    this.parameter = parameter;
-    return this;
+  public setCanvasParameter(value: Partial<IParameter>): Canvas {
+    const ret = this.clone();
+    ret.getCanvasParameter().setValue({
+      ...this.canvasParameter.getValue(),
+      ...value,
+    });
+    return ret;
   }
 }
