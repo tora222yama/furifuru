@@ -49,13 +49,13 @@ return [
     App\Providers\Models\App\Trn\TrnShopAggregateServiceProvider::class,
     App\Providers\Models\App\Trn\TrnShuffleLunchEntryServiceProvider::class,
     App\Providers\Models\App\Trn\TrnShuffleLunchGroupServiceProvider::class,
+    App\Providers\Models\App\Trn\TrnSeatServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
-    App\Providers\Models\App\Trn\TrnSeatServiceProvider::class,
 
     // Usecases.
     App\Providers\Usecases\UsecasesShuffleLunchServiceProvider::class,
