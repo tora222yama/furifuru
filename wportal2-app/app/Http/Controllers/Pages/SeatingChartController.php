@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
+use App\Facades\Models\App\Trn\TrnSeatService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnSeat;
@@ -26,7 +27,7 @@ class SeatingChartController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        $seats = TrnSeat::query()->where('e_archive_level', \App\Enum\App\EArchiveLevel::ALIVE->value)->get();
+        $seats = TrnSeatService::list();
         
         return $this->render('SeatingChart/Index', [
             'trnSeatList' => $seats->map(function (TrnSeat $seat) {
