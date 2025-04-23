@@ -26,10 +26,10 @@ class SeatingChartController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        $seats = TrnSeat::query()->where('is_alive', true)->get();
+        $seats = TrnSeat::query()->where('e_archive_level', \App\Enum\App\EArchiveLevel::ALIVE->value)->get();
         
         return $this->render('SeatingChart/Index', [
-            'seats' => $seats->map(function (TrnSeat $seat) {
+            'trnSeatList' => $seats->map(function (TrnSeat $seat) {
                 return $seat->toPayload();
             }),
         ]);

@@ -7,16 +7,14 @@ import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
 import { MathVector } from '@/script/Common/Canvas/Math/MathVector';
 import { E_MOUSE_BUTTON } from '@/script/Common/Canvas/Enum/EMouseButton';
 
-interface IProps extends IPropsBase {}
-export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
+interface IProps extends IPropsBase {
+  objects: SeatObject[];
+}
+export const SeatingChartCanvas: React.FC<IProps> = ({ sx, objects }) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = React.useState<Canvas>(new Canvas());
 
-  const objectList: SeatObject[] = [
-    new SeatObject('1', 'A1', new Vector2D(0, 0), new Vector2D(100, 100)),
-    new SeatObject('2', 'A2', new Vector2D(100, 50), new Vector2D(100, 100)),
-    new SeatObject('3', 'A3', new Vector2D(200, -100), new Vector2D(100, 100)),
-  ];
+  const objectList = objects;
 
   /**
    * 初期化処理.

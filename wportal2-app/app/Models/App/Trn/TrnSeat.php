@@ -21,14 +21,6 @@ class TrnSeat extends ModelBase
     use EagerLoadHelper, HasFactory;
 
     protected $table = 'trn_seat';
-    
-    /**
-     * 生存レコードのみを取得するスコープ.
-     */
-    public function scopeAlive($query)
-    {
-        return $query->where('e_archive_level', EArchiveLevel::ALIVE->value);
-    }
 
     /**
      * レコードをGraphQLなどでの受け渡し用に変換.

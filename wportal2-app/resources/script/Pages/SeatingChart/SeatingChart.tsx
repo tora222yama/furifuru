@@ -5,11 +5,11 @@ import { TypoH1 } from '@/script/Component/Typography/TypoH1';
 import { E_PAGES, getPagesName } from '@/script/Enum/Server/App/EPages';
 import { SeatingChartCanvas } from '@/script/Pages/SeatingChart/SeatingChartCanvas';
 import { responsiveSpacing } from '@/script/System/Responsive';
-import { useSeatingChart } from '@/script/Provider/SeatingChartProvider';
+import { useIndexContext } from '@/script/Pages/SeatingChart/Index';
 
 interface IProps extends IPropsBase {}
 export const SeatingChart: React.FC<IProps> = () => {
-  const { seatObjects } = useSeatingChart();
+  const { seatObjects } = useIndexContext();
   
   return (
     <Page>
