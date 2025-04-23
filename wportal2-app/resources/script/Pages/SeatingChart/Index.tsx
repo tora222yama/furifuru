@@ -25,42 +25,35 @@ export const context = React.createContext<IndexContext>({
 export const useIndexContext = (): IndexContext => useContext(context);
 
 interface IProps extends IPropsBase {
-  trnSeatList?: Array<{
-    id: number;
-    label: string;
-    positionX: number;
-    positionY: number;
-    phoneNumber: string;
-  }>;
+  trnSeatList: {
+    list: IAppTrnSeat[];
+  };
 }
-export const Index: React.FC<IProps> = ({ trnSeatList = [], ...props }) => {
+export const Index: React.FC<IProps> = ({ trnSeatList, ...props }) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
-  const seatListData = useMemo(
-    () => new AppTrnSeatList(
-      trnSeatList.map(v => parseAppTrnSeatPayload(v))
-    ),
-    [trnSeatList]
-  );
-
-  const seatObjects = useMemo(() => {
-    return seatListData.list().map((seat: IAppTrnSeat) => {
-      return new SeatObject(
-        `seat-${seat.id}`,
-        seat.label,
-        new Vector2D(seat.positionX, seat.positionY),
-        new Vector2D(100, 100)
-      );
-    });
-  }, [seatListData]);
-
   const providerValue = useMemo(
-    () => ({
-      trnSeatList: seatListData,
-      seatObjects,
-    }),
-    [seatListData, seatObjects]
+    () => {
+      const seatList = new AppTrnSeatList(
+        trnSeatList.list.map(v => parseAppTrnSeatPayload(v))
+      );
+      
+      const seatObjects = seatList.list().map((seat: IAppTrnSeat) => {
+        return new SeatObject(
+          `seat-${seat.id}`,
+          seat.label,
+          new Vector2D(seat.positionX, seat.positionY),
+          new Vector2D(100, 100)
+        );
+      });
+      
+      return {
+        trnSeatList: seatList,
+        seatObjects,
+      };
+    },
+    [trnSeatList]
   );
 
   return (
