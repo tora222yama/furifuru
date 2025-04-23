@@ -10,12 +10,13 @@ use App\Facades\Models\App\Trn\TrnSeatService;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Http\Controllers\Controller;
 use App\Models\App\Trn\TrnSeat;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
 class SeatingChartController extends Controller
 {
-    public function invoke(): Response
+    public function invoke(Request $request): Response
     {
         // 管理特権が必用.
         $authUser         = Auth::user();
@@ -27,14 +28,19 @@ class SeatingChartController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        $seats = TrnSeatService::list();
-        
         return $this->render('SeatingChart/Index', [
-            'trnSeatList' => [
-                'list' => $seats->map(function (TrnSeat $seat) {
-                    return $seat->toPayload();
-                }),
-            ],
+            'trnSeatList' => fn () => $this->getTrnSeatList($request),
         ]);
+    }
+
+    /**
+     * @param  array<mixed>  $with
+     * @return array<mixed>
+     */
+    private function getTrnSeatList(Request $request, array $with = []): array
+    {
+        return TrnSeatService::list()->map(function (TrnSeat $trnSeat) {
+            return $trnSeat->toPayload();
+        })->toArray();
     }
 }

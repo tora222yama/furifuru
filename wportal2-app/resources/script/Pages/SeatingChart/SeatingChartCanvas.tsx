@@ -2,19 +2,13 @@ import * as React from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { Canvas } from '@/script/Common/Canvas/Canvas';
 import { Box } from '@mui/material';
-import { SeatObject } from '@/script/Pages/SeatingChart/SeatObject';
-import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
 import { MathVector } from '@/script/Common/Canvas/Math/MathVector';
 import { E_MOUSE_BUTTON } from '@/script/Common/Canvas/Enum/EMouseButton';
 
-interface IProps extends IPropsBase {
-  objects: SeatObject[];
-}
-export const SeatingChartCanvas: React.FC<IProps> = ({ sx, objects }) => {
+interface IProps extends IPropsBase {}
+export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = React.useState<Canvas>(new Canvas());
-
-  const objectList = objects;
 
   /**
    * 初期化処理.
@@ -97,37 +91,6 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx, objects }) => {
 
     // 設定を元に戻す.
     context.setLineDash(lineDash);
-
-    // オブジェクト描画.
-    objectList.map(object => {
-      // オブジェクト自体の描画.
-      context.beginPath();
-      context.fillStyle = 'red';
-      const canvasX =
-        MathVector.object2CanvasX(canvas, object.position.x) -
-        (object.size.x / 2) * scale;
-      const canvasY =
-        MathVector.object2CanvasY(canvas, object.position.y) -
-        (object.size.y / 2) * scale;
-      context.rect(
-        canvasX,
-        canvasY,
-        object.size.x * scale,
-        object.size.y * scale,
-      );
-      context.fill();
-
-      // 選択枠の描画.
-      context.beginPath();
-      context.strokeStyle = 'black';
-      context.rect(
-        canvasX,
-        canvasY,
-        object.size.x * scale,
-        object.size.y * scale,
-      );
-      context.stroke();
-    });
   }, [canvas]);
 
   /**
@@ -156,27 +119,6 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx, objects }) => {
           },
         });
       });
-    } else {
-      const objectPos = MathVector.canvas2Object(canvas, pos);
-
-      // レイキャストを発生させてオブジェクトを探索する.
-      const target = objectList.find(object => {
-        return (
-          object.position.x - object.size.x / 2 < objectPos.x &&
-          object.position.x + object.size.x / 2 > objectPos.x &&
-          object.position.y - object.size.y / 2 < objectPos.y &&
-          object.position.y + object.size.y / 2 > objectPos.y
-        );
-      });
-
-      // オーバーレイしているオブジェクトが存在するなら.
-      if (target) {
-        setCanvas(prevState => {
-          return prevState.setCanvasParameterValue({
-            overlayObject: target,
-          });
-        });
-      }
     }
   };
 
@@ -300,39 +242,7 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx, objects }) => {
   /**
    * マウスクリック時.
    */
-  const handleMouseClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const rect = canvasRef?.current?.getBoundingClientRect() ?? new DOMRect();
-    const pos = {
-      x: MathVector.canvas2ObjectX(canvas, e.clientX - rect.left),
-      y: MathVector.canvas2ObjectY(canvas, e.clientY - rect.top),
-    };
-
-    // レイキャストを発生させてオブジェクトを探索する.
-    const target = objectList.find(object => {
-      return (
-        object.position.x - object.size.x / 2 < pos.x &&
-        object.position.x + object.size.x / 2 > pos.x &&
-        object.position.y - object.size.y / 2 < pos.y &&
-        object.position.y + object.size.y / 2 > pos.y
-      );
-    });
-
-    if (!!target) {
-      // 対象が見つかる場合.
-      setCanvas(prevState => {
-        return prevState.setCanvasParameterValue({
-          captureObject: target,
-        });
-      });
-    } else {
-      // 対象が見つからない場合.
-      setCanvas(prevState => {
-        return prevState.setCanvasParameterValue({
-          captureObject: null,
-        });
-      });
-    }
-  };
+  const handleMouseClick = (_e: React.MouseEvent<HTMLCanvasElement>) => {};
 
   /**
    * マウスが離れた時.
