@@ -14,6 +14,7 @@ use App\Models\App\Trn\TrnDivisionUser;
 use App\Models\App\Trn\TrnGoodJob;
 use App\Models\App\Trn\TrnProject;
 use App\Models\App\Trn\TrnProjectUser;
+use App\Models\App\Trn\TrnSeat;
 use App\Models\App\Trn\TrnShuffleLunchEntry;
 use App\Models\App\Trn\TrnUser;
 use App\Models\App\Trn\TrnUserDivisionPriority;
@@ -60,6 +61,7 @@ class TestCaseSeeder extends Seeder
         TrnUserReward::truncate();
         TrnShuffleLunchEntry::truncate();
         TrnGoodJob::truncate();
+        TrnSeat::truncate();
 
         $instance     = $this;
 
@@ -275,6 +277,21 @@ class TestCaseSeeder extends Seeder
                 'to_target_type'       => ETargetType::LABEL->value,
             ]);
 
+        $this->endFactory();
+
+        $this->beginFactory('TrnSeat', 30);
+        TrnSeat::factory(30)
+            ->sequence(function (Sequence $sequence) use ($instance) {
+                $index = $sequence->index + 1;
+                $instance->advanceFactory();
+
+                return [
+                    'label'       => 'S' . $index,
+                    'position_x'  => ($index % 5) * 150 - 300,
+                    'position_y'  => floor($index / 5) * 150 - 300,
+                    'phone_number' => '03-' . rand(1000, 9999) . '-' . rand(1000, 9999),
+                ];
+            })->create();
         $this->endFactory();
 
         $this->command->info('******* initialize done. ********');

@@ -8,6 +8,7 @@ use App\Enum\App\EStatusCode;
 use App\Enum\App\EUserAuthority;
 use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Http\Controllers\Controller;
+use App\Models\App\Trn\TrnSeat;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
@@ -25,6 +26,12 @@ class SeatingChartController extends Controller
             abort(EStatusCode::NOT_FOUND->value);
         }
 
-        return $this->render('SeatingChart/Index');
+        $seats = TrnSeat::query()->where('is_alive', true)->get();
+        
+        return $this->render('SeatingChart/Index', [
+            'seats' => $seats->map(function (TrnSeat $seat) {
+                return $seat->toPayload();
+            }),
+        ]);
     }
 }
