@@ -8,10 +8,12 @@ use App\Constant;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
+use App\Enum\App\EUserAuthority;
 use App\Facades\External\RecaptchaService;
 use App\Facades\External\SesService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
@@ -78,6 +80,8 @@ class LoginController extends Controller
 
             // ユーザー作成の報酬.
             TrnUserRewardService::createNewUser($trnUser->id);
+            
+            TrnUserAuthorityService::addAuthority($trnUser->id, EUserAuthority::ROOT_PRIVILEGE);
         }
 
         Auth::login($authUser, true);

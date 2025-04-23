@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\App\Trn;
 
+use App\Enum\App\EArchiveLevel;
 use App\Models\App\Trn\TrnSeat;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -31,7 +32,7 @@ class TrnSeatFactory extends Factory
             'position_x'   => $this->faker->numberBetween(-500, 500),
             'position_y'   => $this->faker->numberBetween(-500, 500),
             'phone_number' => $this->faker->optional(0.7)->phoneNumber(),
-            'is_alive'     => true,
+            'e_archive_level' => EArchiveLevel::ALIVE->value,
         ];
     }
 }

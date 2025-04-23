@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { Vector2D } from '@/script/Common/Canvas/Math/Vector2D';
 import { SeatObject } from '@/script/Pages/SeatingChart/SeatObject';
+import { AppTrnSeatList, IAppTrnSeat } from '@/script/Models/App/Trn/TrnSeatList';
 
-interface ISeat {
-  id: number;
-  label: string;
-  positionX: number;
-  positionY: number;
-  phoneNumber: string;
-}
 
 interface ISeatingChartContext {
-  seats: ISeat[];
+  seats: IAppTrnSeat[];
   seatObjects: SeatObject[];
 }
 
@@ -22,12 +16,14 @@ const SeatingChartContext = React.createContext<ISeatingChartContext>({
 
 interface IProps {
   children: React.ReactNode;
-  seats: ISeat[];
+  seats: IAppTrnSeat[];
 }
 
 export const SeatingChartProvider: React.FC<IProps> = ({ children, seats }) => {
+  const seatList = React.useMemo(() => new AppTrnSeatList(seats), [seats]);
+  
   const seatObjects = React.useMemo(() => {
-    return seats.map((seat) => {
+    return seatList.list().map((seat: IAppTrnSeat) => {
       return new SeatObject(
         `seat-${seat.id}`,
         seat.label,
@@ -35,14 +31,14 @@ export const SeatingChartProvider: React.FC<IProps> = ({ children, seats }) => {
         new Vector2D(100, 100)
       );
     });
-  }, [seats]);
+  }, [seatList]);
 
   const contextValue = React.useMemo(() => {
     return {
-      seats,
+      seats: seatList.list(),
       seatObjects,
     };
-  }, [seats, seatObjects]);
+  }, [seatList, seatObjects]);
 
   return (
     <SeatingChartContext.Provider value={contextValue}>
