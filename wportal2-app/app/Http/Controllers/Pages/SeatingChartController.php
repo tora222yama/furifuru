@@ -30,9 +30,11 @@ class SeatingChartController extends Controller
         $seats = TrnSeatService::list();
         
         return $this->render('SeatingChart/Index', [
-            'trnSeatList' => $seats->map(function (TrnSeat $seat) {
-                return $seat->toPayload();
-            }),
+            'trnSeatList' => [
+                'list' => $seats->map(function (TrnSeat $seat) {
+                    return $seat->toPayload();
+                }),
+            ],
         ]);
     }
 }
