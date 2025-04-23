@@ -4,9 +4,12 @@ import { Canvas } from '@/script/Common/Canvas/Canvas';
 import { Box } from '@mui/material';
 import { MathVector } from '@/script/Common/Canvas/Math/MathVector';
 import { E_MOUSE_BUTTON } from '@/script/Common/Canvas/Enum/EMouseButton';
+import { AppTrnSeatList } from '@/script/Models/App/Trn/TrnSeatList';
 
-interface IProps extends IPropsBase {}
-export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
+interface IProps extends IPropsBase {
+  trnSeatList: AppTrnSeatList;
+}
+export const SeatingChartCanvas: React.FC<IProps> = ({ sx, trnSeatList }) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const [canvas, setCanvas] = React.useState<Canvas>(new Canvas());
 
@@ -55,6 +58,7 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
     context.fillRect(0, 0, canvas.getSize().x, canvas.getSize().y);
 
     // 背景枠.
+    context.beginPath();
     context.strokeStyle = 'grey';
     const lineDash = context.getLineDash();
     const dashScale = 10 * scale;
@@ -64,7 +68,6 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
     const minX = numX + Math.floor(offset.x / blockSize);
     const maxX = numX - Math.floor(offset.x / blockSize);
     for (let x = -minX - 1; x <= maxX; x++) {
-      context.beginPath();
       context.setLineDash([dashScale, dashScale]);
       context.moveTo(MathVector.object2CanvasX(canvas, x * blockSize), 0);
       context.lineTo(
@@ -79,7 +82,6 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
     const minY = numY - Math.floor(offset.y / blockSize);
     const maxY = numY + Math.floor(offset.y / blockSize);
     for (let y = -minY; y <= maxY + 1; y++) {
-      context.beginPath();
       context.setLineDash([dashScale, dashScale]);
       context.moveTo(0, MathVector.object2CanvasY(canvas, y * blockSize));
       context.lineTo(
@@ -91,6 +93,33 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
 
     // 設定を元に戻す.
     context.setLineDash(lineDash);
+
+    // 座席の描画.
+    context.beginPath();
+    context.strokeStyle = 'black';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    const fontSize = 30 * scale;
+    context.font = `${fontSize}px sans-serif`;
+    trnSeatList.list().map(seat => {
+      const seatX = MathVector.object2CanvasX(
+        canvas,
+        seat.positionX - blockSize / 2,
+      );
+      const seatY = MathVector.object2CanvasY(
+        canvas,
+        seat.positionY + blockSize / 2,
+      );
+      context.fillStyle = '#8feb34';
+      context.fillRect(seatX, seatY, blockSize * scale, blockSize * scale);
+      context.rect(seatX, seatY, blockSize * scale, blockSize * scale);
+
+      const fontX = MathVector.object2CanvasX(canvas, seat.positionX);
+      const fontY = MathVector.object2CanvasY(canvas, seat.positionY);
+      context.fillStyle = 'black';
+      context.fillText(seat.label, fontX, fontY, 100 * scale);
+    });
+    context.stroke();
   }, [canvas]);
 
   /**
@@ -267,7 +296,7 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx }) => {
         id={'canvas'}
         ref={canvasRef}
         width={canvas.getSize().x}
-        height={400}
+        height={700}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
