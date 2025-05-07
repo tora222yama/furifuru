@@ -74,7 +74,6 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx, trnSeatList }) => {
         MathVector.object2CanvasX(canvas, x * blockSize),
         canvasSize.y,
       );
-      context.stroke();
     }
 
     // 横線.
@@ -88,8 +87,10 @@ export const SeatingChartCanvas: React.FC<IProps> = ({ sx, trnSeatList }) => {
         canvasSize.x,
         MathVector.object2CanvasY(canvas, y * blockSize),
       );
-      context.stroke();
     }
+
+    // 描画処理.
+    context.stroke();
 
     // 設定を元に戻す.
     context.setLineDash(lineDash);
