@@ -102,6 +102,7 @@ export const Attendance: React.FC<IProps> = () => {
           <TypoText>取得日時：{DateTime.now().toDateTime()}</TypoText>
         </Box>
       </Box>
+      {/*<Office sx={{ marginTop: responsiveSpacing(2) }} />*/}
       <Member sx={{ marginTop: responsiveSpacing(4) }} />
     </Page>
   );
