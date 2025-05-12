@@ -75,6 +75,10 @@ resource "aws_ssm_parameter" "wportal_redis_host" {
 /**
  *  APP_KEY
  */
+import {
+  to = aws_ssm_parameter.wportal_app_key
+  id = "/wportal/app_key"
+}
 resource "aws_ssm_parameter" "wportal_app_key" {
   name  = "/wportal/app_key"
   type  = "SecureString"
@@ -125,6 +129,10 @@ resource "aws_ssm_parameter" "wportal_google_client_secret" {
 /**
  *  GOOGLE_CALENDAR_SA
  */
+import {
+ to = aws_ssm_parameter.wportal_google_calendar_sa
+ id = "/wportal/google_calendar_sa"
+}
 resource "aws_ssm_parameter" "wportal_google_calendar_sa" {
   name        = "/wportal/google_calendar_sa"
   type        = "SecureString"

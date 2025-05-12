@@ -15,6 +15,8 @@ AccessKeyId=$(echo "$RES" | jq -r '.Credentials.AccessKeyId')
 SecretAccessKey=$(echo "$RES" | jq -r '.Credentials.SecretAccessKey')
 SessionToken=$(echo "$RES" | jq -r '.Credentials.SessionToken')
 
+echo $AccessKeyId
+
 # 環境変数に設定
 export AWS_ACCESS_KEY_ID=$AccessKeyId
 export AWS_SECRET_ACCESS_KEY=$SecretAccessKey
