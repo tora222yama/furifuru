@@ -11,6 +11,7 @@ data "external" "ecr_image_wportal2_newest" {
     "aws", "ecr", "describe-images",
     "--repository-name", "wportal2_ecr_service_container",
     "--query", "{\"tags\": to_string(sort_by(imageDetails,& imagePushedAt)[-1].imageTags)}",
+    "--region", "ap-northeast-1"
   ]
 }
 

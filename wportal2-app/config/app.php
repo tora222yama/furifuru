@@ -212,6 +212,7 @@ return [
         App\Providers\Models\App\Trn\TrnShopAggregateServiceProvider::class,
         App\Providers\Models\App\Trn\TrnShuffleLunchEntryServiceProvider::class,
         App\Providers\Models\App\Trn\TrnShuffleLunchGroupServiceProvider::class,
+        App\Providers\Models\App\Trn\TrnSeatServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserAuthorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserDivisionPriorityServiceProvider::class,
         App\Providers\Models\App\Trn\TrnUserProjectPriorityServiceProvider::class,
@@ -266,12 +267,14 @@ return [
         'models\app\trn\trn_shop_aggregate_service'          => App\Facades\Models\App\Trn\TrnShopAggregateService::class,
         'models\app\trn\trn_shuffle_lunch_entry_service'     => App\Facades\Models\App\Trn\TrnShuffleLunchEntryService::class,
         'models\app\trn\trn_shuffle_lunch_group_service'     => App\Facades\Models\App\Trn\TrnShuffleLunchGroupService::class,
+        'models\app\trn\trn_seat_service'                    => App\Facades\Models\App\Trn\TrnSeatService::class,
         'models\app\trn\trn_user_authority_service'          => App\Facades\Models\App\Trn\TrnUserAuthorityService::class,
         'models\app\trn\trn_user_division_priority_service'  => App\Facades\Models\App\Trn\TrnUserDivisionPriorityService::class,
         'models\app\trn\trn_user_project_priority_service'   => App\Facades\Models\App\Trn\TrnUserProjectPriorityService::class,
         'models\app\trn\trn_user_service'                    => App\Facades\Models\App\Trn\TrnUserService::class,
         'models\app\trn\trn_user_reward_service'             => App\Facades\Models\App\Trn\TrnUserRewardService::class,
         'models\app\trn\trn_user_slack_profile_service'      => App\Facades\Models\App\Trn\TrnUserSlackProfileService::class,
+        'models\app\trn\trn_seat_service'                    => App\Facades\Models\App\Trn\TrnSeatService::class,
 
         // Usecases.
         'usecases\usecases_shuffle_lunch_service'            => App\Facades\Usecases\UsecasesShuffleLunchService::class,
