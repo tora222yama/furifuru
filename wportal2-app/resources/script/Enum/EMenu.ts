@@ -23,6 +23,7 @@ export const E_MENU = {
   ADMIN_ROOT: 'admin_root', // 管理.
   ADMIN_DATA: 'admin_data', // データ.
   ADMIN_COMMAND: 'admin_command', // コマンド.
+  ADMIN_SEATING_CHART: 'admin_seating_chart', // 座席表.
   SAMPLE_INTERN_ROOT: 'sample_intern_root',
   SAMPLE_INTERN_MVC_VALUE: 'sample_intern_mvc_value',
   SAMPLE_INTERN_INPUT_FORM: 'sample_intern_input_form',
@@ -183,6 +184,14 @@ export const MenuList: IMenu[] = [
     parent: E_MENU.ADMIN_ROOT,
     back: E_PAGES.INVALID,
     name: 'データ',
+    icon: E_ICON.ADMIN_PANEL,
+  },
+  {
+    menu: E_MENU.ADMIN_SEATING_CHART,
+    pages: E_PAGES.SEATING_CHART,
+    parent: E_MENU.ADMIN_ROOT,
+    back: E_PAGES.INVALID,
+    name: '座席表',
     icon: E_ICON.ADMIN_PANEL,
   },
   {

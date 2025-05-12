@@ -34,7 +34,7 @@ class TestCaseSeeder extends Seeder
     private string $pbModelName = '';
 
     /**
-     * ローカル/テストケース向けの初期データを用意する.
+     *  ローカル/テストケース向けの初期データを用意する.
      *
      * @throws RandomException
      * @throws Throwable

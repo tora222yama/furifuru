@@ -146,6 +146,11 @@ Route::group(['middleware' => ['auth:web']], function () {
         Route::get('/intern', '\App\Http\Controllers\Pages\Sample\InternController@invoke');
         Route::get('/inertia_data', '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke');
     });
+
+    /**
+     * 座席表
+     */
+    Route::get('/seating_chart', EPages::SEATING_CHART->getInvokePath());
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
@@ -159,6 +164,11 @@ Route::post('/sp_login', EPages::SP_LOGIN->getInvokePath());
 Route::get('/auth/google', '\App\Http\Controllers\Pages\LoginController@getGoogleAuth');
 Route::get('/login/googleCallback', '\App\Http\Controllers\Pages\LoginController@authGoogleCallback');
 Route::get('/logout', '\App\Http\Controllers\Pages\LoginController@logout');
+
+// ローカル用ゲストログイン
+if (isLocal()) {
+    Route::get('/login/guest', '\App\Http\Controllers\Pages\LoginController@guestLogin');
+}
 
 // 認証前はログイン、認証後は404にフォールバックする
 Route::fallback(EPages::LOGIN->getInvokePath());

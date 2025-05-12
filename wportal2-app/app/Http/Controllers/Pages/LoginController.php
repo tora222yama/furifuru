@@ -8,10 +8,12 @@ use App\Constant;
 use App\Enum\App\EArchiveLevel;
 use App\Enum\App\EEnableFlag;
 use App\Enum\App\EPages;
+use App\Enum\App\EUserAuthority;
 use App\Facades\External\RecaptchaService;
 use App\Facades\External\SesService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Auth\AuthUserService;
+use App\Facades\Models\App\Trn\TrnUserAuthorityService;
 use App\Facades\Models\App\Trn\TrnUserRewardService;
 use App\Facades\Models\App\Trn\TrnUserService;
 use App\Http\Controllers\Controller;
@@ -39,6 +41,52 @@ class LoginController extends Controller
     public function invoke(): Response
     {
         return $this->render('Login/Index');
+    }
+
+    /**
+     * ローカル用ログイン.
+     *
+     * @throws Throwable
+     */
+    public function guestLogin(): RedirectResponse
+    {
+        // ローカル専用のrouteで呼ばれるはずがないため.
+        if (! isLocal()) {
+            abort(404);
+        }
+
+        // ゲスト用メールアドレス.
+        $email      = 'guest@919.jp';
+
+        // アクティブなユーザー情報を検索.
+        /** @var AuthUser|null $authUser */
+        $authUser   = AuthUser::query()
+            ->where('email', $email)
+            ->first();
+
+        // 新規ユーザーの作成.
+        if ($authUser === null) {
+            // 認証ユーザーを作成.
+            $authUser                    = new AuthUser;
+            $authUser->email             = $email;
+            $authUser->name              = '名字 名前';
+            $authUser->email_verified_at = now();
+            $authUser->password          = substr(bin2hex(random_bytes(16)), 0, 16);
+            $authUser->google_id         = '';
+            $authUser->saveOrFail();
+
+            // ユーザーを作成.
+            $trnUser                     = TrnUserService::createNewUser($authUser, '名字 名前');
+
+            // ユーザー作成の報酬.
+            TrnUserRewardService::createNewUser($trnUser->id);
+            
+            TrnUserAuthorityService::addAuthority($trnUser->id, EUserAuthority::ROOT_PRIVILEGE);
+        }
+
+        Auth::login($authUser, true);
+
+        return redirect('/');
     }
 
     /**

@@ -43,10 +43,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "alb_log" {
 /**
  *  ライフサイクル設定.
  */
-#import {
-#    to = aws_s3_bucket_lifecycle_configuration.alb_log
-#    id = "wportal-alb-log"
-#}
+import {
+   to = aws_s3_bucket_lifecycle_configuration.alb_log
+   id = "wportal-alb-log"
+}
 resource "aws_s3_bucket_lifecycle_configuration" "alb_log" {
   bucket = aws_s3_bucket.alb_log.id
   rule {

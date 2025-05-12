@@ -67,6 +67,7 @@ export const E_PAGES = {
   SAMPLE_PAGINATION: 'sample_pagination', // ページネーション.
   SAMPLE_INTERN: 'sample_intern', // インターン.
   SAMPLE_INERTIA_DATA: 'sample_inertia_data', // Inertiaデータ.
+  SEATING_CHART: 'seating_chart', // 座席表.
 } as const;
 export type EPages = (typeof E_PAGES)[keyof typeof E_PAGES];
 // #ENUM_DEFINE_END#
@@ -205,6 +206,8 @@ const getHref = (page: EPages): string => {
       return '/sample/intern';
     case E_PAGES.SAMPLE_INERTIA_DATA:
       return '/sample/inertia_data';
+    case E_PAGES.SEATING_CHART:
+      return '/seating_chart';
 
     default:
       return '/';
@@ -297,6 +300,8 @@ export const getPagesName = (page: EPages): string => {
       return 'コンポーネント';
     case E_PAGES.SAMPLE_INERTIA_DATA:
       return 'データ受信';
+    case E_PAGES.SEATING_CHART:
+      return '座席表';
     default:
       return '';
   }
