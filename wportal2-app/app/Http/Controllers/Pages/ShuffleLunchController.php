@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pages;
 use App\Enum\App\EPages;
 use App\Enum\App\ShuffleLunch\ETimeZone;
 use App\Facades\External\GoogleCalendarService;
+use App\Facades\External\SlackService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchGroupService;
@@ -90,6 +91,12 @@ class ShuffleLunchController extends Controller
             // エントリ情報の更新.
             TrnShuffleLunchEntryService::updateByPipe();
         });
+
+        $entryList      = TrnShuffleLunchEntryService::listToday();
+        $entryCount     = count($entryList);
+        $nickname       = auth()->user()?->TrnUser?->nickname ?: '参加者';
+        $message        = "{$nickname}さんがシャッフルランチに登録しました。現在の参加者数: {$entryCount}名";
+        SlackService::notifyNotice($message, 'シャッフルランチ登録通知');
 
         return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
     }
