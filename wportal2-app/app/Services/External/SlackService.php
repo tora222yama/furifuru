@@ -13,6 +13,7 @@ use App\Facades\Models\App\Trn\TrnProjectUserService;
 use App\Models\App\Trn\TrnProjectNotification;
 use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
+use App\Pipe\App\PipeAppShuffleLunchRegister;
 use App\Pipe\PipeBase;
 use App\Trait\SlackApi;
 use Carbon\Carbon;
@@ -40,6 +41,7 @@ class SlackService
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_CREATE                 => $this->execAppAttendanceCreate($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
+                EPipeKind::APP_SHUFFLE_LUNCH_REGISTER            => $this->execAppShuffleLunchRegister($pipe),
                 default                                          => throw new Exception("invalid pipe:$kind->name")
             };
         }
@@ -99,6 +101,21 @@ class SlackService
             EStatusCode::NOT_FOUND,
             new Exception("APIによる検索不可:$pipe->email")
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppShuffleLunchRegister(
+        PipeBase $pipe
+    ): void {
+        /** @var PipeAppShuffleLunchRegister $pipe */
+        $entryCount = $pipe->entryCount;
+
+        // 表示メッセージの作成
+        $message    = "{$entryCount}名が参加中！　シャッフルランチへのご参加をお待ちしております！";
+
+        $this->notifyNotice($message, 'シャッフルランチ登録通知');
     }
 
     /**

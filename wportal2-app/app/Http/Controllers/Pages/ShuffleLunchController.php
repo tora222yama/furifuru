@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pages;
 use App\Enum\App\EPages;
 use App\Enum\App\ShuffleLunch\ETimeZone;
 use App\Facades\External\GoogleCalendarService;
+use App\Facades\External\SlackService;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Facades\Models\App\Trn\TrnShuffleLunchGroupService;
@@ -89,6 +90,8 @@ class ShuffleLunchController extends Controller
         DB::transaction(static function (): void {
             // エントリ情報の更新.
             TrnShuffleLunchEntryService::updateByPipe();
+
+            SlackService::updateByPipe();
         });
 
         return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
