@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "wportal2_deploy_assume_role_policy" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:quick-wpd/wportal2:*"]
+      values   = ["repo:quick-wpd-human-tech/wportal2:*"]
     }
   }
 }
