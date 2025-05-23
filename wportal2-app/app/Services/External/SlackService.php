@@ -115,8 +115,7 @@ class SlackService
         $entryCount = count($entryList);
 
         // 表示メッセージの作成
-        $nickname   = $pipe->authUser?->TrnUser?->nickname ?: '参加者';
-        $message    = "{$nickname}さんがシャッフルランチに登録しました。現在の参加者数: {$entryCount}名";
+        $message    = "{$entryCount}名が参加中！　シャッフルランチへのご参加をお待ちしております！";
 
         $this->notifyNotice($message, 'シャッフルランチ登録通知');
     }
