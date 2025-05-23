@@ -51,6 +51,8 @@ class TrnShuffleLunchEntryService extends ModelServiceBase
         $new->event_time_zone = $pipe->eventTimeZone;
 
         $this->insertOrFail($new);
+
+        $pipe->entryCount     = $this->listToday()->count();
     }
 
     /**

@@ -10,7 +10,6 @@ use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnProjectNotificationService;
 use App\Facades\Models\App\Trn\TrnProjectUserService;
-use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Models\App\Trn\TrnProjectNotification;
 use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
@@ -111,8 +110,7 @@ class SlackService
         PipeBase $pipe
     ): void {
         /** @var PipeAppShuffleLunchRegister $pipe */
-        $entryList  = TrnShuffleLunchEntryService::listToday();
-        $entryCount = count($entryList);
+        $entryCount = $pipe->entryCount;
 
         // 表示メッセージの作成
         $message    = "{$entryCount}名が参加中！　シャッフルランチへのご参加をお待ちしております！";

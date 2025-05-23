@@ -16,6 +16,8 @@ final class PipeAppShuffleLunchRegister extends PipeBase
 
     public ?AuthUser $authUser           = null;
 
+    public int $entryCount               = 0;
+
     /**
      * constructor.
      *
