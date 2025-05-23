@@ -90,13 +90,9 @@ class ShuffleLunchController extends Controller
         DB::transaction(static function (): void {
             // エントリ情報の更新.
             TrnShuffleLunchEntryService::updateByPipe();
-        });
 
-        $entryList      = TrnShuffleLunchEntryService::listToday();
-        $entryCount     = count($entryList);
-        $nickname       = auth()->user()?->TrnUser?->nickname ?: '参加者';
-        $message        = "{$nickname}さんがシャッフルランチに登録しました。現在の参加者数: {$entryCount}名";
-        SlackService::notifyNotice($message, 'シャッフルランチ登録通知');
+            SlackService::updateByPipe();
+        });
 
         return redirect()->action(EPages::SHUFFLE_LUNCH->getInvokePath());
     }

@@ -10,9 +10,11 @@ use App\Enum\App\EStatusCode;
 use App\Facades\Internal\PipeService;
 use App\Facades\Models\App\Trn\TrnProjectNotificationService;
 use App\Facades\Models\App\Trn\TrnProjectUserService;
+use App\Facades\Models\App\Trn\TrnShuffleLunchEntryService;
 use App\Models\App\Trn\TrnProjectNotification;
 use App\Pipe\App\PipeAppAttendanceCreate;
 use App\Pipe\App\PipeAppPersonalSettingShowAlignSlack;
+use App\Pipe\App\PipeAppShuffleLunchRegister;
 use App\Pipe\PipeBase;
 use App\Trait\SlackApi;
 use Carbon\Carbon;
@@ -40,6 +42,7 @@ class SlackService
             match ($kind) {
                 EPipeKind::APP_ATTENDANCE_CREATE                 => $this->execAppAttendanceCreate($pipe),
                 EPipeKind::APP_PERSONAL_SETTING_SHOW_ALIGN_SLACK => $this->execAppPersonalSettingShowAlignSlack($pipe),
+                EPipeKind::APP_SHUFFLE_LUNCH_REGISTER            => $this->execAppShuffleLunchRegister($pipe),
                 default                                          => throw new Exception("invalid pipe:$kind->name")
             };
         }
@@ -99,6 +102,23 @@ class SlackService
             EStatusCode::NOT_FOUND,
             new Exception("APIによる検索不可:$pipe->email")
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function execAppShuffleLunchRegister(
+        PipeBase $pipe
+    ): void {
+        /** @var PipeAppShuffleLunchRegister $pipe */
+        $entryList  = TrnShuffleLunchEntryService::listToday();
+        $entryCount = count($entryList);
+
+        // 表示メッセージの作成
+        $nickname   = $pipe->authUser?->TrnUser?->nickname ?: '参加者';
+        $message    = "{$nickname}さんがシャッフルランチに登録しました。現在の参加者数: {$entryCount}名";
+
+        $this->notifyNotice($message, 'シャッフルランチ登録通知');
     }
 
     /**
