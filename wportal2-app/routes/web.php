@@ -68,6 +68,13 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
+     * シフト管理.
+     */
+    Route::prefix('/shift_schedule')->group(function () {
+        Route::match(['get'], '/', EPages::SHIFT_SCHEDULE->getInvokePath());
+    });
+
+    /**
      * 勤怠確認・修正.
      */
     Route::prefix('/attendance/edit')->group(function () {

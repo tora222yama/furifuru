@@ -26,6 +26,7 @@ export const E_PAGES = {
   REWARD: 'reward', // 報酬.
   REWARD__LIST: 'reward__list', // 報酬一覧.
   REWARD__ACHIEVE: 'reward__achieve', // 報酬達成.
+  SHIFT_SCHEDULE: 'shift_schedule', // シフト管理.
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
@@ -120,6 +121,8 @@ const getHref = (page: EPages): string => {
       return '/reward/list';
     case E_PAGES.REWARD__ACHIEVE:
       return '/reward/achieve';
+    case E_PAGES.SHIFT_SCHEDULE:
+      return '/shift_schedule';
     case E_PAGES.ATTENDANCE__EDIT:
       return '/attendance/edit';
     case E_PAGES.ATTENDANCE__EDIT__UPDATE:
@@ -208,7 +211,6 @@ const getHref = (page: EPages): string => {
       return '/sample/inertia_data';
     case E_PAGES.SEATING_CHART:
       return '/seating_chart';
-
     default:
       return '/';
   }
