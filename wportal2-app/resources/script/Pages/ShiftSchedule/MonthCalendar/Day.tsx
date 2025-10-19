@@ -3,12 +3,7 @@ import { Box, Select, MenuItem } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
-import { DateTime } from '@/script/Common/DateTime';
-
-export interface IDate {
-  dateTime: DateTime;
-  inRange: boolean;
-}
+import { IDate } from '@/script/Hooks/useMonthCalendar';
 
 interface IProps extends IPropsBase {
   date: IDate;
@@ -36,6 +31,7 @@ export const Day: React.FC<IProps> = ({ sx, date }) => {
       </TypoText>
       {date.inRange && (
         <Select
+          variant="outlined"
           value={shift}
           onChange={handleChange}
           displayEmpty
