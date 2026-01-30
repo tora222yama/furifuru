@@ -14,6 +14,7 @@ services:
       - APP_TIMEOUT=60
       - PHP_MEMORY_LIMIT=256M
       - PHP_MAX_UPLOAD=20M
+      - XDEBUG_MODE=debug # リモートデバッグでステップ実行をする場合は値をdebugに変更する
     working_dir: /var/www/html/wportal2-app
     ports:
       - "9190:80"   # Laravel用
@@ -39,6 +40,26 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - wportal2_db_volume:/var/lib/mysql
+      - ./wportal2-app/docker/db/conf.d:/etc/mysql/conf.d
+    networks:
+      - wportal2_local
+
+  ###########################
+  # wportal2_db_test : mysql 8.0
+  # DBサーバー(テスト用)
+  wportal2_db_test:
+    image: mysql:8.0
+    container_name: 'wportal2_db_test'
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: wportal2_test
+      MYSQL_USER: wportal2_test
+      MYSQL_PASSWORD: wportal2_test
+      MYSQL_ROOT_PASSWORD: wportal2_test
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - wportal2_db_test_volume:/var/lib/mysql
       - ./wportal2-app/docker/db/conf.d:/etc/mysql/conf.d
     networks:
       - wportal2_local
@@ -86,6 +107,8 @@ networks:
 
 volumes:
   wportal2_db_volume:
+    driver: local
+  wportal2_db_test_volume:
     driver: local
   wportal2_redis_volume:
     driver: local
