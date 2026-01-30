@@ -24,3 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/healthcheck', static function () {
     return response()->json();
 });
+
+// デプロイ確認用
+Route::get('/deployed', static function () {
+    return response()->json(['status' => 'deployed']);
+});
