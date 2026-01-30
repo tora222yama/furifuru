@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // ヘルスチェック用
 Route::get('/healthcheck', static function () {
-    return response()->json(200);
+    return response()->json();
 });
