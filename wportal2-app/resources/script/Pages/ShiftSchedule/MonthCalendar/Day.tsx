@@ -3,7 +3,7 @@ import { Box, Select, MenuItem } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
-import { IDate } from '@/script/Hooks/useMonthCalendar';
+import { IDate } from '@/script/Common/getMonthCalendar';
 
 interface IProps extends IPropsBase {
   date: IDate;

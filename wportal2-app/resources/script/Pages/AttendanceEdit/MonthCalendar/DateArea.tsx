@@ -7,8 +7,8 @@ import { useIndexContext } from '@/script/Pages/AttendanceEdit/Index';
 import { DateTime } from '@/script/Common/DateTime';
 import {
   IDate as IBaseDate,
-  useMonthCalendar,
-} from '@/script/Hooks/useMonthCalendar';
+  getMonthCalendar,
+} from '@/script/Common/getMonthCalendar';
 import { getShortLabelAttendanceState } from '@/script/Enum/Server/App/EAttendanceState';
 import { IEvent } from '@/script/Pages/AttendanceEdit/MonthCalendar/IEvent';
 import { DialogEdit } from '@/script/Pages/AttendanceEdit/DialogEdit';
@@ -43,7 +43,7 @@ export const DateArea: React.FC<IProps> = ({ sx }) => {
     });
   }, [trnAttendanceStateList]);
 
-  const baseDateList = useMonthCalendar(dateTime);
+  const baseDateList = useMemo(() => getMonthCalendar(dateTime), [dateTime]);
 
   /**
    * カレンダーに表示する日付のリスト.

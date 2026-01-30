@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { DateTime } from '@/script/Common/DateTime';
 import { Day } from '@/script/Pages/ShiftSchedule/MonthCalendar/Day';
-import { useMonthCalendar } from '@/script/Hooks/useMonthCalendar';
+import { getMonthCalendar } from '@/script/Common/getMonthCalendar';
 
 interface IProps extends IPropsBase {}
 export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
   const [currentDate, setCurrentDate] = useState(DateTime.now());
-  const dateList = useMonthCalendar(currentDate);
+  const dateList = useMemo(() => getMonthCalendar(currentDate), [currentDate]);
 
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subMonth(1));
