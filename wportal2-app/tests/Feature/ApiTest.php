@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\ShiftSchedule;
+namespace Tests\Feature;
 
 use App\Models\App\Auth\AuthUser;
 use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
 
-class ApiTest extends TestCase
+class ApiTest extends FeatureTestCase
 {
     /**
      * A basic feature test example.
