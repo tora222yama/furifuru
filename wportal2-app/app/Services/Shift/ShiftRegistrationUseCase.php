@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Shift;
 
 use App\Collections\ShiftEntries;
+use App\Constant\ShiftScheduleConstant;
 use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Dto\Shift\ShiftSyncResult;
 use App\Services\External\GoogleCalendarServiceInterface;
@@ -19,8 +20,6 @@ use Throwable;
 
 final readonly class ShiftRegistrationUseCase
 {
-    private const string SHIFT_MARKER = '[SHIFT_SYNC]';
-
     public function __construct(private GoogleCalendarServiceInterface $googleCalendarService) {}
 
     /**
@@ -115,7 +114,7 @@ final readonly class ShiftRegistrationUseCase
                 $summary,
                 $location,
                 $description,
-                descriptionPrefix: self::SHIFT_MARKER,
+                descriptionPrefix: ShiftScheduleConstant::MARKER,
             );
 
             return true;
@@ -150,7 +149,7 @@ final readonly class ShiftRegistrationUseCase
                 $summary,
                 $location,
                 $description,
-                descriptionPrefix: self::SHIFT_MARKER,
+                descriptionPrefix: ShiftScheduleConstant::MARKER,
             );
 
             return true;
@@ -165,7 +164,7 @@ final readonly class ShiftRegistrationUseCase
     {
         $description = $event->getDescription();
 
-        return $description !== '' && str_contains($description, self::SHIFT_MARKER);
+        return $description !== '' && str_contains($description, ShiftScheduleConstant::MARKER);
     }
 
     private function summaryForType(ShiftType $type, bool $allDay): string

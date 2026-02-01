@@ -8,20 +8,37 @@ use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
 use App\Services\Shift\ShiftRegistrationUseCase;
+use App\Services\Shift\ShiftScheduleQueryServiceInterface;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Inertia\Response;
 use InvalidArgumentException;
 
 class ShiftScheduleController extends Controller
 {
-    public function __construct(private readonly ShiftRegistrationUseCase $shiftRegistrationService) {}
+    public function __construct(
+        private readonly ShiftRegistrationUseCase $shiftRegistrationService,
+        private readonly ShiftScheduleQueryServiceInterface $shiftScheduleQueryService,
+    ) {}
 
-    public function invoke(): Response
+    public function index(Request $request): Response
     {
+        $authUser    = $request->user();
+
+        if (! $authUser) {
+            abort(404, 'user not found');
+        }
+
+        $targetMonth = $this->resolveMonth($request->string('month')->toString());
+
         return $this->render('ShiftSchedule/Index', [
-            // シフト管理画面
-            'testProps' => 'testValue',
+            'currentMonth'  => $targetMonth->format('Y-m'),
+            'shiftEntries'  => fn () => $this->shiftScheduleQueryService->getMonthlyShifts(
+                $authUser->email,
+                $targetMonth,
+            )->toArray(),
         ]);
     }
 
@@ -63,5 +80,20 @@ class ShiftScheduleController extends Controller
                 'successes' => $result->successes->toArray(),
                 'failures'  => $result->failures->toArray(),
             ]);
+    }
+
+    private function resolveMonth(?string $month): CarbonImmutable
+    {
+        if ($month === null || $month === '') {
+            return CarbonImmutable::now()->startOfMonth();
+        }
+
+        $parsed = CarbonImmutable::createFromFormat('Y-m', $month);
+
+        if ($parsed === null) {
+            return CarbonImmutable::now()->startOfMonth();
+        }
+
+        return $parsed->startOfMonth();
     }
 }

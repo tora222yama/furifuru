@@ -104,7 +104,7 @@ enum EPages: string
             self::REWARD                         => '\App\Http\Controllers\Pages\RewardController@invoke',
             self::REWARD__LIST                   => '\App\Http\Controllers\Pages\RewardController@list',
             self::REWARD__ACHIEVE                => '\App\Http\Controllers\Pages\RewardController@achieve',
-            self::SHIFT_SCHEDULE                 => '\App\Http\Controllers\Pages\ShiftScheduleController@invoke',
+            self::SHIFT_SCHEDULE                 => '\App\Http\Controllers\Pages\ShiftScheduleController@index',
             self::ATTENDANCE__EDIT               => '\App\Http\Controllers\Pages\AttendanceEditController@invoke',
             self::ATTENDANCE__EDIT__UPDATE       => '\App\Http\Controllers\Pages\AttendanceEditController@update',
             self::DIVISION                       => '\App\Http\Controllers\Pages\DivisionController@invoke',

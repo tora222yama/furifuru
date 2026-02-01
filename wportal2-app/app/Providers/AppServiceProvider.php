@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Services\External\GoogleCalendarService;
 use App\Services\External\GoogleCalendarServiceInterface;
+use App\Services\Shift\ShiftScheduleQueryService;
+use App\Services\Shift\ShiftScheduleQueryServiceInterface;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(GoogleCalendarServiceInterface::class, GoogleCalendarService::class);
+        $this->app->bind(ShiftScheduleQueryServiceInterface::class, ShiftScheduleQueryService::class);
     }
 
     /**

@@ -8,25 +8,43 @@ import { ShiftSchedule } from '@/script/Pages/ShiftSchedule/ShiftSchedule';
  */
 type IndexContext = {
   testProps?: string;
+  shiftEntries?: ShiftEntry[];
+  currentMonth?: string;
 };
 export const context = React.createContext<IndexContext>({
   testProps: undefined,
+  shiftEntries: undefined,
+  currentMonth: undefined,
 });
 
 export const useIndexContext = (): IndexContext => React.useContext(context);
 
+type ShiftEntry = {
+  date: string;
+  type: string;
+};
+
 interface IProps extends IPropsBase {
   testProps?: string;
+  shiftEntries?: ShiftEntry[];
+  currentMonth?: string;
 }
-export const Index: React.FC<IProps> = ({ testProps, ...props }) => {
+export const Index: React.FC<IProps> = ({
+  testProps,
+  shiftEntries,
+  currentMonth,
+  ...props
+}) => {
   /**
    * 下位コンポーネントで利用するコントローラー経由のパラメータ.
    */
   const providerValue: IndexContext = React.useMemo(
     () => ({
       testProps: testProps,
+      shiftEntries: shiftEntries,
+      currentMonth: currentMonth,
     }),
-    [testProps],
+    [testProps, shiftEntries, currentMonth],
   );
   // noinspection TypeScriptValidateTypes
   return (
