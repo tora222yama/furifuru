@@ -16,10 +16,7 @@ use Google_Service_PeopleService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Google Calendarに対する処理.
- */
-class GoogleCalendarService
+class GoogleCalendarService implements GoogleCalendarServiceInterface
 {
     /**
      * 指定期間の予定を取得.

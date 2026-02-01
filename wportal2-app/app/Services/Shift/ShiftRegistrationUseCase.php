@@ -7,7 +7,7 @@ namespace App\Services\Shift;
 use App\Collections\ShiftEntries;
 use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Dto\Shift\ShiftSyncResult;
-use App\Services\External\GoogleCalendarService;
+use App\Services\External\GoogleCalendarServiceInterface;
 use App\ValueObjects\ShiftType;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -21,7 +21,7 @@ final readonly class ShiftRegistrationUseCase
 {
     private const string SHIFT_MARKER = '[SHIFT_SYNC]';
 
-    public function __construct(private GoogleCalendarService $googleCalendarService) {}
+    public function __construct(private GoogleCalendarServiceInterface $googleCalendarService) {}
 
     /**
      * @return ShiftSyncResult 成功・失敗を含む同期結果
