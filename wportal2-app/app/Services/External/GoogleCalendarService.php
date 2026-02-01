@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\External;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Google\Exception;
 use Google\Service\Calendar\Event;
 use Google_Client;
@@ -29,8 +30,8 @@ class GoogleCalendarService
      */
     public function listSchedule(
         string $calendarId,
-        Carbon $startDate,
-        Carbon $endDate
+        CarbonImmutable $startDate,
+        CarbonImmutable $endDate
     ): Collection {
         // サービス取得.
         $service = new Google_Service_Calendar(
@@ -75,6 +76,7 @@ class GoogleCalendarService
         string $summary,
         string $location,
         string $description,
+        ?string $descriptionPrefix = null,
     ): void {
         // サービス取得.
         $service    = new Google_Service_Calendar(
@@ -83,7 +85,7 @@ class GoogleCalendarService
 
         // 全参加者のリスト.
         $attendList = collect([$authEmail])
-            ->concat($calendarIdList);
+            ->concat($calendarIdList->toArray());
 
         // 登録パラメータ.
         $params     = new Google_Service_Calendar_Event([
@@ -97,7 +99,7 @@ class GoogleCalendarService
                 'timeZone' => 'Asia/Tokyo',
             ],
             'location'        => $location,
-            'description'     => $description,
+            'description'     => $this->buildDescription($descriptionPrefix, $description),
             'guestsCanModify' => true,
             'attendees'       => $attendList->map(function ($calendarId) {
                 return ['email' => $calendarId];
@@ -114,6 +116,46 @@ class GoogleCalendarService
             ]
         );
         Log::info(print_r($result, true));
+    }
+
+    /**
+     * 指定期間の予定を削除（任意フィルタで対象を限定可能）。
+     *
+     * @param  callable(Event):bool|null  $filter
+     *
+     * @throws Exception
+     */
+    public function deleteSchedules(string $calendarId, CarbonImmutable $startDate, CarbonImmutable $endDate, ?callable $filter = null): void
+    {
+        $service = new Google_Service_Calendar(
+            $this->getClient($calendarId)
+        );
+
+        $events  = $this->listSchedule($calendarId, $startDate, $endDate);
+        if ($filter !== null) {
+            $events = $events->filter(static fn (Event $event): bool => (bool) $filter($event));
+        }
+
+        foreach ($events as $event) {
+            try {
+                $service->events->delete(
+                    $calendarId,
+                    $event->getId(),
+                    ['sendUpdates' => 'all']
+                );
+            } catch (\Exception $e) {
+                Log::warning('google calendar delete failed: '.$e->getMessage());
+            }
+        }
+    }
+
+    private function buildDescription(?string $prefix, string $description): string
+    {
+        if ($prefix === null || $prefix === '') {
+            return $description;
+        }
+
+        return trim($prefix.' '.$description);
     }
 
     /**

@@ -6,7 +6,7 @@ namespace App\Pipe\Usecases;
 
 use App\Enum\App\EPipeKind;
 use App\Pipe\PipeBase;
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 
 final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
@@ -14,9 +14,9 @@ final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
     /** @var Collection<int, string> */
     public Collection $emailList;
 
-    public Carbon $startDate;
+    public CarbonImmutable $startDate;
 
-    public Carbon $endDate;
+    public CarbonImmutable $endDate;
 
     /**
      * constructor.
@@ -34,8 +34,8 @@ final class PipeUsecasesCalendarUserScheduleListQuery extends PipeBase
     public function parse(): void
     {
         $this->emailList = collect($this->getArgAsStringArray('emailList'));
-        $this->startDate = Carbon::parse($this->getArgAsString('startDate'));
-        $this->endDate   = Carbon::parse($this->getArgAsString('endDate'));
+        $this->startDate = CarbonImmutable::parse($this->getArgAsString('startDate'));
+        $this->endDate   = CarbonImmutable::parse($this->getArgAsString('endDate'));
     }
 
     /**

@@ -31,32 +31,37 @@ class ShiftScheduleController extends Controller
      */
     public function store(ShiftStoreRequest $request): RedirectResponse
     {
-        $authUser = $request->user();
-        $trnUser  = $authUser?->TrnUser;
+        $authUser    = $request->user();
+        $trnUser     = $authUser?->TrnUser;
 
         if (! $trnUser) {
             abort(404, 'user not found');
         }
 
-        $data     = $request->validated();
+        $data        = $request->validated();
 
-        $command  = ShiftRegistrationCommand::fromPayloads(
+        $command     = ShiftRegistrationCommand::fromPayloads(
             $trnUser->id,
             $authUser->email,
             $data['shifts'] ?? [],
         );
 
         try {
-            $failedShifts = $this->shiftRegistrationService->execute($command);
+            $result = $this->shiftRegistrationService->execute($command);
         } catch (InvalidArgumentException $e) {
             throw ValidationException::withMessages([
                 'shifts' => $e->getMessage(),
             ]);
         }
 
+        $hasFailures = ! $result->failures->isEmpty();
+
         return redirect()
             ->back()
-            ->with('status', $failedShifts->isEmpty() ? 'stored' : 'stored_with_errors')
-            ->with('failedShifts', $failedShifts->toArray());
+            ->with('status', $hasFailures ? 'stored_with_errors' : 'stored')
+            ->with('shiftSync', [
+                'successes' => $result->successes->toArray(),
+                'failures'  => $result->failures->toArray(),
+            ]);
     }
 }

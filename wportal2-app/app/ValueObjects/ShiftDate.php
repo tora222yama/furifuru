@@ -28,6 +28,11 @@ final readonly class ShiftDate
         return Carbon::createFromImmutable($this->value);
     }
 
+    public function toCarbonImmutable(): CarbonImmutable
+    {
+        return $this->value;
+    }
+
     public function toDateString(): string
     {
         return $this->value->toDateString();

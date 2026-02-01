@@ -6,53 +6,77 @@ namespace App\Services\Shift;
 
 use App\Collections\ShiftEntries;
 use App\Dto\Shift\ShiftRegistrationCommand;
-use App\Models\App\Trn\TrnUserShiftEntry;
+use App\Dto\Shift\ShiftSyncResult;
 use App\Services\External\GoogleCalendarService;
 use App\ValueObjects\ShiftType;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Google\Service\Calendar\Event;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 use Throwable;
 
-readonly class ShiftRegistrationUseCase
+final readonly class ShiftRegistrationUseCase
 {
+    private const string SHIFT_MARKER = '[SHIFT_SYNC]';
+
     public function __construct(private GoogleCalendarService $googleCalendarService) {}
 
     /**
-     * @return ShiftEntries 失敗したシフト一覧
+     * @return ShiftSyncResult 成功・失敗を含む同期結果
      */
-    public function execute(ShiftRegistrationCommand $command): ShiftEntries
+    public function execute(ShiftRegistrationCommand $command): ShiftSyncResult
     {
-        $shifts = ShiftEntries::fromArray($command->shifts);
+        $shifts     = ShiftEntries::fromArray($command->shifts);
 
-        $this->saveShifts($command->trnUserId, $shifts);
+        if ($shifts->isEmpty()) {
+            return new ShiftSyncResult(ShiftEntries::empty(), ShiftEntries::empty());
+        }
+
+        $monthRange = $shifts->monthRangeOrFail();
+        $this->deleteGoogleCalendarMonth($command->authEmail, $monthRange);
 
         return $this->syncShifts($command->authEmail, $shifts);
     }
 
-    private function saveShifts(int $trnUserId, ShiftEntries $shifts): void
+    /**
+     * 指定月のGoogleカレンダー上のシフト予定を削除する.
+     *
+     * @param  array{start:string,end:string}  $monthRange
+     */
+    private function deleteGoogleCalendarMonth(string $authEmail, array $monthRange): void
     {
-        foreach ($shifts as $shift) {
-            TrnUserShiftEntry::updateOrCreate(
-                [
-                    'user_id' => $trnUserId,
-                    'date'    => $shift->date->toDateString(),
-                ],
-                [
-                    'type' => $shift->type->value,
-                ],
+        $start = CarbonImmutable::createFromFormat('Y-m-d', $monthRange['start']);
+        $end   = CarbonImmutable::createFromFormat('Y-m-d', $monthRange['end']);
+
+        if ($start === null || $end === null) {
+            throw new InvalidArgumentException('Invalid month range date format');
+        }
+
+        $start = $start->startOfDay();
+        $end   = $end->endOfDay();
+
+        try {
+            $this->googleCalendarService->deleteSchedules(
+                $authEmail,
+                $start,
+                $end,
+                fn (Event $event): bool => $this->isShiftEvent($event),
             );
+        } catch (Throwable $e) {
+            Log::warning('google calendar month delete failed: '.$e->getMessage());
         }
     }
 
     /**
-     * @param  ShiftEntries  $shifts
-     *                                同期実行。将来キュー投入に置き換え可能。
+     * @param  ShiftEntries  $shifts  同期実行。将来キュー投入に置き換え可能。
      */
-    private function syncShifts(string $authEmail, ShiftEntries $shifts): ShiftEntries
+    private function syncShifts(string $authEmail, ShiftEntries $shifts): ShiftSyncResult
     {
         $calendarIdList = collect();
         $failed         = ShiftEntries::empty();
+        $succeeded      = ShiftEntries::empty();
 
         foreach ($shifts as $shift) {
             $date     = $shift->date->toCarbon();
@@ -61,12 +85,16 @@ readonly class ShiftRegistrationUseCase
             $allDayOk = $this->createAllDayEvent($authEmail, $calendarIdList, $date, $type);
             $timedOk  = $this->createTimedEvent($authEmail, $calendarIdList, $date, $type);
 
-            if (! $allDayOk || ! $timedOk) {
+            $synced   = $allDayOk && $timedOk;
+
+            if (! $synced) {
                 $failed->push($shift);
+            } else {
+                $succeeded->push($shift);
             }
         }
 
-        return $failed;
+        return new ShiftSyncResult($succeeded, $failed);
     }
 
     /** @param Collection<int, string> $calendarIdList */
@@ -86,7 +114,8 @@ readonly class ShiftRegistrationUseCase
                 $end,
                 $summary,
                 $location,
-                $description
+                $description,
+                descriptionPrefix: self::SHIFT_MARKER,
             );
 
             return true;
@@ -120,7 +149,8 @@ readonly class ShiftRegistrationUseCase
                 $end,
                 $summary,
                 $location,
-                $description
+                $description,
+                descriptionPrefix: self::SHIFT_MARKER,
             );
 
             return true;
@@ -129,6 +159,13 @@ readonly class ShiftRegistrationUseCase
 
             return false;
         }
+    }
+
+    private function isShiftEvent(Event $event): bool
+    {
+        $description = $event->getDescription();
+
+        return $description !== '' && str_contains($description, self::SHIFT_MARKER);
     }
 
     private function summaryForType(ShiftType $type, bool $allDay): string

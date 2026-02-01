@@ -8,6 +8,7 @@ use App\Exceptions\ShiftEntryValidationException;
 use App\ValueObjects\ShiftEntry;
 use ArrayIterator;
 use Countable;
+use InvalidArgumentException;
 use IteratorAggregate;
 use Throwable;
 use Traversable;
@@ -120,5 +121,32 @@ final class ShiftEntries implements Countable, IteratorAggregate
         }
 
         return ShiftEntry::fromArray($item);
+    }
+
+    public function first(): ?ShiftEntry
+    {
+        return $this->items[0] ?? null;
+    }
+
+    /** @return array{start: string, end: string} */
+    public function monthRangeOrFail(): array
+    {
+        $first      = $this->first();
+        if ($first === null) {
+            throw new InvalidArgumentException('Shifts cannot be empty when determining month range');
+        }
+
+        $firstMonth = $first->date->toCarbonImmutable()->format('Y-m');
+
+        foreach ($this->items as $item) {
+            if ($item->date->toCarbonImmutable()->format('Y-m') !== $firstMonth) {
+                throw new InvalidArgumentException('All shifts must belong to the same month');
+            }
+        }
+
+        $start      = $first->date->toCarbonImmutable()->startOfMonth()->toDateString();
+        $end        = $first->date->toCarbonImmutable()->endOfMonth()->toDateString();
+
+        return ['start' => $start, 'end' => $end];
     }
 }
