@@ -8,6 +8,8 @@ parameters:
         - app/
         - database/
 
+    tmpDir: ./storage/phpstan
+
     # Level 10 is the highest level
     # 9以降は不毛な指摘やstanそのものに不具合がある、プロジェクトのさじ加減で調整してください
     level: 8
