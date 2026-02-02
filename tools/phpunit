@@ -18,6 +18,7 @@ set -euo pipefail
 #   tools/phpunit --filter ShiftScheduleQueryServiceTest
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+container_root="/var/www/html"
 cd "$repo_root"
 
 mapped_args=()
@@ -35,12 +36,12 @@ for arg in "$@"; do
 	fi
 
 	if [[ "$arg" == "$repo_root"* ]]; then
-		mapped_args+=("${arg/#$repo_root/\/var\/www\/html}")
+		mapped_args+=("${arg/#$repo_root/$container_root}")
 	elif [[ "$arg" == *="$repo_root"* ]]; then
 		# 例: --configuration=/Users/.../wportal2/wportal2-app/phpunit.xml
 		left="${arg%%=*}"
 		right="${arg#*=}"
-		mapped_args+=("${left}=${right/#$repo_root/\/var\/www\/html}")
+		mapped_args+=("${left}=${right/#$repo_root/$container_root}")
 	else
 		mapped_args+=("$arg")
 	fi
