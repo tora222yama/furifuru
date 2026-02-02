@@ -1,0 +1,17 @@
+{
+    "java.test.config": {
+        "testFramework": "junit",
+        "testRunner": "junit5"
+    },
+    "phpunit.path": "tools/phpunit",
+    "phpunit.configuration": "wportal2-app/phpunit.xml",
+
+    // PHPUnit Test Explorer (recca0120.vscode-phpunit) settings for Docker Compose
+    "phpunit.command": "docker compose exec -T -w /var/www/html wportal2_web ${php} ${phpargs} ${phpunit} ${phpunitargs}",
+    "phpunit.php": "php",
+    "phpunit.phpunit": "wportal2-app/vendor/bin/phpunit",
+    "phpunit.args": [
+        "-c",
+        "wportal2-app/phpunit.xml"
+    ]
+}

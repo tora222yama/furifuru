@@ -14,7 +14,11 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /.idea
-/.vscode
+/.vscode/*
+!/.vscode/tasks.json
+!/.vscode/settings.json
+!/.vscode/extensions.json
+!/.vscode/launch.json
 local-opensearch
 .pint.cache
 

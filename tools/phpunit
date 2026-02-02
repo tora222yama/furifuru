@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run PHPUnit inside the dev container.
+# Usage examples:
+#   tools/phpunit --testsuite Unit
+#   tools/phpunit --filter ShiftScheduleQueryServiceTest
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+exec docker compose exec -T -w /var/www/html wportal2_web wportal2-app/vendor/bin/phpunit "$@"
