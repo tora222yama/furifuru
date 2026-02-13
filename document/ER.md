@@ -285,3 +285,24 @@ erDiagram
     trn_division ||--o{ trn_good_job : "1:N from/to_trn_division_id"
     trn_project ||--o{ trn_good_job : "1:N from/to_trn_project_id"
 ```
+
+## リレーション要約
+
+| 関係 | 種別 | 接続キー |
+| :--- | :--- | :--- |
+| `auth_user` → `trn_user` | 1:1 | `auth_id` |
+| `trn_user` → `trn_user_slack_profile` | 1:1 | `trn_user_id` |
+| `trn_user` → `trn_user_authority` | 1:N | `trn_user_id` |
+| `trn_user` → `trn_attendance_state` | 1:N | `trn_user_id` |
+| `trn_division` ↔ `trn_user` (via `trn_division_user`) | N:N | 中間テーブル |
+| `trn_project` ↔ `trn_user` (via `trn_project_user`) | N:N | 中間テーブル |
+| `trn_project` → `trn_project_notification` | 1:N | `trn_project_id` |
+| `trn_user` + `trn_project` → `trn_user_project_priority` | N:N (優先度付き) | 複合参照 |
+| `trn_user` + `trn_division` → `trn_user_division_priority` | N:N (優先度付き) | 複合参照 |
+| `trn_user` + `mst_reward` → `trn_user_reward` | N:N (実績付き) | 複合参照 |
+| `trn_user` + `mst_goods` → `trn_shop_aggregate` | N:N (購入履歴) | 複合参照 |
+| `trn_user` → `trn_shuffle_lunch_entry` | 1:N | `trn_user_id` |
+| `trn_user` → `trn_shuffle_lunch_group` | 1:N | `trn_user_id` |
+| `trn_good_job` → `trn_user` / `trn_division` / `trn_project` | 多方向参照 | from/to各ID |
+| `trn_seat` | 独立 | なし |
+| `trn_batch_release_history` | 独立 | なし |
