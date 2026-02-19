@@ -1,19 +1,21 @@
 import * as React from 'react';
-import { Box, Select, MenuItem } from '@mui/material';
+import { Box, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IDate } from '@/script/Common/getMonthCalendar';
+import { ShiftType } from '@/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar';
 
 interface IProps extends IPropsBase {
   date: IDate;
+  shift: ShiftType;
+  onShiftChange: (shift: ShiftType) => void;
 }
-export const Day: React.FC<IProps> = ({ sx, date }) => {
+export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
   const dateColor = date.inRange ? E_COLOR.BLACK : E_COLOR.GREY;
-  const [shift, setShift] = React.useState('');
 
-  const handleChange = (event: any) => {
-    setShift(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onShiftChange(event.target.value as ShiftType);
   };
 
   return (
@@ -30,22 +32,27 @@ export const Day: React.FC<IProps> = ({ sx, date }) => {
         {date.dateTime.toFormatString('dd日')}
       </TypoText>
       {date.inRange && (
-        <Select
-          variant="outlined"
+        <RadioGroup
           value={shift}
           onChange={handleChange}
-          displayEmpty
-          fullWidth
-          size="small"
           sx={{ marginTop: '8px' }}
         >
-          <MenuItem value="">
-            <em>未選択</em>
-          </MenuItem>
-          <MenuItem value={'office'}>出社</MenuItem>
-          <MenuItem value={'remote'}>在宅</MenuItem>
-          <MenuItem value={'holiday'}>休暇</MenuItem>
-        </Select>
+          <FormControlLabel
+            value="remote"
+            control={<Radio size="small" />}
+            label={<TypoText size="xs">在宅</TypoText>}
+          />
+          <FormControlLabel
+            value="office"
+            control={<Radio size="small" />}
+            label={<TypoText size="xs">出社</TypoText>}
+          />
+          <FormControlLabel
+            value="holiday"
+            control={<Radio size="small" />}
+            label={<TypoText size="xs">休暇</TypoText>}
+          />
+        </RadioGroup>
       )}
     </Box>
   );

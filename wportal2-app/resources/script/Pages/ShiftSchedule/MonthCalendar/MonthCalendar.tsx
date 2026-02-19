@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography, Button } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useMemo, useState } from 'react';
 import { IPropsBase } from '@/script/System/System';
@@ -9,8 +9,13 @@ import { Day } from '@/script/Pages/ShiftSchedule/MonthCalendar/Day';
 import { getMonthCalendar } from '@/script/Common/getMonthCalendar';
 
 interface IProps extends IPropsBase {}
+
+export type ShiftType = 'remote' | 'office' | 'holiday';
+
 export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
   const [currentDate, setCurrentDate] = useState(DateTime.now());
+  const [shiftData, setShiftData] = useState<{ [key: string]: ShiftType }>({});
+
   const dateList = useMemo(() => getMonthCalendar(currentDate), [currentDate]);
 
   const handlePrevMonth = () => {
@@ -19,6 +24,30 @@ export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
 
   const handleNextMonth = () => {
     setCurrentDate(currentDate.addMonth(1));
+  };
+
+  const handleShiftChange = (dateStr: string, shift: ShiftType) => {
+    setShiftData(prev => ({ ...prev, [dateStr]: shift }));
+  };
+
+  const handleSubmit = () => {
+    const logs: { date: string; shift: ShiftType }[] = [];
+    const startOfTarget = currentDate.startOfMonth();
+    const endOfNextMonth = currentDate.addMonth(1).endOfMonth();
+
+    // 現在の月と次の月の日数をループしてデータを収集
+    let target = startOfTarget;
+    while (target.toJsTimeStamp() <= endOfNextMonth.toJsTimeStamp()) {
+      const dateKey = target.toFormatString('yyyy-MM-dd');
+      logs.push({
+        date: dateKey,
+        shift: shiftData[dateKey] || 'remote', // 未選択ならデフォルトの 'remote'
+      });
+      target = target.addDay(1);
+    }
+
+    console.log('Shift Data (Current & Next Month):', logs);
+    alert('シフト状況（今月と来月分）をログに出力しました。');
   };
 
   const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -74,12 +103,27 @@ export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
         >
           {dateList.map((week, weekIndex) => (
             <React.Fragment key={weekIndex}>
-              {week.map((date, dayIndex) => (
-                <Day key={dayIndex} date={date} />
-              ))}
+              {week.map(date => {
+                const dateKey = date.dateTime.toFormatString('yyyy-MM-dd');
+                return (
+                  <Day
+                    key={dateKey}
+                    date={date}
+                    shift={shiftData[dateKey] || 'remote'}
+                    onShiftChange={val => handleShiftChange(dateKey, val)}
+                  />
+                );
+              })}
             </React.Fragment>
           ))}
         </Box>
+      </Box>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
+      >
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          送信
+        </Button>
       </Box>
     </Box>
   );
