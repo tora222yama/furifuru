@@ -79,8 +79,8 @@
 ## 実装タスクリスト
 
 - [x] 1. Migrationファイルの作成と実行
-- [ ] 2. Enum (PHP & TypeScript) の作成
-- [ ] 3. Backend: Models & Services の作成
+- [x] 2. Enum (PHP & TypeScript) の作成
+- [x] 3. Backend: Models & Services の作成
 - [ ] 4. Backend: GraphQL Schema (Query/Mutation) 定義
 - [ ] 5. Frontend/Backend: ルーティング設定と空の一覧画面 (Index) の作成（URL直叩き用）
 - [ ] 6. Backend: 出品登録処理の実装 (Pipe)
@@ -93,4 +93,10 @@
 
 ## Current Status
 
-Migration完了。次はEnum作成から。
+タスク2（Enum作成）・タスク3（Models & Services作成）完了。次はGraphQL Schema定義から。
+
+### 完了メモ（タスク2・3）
+- PHP Enum: `app/Enum/App/Qmart/EQmartItemStatus.php` (SELLING=1, NEGOTIATING=2, SOLD=3, ARCHIVED=4)
+- TS Enum: `resources/script/Enum/Server/App/Qmart/EQmartItemStatus.ts`
+- Models: `TrnQmartItem`（SoftDeletes使用）, `TrnQmartItemImage`, `TrnQmartComment`
+- Services / Facades / Providers: 各3ファイル作成、`bootstrap/providers.php` に登録済み
