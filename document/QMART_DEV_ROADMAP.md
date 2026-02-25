@@ -81,7 +81,7 @@
 - [x] 1. Migrationファイルの作成と実行
 - [x] 2. Enum (PHP & TypeScript) の作成
 - [x] 3. Backend: Models & Services の作成
-- [ ] 4. Backend: GraphQL Schema (Query/Mutation) 定義
+- [x] 4. Backend: GraphQL Schema (Query/Mutation) 定義
 - [ ] 5. Frontend/Backend: ルーティング設定と空の一覧画面 (Index) の作成（URL直叩き用）
 - [ ] 6. Backend: 出品登録処理の実装 (Pipe)
 - [ ] 7. Frontend: 一覧画面の実装
@@ -93,7 +93,18 @@
 
 ## Current Status
 
-タスク2（Enum作成）・タスク3（Models & Services作成）完了。次はGraphQL Schema定義から。
+タスク4（GraphQL Schema定義）完了。次はルーティング設定と空の一覧画面（タスク5）から。
+
+### 完了メモ（タスク4）
+- GraphQL Schema定義: `graphql/App/Qmart/Qmart.graphql`
+  - Query: `AppQmartItemList`（オフセットページネーション）, `AppQmartItemDetail`（詳細取得）
+  - Mutation: `AppQmartItemCreate`（出品登録）, `AppQmartItemUpdateStatus`（ステータス更新）, `AppQmartCommentCreate`（コメント投稿）
+  - 型定義: `AppQmartItem`, `AppQmartItemImage`, `AppQmartComment`, `AppQmartItemListResponse`
+- フロントエンド用クエリ/ミューテーション定義: `graphql/App/Qmart/Queries/Qmart.graphql`, `graphql/App/Qmart/Mutations/Qmart.graphql`
+- Query Resolver: `app/GraphQL/App/Qmart/Queries/AppQmartItemListQuery.php`, `AppQmartItemDetailQuery.php`
+- Mutation Resolver（仮実装）: `app/GraphQL/App/Qmart/Mutations/AppQmartItemCreate.php`, `AppQmartItemUpdateStatus.php`, `AppQmartCommentCreate.php`
+- `schema.graphql` に `#import App/Qmart/Qmart.graphql` を追加済み
+- 既存の `AppTrnUser` 型を再利用（出品者・コメント投稿者のリレーション用）
 
 ### 完了メモ（タスク2・3）
 - PHP Enum: `app/Enum/App/Qmart/EQmartItemStatus.php` (SELLING=1, NEGOTIATING=2, SOLD=3, ARCHIVED=4)
