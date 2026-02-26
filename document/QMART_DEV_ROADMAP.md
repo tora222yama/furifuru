@@ -82,7 +82,7 @@
 - [x] 2. Enum (PHP & TypeScript) の作成
 - [x] 3. Backend: Models & Services の作成
 - [x] 4. Backend: GraphQL Schema (Query/Mutation) 定義
-- [ ] 5. Frontend/Backend: ルーティング設定と空の一覧画面 (Index) の作成（URL直叩き用）
+- [x] 5. Frontend/Backend: ルーティング設定と空の一覧画面 (Index) の作成（URL直叩き用）
 - [ ] 6. Backend: 出品登録処理の実装 (Pipe)
 - [ ] 7. Frontend: 一覧画面の実装
 - [ ] 8. Frontend: 出品モーダル/画面 の実装
@@ -93,7 +93,15 @@
 
 ## Current Status
 
-タスク4（GraphQL Schema定義）完了。次はルーティング設定と空の一覧画面（タスク5）から。
+タスク5（ルーティング設定と空の一覧画面）完了。次は出品登録処理の実装（タスク6）から。
+
+### 完了メモ（タスク5）
+- ルーティング: `routes/web.php` に `/qmart` ルート追加（`auth:web` ミドルウェアグループ内）
+- PHP Enum: `app/Enum/App/EPages.php` に `QMART = 'qmart'` を追加
+- Controller: `app/Http/Controllers/Pages/QmartController.php` 新規作成（Inertiaで `Qmart/Index` をレンダリング）
+- TS Enum: `resources/script/Enum/Server/App/EPages.ts` に `QMART` 追加（href, name 対応含む）
+- Frontend: `resources/script/Pages/Qmart/Index.tsx`, `Qmart.tsx` 新規作成（タイトル「Qマート」のみ表示の空ページ）
+- ※メニューへの導線は未追加（本番テスト戦略に従い、URL直叩きで確認）
 
 ### 完了メモ（タスク4）
 - GraphQL Schema定義: `graphql/App/Qmart/Qmart.graphql`
