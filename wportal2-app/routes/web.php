@@ -148,6 +148,11 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
+     * Qマート
+     */
+    Route::get('/qmart', EPages::QMART->getInvokePath());
+
+    /**
      * 座席表
      */
     Route::get('/seating_chart', EPages::SEATING_CHART->getInvokePath());
