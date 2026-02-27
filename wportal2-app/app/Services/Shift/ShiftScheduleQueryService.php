@@ -93,9 +93,10 @@ final readonly class ShiftScheduleQueryService implements ShiftScheduleQueryServ
         $summary = $event->getSummary();
 
         return match (true) {
-            str_contains($summary, '出社')   => ShiftType::Office->value,
-            str_contains($summary, '在宅')   => ShiftType::Remote->value,
-            str_contains($summary, '休暇')   => ShiftType::Holiday->value,
+            str_contains($summary, '在宅')     => ShiftType::Remote->value,
+            str_contains($summary, '出社')     => ShiftType::Office->value,
+            str_contains($summary, '出張')     => ShiftType::BusinessTrip->value,
+            str_contains($summary, '休暇')     => ShiftType::Holiday->value,
             default                          => null,
         };
     }

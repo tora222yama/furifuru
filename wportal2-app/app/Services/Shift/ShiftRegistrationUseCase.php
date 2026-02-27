@@ -170,18 +170,20 @@ final readonly class ShiftRegistrationUseCase
     private function summaryForType(ShiftType $type, bool $allDay): string
     {
         return match ($type) {
-            ShiftType::Office  => $allDay ? '終日 出社' : '出社',
-            ShiftType::Remote  => $allDay ? '終日 在宅' : '在宅',
-            ShiftType::Holiday => $allDay ? '終日 休暇' : '休暇',
+            ShiftType::Remote       => $allDay ? '終日 在宅' : '在宅',
+            ShiftType::Office       => $allDay ? '終日 出社' : '出社',
+            ShiftType::BusinessTrip => $allDay ? '終日 出張' : '出張',
+            ShiftType::Holiday      => $allDay ? '終日 休暇' : '休暇',
         };
     }
 
     private function locationForType(ShiftType $type): string
     {
         return match ($type) {
-            ShiftType::Office  => 'Office',
-            ShiftType::Remote  => 'Remote',
-            ShiftType::Holiday => '',
+            ShiftType::Office       => 'Office',
+            ShiftType::Remote       => 'Remote',
+            ShiftType::BusinessTrip => 'BusinessTrip',
+            ShiftType::Holiday      => 'Holiday',
         };
     }
 }

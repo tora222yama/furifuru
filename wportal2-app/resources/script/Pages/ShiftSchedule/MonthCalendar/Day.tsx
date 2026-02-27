@@ -25,7 +25,12 @@ export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
         minHeight: '120px',
         borderTop: `1px solid ${E_COLOR.GREY}`,
         borderLeft: `1px solid ${E_COLOR.GREY}`,
+        position: 'relative',
         ...sx,
+        bgcolor:
+          date.inRange && shift === 'holiday'
+            ? E_COLOR.BACKGROUND_GRAYOUT
+            : 'transparent',
       }}
     >
       <TypoText color={dateColor} bold={date.inRange}>
@@ -35,7 +40,7 @@ export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
         <RadioGroup
           value={shift}
           onChange={handleChange}
-          sx={{ marginTop: '8px' }}
+          sx={{ marginTop: '8px', position: 'relative' }}
         >
           <FormControlLabel
             value="remote"
@@ -48,9 +53,20 @@ export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
             label={<TypoText size="xs">出社</TypoText>}
           />
           <FormControlLabel
+            value="businessTrip"
+            control={<Radio size="small" />}
+            label={<TypoText size="xs">出張</TypoText>}
+          />
+          <FormControlLabel
             value="holiday"
             control={<Radio size="small" />}
             label={<TypoText size="xs">休暇</TypoText>}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              margin: 0,
+            }}
           />
         </RadioGroup>
       )}
