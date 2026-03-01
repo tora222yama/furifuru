@@ -25,8 +25,8 @@ interface GoogleCalendarServiceInterface
         Carbon $start,
         Carbon $end,
         string $summary,
-        string $location,
-        string $description,
+        string $location = '',
+        string $description = '',
         ?string $descriptionPrefix = null,
     ): void;
 
