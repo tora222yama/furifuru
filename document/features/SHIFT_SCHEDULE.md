@@ -22,6 +22,12 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
     └── [登録] ShiftRegistrationUseCase
                   ├── ShiftScheduleRepositoryInterface → DB（TX内）
                   └── GoogleCalendarServiceInterface → Google Calendar API（TX外）
+
+[Artisan / cron]
+  shift:sync-calendar {email}
+    └── SyncShiftCalendarUseCase
+          ├── ShiftScheduleRepositoryInterface → DB（getAllShifts / updateSyncStatuses）
+          └── GoogleCalendarServiceInterface → Google Calendar API（TX外・ベストエフォート）
 ```
 
 ### 設計上のポイント
@@ -113,11 +119,35 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 5. ShiftSyncResult(successes, failures) を返す
 ```
 
-**トランザクション整合性方針**
-- DB書き込みのみトランザクション管理する
-- Google Calendar API の失敗は DB データに影響しない
-- カレンダー同期に失敗しても Controller は `stored_with_errors` ステータスでフロントに通知できる
-- `PENDING` / `FAILED` レコードを対象にした再同期は将来の `SyncShiftCalendarUseCase`（未実装）で行う
+---
+
+## 再同期フロー（`SyncShiftCalendarUseCase::execute()`）
+
+```
+1. getAllShifts(trnUserId)  ← 全ステータス（PENDING / FAILED / SYNCED）を対象
+   └── 空なら ShiftSyncResult(empty, empty) を返す
+
+2. 対象月を列挙し、月ごとに deleteGoogleCalendarMonth()
+   └── マーカー付きシフトイベントを一掃（Google側の手動変更も上書き）
+
+3. syncShifts() : DB のシフトでカレンダーを再作成
+   ├── 終日イベント（blockSchedule）
+   └── 時刻付きイベント（blockSchedule）
+
+4. updateSyncStatuses()
+   ├── 成功分 → SYNCED
+   └── 失敗分 → FAILED
+
+5. ShiftSyncResult(successes, failures) を返す
+```
+
+**ShiftRegistrationUseCase との違い**
+| | ShiftRegistrationUseCase | SyncShiftCalendarUseCase |
+|---|---|---|
+| 入力 | 全シフト配列 | DB の全シフト（ステータス問わず）|
+| DB 書き込み | replaceMonthlyShifts（TX内） | なし（ステータス更新のみ） |
+| カレンダー削除 | 当月を一括削除してから再登録 | 同上（DB の全月を月単位で削除→再登録） |
+| 複数月対応 | 同一月のみ（制約あり） | 複数月にまたがっても可 |
 
 ---
 
@@ -163,6 +193,10 @@ description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を�
 | `app/Services/Shift/ShiftScheduleRepository.php` | Repository 実装 |
 | `tests/Fakes/Shift/FakeShiftScheduleRepository.php` | テスト用 Fake |
 | `app/Console/Commands/Test/RegisterShift.php` | 動作確認用 Artisan コマンド |
+| `app/Dto/Shift/SyncShiftCalendarCommand.php` | 再同期 UseCase の入力 DTO |
+| `app/Services/Shift/SyncShiftCalendarUseCase.php` | 再同期ユースケース |
+| `app/Console/Commands/Shift/SyncShiftCalendar.php` | 再同期 Artisan コマンド（`shift:sync-calendar`） |
+| `tests/Feature/Services/Shift/SyncShiftCalendarUseCaseTest.php` | 再同期 UseCase テスト |
 
 ### 既存ファイル（今回修正）
 
@@ -174,6 +208,9 @@ description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を�
 | `app/Providers/AppServiceProvider.php` | `ShiftScheduleRepositoryInterface` のバインディングを追加 |
 | `tests/Feature/Services/Shift/ShiftRegistrationUseCaseTest.php` | FakeRepository を使うよう更新。DB保存・ステータス更新のアサーションを追加 |
 | `tests/Unit/Services/Shift/ShiftScheduleQueryServiceTest.php` | FakeRepository ベースのテストに全面書き換え |
+| `app/Services/Shift/ShiftScheduleRepositoryInterface.php` | `getPendingOrFailedShifts()` / `getAllShifts()` を追加 |
+| `app/Services/Shift/ShiftScheduleRepository.php` | `getPendingOrFailedShifts()` / `getAllShifts()` を実装 |
+| `tests/Fakes/Shift/FakeShiftScheduleRepository.php` | `getPendingOrFailedShifts()` / `seedPendingOrFailed()` / `getAllShifts()` / `seedAll()` を追加 |
 
 ### 削除
 
@@ -186,6 +223,7 @@ description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を�
 ## 動作確認コマンド
 
 ```bash
+# シフト登録（動作確認用）
 # オプション指定
 php artisan test:register-shift user@example.com \
   --shifts=2026-03-10:office \
@@ -197,6 +235,11 @@ php artisan test:register-shift user@example.com
 ```
 
 シフト種別の選択肢: `office` / `remote` / `businessTrip` / `holiday`
+
+```bash
+# PENDING / FAILED シフトを Google Calendar に再同期
+php artisan shift:sync-calendar user@example.com
+```
 
 ---
 
@@ -257,6 +300,104 @@ export type ShiftEntry = {
 
 | 機能 | 概要 |
 |---|---|
-| `SyncShiftCalendarUseCase` | `e_calendar_sync_status = PENDING\|FAILED` のレコードを対象に Google Calendar へ再同期するユースケース |
-| 再同期の起動方式 | バッチ／キュー（Artisan コマンド or Laravel Queue）での定期実行を想定 |
+| 再同期の定期実行 | `shift:sync-calendar` を cron（Laravel Scheduler 等）で定期実行する設定 |
 | フロントエンド送信処理 | `handleSubmit` を実際の API（GraphQL / Inertia POST）に接続する |
+
+---
+
+## 実装履歴
+
+### Phase 1: シフト DB 永続化・Google Calendar 同期（初回実装）
+
+**概要**  
+ShiftRegistrationUseCase に Repository 層を追加してシフトを DB に永続化し、Google Calendar 同期の結果を `e_calendar_sync_status` に反映する仕組みを構築した。
+
+**新規作成**
+- `database/migrations/2026_03_02_000001_create_trn_shift_schedule_table.php`
+- `app/Enum/App/ECalendarSyncStatus.php`（PENDING / SYNCED / FAILED）
+- `app/Models/App/Trn/TrnShiftSchedule.php`
+- `app/Services/Shift/ShiftScheduleRepositoryInterface.php`
+- `app/Services/Shift/ShiftScheduleRepository.php`
+- `tests/Fakes/Shift/FakeShiftScheduleRepository.php`
+- `app/Console/Commands/Test/RegisterShift.php`（`test:register-shift` コマンド）
+
+**修正**
+- `ShiftRegistrationUseCase`: Repository DI 追加・DB保存（TX内）・同期ステータス更新を追加
+- `ShiftScheduleQueryService`: Google Calendar 依存を除去し Repository に委譲。Interface 実装を外した
+- `ShiftScheduleController`: `index()` でも `trnUser->id` を取得して QueryService に渡すよう変更
+- `AppServiceProvider`: `ShiftScheduleRepositoryInterface` のバインディングを追加
+- `ShiftRegistrationUseCaseTest`: FakeRepository ベースに全面更新
+- `ShiftScheduleQueryServiceTest`: FakeRepository ベースのテストに全面書き換え
+
+**削除**
+- `app/Services/Shift/ShiftScheduleQueryServiceInterface.php`（Controller が具体クラスに直接依存する設計に変更したため不要）
+
+---
+
+### Phase 2: 再同期ユースケース実装
+
+**概要**  
+`e_calendar_sync_status = PENDING | FAILED` のシフトを Google Calendar に再同期する `SyncShiftCalendarUseCase` と Artisan コマンド `shift:sync-calendar` を実装した。
+
+**新規作成**
+- `app/Dto/Shift/SyncShiftCalendarCommand.php`
+- `app/Services/Shift/SyncShiftCalendarUseCase.php`
+- `app/Console/Commands/Shift/SyncShiftCalendar.php`（`shift:sync-calendar {email}` コマンド）
+- `tests/Feature/Services/Shift/SyncShiftCalendarUseCaseTest.php`
+
+**修正**
+- `ShiftScheduleRepositoryInterface`: `getPendingOrFailedShifts()` を追加
+- `ShiftScheduleRepository`: `getPendingOrFailedShifts()` を実装
+- `FakeShiftScheduleRepository`: `getPendingOrFailedShifts()` / `seedPendingOrFailed()` を追加
+
+---
+
+### Phase 3: 再同期を全シフト対象・完全上書きに変更
+
+**概要**  
+Google Calendar 側で手動変更されている可能性を考慮し、`SyncShiftCalendarUseCase` の動作を以下のように変更した。
+
+| | 変更前（Phase 2） | 変更後（Phase 3） |
+|---|---|---|
+| 対象シフト | PENDING / FAILED のみ | 全ステータス（DB 全件） |
+| 月削除 | なし（追加のみ） | あり（月ごとに削除→再作成） |
+| Google 側の手動変更 | 上書きしない | 上書きして DB を SoT に保つ |
+| 複数月対応 | 可 | 可（月ごとに独立して削除実行） |
+
+**修正**
+- `ShiftScheduleRepositoryInterface`: `getAllShifts()` を追加
+- `ShiftScheduleRepository`: `getAllShifts()` を実装（ステータス条件なし・日付昇順）
+- `FakeShiftScheduleRepository`: `getAllShifts()` / `seedAll()` / `getAllShiftsCalls` を追加
+- `SyncShiftCalendarUseCase`: `getPendingOrFailedShifts()` → `getAllShifts()` に変更。`deleteMonthsFromCalendar()` で月ごとにカレンダー削除を追加
+- `SyncShiftCalendarUseCaseTest`: 全テストを新フローに更新（`deleteCalls` の検証追加、`seedAll()` 使用）
+
+`getPendingOrFailedShifts()` は将来の軽量再同期（削除なし・差分のみ）等に備えて残してある。
+
+---
+
+### Phase 4: isShiftEvent の null description バグ修正
+
+**概要**  
+Google Calendar 上に description が設定されていない予定（通常の会議・予定など）が存在する場合、シフトの再登録時に旧イベントが削除されずに重複登録される不具合を修正した。
+
+**原因**  
+`isShiftEvent()` 内で `$event->getDescription()` が `null` を返す場合、`str_contains(null, '[SHIFT_SYNC]')` が `TypeError` を投げ、`deleteGoogleCalendarMonth()` の try/catch に捕捉されて削除処理全体がスキップされていた。その後 `syncShifts()` が新規イベントを登録するため、旧イベントと重複した。
+
+```
+// 修正前
+return $description !== '' && str_contains($description, ShiftScheduleConstant::MARKER);
+//                  ^^^^^  空文字ガードのみ → null は TypeError
+
+// 修正後
+return $description !== null && str_contains($description, ShiftScheduleConstant::MARKER);
+//                   ^^^^^^  null ガード
+```
+
+**修正**
+- `ShiftRegistrationUseCase::isShiftEvent()`: `!== ''` → `!== null`
+- `SyncShiftCalendarUseCase::isShiftEvent()`: 同上
+- `ShiftScheduleRepositoryInterface` doc comment: 「既存をアーカイブして」→「既存を物理削除して」（過去の設計メモの残存を修正）
+
+**テスト**
+- `FakeGoogleCalendarService`: フィルタを実際に適用して `$deletedEvents` に記録するよう更新
+- `ShiftRegistrationUseCaseTest`: `test_execute_does_not_throw_when_calendar_has_null_description_event` を追加（回帰テスト）
