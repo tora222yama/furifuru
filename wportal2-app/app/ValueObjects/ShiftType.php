@@ -6,7 +6,8 @@ namespace App\ValueObjects;
 
 enum ShiftType: string
 {
-    case Office  = 'office';
-    case Remote  = 'remote';
-    case Holiday = 'holiday';
+    case Office       = 'office';
+    case Remote       = 'remote';
+    case BusinessTrip = 'businessTrip';
+    case Holiday      = 'holiday';
 }

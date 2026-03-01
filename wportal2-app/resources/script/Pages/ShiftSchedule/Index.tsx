@@ -46,6 +46,7 @@ export const Index: React.FC<IProps> = ({
     }),
     [testProps, shiftEntries, currentMonth],
   );
+  console.log(providerValue);
   // noinspection TypeScriptValidateTypes
   return (
     <CommonIndexProvider {...props}>
