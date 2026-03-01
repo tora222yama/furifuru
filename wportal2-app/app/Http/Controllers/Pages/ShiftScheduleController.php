@@ -8,7 +8,7 @@ use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
 use App\Services\Shift\ShiftRegistrationUseCase;
-use App\Services\Shift\ShiftScheduleQueryServiceInterface;
+use App\Services\Shift\ShiftScheduleQueryService;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,14 +20,15 @@ class ShiftScheduleController extends Controller
 {
     public function __construct(
         private readonly ShiftRegistrationUseCase $shiftRegistrationService,
-        private readonly ShiftScheduleQueryServiceInterface $shiftScheduleQueryService,
+        private readonly ShiftScheduleQueryService $shiftScheduleQueryService,
     ) {}
 
     public function index(Request $request): Response
     {
         $authUser    = $request->user();
+        $trnUser     = $authUser?->TrnUser;
 
-        if (! $authUser) {
+        if (! $trnUser) {
             abort(404, 'user not found');
         }
 
@@ -36,7 +37,7 @@ class ShiftScheduleController extends Controller
         return $this->render('ShiftSchedule/Index', [
             'currentMonth'  => $targetMonth->format('Y-m'),
             'shiftEntries'  => fn () => $this->shiftScheduleQueryService->getMonthlyShifts(
-                $authUser->email,
+                $trnUser->id,
                 $targetMonth,
             )->toArray(),
         ]);

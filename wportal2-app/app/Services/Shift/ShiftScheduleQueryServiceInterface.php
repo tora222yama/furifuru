@@ -9,5 +9,5 @@ use Carbon\CarbonImmutable;
 
 interface ShiftScheduleQueryServiceInterface
 {
-    public function getMonthlyShifts(string $authEmail, CarbonImmutable $targetMonth): ShiftEntries;
+    public function getMonthlyShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries;
 }
