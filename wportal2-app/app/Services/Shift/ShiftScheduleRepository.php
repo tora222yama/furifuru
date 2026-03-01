@@ -90,4 +90,34 @@ final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface
             ->whereIn('shift_date', $dates)
             ->update(['e_calendar_sync_status' => $status->value]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPendingOrFailedShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries
+    {
+        $start   = $targetMonth->startOfMonth()->toDateString();
+        $end     = $targetMonth->endOfMonth()->toDateString();
+
+        $records = TrnShiftSchedule::query()
+            ->where('trn_user_id', $trnUserId)
+            ->whereBetween('shift_date', [$start, $end])
+            ->whereIn('e_calendar_sync_status', [
+                ECalendarSyncStatus::PENDING->value,
+                ECalendarSyncStatus::FAILED->value,
+            ])
+            ->orderBy('shift_date')
+            ->get();
+
+        $shifts  = [];
+        foreach ($records as $record) {
+            /** @var TrnShiftSchedule $record */
+            $shifts[] = [
+                'date' => $record->shift_date,
+                'type' => $record->shift_type,
+            ];
+        }
+
+        return ShiftEntries::fromArray($shifts);
+    }
 }

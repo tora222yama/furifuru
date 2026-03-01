@@ -20,8 +20,14 @@ final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterf
     /** @var array<int, array{trnUserId:int,shifts:ShiftEntries,status:ECalendarSyncStatus}> */
     public array $updateSyncStatusesCalls   = [];
 
+    /** @var array<int, array{trnUserId:int,targetMonth:CarbonImmutable}> */
+    public array $getPendingOrFailedCalls   = [];
+
     /** @var array<string, ShiftEntries> key: "{trnUserId}:{Y-m}" */
     private array $store                    = [];
+
+    /** @var array<string, ShiftEntries> key: "{trnUserId}:{Y-m}" */
+    private array $pendingOrFailedStore     = [];
 
     public function replaceMonthlyShifts(int $trnUserId, ShiftEntries $shifts): void
     {
@@ -71,5 +77,26 @@ final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterf
         $key               = "{$trnUserId}:{$month}";
 
         $this->store[$key] = $shifts;
+    }
+
+    /**
+     * テスト用：指定ユーザー・月の PENDING/FAILED シフトをあらかじめセットする。
+     */
+    public function seedPendingOrFailed(int $trnUserId, CarbonImmutable $targetMonth, ShiftEntries $shifts): void
+    {
+        $key                               = "{$trnUserId}:{$targetMonth->format('Y-m')}";
+        $this->pendingOrFailedStore[$key]  = $shifts;
+    }
+
+    public function getPendingOrFailedShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries
+    {
+        $this->getPendingOrFailedCalls[] = [
+            'trnUserId'   => $trnUserId,
+            'targetMonth' => $targetMonth,
+        ];
+
+        $key                             = "{$trnUserId}:{$targetMonth->format('Y-m')}";
+
+        return $this->pendingOrFailedStore[$key] ?? ShiftEntries::empty();
     }
 }
