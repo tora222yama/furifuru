@@ -7,19 +7,29 @@ namespace Tests\Fakes\External;
 use App\Services\External\GoogleCalendarServiceInterface;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Google\Service\Calendar\Event;
 use Illuminate\Support\Collection;
 use RuntimeException;
+use Throwable;
 
 final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
 {
+    /** @var array<int, array{authEmail:string,start:CarbonImmutable,end:CarbonImmutable}> */
+    public array $listScheduleCalls = [];
+
     /** @var array<int, array{authEmail:string,start:CarbonImmutable,end:CarbonImmutable,filter:callable|null}> */
-    public array $deleteCalls = [];
+    public array $deleteCalls       = [];
 
     /** @var array<int, array{authEmail:string,start:Carbon,end:Carbon,summary:string,location:string,description:string,descriptionPrefix:?string}> */
-    public array $blockCalls  = [];
+    public array $blockCalls        = [];
 
     /** @var list<int> */
     private array $throwOnBlockCallIndices;
+
+    /** @var Collection<int, Event> */
+    private Collection $listScheduleResult;
+
+    private ?Throwable $throwOnListSchedule;
 
     /**
      * @param  list<int>  $throwOnBlockCallIndices  ブロック呼び出しで例外をスローするインデックスのリスト
@@ -27,6 +37,29 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
     public function __construct(array $throwOnBlockCallIndices = [])
     {
         $this->throwOnBlockCallIndices = $throwOnBlockCallIndices;
+        $this->listScheduleResult      = collect();
+        $this->throwOnListSchedule     = null;
+    }
+
+    /**
+     * @param  Collection<int, Event>  $events
+     */
+    public function setListScheduleResult(Collection $events): void
+    {
+        $this->listScheduleResult = $events;
+    }
+
+    /**
+     * @param  list<Event>  $events
+     */
+    public function seedListScheduleEvents(array $events): void
+    {
+        $this->listScheduleResult = collect($events);
+    }
+
+    public function throwOnListSchedule(?Throwable $throwable): void
+    {
+        $this->throwOnListSchedule = $throwable;
     }
 
     public function deleteSchedules(string $calendarId, CarbonImmutable $startDate, CarbonImmutable $endDate, ?callable $filter = null): void
@@ -71,10 +104,20 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
     }
 
     /**
-     * @return Collection<int, never>
+     * @return Collection<int, Event>
      */
     public function listSchedule(string $calendarId, CarbonImmutable $startDate, CarbonImmutable $endDate): Collection
     {
-        return collect();
+        $this->listScheduleCalls[] = [
+            'authEmail' => $calendarId,
+            'start'     => $startDate,
+            'end'       => $endDate,
+        ];
+
+        if ($this->throwOnListSchedule !== null) {
+            throw $this->throwOnListSchedule;
+        }
+
+        return $this->listScheduleResult;
     }
 }

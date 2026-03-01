@@ -10,6 +10,7 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [SPAビルドについて](./document/SPA.md)
 - [InertiaLinkとPartialLoadについて](./document/INERTIA_LINK_AND_PARTIAL_LOAD.md)
 - [TIPS](./document/TIPS.md)
+- [テスト実行ガイド（VS Code: チャット/フラスコ対応）](./wportal2-app/document/TESTING.md)
 
 # 環境構築
 
