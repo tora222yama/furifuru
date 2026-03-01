@@ -7,6 +7,7 @@ namespace Tests\Feature\Services\Shift;
 use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Enum\App\ECalendarSyncStatus;
 use App\Services\Shift\ShiftRegistrationUseCase;
+use Google\Service\Calendar\Event;
 use InvalidArgumentException;
 use Tests\Fakes\External\FakeGoogleCalendarService;
 use Tests\Fakes\Shift\FakeShiftScheduleRepository;
@@ -114,6 +115,41 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertCount(1, $failedUpdates);
 
         $this->assertCount(1, $fakeCalendar->deleteCalls);
+        $this->assertCount(2, $fakeCalendar->blockCalls);
+    }
+
+    public function test_execute_does_not_throw_when_calendar_has_null_description_event(): void
+    {
+        // description が null のイベント（説明なしの Google Calendar 予定）と
+        // SHIFT_SYNC マーカー付きのシフトイベントが混在するケースを再現する。
+        // 修正前は isShiftEvent 内の str_contains(null, ...) が TypeError を投げて
+        // 削除処理全体がスキップされ、シフトが重複登録される不具合があった。
+        $nullDescriptionEvent = new Event;
+        // description を設定しない → getDescription() が null を返す
+
+        $shiftEvent           = new Event;
+        $shiftEvent->setDescription('[SHIFT_SYNC] 終日');
+
+        $fakeCalendar         = new FakeGoogleCalendarService;
+        $fakeCalendar->seedListScheduleEvents([$nullDescriptionEvent, $shiftEvent]);
+        $fakeRepository       = new FakeShiftScheduleRepository;
+        $useCase              = $this->makeUseCase($fakeCalendar, $fakeRepository);
+
+        $command              = new ShiftRegistrationCommand(1, 'user@example.com', [
+            ['date' => '2024-07-01', 'type' => 'office'],
+        ]);
+
+        // null description のイベントが混在していても例外なく完了すること
+        $result               = $useCase->execute($command);
+
+        $this->assertSame(1, $result->successes->count());
+        $this->assertSame(0, $result->failures->count());
+
+        // SHIFT_SYNC マーカー付きのイベントのみ削除対象となっていること
+        $this->assertCount(1, $fakeCalendar->deletedEvents);
+        $this->assertStringContainsString('[SHIFT_SYNC]', (string) $fakeCalendar->deletedEvents[0]->getDescription());
+
+        // 新規シフトは正常に登録されていること（1 shift x (all-day + timed)）
         $this->assertCount(2, $fakeCalendar->blockCalls);
     }
 

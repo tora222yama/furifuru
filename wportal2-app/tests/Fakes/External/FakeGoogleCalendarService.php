@@ -20,6 +20,9 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
     /** @var array<int, array{authEmail:string,start:CarbonImmutable,end:CarbonImmutable,filter:callable|null}> */
     public array $deleteCalls       = [];
 
+    /** @var list<Event> フィルタを通過し削除対象となったイベント */
+    public array $deletedEvents     = [];
+
     /** @var array<int, array{authEmail:string,start:Carbon,end:Carbon,summary:string,location:string,description:string,descriptionPrefix:?string}> */
     public array $blockCalls        = [];
 
@@ -70,6 +73,15 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
             'end'       => $endDate,
             'filter'    => $filter,
         ];
+
+        // 実装と同様にフィルタを適用して削除対象イベントを記録する
+        $events = $this->listScheduleResult;
+        if ($filter !== null) {
+            $events = $events->filter(static fn (Event $event): bool => (bool) $filter($event));
+        }
+        foreach ($events as $event) {
+            $this->deletedEvents[] = $event;
+        }
     }
 
     /**
