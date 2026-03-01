@@ -197,7 +197,7 @@ final readonly class ShiftRegistrationUseCase
     {
         $description = $event->getDescription();
 
-        return $description !== '' && str_contains($description, ShiftScheduleConstant::MARKER);
+        return $description !== null && str_contains($description, ShiftScheduleConstant::MARKER);
     }
 
     private function summaryForType(ShiftType $type, bool $allDay): string
