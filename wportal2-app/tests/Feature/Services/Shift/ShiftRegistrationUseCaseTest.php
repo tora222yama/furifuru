@@ -6,6 +6,7 @@ namespace Tests\Feature\Services\Shift;
 
 use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Enum\App\ECalendarSyncStatus;
+use App\Services\Shift\ShiftCalendarSyncer;
 use App\Services\Shift\ShiftRegistrationUseCase;
 use Google\Service\Calendar\Event;
 use InvalidArgumentException;
@@ -19,9 +20,11 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         ?FakeGoogleCalendarService $calendarService = null,
         ?FakeShiftScheduleRepository $repository = null,
     ): ShiftRegistrationUseCase {
+        $calendarService ??= new FakeGoogleCalendarService;
+
         return new ShiftRegistrationUseCase(
-            $calendarService ?? new FakeGoogleCalendarService,
-            $repository      ?? new FakeShiftScheduleRepository,
+            new ShiftCalendarSyncer($calendarService),
+            $repository ?? new FakeShiftScheduleRepository,
         );
     }
 
@@ -78,15 +81,13 @@ final class ShiftRegistrationUseCaseTest extends TestCase
 
         [$allDayOffice, $timedOffice, $allDayRemote, $timedRemote] = $fakeCalendar->blockCalls;
 
-        $this->assertSame('終日 出社', $allDayOffice['summary']);
-        $this->assertSame('Office', $allDayOffice['location']);
+        $this->assertSame('出社', $allDayOffice['summary']);
         $this->assertSame('[SHIFT_SYNC]', $allDayOffice['descriptionPrefix']);
-        $this->assertSame('出社', $timedOffice['summary']);
+        $this->assertSame('出勤（出社）', $timedOffice['summary']);
 
-        $this->assertSame('終日 在宅', $allDayRemote['summary']);
-        $this->assertSame('Remote', $allDayRemote['location']);
+        $this->assertSame('在宅', $allDayRemote['summary']);
         $this->assertSame('[SHIFT_SYNC]', $allDayRemote['descriptionPrefix']);
-        $this->assertSame('在宅', $timedRemote['summary']);
+        $this->assertSame('出勤（在宅）', $timedRemote['summary']);
     }
 
     public function test_execute_marks_shift_as_failure_when_blocking_fails(): void

@@ -75,7 +75,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
         ];
 
         // 実装と同様にフィルタを適用して削除対象イベントを記録する
-        $events = $this->listScheduleResult;
+        $events              = $this->listScheduleResult;
         if ($filter !== null) {
             $events = $events->filter(static fn (Event $event): bool => (bool) $filter($event));
         }
@@ -95,8 +95,8 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
         Carbon $start,
         Carbon $end,
         string $summary,
-        string $location,
-        string $description,
+        string $location = '',
+        string $description = '',
         ?string $descriptionPrefix = null,
     ): void {
         $index              = count($this->blockCalls);

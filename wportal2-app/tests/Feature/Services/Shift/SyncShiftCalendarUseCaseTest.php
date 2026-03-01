@@ -7,6 +7,7 @@ namespace Tests\Feature\Services\Shift;
 use App\Collections\ShiftEntries;
 use App\Dto\Shift\SyncShiftCalendarCommand;
 use App\Enum\App\ECalendarSyncStatus;
+use App\Services\Shift\ShiftCalendarSyncer;
 use App\Services\Shift\SyncShiftCalendarUseCase;
 use Carbon\CarbonImmutable;
 use Tests\Fakes\External\FakeGoogleCalendarService;
@@ -19,9 +20,11 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
         ?FakeGoogleCalendarService $calendarService = null,
         ?FakeShiftScheduleRepository $repository = null,
     ): SyncShiftCalendarUseCase {
+        $calendarService ??= new FakeGoogleCalendarService;
+
         return new SyncShiftCalendarUseCase(
-            $calendarService ?? new FakeGoogleCalendarService,
-            $repository      ?? new FakeShiftScheduleRepository,
+            new ShiftCalendarSyncer($calendarService),
+            $repository ?? new FakeShiftScheduleRepository,
         );
     }
 
@@ -30,7 +33,7 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
         return new SyncShiftCalendarCommand(
             trnUserId: 1,
             authEmail: 'user@example.com',
-            targetMonth: CarbonImmutable::createFromFormat('Y-m', $month)->startOfMonth(),
+            targetMonth: CarbonImmutable::parse($month.'-01')->startOfMonth(),
         );
     }
 
@@ -187,11 +190,10 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
 
         [$allDay, $timed] = $fakeCalendar->blockCalls;
 
-        $this->assertSame('終日 休暇', $allDay['summary']);
-        $this->assertSame('Holiday', $allDay['location']);
+        $this->assertSame('休暇', $allDay['summary']);
         $this->assertSame('[SHIFT_SYNC]', $allDay['descriptionPrefix']);
 
-        $this->assertSame('休暇', $timed['summary']);
+        $this->assertSame('出勤（休暇）', $timed['summary']);
         $this->assertSame('09:00', $timed['start']->format('H:i'));
         $this->assertSame('18:00', $timed['end']->format('H:i'));
     }
