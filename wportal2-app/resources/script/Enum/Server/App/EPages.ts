@@ -250,6 +250,8 @@ export const getPagesName = (page: EPages): string => {
       return '報酬一覧';
     case E_PAGES.ATTENDANCE__EDIT:
       return '勤怠修正';
+    case E_PAGES.SHIFT_SCHEDULE:
+      return 'シフト管理';
     case E_PAGES.DIVISION:
       return '課一覧';
     case E_PAGES.DIVISION__SHOW:
