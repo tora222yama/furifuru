@@ -74,8 +74,8 @@ export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
         >
           {dateList.map((week, weekIndex) => (
             <React.Fragment key={weekIndex}>
-              {week.map((date, dayIndex) => (
-                <Day key={dayIndex} date={date} />
+              {week.map(date => (
+                <Day key={date.dateTime.toJsTimeStamp()} date={date} />
               ))}
             </React.Fragment>
           ))}

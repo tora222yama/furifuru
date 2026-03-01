@@ -99,8 +99,9 @@ export class DateTime {
    */
   public endOfMonth(): DateTime {
     const ret = this.newDate();
-    ret.setDate(0);
+    ret.setDate(1);
     ret.setMonth(ret.getMonth() + 1);
+    ret.setDate(0);
     ret.setHours(23);
     ret.setMinutes(59);
     ret.setSeconds(59);
@@ -112,11 +113,11 @@ export class DateTime {
    * 月の日数を得る.
    */
   public daysInMonth(): number {
-    const startOfMonth = this.startOfMonth();
-    const endOfMonth = this.endOfMonth();
-    const diff = endOfMonth.toJsTimeStamp() - startOfMonth.toJsTimeStamp();
-
-    return Math.ceil(diff / DateTime.SPAN_DAY_JS);
+    const ret = this.newDate();
+    ret.setDate(1);
+    ret.setMonth(ret.getMonth() + 1);
+    ret.setDate(0);
+    return ret.getDate();
   }
 
   /**
@@ -255,7 +256,15 @@ export class DateTime {
    */
   public addMonth(addMonth = 1): DateTime {
     const ret = this.newDate();
+    const currentDay = ret.getDate();
+    ret.setDate(1);
     ret.setMonth(ret.getMonth() + addMonth);
+    const lastDayNextMonth = new Date(
+      ret.getFullYear(),
+      ret.getMonth() + 1,
+      0,
+    ).getDate();
+    ret.setDate(Math.min(currentDay, lastDayNextMonth));
     return new DateTime(ret.getTime());
   }
 
@@ -265,7 +274,15 @@ export class DateTime {
    */
   public subMonth(subMonth = 1): DateTime {
     const ret = this.newDate();
+    const currentDay = ret.getDate();
+    ret.setDate(1);
     ret.setMonth(ret.getMonth() - subMonth);
+    const lastDayPrevMonth = new Date(
+      ret.getFullYear(),
+      ret.getMonth() + 1,
+      0,
+    ).getDate();
+    ret.setDate(Math.min(currentDay, lastDayPrevMonth));
     return new DateTime(ret.getTime());
   }
 
