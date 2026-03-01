@@ -8,22 +8,30 @@ use App\Collections\ShiftEntries;
 use App\Constant\ShiftScheduleConstant;
 use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Dto\Shift\ShiftSyncResult;
+use App\Enum\App\ECalendarSyncStatus;
 use App\Services\External\GoogleCalendarServiceInterface;
 use App\ValueObjects\ShiftType;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Google\Service\Calendar\Event;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use Throwable;
 
 final readonly class ShiftRegistrationUseCase
 {
-    public function __construct(private GoogleCalendarServiceInterface $googleCalendarService) {}
+    public function __construct(
+        private GoogleCalendarServiceInterface $googleCalendarService,
+        private ShiftScheduleRepositoryInterface $shiftScheduleRepository,
+    ) {}
 
     /**
      * @return ShiftSyncResult 成功・失敗を含む同期結果
+     *
+     * DB書き込みをトランザクション内で確定し、Google Calendar連携はその後ベストエフォートで実行する。
+     * 外部API（Google Calendar）の失敗はDBデータに影響しない。
      */
     public function execute(ShiftRegistrationCommand $command): ShiftSyncResult
     {
@@ -33,10 +41,35 @@ final readonly class ShiftRegistrationUseCase
             return new ShiftSyncResult(ShiftEntries::empty(), ShiftEntries::empty());
         }
 
+        // DBへの保存（トランザクション内）
+        DB::transaction(function () use ($command, $shifts): void {
+            $this->shiftScheduleRepository->replaceMonthlyShifts($command->trnUserId, $shifts);
+        });
+
+        // Google Calendar 連携（トランザクション外・ベストエフォート）
         $monthRange = $shifts->monthRangeOrFail();
         $this->deleteGoogleCalendarMonth($command->authEmail, $monthRange);
 
-        return $this->syncShifts($command->authEmail, $shifts);
+        $result     = $this->syncShifts($command->authEmail, $shifts);
+
+        // Google Calendar 同期結果をDBのステータスに反映
+        if (! $result->successes->isEmpty()) {
+            $this->shiftScheduleRepository->updateSyncStatuses(
+                $command->trnUserId,
+                $result->successes,
+                ECalendarSyncStatus::SYNCED,
+            );
+        }
+
+        if (! $result->failures->isEmpty()) {
+            $this->shiftScheduleRepository->updateSyncStatuses(
+                $command->trnUserId,
+                $result->failures,
+                ECalendarSyncStatus::FAILED,
+            );
+        }
+
+        return $result;
     }
 
     /**
