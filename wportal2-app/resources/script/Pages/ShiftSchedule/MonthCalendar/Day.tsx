@@ -9,9 +9,10 @@ import { ShiftType } from '@/script/Pages/ShiftSchedule/MonthCalendar/MonthCalen
 interface IProps extends IPropsBase {
   date: IDate;
   shift: ShiftType;
+  holidayName?: string;
   onShiftChange: (shift: ShiftType) => void;
 }
-export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
+export const Day: React.FC<IProps> = ({ sx, date, shift, holidayName, onShiftChange }) => {
   const dateColor = date.inRange ? E_COLOR.BLACK : E_COLOR.GREY;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,9 +34,16 @@ export const Day: React.FC<IProps> = ({ sx, date, shift, onShiftChange }) => {
             : 'transparent',
       }}
     >
-      <TypoText color={dateColor} bold={date.inRange}>
-        {date.dateTime.toFormatString('dd日')}
-      </TypoText>
+      <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+        <TypoText color={dateColor} bold={date.inRange}>
+          {date.dateTime.toFormatString('dd日')}
+        </TypoText>
+        {holidayName && (
+          <TypoText size="xs" color={E_COLOR.TEXT_RED}>
+            {holidayName}
+          </TypoText>
+        )}
+      </Box>
       {date.inRange && (
         <RadioGroup
           value={shift}
