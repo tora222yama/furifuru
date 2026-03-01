@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Box, IconButton, Typography, Button } from '@mui/material';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { Box, IconButton, Button, Paper } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
 import { IPropsBase } from '@/script/System/System';
@@ -8,15 +7,44 @@ import { E_COLOR } from '@/script/Enum/EColor';
 import { DateTime } from '@/script/Common/DateTime';
 import { Day } from '@/script/Pages/ShiftSchedule/MonthCalendar/Day';
 import { getMonthCalendar } from '@/script/Common/getMonthCalendar';
-import { E_WEEK_DAY } from '@/script/Enum/Server/App/EWeekDay';
+import {
+  E_WEEK_DAY,
+  getWeekDayShortLabel,
+} from '@/script/Enum/Server/App/EWeekDay';
+import { ShiftEntry, ShiftType } from '@/script/Pages/ShiftSchedule/Index';
+import { TypoH2 } from '@/script/Component/Typography/TypoH2';
+import { TypoText } from '@/script/Component/Typography/TypoText';
+import { Icon } from '@/script/Component/Misc/Icon';
+import { E_ICON } from '@/script/Enum/EIcon';
 
-interface IProps extends IPropsBase {}
+interface IProps extends IPropsBase {
+  shiftEntries?: ShiftEntry[];
+  currentMonth?: string;
+}
 
-export type ShiftType = 'remote' | 'office' | 'businessTrip' | 'holiday';
+export const MonthCalendar: React.FC<IProps> = ({
+  sx,
+  shiftEntries,
+  currentMonth,
+}) => {
+  const [currentDate, setCurrentDate] = useState(() => {
+    if (currentMonth) {
+      return DateTime.parseString(`${currentMonth}-01`);
+    }
+    return DateTime.now();
+  });
 
-export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
-  const [currentDate, setCurrentDate] = useState(DateTime.now());
-  const [shiftData, setShiftData] = useState<{ [key: string]: ShiftType }>({});
+  const [shiftData, setShiftData] = useState<{ [key: string]: ShiftType }>(
+    () => {
+      const data: { [key: string]: ShiftType } = {};
+      if (shiftEntries) {
+        for (const entry of shiftEntries) {
+          data[entry.date] = entry.type;
+        }
+      }
+      return data;
+    },
+  );
 
   const dateList = useMemo(() => getMonthCalendar(currentDate), [currentDate]);
 
@@ -45,7 +73,7 @@ export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
   };
 
   const handleSubmit = () => {
-    const logs: { date: string; shift: ShiftType }[] = [];
+    const entries: ShiftEntry[] = [];
     const startOfTarget = currentDate.startOfMonth();
     const endOfTarget = currentDate.endOfMonth();
 
@@ -53,92 +81,108 @@ export const MonthCalendar: React.FC<IProps> = ({ sx }) => {
     let target = startOfTarget;
     while (target.toJsTimeStamp() <= endOfTarget.toJsTimeStamp()) {
       const dateKey = target.toFormatString('yyyy-MM-dd');
-      logs.push({
+      entries.push({
         date: dateKey,
-        shift: shiftData[dateKey] || getDefaultShift(target), // 未選択ならデフォルト値
+        type: shiftData[dateKey] || getDefaultShift(target), // 未選択ならデフォルト値
       });
       target = target.addDay(1);
     }
 
-    console.log('Shift Data (Current):', logs);
+    console.log('Shift Data (Current):', entries);
     alert('シフト状況（今月分）をログに出力しました。');
   };
 
-  const weekDays = ['日', '月', '火', '水', '木', '金', '土'];
+  const weekDayList = Object.values(E_WEEK_DAY);
 
   return (
     <Box sx={{ ...sx }}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '16px 0',
-        }}
-      >
-        <IconButton onClick={handlePrevMonth}>
-          <ArrowBackIos />
-        </IconButton>
-        <Typography variant="h5" component="div" sx={{ margin: '0 16px' }}>
-          {currentDate.toFormatString('yyyy年MM月')}
-        </Typography>
-        <IconButton onClick={handleNextMonth}>
-          <ArrowForwardIos />
-        </IconButton>
-      </Box>
-      <Box sx={{ borderBottom: `1px solid ${E_COLOR.GREY}` }}>
+      <Paper sx={{ padding: '16px' }}>
         <Box
           sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            textAlign: 'center',
+            paddingTop: '10px',
+            paddingBottom: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '20px',
           }}
         >
-          {weekDays.map(day => (
-            <Box
-              key={day}
-              sx={{
-                padding: '8px',
-                borderTop: `1px solid ${E_COLOR.GREY}`,
-                borderLeft: `1px solid ${E_COLOR.GREY}`,
-                borderRight: `1px solid ${E_COLOR.GREY}`,
-              }}
-            >
-              <Typography>{day}</Typography>
-            </Box>
-          ))}
+          <IconButton
+            sx={{ color: E_COLOR.WHITE, background: E_COLOR.PRIMARY_MAIN }}
+            onClick={handlePrevMonth}
+          >
+            <Icon icon={E_ICON.ARROW_LEFT} />
+          </IconButton>
+          <TypoH2>{currentDate.toFormatString('yyyy年MM月')}</TypoH2>
+          <IconButton
+            sx={{ color: E_COLOR.WHITE, background: E_COLOR.PRIMARY_MAIN }}
+            onClick={handleNextMonth}
+          >
+            <Icon icon={E_ICON.ARROW_RIGHT} />
+          </IconButton>
+        </Box>
+        <Box sx={{ borderBottom: `1px solid ${E_COLOR.GREY}` }}>
+          <Box
+            sx={{
+              backgroundColor: E_COLOR.PRIMARY_MAIN,
+              display: 'flex',
+              height: '40px',
+              borderRight: `1px solid ${E_COLOR.GREY}`,
+            }}
+          >
+            {weekDayList.map(weekDay => (
+              <Box
+                key={weekDay}
+                sx={{
+                  width: 'calc(100% / 7)',
+                  borderTop: `1px solid ${E_COLOR.GREY}`,
+                  borderLeft: `1px solid ${E_COLOR.GREY}`,
+                }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <TypoText color={E_COLOR.WHITE} bold>
+                  {getWeekDayShortLabel(weekDay)}
+                </TypoText>
+              </Box>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(7, calc(100% / 7))',
+              borderRight: `1px solid ${E_COLOR.GREY}`,
+            }}
+          >
+            {dateList.map((week, weekIndex) => (
+              <React.Fragment key={weekIndex}>
+                {week.map(date => {
+                  const dateKey = date.dateTime.toFormatString('yyyy-MM-dd');
+                  return (
+                    <Day
+                      key={dateKey}
+                      date={date}
+                      shift={
+                        shiftData[dateKey] || getDefaultShift(date.dateTime)
+                      }
+                      holidayName={isHoliday(date.dateTime.Date()) || undefined}
+                      onShiftChange={val => handleShiftChange(dateKey, val)}
+                    />
+                  );
+                })}
+              </React.Fragment>
+            ))}
+          </Box>
         </Box>
         <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            borderRight: `1px solid ${E_COLOR.GREY}`,
-          }}
+          sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
         >
-          {dateList.map((week, weekIndex) => (
-            <React.Fragment key={weekIndex}>
-              {week.map(date => {
-                const dateKey = date.dateTime.toFormatString('yyyy-MM-dd');
-                return (
-                  <Day
-                    key={dateKey}
-                    date={date}
-                    shift={shiftData[dateKey] || getDefaultShift(date.dateTime)}
-                    onShiftChange={val => handleShiftChange(dateKey, val)}
-                  />
-                );
-              })}
-            </React.Fragment>
-          ))}
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            送信
+          </Button>
         </Box>
-      </Box>
-      <Box
-        sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
-      >
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          送信
-        </Button>
-      </Box>
+      </Paper>
     </Box>
   );
 };
