@@ -165,7 +165,7 @@ final readonly class ShiftCalendarSyncer
             ShiftType::Remote       => $allDay ? '在宅' : '出勤（在宅）',
             ShiftType::Office       => $allDay ? '出社' : '出勤（出社）',
             ShiftType::BusinessTrip => $allDay ? '出張' : '出勤（出張）',
-            ShiftType::Holiday      => $allDay ? '休暇' : '出勤（休暇）',
+            ShiftType::Holiday      => $allDay ? '休暇' : '休暇',
         };
     }
 }

@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth:web']], function () {
      */
     Route::prefix('/shift_schedule')->group(function () {
         Route::match(['get'], '/', EPages::SHIFT_SCHEDULE->getInvokePath());
+        Route::post('/store', EPages::SHIFT_SCHEDULE__STORE->getInvokePath());
     });
 
     /**
