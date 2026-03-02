@@ -7,7 +7,9 @@ namespace App\Services\Shift;
 use App\Collections\ShiftEntries;
 use App\Enum\App\ECalendarSyncStatus;
 use App\Models\App\Trn\TrnShiftSchedule;
+use App\ValueObjects\ShiftDate;
 use App\ValueObjects\ShiftEntry;
+use App\ValueObjects\ShiftType;
 use Carbon\CarbonImmutable;
 
 final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface
@@ -59,16 +61,17 @@ final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface
             ->orderBy('shift_date')
             ->get();
 
-        $shifts  = [];
+        $entries = ShiftEntries::empty();
         foreach ($records as $record) {
             /** @var TrnShiftSchedule $record */
-            $shifts[] = [
-                'date' => $record->shift_date,
-                'type' => $record->shift_type,
-            ];
+            $entries->push(new ShiftEntry(
+                new ShiftDate($record->shift_date),
+                ShiftType::from($record->shift_type),
+                ECalendarSyncStatus::from((int) $record->e_calendar_sync_status),
+            ));
         }
 
-        return ShiftEntries::fromArray($shifts);
+        return $entries;
     }
 
     /**
