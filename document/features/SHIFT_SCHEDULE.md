@@ -21,13 +21,17 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
     │
     └── [登録] ShiftRegistrationUseCase
                   ├── ShiftScheduleRepositoryInterface → DB（TX内）
-                  └── GoogleCalendarServiceInterface → Google Calendar API（TX外）
+                  ├── ShiftSettingsRepository           → DB（TX内・勤務開始時刻 upsert）
+                  └── ShiftCalendarSyncer               → Google Calendar API（TX外）
+                            └── GoogleCalendarServiceInterface
 
 [Artisan / cron]
-  shift:sync-calendar {email}
+  shift:sync-calendar {email} {month}
     └── SyncShiftCalendarUseCase
-          ├── ShiftScheduleRepositoryInterface → DB（getAllShifts / updateSyncStatuses）
-          └── GoogleCalendarServiceInterface → Google Calendar API（TX外・ベストエフォート）
+          ├── ShiftScheduleRepositoryInterface  → DB（getMonthlyShifts / updateSyncStatuses）
+          ├── ShiftSettingsRepository           → DB（findOrDefault・開始時刻取得）
+          └── ShiftCalendarSyncer               → Google Calendar API（TX外・ベストエフォート）
+                    └── GoogleCalendarServiceInterface
 ```
 
 ### 設計上のポイント
@@ -43,6 +47,10 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 - **UseCase を読み書き共通の窓口としない**
   書き込みは `ShiftRegistrationUseCase`（UseCase層）、読み取りは `ShiftScheduleQueryService`（Query層）と分離。
   非対称に見えるが、将来的に読み取り側も複雑化した場合は QueryService にロジックを追加するだけでよい。
+
+- **カレンダー処理を `ShiftCalendarSyncer` に集約**
+  `ShiftRegistrationUseCase` と `SyncShiftCalendarUseCase` が共通して使うカレンダー操作（削除→再作成）を
+  `ShiftCalendarSyncer` に切り出し、両 UseCase から呼び出す。`isShiftEvent()` 等の判定ロジックもここに集約される。
 
 ---
 
@@ -67,6 +75,20 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 他テーブルで `e_archive_level` による論理削除が使われているのは「エンティティの変更履歴を残す」目的のため。
 シフトスケジュールは「月次の現在状態」であり、旧データの履歴参照は不要。
 ソフトデリートにすると読まれることのないアーカイブレコードが蓄積するだけになるため、物理削除（DELETE）を採用する。
+
+### `trn_user_shift_setting` テーブル
+
+| カラム | 型 | 説明 |
+|---|---|---|
+| `id` | bigint PK | |
+| `trn_user_id` | int | `trn_user.id` への参照（FK制約なし）|
+| `office_start_time` | varchar(5) | 出社の勤務開始時刻（例: `"09:30"`）|
+| `remote_start_time` | varchar(5) | 在宅の勤務開始時刻（例: `"10:00"`）|
+| `created_at` / `updated_at` | timestamp | |
+
+- `trn_user_id` UNIQUE 制約（1ユーザー1レコード）
+- 未設定時のデフォルトは `09:00`（`ShiftStartSettings::DEFAULT_TIME`）
+- 許容値は `08:00` 〜 `12:00` の 30分刻り（`ShiftStartSettings::ALLOWED` 参照）
 
 ---
 
@@ -93,6 +115,19 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 
 場所: `App\Enum\App\ECalendarSyncStatus`
 
+### `ShiftStartSettings`（ValueObject）
+
+| フィールド | 型 | 説明 |
+|---|---|---|
+| `officeStartTime` | string | 出社の勤務開始時刻（`HH:MM` 形式）|
+| `remoteStartTime` | string | 在宅の勤務開始時刻（`HH:MM` 形式）|
+
+許容値: `08:00` / `08:30` / `09:00` / `09:30` / `10:00` / `10:30` / `11:00` / `11:30` / `12:00`  
+デフォルト: `09:00`（`ShiftStartSettings::default()` で生成）
+
+場所: `App\ValueObjects\ShiftStartSettings`  
+関連: `ShiftSettingsRepository`（`upsert` / `findOrDefault`）、`TrnUserShiftSetting` Model
+
 ---
 
 ## シフト登録フロー（`ShiftRegistrationUseCase::execute()`）
@@ -101,14 +136,14 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 1. ShiftEntries::fromArray() でバリデーション・VO変換
    └── 空の場合は即 ShiftSyncResult(empty, empty) を返す
 
-2. [DB TX] replaceMonthlyShifts()
-   ├── 既存の当月レコードを DELETE
-   └── 新レコードを PENDING でバルク INSERT
+2. [DB TX]
+   ├── replaceMonthlyShifts()  : 既存の当月レコードを DELETE → 新レコードを PENDING でバルク INSERT
+   └── shiftSettingsRepository.upsert()  : 勤務開始時刻設定を upsert
    → TX commit
 
-3. [TX外・ベストエフォート] Google Calendar 同期
+3. [TX外・ベストエフォート] ShiftCalendarSyncer::replaceCalendarMonth()
    ├── deleteGoogleCalendarMonth() : 当月のシフトイベントを削除
-   └── syncShifts() : 各シフトをカレンダーに登録
+   └── syncShifts() : 各シフトをカレンダーに登録（startSettings の時刻を使用）
        ├── 終日イベント（blockSchedule）
        └── 時刻付きイベント（blockSchedule）
 
@@ -123,16 +158,20 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 
 ## 再同期フロー（`SyncShiftCalendarUseCase::execute()`）
 
+`SyncShiftCalendarCommand` に `targetMonth`（`CarbonImmutable`）を渡すことで **指定月のみ** を対象に再同期する。
+
 ```
-1. getAllShifts(trnUserId)  ← 全ステータス（PENDING / FAILED / SYNCED）を対象
+1. getMonthlyShifts(trnUserId, targetMonth)  ← 全ステータス（PENDING / FAILED / SYNCED）を対象
    └── 空なら ShiftSyncResult(empty, empty) を返す
 
-2. 対象月を列挙し、月ごとに deleteGoogleCalendarMonth()
-   └── マーカー付きシフトイベントを一掃（Google側の手動変更も上書き）
+2. shiftSettingsRepository.findOrDefault(trnUserId) で勤務開始時刻設定を取得
 
-3. syncShifts() : DB のシフトでカレンダーを再作成
-   ├── 終日イベント（blockSchedule）
-   └── 時刻付きイベント（blockSchedule）
+3. ShiftCalendarSyncer::replaceCalendarMonth()
+   ├── deleteGoogleCalendarMonth() : 指定月のシフトイベントを一掃
+   │     └── マーカー付きイベントのみ削除（Google側の手動変更も上書き）
+   └── syncShifts() : DB のシフトでカレンダーを再作成（startSettings の時刻を使用）
+       ├── 終日イベント（blockSchedule）
+       └── 時刻付きイベント（blockSchedule）
 
 4. updateSyncStatuses()
    ├── 成功分 → SYNCED
@@ -144,10 +183,11 @@ DBをデータのソース・オブ・トゥルース（SoT）とし、Googleカ
 **ShiftRegistrationUseCase との違い**
 | | ShiftRegistrationUseCase | SyncShiftCalendarUseCase |
 |---|---|---|
-| 入力 | 全シフト配列 | DB の全シフト（ステータス問わず）|
-| DB 書き込み | replaceMonthlyShifts（TX内） | なし（ステータス更新のみ） |
-| カレンダー削除 | 当月を一括削除してから再登録 | 同上（DB の全月を月単位で削除→再登録） |
-| 複数月対応 | 同一月のみ（制約あり） | 複数月にまたがっても可 |
+| 入力 | 全シフト配列（フロントエンド POST） | DB のシフト（指定月・全ステータス）|
+| DB 書き込み | replaceMonthlyShifts + upsertSettings（TX内） | なし（ステータス更新のみ） |
+| 開始時刻 | コマンドに含む（ユーザー指定） | DB から findOrDefault で取得 |
+| カレンダー削除 | 当月を一括削除してから再登録 | 同上（指定月を削除→再登録） |
+| 複数月対応 | 同一月のみ（制約あり） | 同一月のみ（月指定） |
 
 ---
 
@@ -171,8 +211,8 @@ ShiftScheduleQueryService::getMonthlyShifts(trnUserId, targetMonth)
 | 種類 | 時間帯 | 備考 |
 |---|---|---|
 | 終日イベント | 終日 | カレンダー上の視認性向上のため |
-| 時刻付きイベント（休暇以外） | 05:00〜10:00 | ブロック用 |
-| 時刻付きイベント（休暇） | 09:00〜18:00 | ブロック用 |
+| 時刻付きイベント（休暇以外） | `startTime` 〜 `startTime + 5h` | ブロック用。`startTime` は `ShiftStartSettings` で設定 |
+| 時刻付きイベント（休暇） | 09:00〜18:00 | ブロック用（固定） |
 
 **シフトイベントの識別方法**
 description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を付与する。
@@ -186,16 +226,23 @@ description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を�
 
 | ファイル | 役割 |
 |---|---|
-| `database/migrations/2026_03_02_000001_create_trn_shift_schedule_table.php` | マイグレーション |
+| `database/migrations/2026_03_02_000001_create_trn_shift_schedule_table.php` | maイグレーション（`trn_shift_schedule`）|
+| `database/migrations/xxxx_create_trn_user_shift_setting_table.php` | マイグレーション（`trn_user_shift_setting`）|
 | `app/Enum/App/ECalendarSyncStatus.php` | 同期ステータス Enum |
 | `app/Models/App/Trn/TrnShiftSchedule.php` | Eloquent Model |
+| `app/Models/App/Trn/TrnUserShiftSetting.php` | Eloquent Model（勤務開始時刻設定）|
+| `app/ValueObjects/ShiftStartSettings.php` | 勤務開始時刻設定 ValueObject |
+| `app/Services/Shift/ShiftCalendarSyncer.php` | カレンダー操作の共通サービス（削除→再作成・`isShiftEvent` 判定）|
 | `app/Services/Shift/ShiftScheduleRepositoryInterface.php` | Repository Interface |
 | `app/Services/Shift/ShiftScheduleRepository.php` | Repository 実装 |
+| `app/Services/Shift/ShiftSettingsRepository.php` | 勤務開始時刻設定 Repository |
 | `tests/Fakes/Shift/FakeShiftScheduleRepository.php` | テスト用 Fake |
 | `app/Console/Commands/Test/RegisterShift.php` | 動作確認用 Artisan コマンド |
-| `app/Dto/Shift/SyncShiftCalendarCommand.php` | 再同期 UseCase の入力 DTO |
+| `app/Dto/Shift/ShiftRegistrationCommand.php` | 登録 UseCase の入力 DTO（`startSettings` を含む）|
+| `app/Dto/Shift/SyncShiftCalendarCommand.php` | 再同期 UseCase の入力 DTO（`targetMonth` を含む）|
+| `app/Http/Requests/ShiftStoreRequest.php` | store アクション用 FormRequest |
 | `app/Services/Shift/SyncShiftCalendarUseCase.php` | 再同期ユースケース |
-| `app/Console/Commands/Shift/SyncShiftCalendar.php` | 再同期 Artisan コマンド（`shift:sync-calendar`） |
+| `app/Console/Commands/Shift/SyncShiftCalendar.php` | 再同期 Artisan コマンド（`shift:sync-calendar {email} {month}`）|
 | `tests/Feature/Services/Shift/SyncShiftCalendarUseCaseTest.php` | 再同期 UseCase テスト |
 
 ### 既存ファイル（今回修正）
@@ -237,8 +284,8 @@ php artisan test:register-shift user@example.com
 シフト種別の選択肢: `office` / `remote` / `businessTrip` / `holiday`
 
 ```bash
-# PENDING / FAILED シフトを Google Calendar に再同期
-php artisan shift:sync-calendar user@example.com
+# 指定月のシフトを Google Calendar に再同期（全ステータス対象・完全上書き）
+php artisan shift:sync-calendar user@example.com 2026-03
 ```
 
 ---
@@ -256,7 +303,7 @@ Index
               └── Day（× 日数分）
 ```
 
-- **`Index`**: コントローラーから `shiftEntries` / `currentMonth` を受取り、`ShiftSchedule` へ props として渡す
+- **`Index`**: コントローラーから `shiftEntries` / `currentMonth` / `startSettings` を受取り、`ShiftSchedule` へ props として渡す
 - **`ShiftSchedule`**: ページレイアウト（`TypoH1` タイトル + `MonthCalendar`）
 - **`MonthCalendar`**: 月ナビ・週ヘッダー・日付グリッド・送信ボタンを保持するメインコンポーネント
 - **`Day`**: 1日分のセル。シフト種別の RadioGroup と祝日名を表示
@@ -291,17 +338,29 @@ export type ShiftSyncResult = {
   failures: ShiftEntry[];
 };
 
+/** 在宅・出社の勤務開始時刻設定 */
+export type ShiftStartSettings = {
+  officeStartTime: string;  // 'HH:MM'
+  remoteStartTime: string;  // 'HH:MM'
+};
+
+/** 選択可能な開始時刻。'08:00'〜'12:00' の 30分刻り */
+export const SHIFT_START_TIME_OPTIONS = ['08:00', '08:30', '09:00', ...] as const;
+export type ShiftStartTime = (typeof SHIFT_START_TIME_OPTIONS)[number];
+
 /** コントローラーが返す全 props の型 */
 export type ShiftPageProps = {
   shiftEntries?: ShiftEntry[];
   currentMonth?: string;
-  shiftSync?: ShiftSyncResult;   // store 後のカレンダー同期結果（flash）
-  flash?: { status?: string };   // 汎用ステータス（HandleInertiaRequests 経由）
+  startSettings?: ShiftStartSettings;  // 勤務開始時刻設定（DB 未設定時はデフォルト値）
+  shiftSync?: ShiftSyncResult;         // store 後のカレンダー同期結果（flash）
+  flash?: { status?: string };         // 汎用ステータス（HandleInertiaRequests 経由）
 };
 ```
 
 - `ShiftEntry` はサーバーからの受信データ（`shiftEntries`）と送信ペイロード（`handleSubmit`）で共通して使用する
 - 送信ペイロードに `syncStatus` は含まれない（`toArray()` には省略されるため）
+- `startSettings` は Partial Reload 対象外（初回ロード時のみ取得）
 
 ### カレンダー表示仕様
 
@@ -313,7 +372,7 @@ export type ShiftPageProps = {
 | 月移動 | 前後月ボタン押下で `router.get()` + Partial Reload（`only: ['shiftEntries', 'currentMonth']`）を実行。URL が `?month=YYYY-MM` に更新されブラウザ戻るボタンで月移動できる |
 | 同期ステータスバッジ | 各日付セルに現在のステータスを小さい `Chip` で表示（詳細は下表） |
 | 送信スキップ | 土日・祝日で `shiftData` に未登録かつユーザーが変更していない日は送信対象から除外する |
-| 送信 | 対象日分の `ShiftEntry[]` を `POST /shift_schedule/store` へ送信。ローディング表示→スナックバーで結果通知 |
+| 送信 | 対象日分の `ShiftEntry[]` と `officeStartTime` / `remoteStartTime` を `POST /shift_schedule/store` へ送信。ローディング表示→スナックバーで結果通知 |
 
 ### 同期ステータスバッジ仕様
 
@@ -332,10 +391,10 @@ export type ShiftPageProps = {
 
 | ファイル | 役割 |
 |---|---|
-| `resources/script/Pages/ShiftSchedule/Index.tsx` | エントリポイント。`ShiftEntry` / `ShiftType` 型を export |
+| `resources/script/Pages/ShiftSchedule/Index.tsx` | エントリポイント。`ShiftEntry` / `ShiftType` / `ShiftStartSettings` 等の型を集約して export |
 | `resources/script/Pages/ShiftSchedule/ShiftSchedule.tsx` | ページレイアウト（タイトル + カレンダー） |
-| `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx` | 月カレンダー本体 |
-| `resources/script/Pages/ShiftSchedule/MonthCalendar/Day.tsx` | 日付セル（シフト選択 + 祝日名） |
+| `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx` | 月カレンダー本体。勤務開始時刻の Select UI も含む |
+| `resources/script/Pages/ShiftSchedule/MonthCalendar/Day.tsx` | 日付セル（シフト選択 + 祝日名 + 同期ステータスバッジ）|
 
 ---
 
@@ -395,26 +454,26 @@ ShiftRegistrationUseCase に Repository 層を追加してシフトを DB に永
 
 ---
 
-### Phase 3: 再同期を全シフト対象・完全上書きに変更
+### Phase 3: 再同期を指定月・完全上書きに変更
 
 **概要**  
 Google Calendar 側で手動変更されている可能性を考慮し、`SyncShiftCalendarUseCase` の動作を以下のように変更した。
+`SyncShiftCalendarCommand` に `targetMonth` を持たせ、Artisan コマンドも `{email} {month}` を引数に取る形に変更した。
 
 | | 変更前（Phase 2） | 変更後（Phase 3） |
 |---|---|---|
-| 対象シフト | PENDING / FAILED のみ | 全ステータス（DB 全件） |
-| 月削除 | なし（追加のみ） | あり（月ごとに削除→再作成） |
+| 対象シフト | PENDING / FAILED のみ | 全ステータス（指定月 DB 全件） |
+| 月削除 | なし（追加のみ） | あり（指定月を削除→再作成） |
 | Google 側の手動変更 | 上書きしない | 上書きして DB を SoT に保つ |
-| 複数月対応 | 可 | 可（月ごとに独立して削除実行） |
+| 月指定 | 不可（全月） | `targetMonth` で指定 |
 
 **修正**
-- `ShiftScheduleRepositoryInterface`: `getAllShifts()` を追加
-- `ShiftScheduleRepository`: `getAllShifts()` を実装（ステータス条件なし・日付昇順）
-- `FakeShiftScheduleRepository`: `getAllShifts()` / `seedAll()` / `getAllShiftsCalls` を追加
-- `SyncShiftCalendarUseCase`: `getPendingOrFailedShifts()` → `getAllShifts()` に変更。`deleteMonthsFromCalendar()` で月ごとにカレンダー削除を追加
-- `SyncShiftCalendarUseCaseTest`: 全テストを新フローに更新（`deleteCalls` の検証追加、`seedAll()` 使用）
+- `SyncShiftCalendarUseCase`: `getPendingOrFailedShifts()` → `getMonthlyShifts(targetMonth)` に変更。`ShiftCalendarSyncer::replaceCalendarMonth()` で削除→再作成
+- `SyncShiftCalendarCommand`: `targetMonth: CarbonImmutable` フィールドを追加
+- `SyncShiftCalendarUseCaseTest`: 全テストを新フローに更新（`deleteCalls` の検証追加）
+- `FakeShiftScheduleRepository`: テスト用シード・検証ヘルパーを整備
 
-`getPendingOrFailedShifts()` は将来の軽量再同期（削除なし・差分のみ）等に備えて残してある。
+`getPendingOrFailedShifts()` は将来の軽量再同期（削除なし・差分のみ）等に備えて `ShiftScheduleRepositoryInterface` に残してある。
 
 ---
 
@@ -437,8 +496,7 @@ return $description !== null && str_contains($description, ShiftScheduleConstant
 ```
 
 **修正**
-- `ShiftRegistrationUseCase::isShiftEvent()`: `!== ''` → `!== null`
-- `SyncShiftCalendarUseCase::isShiftEvent()`: 同上
+- `ShiftCalendarSyncer::isShiftEvent()`: `!== ''` → `!== null`（`isShiftEvent` は `ShiftCalendarSyncer` に集約されている）
 - `ShiftScheduleRepositoryInterface` doc comment: 「既存をアーカイブして」→「既存を物理削除して」（過去の設計メモの残存を修正）
 
 **テスト**
@@ -531,3 +589,26 @@ return $description !== null && str_contains($description, ShiftScheduleConstant
 - `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`
   - `handleSubmit`: 上記条件に合致する日付は `entries` に追加せず `continue` する
   - `getDisplaySyncStatus`: 上記条件のとき `undefined` を返してバッジも非表示にする
+
+---
+
+### Phase 9: 勤務開始時刻設定機能
+
+**概要**  
+Google Calendar のブロックイベントに使う「出社/在宅の勤務開始時刻」をユーザーごとに設定・保存できるようにした。
+設定はシフト送信時に一緒に DB へ upsert され、再同期時（`SyncShiftCalendarUseCase`）でも参照される。
+
+**新規作成**
+- `app/ValueObjects/ShiftStartSettings.php`（`officeStartTime` / `remoteStartTime`。08:00〜12:00 の 30分刻り）
+- `app/Models/App/Trn/TrnUserShiftSetting.php`（Eloquent Model）
+- `app/Services/Shift/ShiftSettingsRepository.php`（`upsert` / `findOrDefault`）
+- `database/migrations/xxxx_create_trn_user_shift_setting_table.php`
+
+**修正**
+- `ShiftRegistrationUseCase`: `ShiftSettingsRepository` を DI 追加。TX 内で `upsert()` を実行
+- `SyncShiftCalendarUseCase`: `ShiftSettingsRepository` を DI 追加。`findOrDefault()` でスタートタイムを取得し `ShiftCalendarSyncer` に渡す
+- `ShiftCalendarSyncer`: `replaceCalendarMonth()` / `syncShifts()` に `ShiftStartSettings` を受け取り、時刻付きイベントの開始時刻に反映
+- `ShiftRegistrationCommand`: `startSettings: ShiftStartSettings` フィールドを追加
+- `ShiftScheduleController`: `startSettings` を lazy prop として `index()` で返す。`store()` でリクエストから `officeStartTime` / `remoteStartTime` を取り出してコマンドに渡す
+- `resources/script/Pages/ShiftSchedule/Index.tsx`: `ShiftStartSettings` / `SHIFT_START_TIME_OPTIONS` / `ShiftStartTime` 型を追加。`ShiftPageProps` に `startSettings` を追加
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`: `officeStartTime` / `remoteStartTime` の `useState` を追加。送信ペイロードに含める。勤務開始時刻を選択する UI（Select）を追加
