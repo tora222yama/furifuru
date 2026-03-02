@@ -274,9 +274,16 @@ Inertia のエントリーポイントである `Index.tsx` が「コントロ�
 
 export type ShiftType = 'remote' | 'office' | 'businessTrip' | 'holiday';
 
+/** DB の Google カレンダー同期ステータス（サーバーから渡される値） */
+export type CalendarSyncStatus = 'pending' | 'synced' | 'failed';
+
+/** フロントエンド表示用ステータス（未保存・未入力を含む） */
+export type DisplaySyncStatus = CalendarSyncStatus | 'unsaved' | 'unregistered';
+
 export type ShiftEntry = {
   date: string;    // 'yyyy-MM-dd'
   type: ShiftType;
+  syncStatus?: CalendarSyncStatus; // DB 保存済みエントリのみ存在
 };
 
 export type ShiftSyncResult = {
@@ -294,6 +301,7 @@ export type ShiftPageProps = {
 ```
 
 - `ShiftEntry` はサーバーからの受信データ（`shiftEntries`）と送信ペイロード（`handleSubmit`）で共通して使用する
+- 送信ペイロードに `syncStatus` は含まれない（`toArray()` には省略されるため）
 
 ### カレンダー表示仕様
 
@@ -302,7 +310,23 @@ export type ShiftPageProps = {
 | 初期表示月 | コントローラーから渡された `currentMonth`（`yyyy-MM` 形式）。未指定時は当月 |
 | シフト初期値 | `shiftEntries` に含まれる日付はそのまま反映。未登録の日は平日→`remote`、土日祝→`holiday` をデフォルト表示 |
 | 祝日の表示 | `japanese-holidays` の `isHoliday()` で判定し、祝日名を日付と同行・右寄せ・赤テキストで表示 |
-| 送信 | 当月全日付分の `ShiftEntry[]` を `POST /shift_schedule/store` へ送信。ローディング表示→スナックバーで結果通知 |
+| 月移動 | 前後月ボタン押下で `router.get()` + Partial Reload（`only: ['shiftEntries', 'currentMonth']`）を実行。URL が `?month=YYYY-MM` に更新されブラウザ戻るボタンで月移動できる |
+| 同期ステータスバッジ | 各日付セルに現在のステータスを小さい `Chip` で表示（詳細は下表） |
+| 送信スキップ | 土日・祝日で `shiftData` に未登録かつユーザーが変更していない日は送信対象から除外する |
+| 送信 | 対象日分の `ShiftEntry[]` を `POST /shift_schedule/store` へ送信。ローディング表示→スナックバーで結果通知 |
+
+### 同期ステータスバッジ仕様
+
+| `DisplaySyncStatus` | ラベル | 色 | 表示条件 |
+|---|---|---|---|
+| `unregistered` | 未入力 | グレー | 平日・DB 未登録・ユーザー未変更 |
+| `unsaved` | 未保存 | オレンジ | `shiftData` がサーバー値と異なる（未送信の変更あり） |
+| `pending` | 未連携 | グレー | DB 登録済み・Google Calendar 未同期 |
+| `synced` | 同期済 | 緑 | Google Calendar 同期完了 |
+| `failed` | 連携失敗 | 赤 | Google Calendar 同期失敗 |
+| (非表示) | — | — | 土日・祝日かつ DB 未登録・ユーザー未変更 |
+
+**補足**: 平日で未入力（`unregistered`）かつ現在のシフト表示が `remote` のとき、「在宅」ラジオボタンにカーソルを合わせると「未入力のままでも送信時に在宅として同期されます」というツールチップを表示する。
 
 ### フロントエンドのファイル一覧
 
@@ -320,6 +344,7 @@ export type ShiftPageProps = {
 | 機能 | 概要 |
 |---|---|
 | 再同期の定期実行 | `shift:sync-calendar` を cron（Laravel Scheduler 等）で定期実行する設定 |
+| 月移動時の shiftData 上書き防止（保存済み月の再訪） | 現状、一度別月に移動して戻ってきたとき `serverShiftData` がキャッシュされているため未変更の日はサーバー値で上書きされない。ただし変更済みの日もそのまま残るため整合性は保たれる |
 
 ---
 
@@ -446,3 +471,63 @@ return $description !== null && str_contains($description, ShiftScheduleConstant
 | `Session store not set on request` | `HandleInertiaRequests` がグローバルミドルウェア（`$middleware->append()`）のため `StartSession` より先に `share()` が評価される | `flash` の値をクロージャ `fn () => [...]` にして遅延評価に変更 |
 | flash が常に null | 上記と同様の評価タイミング問題。`hasSession()` ガードでエラーは消えたが値が null のまま | クロージャ化で解決 |
 | `router.post` + `useEffect` で flash が届かない | `useEffect` は `props.flash?.status` の変化を検知できないケースがある | `router.post()` の `onSuccess(page => ...)` コールバックで直接 `page.props.flash` を読む方式に変更 |
+
+---
+
+### Phase 6: Partial Reload による月移動と state 保持
+
+**概要**  
+月ナビゲーションボタン押下時に `router.get()` + Partial Reload で当月のシフトデータだけを再取得するよう変更した。
+`preserveState: true` により React の state（`shiftData` 等のフォーム状態）はページ遷移を跨いで維持される。
+
+**変更ファイル**
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`
+  - `handlePrevMonth` / `handleNextMonth`: `setCurrentDate()` でUIを即時更新しつつ、`router.get('/shift_schedule', { month }, { only: ['shiftEntries', 'currentMonth'], preserveState: true, preserveScroll: true })` を呼ぶ
+  - `useRef` + `useEffect` で `shiftEntries` の参照変化を検知。Partial Reload 完了時（props 更新時）にのみ `shiftData` をマージ更新する
+  - **マージ戦略**: `shiftData` にすでにあるキー（ユーザーが変更済みの日付）は上書きしない。新規月のデータのみ追加
+
+**設計上の判断**
+- `setCurrentDate()` を先に呼ぶことで、通信完了前でもカレンダーUIが即時切り替わる（オプティミスティックUI）
+- URL が `?month=YYYY-MM` に変わるためブラウザの「戻る」ボタンで月移動できる
+
+---
+
+### Phase 7: 同期ステータスバッジ表示
+
+**概要**  
+各日付セルに「未入力 / 未保存 / 未連携 / 同期済 / 連携失敗」を示す Chip バッジを追加し、
+ユーザーが送信前・送信後のステータスを一目で把握できるようにした。
+
+**変更ファイル**
+- `app/ValueObjects/ShiftEntry.php`
+  - コンストラクタに `?ECalendarSyncStatus $syncStatus = null` を追加
+  - `toArray()` に `syncStatus` キーを追加（`null` の場合はキー自体を省略）
+  - `fromArray()` は変更なし（リクエスト入力パスに影響しない）
+- `app/Services/Shift/ShiftScheduleRepository.php`
+  - `getMonthlyShifts()`: `ShiftEntries::fromArray()` から `new ShiftEntry(new ShiftDate(...), ShiftType::from(...), ECalendarSyncStatus::from(...))` による個別組み立てに変更し、`e_calendar_sync_status` を取得して `syncStatus` に渡す
+- `resources/script/Pages/ShiftSchedule/Index.tsx`
+  - `CalendarSyncStatus`（サーバー由来）・`DisplaySyncStatus`（表示用・未保存/未入力を含む）型を追加
+  - `ShiftEntry` に `syncStatus?: CalendarSyncStatus` を追加
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`
+  - `serverShiftData` state（サーバーが最後に返したシフト種別）を追加。Partial Reload 後は常に上書き
+  - `syncStatusData` state（DB 由来の同期ステータス）を追加。Partial Reload 後は常に上書き
+  - `getDisplaySyncStatus(dateStr, dateTime)`: ローカル変更の有無・土日祝判定を踏まえて `DisplaySyncStatus | undefined` を返すヘルパーを追加
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/Day.tsx`
+  - `syncStatus?: DisplaySyncStatus` prop を追加
+  - `SYNC_STATUS_CONFIG` マッピング（ラベル + MUI カラー）を定義
+  - 日付ヘッダー直下に `height: '18px'` 固定の Box を設け、`syncStatus` がない場合も高さを確保してラジオボタンのズレを防ぐ
+  - 平日・未入力（`unregistered`）かつ `shift === 'remote'` のとき「在宅」ラベルに `Tooltip` を表示
+
+---
+
+### Phase 8: 土日・祝日の未変更シフトを送信対象から除外
+
+**概要**  
+土日・祝日はデフォルトで `holiday` になるが、ユーザーが明示的に変更しない限りカレンダーに登録する必要がないため、送信ペイロードおよびバッジ表示の両方から除外するようにした。
+
+**判断基準**: `shiftData[dateKey]` が `undefined`（DB未登録かつユーザー未変更）かつ `getDefaultShift(date) === 'holiday'`（土日または祝日）のとき対象外とする。
+
+**変更ファイル**
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`
+  - `handleSubmit`: 上記条件に合致する日付は `entries` に追加せず `continue` する
+  - `getDisplaySyncStatus`: 上記条件のとき `undefined` を返してバッジも非表示にする
