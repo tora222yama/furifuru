@@ -9,6 +9,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
@@ -27,7 +31,10 @@ import {
   DisplaySyncStatus,
   ShiftEntry,
   ShiftPageProps,
+  ShiftStartSettings,
+  ShiftStartTime,
   ShiftType,
+  SHIFT_START_TIME_OPTIONS,
 } from '@/script/Pages/ShiftSchedule/Index';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { TypoText } from '@/script/Component/Typography/TypoText';
@@ -40,17 +47,27 @@ import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 interface IProps extends IPropsBase {
   shiftEntries?: ShiftEntry[];
   currentMonth?: string;
+  startSettings?: ShiftStartSettings;
 }
 
 export const MonthCalendar: React.FC<IProps> = ({
   sx,
   shiftEntries,
   currentMonth,
+  startSettings,
 }) => {
   const { onStart, onFinish } = useProgressContext();
   const displaySnackbar = useSnackbar();
 
   const [confirmOpen, setConfirmOpen] = React.useState(false);
+
+  // 在宅・出社の勤務開始時刻（9:00〜11:00、30分刻り）
+  const [officeStartTime, setOfficeStartTime] = React.useState<ShiftStartTime>(
+    (startSettings?.officeStartTime as ShiftStartTime) ?? '09:00',
+  );
+  const [remoteStartTime, setRemoteStartTime] = React.useState<ShiftStartTime>(
+    (startSettings?.remoteStartTime as ShiftStartTime) ?? '09:00',
+  );
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (currentMonth) {
@@ -262,7 +279,11 @@ export const MonthCalendar: React.FC<IProps> = ({
 
     router.post(
       getPagesHref(E_PAGES.SHIFT_SCHEDULE__STORE),
-      { shifts: entries },
+      {
+        shifts: entries,
+        officeStartTime,
+        remoteStartTime,
+      },
       {
         onStart,
         onFinish,
@@ -356,8 +377,50 @@ export const MonthCalendar: React.FC<IProps> = ({
           </Box>
         </Box>
         <Box
-          sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '16px',
+            marginTop: '24px',
+            flexWrap: 'wrap',
+          }}
         >
+          {/* 勤務開始時刻設定 */}
+          <Box sx={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel>出社 勤務開始時刻</InputLabel>
+              <Select
+                value={officeStartTime}
+                label="出社 勤務開始時刻"
+                onChange={e =>
+                  setOfficeStartTime(e.target.value as ShiftStartTime)
+                }
+              >
+                {SHIFT_START_TIME_OPTIONS.map(time => (
+                  <MenuItem key={time} value={time}>
+                    {time}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel>在宅 勤務開始時刻</InputLabel>
+              <Select
+                value={remoteStartTime}
+                label="在宅 勤務開始時刻"
+                onChange={e =>
+                  setRemoteStartTime(e.target.value as ShiftStartTime)
+                }
+              >
+                {SHIFT_START_TIME_OPTIONS.map(time => (
+                  <MenuItem key={time} value={time}>
+                    {time}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           <Button
             variant="contained"
             color="primary"

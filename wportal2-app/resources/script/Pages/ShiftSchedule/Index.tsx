@@ -23,10 +23,31 @@ export type ShiftSyncResult = {
   failures: ShiftEntry[];
 };
 
+/** 在宅・出社の勤務開始時刻設定。09:00〜11:00 の 30分刻り。 */
+export type ShiftStartSettings = {
+  officeStartTime: string;
+  remoteStartTime: string;
+};
+
+export const SHIFT_START_TIME_OPTIONS = [
+  '08:00',
+  '08:30',
+  '09:00',
+  '09:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '12:00',
+] as const;
+
+export type ShiftStartTime = (typeof SHIFT_START_TIME_OPTIONS)[number];
+
 /** Inertia コントローラーから渡されるページ層の props 型定義 */
 export type ShiftPageProps = {
   shiftEntries?: ShiftEntry[];
   currentMonth?: string;
+  startSettings?: ShiftStartSettings;
   shiftSync?: ShiftSyncResult;
   flash?: { status?: string };
 };
@@ -36,12 +57,17 @@ interface IProps extends IPropsBase, ShiftPageProps {}
 export const Index: React.FC<IProps> = ({
   shiftEntries,
   currentMonth,
+  startSettings,
   ...props
 }) => {
   // noinspection TypeScriptValidateTypes
   return (
     <CommonIndexProvider {...props}>
-      <ShiftSchedule shiftEntries={shiftEntries} currentMonth={currentMonth} />
+      <ShiftSchedule
+        shiftEntries={shiftEntries}
+        currentMonth={currentMonth}
+        startSettings={startSettings}
+      />
     </CommonIndexProvider>
   );
 };
