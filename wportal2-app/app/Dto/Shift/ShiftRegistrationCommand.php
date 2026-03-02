@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dto\Shift;
 
+use App\ValueObjects\ShiftStartSettings;
+
 final readonly class ShiftRegistrationCommand
 {
     public function __construct(
@@ -11,13 +13,20 @@ final readonly class ShiftRegistrationCommand
         public string $authEmail,
         /** @var array<int, array{date:string,type:string}> */
         public array $shifts,
+        public ShiftStartSettings $startSettings,
     ) {}
 
     /**
      * @param  array<int, array{date:string,type:string}>  $shiftPayloads
+     * @param  array{officeStartTime?:string,remoteStartTime?:string}  $startSettingsPayload
      */
-    public static function fromPayloads(int $trnUserId, string $authEmail, array $shiftPayloads): self
+    public static function fromPayloads(int $trnUserId, string $authEmail, array $shiftPayloads, array $startSettingsPayload = []): self
     {
-        return new self($trnUserId, $authEmail, $shiftPayloads);
+        return new self(
+            $trnUserId,
+            $authEmail,
+            $shiftPayloads,
+            ShiftStartSettings::fromArray($startSettingsPayload),
+        );
     }
 }

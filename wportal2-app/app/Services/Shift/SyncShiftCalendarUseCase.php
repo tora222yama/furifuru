@@ -21,6 +21,7 @@ final readonly class SyncShiftCalendarUseCase
     public function __construct(
         private ShiftCalendarSyncer $calendarSyncer,
         private ShiftScheduleRepositoryInterface $shiftScheduleRepository,
+        private ShiftSettingsRepository $shiftSettingsRepository,
     ) {}
 
     /**
@@ -28,18 +29,19 @@ final readonly class SyncShiftCalendarUseCase
      */
     public function execute(SyncShiftCalendarCommand $command): ShiftSyncResult
     {
-        $shifts     = $this->shiftScheduleRepository->getMonthlyShifts($command->trnUserId, $command->targetMonth);
+        $shifts        = $this->shiftScheduleRepository->getMonthlyShifts($command->trnUserId, $command->targetMonth);
 
         if ($shifts->isEmpty()) {
             return new ShiftSyncResult(ShiftEntries::empty(), ShiftEntries::empty());
         }
 
         // 対象月のカレンダーイベントを削除（手動変更を含む全イベントを一掃）し、DB のシフトで再作成
-        $monthRange = [
+        $monthRange    = [
             'start' => $command->targetMonth->startOfMonth()->toDateString(),
             'end'   => $command->targetMonth->endOfMonth()->toDateString(),
         ];
-        $result     = $this->calendarSyncer->replaceCalendarMonth($command->authEmail, $monthRange, $shifts);
+        $startSettings = $this->shiftSettingsRepository->findOrDefault($command->trnUserId);
+        $result        = $this->calendarSyncer->replaceCalendarMonth($command->authEmail, $monthRange, $shifts, $startSettings);
 
         if (! $result->successes->isEmpty()) {
             $this->shiftScheduleRepository->updateSyncStatuses(

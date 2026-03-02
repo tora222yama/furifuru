@@ -8,6 +8,7 @@ use App\Collections\ShiftEntries;
 use App\Constant\ShiftScheduleConstant;
 use App\Dto\Shift\ShiftSyncResult;
 use App\Services\External\GoogleCalendarServiceInterface;
+use App\ValueObjects\ShiftStartSettings;
 use App\ValueObjects\ShiftType;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -36,11 +37,15 @@ final readonly class ShiftCalendarSyncer
      *
      * @param  array{start:string,end:string}  $monthRange
      */
-    public function replaceCalendarMonth(string $authEmail, array $monthRange, ShiftEntries $shifts): ShiftSyncResult
-    {
+    public function replaceCalendarMonth(
+        string $authEmail,
+        array $monthRange,
+        ShiftEntries $shifts,
+        ?ShiftStartSettings $startSettings = null,
+    ): ShiftSyncResult {
         $this->deleteGoogleCalendarMonth($authEmail, $monthRange);
 
-        return $this->syncShifts($authEmail, $shifts);
+        return $this->syncShifts($authEmail, $shifts, $startSettings ?? ShiftStartSettings::default());
     }
 
     /**
@@ -75,7 +80,7 @@ final readonly class ShiftCalendarSyncer
     /**
      * シフト一覧を Google Calendar に登録し、成功・失敗を返す.
      */
-    private function syncShifts(string $authEmail, ShiftEntries $shifts): ShiftSyncResult
+    private function syncShifts(string $authEmail, ShiftEntries $shifts, ShiftStartSettings $startSettings): ShiftSyncResult
     {
         $calendarIdList = collect();
         $failed         = ShiftEntries::empty();
@@ -86,7 +91,7 @@ final readonly class ShiftCalendarSyncer
             $type     = $shift->type;
 
             $allDayOk = $this->createAllDayEvent($authEmail, $calendarIdList, $date, $type);
-            $timedOk  = $this->createTimedEvent($authEmail, $calendarIdList, $date, $type);
+            $timedOk  = $this->createTimedEvent($authEmail, $calendarIdList, $date, $type, startSettings: $startSettings);
 
             if ($allDayOk && $timedOk) {
                 $succeeded->push($shift);
@@ -125,14 +130,27 @@ final readonly class ShiftCalendarSyncer
     }
 
     /** @param Collection<int, string> $calendarIdList */
-    private function createTimedEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'opaque'): bool
-    {
+    private function createTimedEvent(
+        string $authEmail,
+        Collection $calendarIdList,
+        Carbon $date,
+        ShiftType $type,
+        string $transparency = 'opaque',
+        ?ShiftStartSettings $startSettings = null,
+    ): bool {
+        $startSettings ??= ShiftStartSettings::default();
         if ($type === ShiftType::Holiday) {
             $start = $date->copy()->setTime(5, 0);
             $end   = $date->copy()->setTime(22, 0);
         } else {
-            $start = $date->copy()->setTime(5, 0);
-            $end   = $date->copy()->setTime(10, 0);
+            $endTimeStr = match ($type) {
+                ShiftType::Office => $startSettings->officeStartTime,
+                ShiftType::Remote => $startSettings->remoteStartTime,
+                default           => ShiftStartSettings::DEFAULT_TIME,
+            };
+            $endTime    = ShiftStartSettings::parseTime($endTimeStr);
+            $start      = $date->copy()->setTime(5, 0);
+            $end        = $date->copy()->setTime($endTime['hour'], $endTime['minute']);
         }
 
         $summary = $this->summaryForType($type, false);

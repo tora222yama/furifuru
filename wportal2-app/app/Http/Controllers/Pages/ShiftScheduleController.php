@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
 use App\Services\Shift\ShiftRegistrationUseCase;
 use App\Services\Shift\ShiftScheduleQueryService;
+use App\Services\Shift\ShiftSettingsRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class ShiftScheduleController extends Controller
     public function __construct(
         private readonly ShiftRegistrationUseCase $shiftRegistrationService,
         private readonly ShiftScheduleQueryService $shiftScheduleQueryService,
+        private readonly ShiftSettingsRepository $shiftSettingsRepository,
     ) {}
 
     public function index(Request $request): Response
@@ -40,6 +42,7 @@ class ShiftScheduleController extends Controller
                 $trnUser->id,
                 $targetMonth,
             )->toArray(),
+            'startSettings' => fn () => $this->shiftSettingsRepository->findOrDefault($trnUser->id)->toArray(),
             'shiftSync'     => fn () => session('shiftSync'),
         ]);
     }
@@ -63,6 +66,10 @@ class ShiftScheduleController extends Controller
             $trnUser->id,
             $authUser->email,
             $data['shifts'] ?? [],
+            [
+                'officeStartTime' => $data['officeStartTime'] ?? null,
+                'remoteStartTime' => $data['remoteStartTime'] ?? null,
+            ],
         );
 
         try {

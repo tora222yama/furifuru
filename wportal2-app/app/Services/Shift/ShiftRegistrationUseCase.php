@@ -15,6 +15,7 @@ final readonly class ShiftRegistrationUseCase
     public function __construct(
         private ShiftCalendarSyncer $calendarSyncer,
         private ShiftScheduleRepositoryInterface $shiftScheduleRepository,
+        private ShiftSettingsRepository $shiftSettingsRepository,
     ) {}
 
     /**
@@ -34,11 +35,17 @@ final readonly class ShiftRegistrationUseCase
         // DBへの保存（トランザクション内）
         DB::transaction(function () use ($command, $shifts): void {
             $this->shiftScheduleRepository->replaceMonthlyShifts($command->trnUserId, $shifts);
+            $this->shiftSettingsRepository->upsert($command->trnUserId, $command->startSettings);
         });
 
         // Google Calendar 連携（トランザクション外・ベストエフォート）
         $monthRange = $shifts->monthRangeOrFail();
-        $result     = $this->calendarSyncer->replaceCalendarMonth($command->authEmail, $monthRange, $shifts);
+        $result     = $this->calendarSyncer->replaceCalendarMonth(
+            $command->authEmail,
+            $monthRange,
+            $shifts,
+            $command->startSettings,
+        );
 
         // Google Calendar 同期結果をDBのステータスに反映
         if (! $result->successes->isEmpty()) {
