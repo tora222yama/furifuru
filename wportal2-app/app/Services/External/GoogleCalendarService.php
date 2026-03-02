@@ -74,6 +74,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
         string $location = '',
         string $description = '',
         ?string $descriptionPrefix = null,
+        ?string $transparency = null,
     ): void {
         // サービス取得.
         $service    = new Google_Service_Calendar(
@@ -85,7 +86,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
             ->concat($calendarIdList->toArray());
 
         // 登録パラメータ.
-        $params     = new Google_Service_Calendar_Event([
+        $eventParams = [
             'summary'         => $summary,
             'start'           => [
                 'dateTime' => $start->toIso8601String(),
@@ -98,10 +99,20 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
             'location'        => $location,
             'description'     => $this->buildDescription($descriptionPrefix, $description),
             'guestsCanModify' => true,
-            'attendees'       => $attendList->map(function ($calendarId) {
-                return ['email' => $calendarId];
+            'attendees'       => $attendList->map(function ($calendarId) use ($authEmail) {
+                return $calendarId === $authEmail
+                    ? ['email' => $calendarId, 'responseStatus' => 'accepted']
+                    : ['email' => $calendarId];
             })->toArray(),
-        ]);
+        ];
+
+        $params = new Google_Service_Calendar_Event($eventParams);
+
+        if ($transparency !== null) {
+            $params->setTransparency($transparency);
+        }
+
+        Log::debug('google calendar insert params: '.json_encode($params->toSimpleObject()));
 
         // 登録を実施.
         // 結果を取得.
@@ -112,7 +123,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
                 'sendUpdates' => 'all',
             ]
         );
-        Log::info(print_r($result, true));
+        Log::info('google calendar insert result: transparency='.$result->getTransparency().' id='.$result->getId());
     }
 
     /**

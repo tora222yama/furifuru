@@ -99,7 +99,7 @@ final readonly class ShiftCalendarSyncer
     }
 
     /** @param Collection<int, string> $calendarIdList */
-    private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type): bool
+    private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'opaque'): bool
     {
         $start   = $date->copy()->startOfDay();
         $end     = $date->copy()->endOfDay();
@@ -113,6 +113,7 @@ final readonly class ShiftCalendarSyncer
                 $end,
                 $summary,
                 descriptionPrefix: ShiftScheduleConstant::MARKER,
+                transparency: $transparency,
             );
 
             return true;
@@ -124,11 +125,11 @@ final readonly class ShiftCalendarSyncer
     }
 
     /** @param Collection<int, string> $calendarIdList */
-    private function createTimedEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type): bool
+    private function createTimedEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'opaque'): bool
     {
         if ($type === ShiftType::Holiday) {
-            $start = $date->copy()->setTime(9, 0);
-            $end   = $date->copy()->setTime(18, 0);
+            $start = $date->copy()->setTime(5, 0);
+            $end   = $date->copy()->setTime(22, 0);
         } else {
             $start = $date->copy()->setTime(5, 0);
             $end   = $date->copy()->setTime(10, 0);
@@ -144,6 +145,7 @@ final readonly class ShiftCalendarSyncer
                 $end,
                 $summary,
                 descriptionPrefix: ShiftScheduleConstant::MARKER,
+                transparency: $transparency,
             );
 
             return true;
@@ -165,7 +167,7 @@ final readonly class ShiftCalendarSyncer
             ShiftType::Remote       => $allDay ? '在宅' : '出勤（在宅）',
             ShiftType::Office       => $allDay ? '出社' : '出勤（出社）',
             ShiftType::BusinessTrip => $allDay ? '出張' : '出勤（出張）',
-            ShiftType::Holiday      => $allDay ? '休暇' : '休暇',
+            ShiftType::Holiday      => '休暇',
         };
     }
 }

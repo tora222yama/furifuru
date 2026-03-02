@@ -18,6 +18,7 @@ interface GoogleCalendarServiceInterface
 
     /**
      * @param  Collection<int, string>  $calendarIdList
+     * @param  string|null  $transparency  'opaque'（予定あり）または 'transparent'（予定なし）。null の場合は API デフォルトに委ねる
      */
     public function blockSchedule(
         string $authEmail,
@@ -28,6 +29,7 @@ interface GoogleCalendarServiceInterface
         string $location = '',
         string $description = '',
         ?string $descriptionPrefix = null,
+        ?string $transparency = null,
     ): void;
 
     /**

@@ -98,6 +98,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
         string $location = '',
         string $description = '',
         ?string $descriptionPrefix = null,
+        ?string $transparency = null,
     ): void {
         $index              = count($this->blockCalls);
         $this->blockCalls[] = [
@@ -108,6 +109,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
             'location'          => $location,
             'description'       => $description,
             'descriptionPrefix' => $descriptionPrefix,
+            'transparency'      => $transparency,
         ];
 
         if (in_array($index, $this->throwOnBlockCallIndices, true)) {
