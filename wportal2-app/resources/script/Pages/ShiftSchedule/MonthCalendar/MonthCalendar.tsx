@@ -1,5 +1,15 @@
 import * as React from 'react';
-import { Box, IconButton, Button, Paper } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Button,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
 import { router } from '@inertiajs/react';
@@ -39,6 +49,8 @@ export const MonthCalendar: React.FC<IProps> = ({
 }) => {
   const { onStart, onFinish } = useProgressContext();
   const displaySnackbar = useSnackbar();
+
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (currentMonth) {
@@ -219,7 +231,12 @@ export const MonthCalendar: React.FC<IProps> = ({
     return 'remote';
   };
 
+  const handleSubmitConfirm = () => {
+    setConfirmOpen(true);
+  };
+
   const handleSubmit = () => {
+    setConfirmOpen(false);
     const entries: ShiftEntry[] = [];
     const startOfTarget = currentDate.startOfMonth();
     const endOfTarget = currentDate.endOfMonth();
@@ -341,11 +358,31 @@ export const MonthCalendar: React.FC<IProps> = ({
         <Box
           sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
         >
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmitConfirm}
+          >
             送信
           </Button>
         </Box>
       </Paper>
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>シフト登録の確認</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            表示している1ヶ月分のシフトを登録します
+            <br />
+            ※同期に1〜2分ほどかかります
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>キャンセル</Button>
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            登録する
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
