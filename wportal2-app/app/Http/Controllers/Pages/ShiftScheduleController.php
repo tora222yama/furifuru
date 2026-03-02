@@ -40,6 +40,7 @@ class ShiftScheduleController extends Controller
                 $trnUser->id,
                 $targetMonth,
             )->toArray(),
+            'shiftSync'     => fn () => session('shiftSync'),
         ]);
     }
 

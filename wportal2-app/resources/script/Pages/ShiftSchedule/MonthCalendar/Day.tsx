@@ -4,7 +4,7 @@ import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IDate } from '@/script/Common/getMonthCalendar';
-import { ShiftType } from '@/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar';
+import { ShiftType } from '@/script/Pages/ShiftSchedule/Index';
 
 interface IProps extends IPropsBase {
   date: IDate;
@@ -12,7 +12,13 @@ interface IProps extends IPropsBase {
   holidayName?: string;
   onShiftChange: (shift: ShiftType) => void;
 }
-export const Day: React.FC<IProps> = ({ sx, date, shift, holidayName, onShiftChange }) => {
+export const Day: React.FC<IProps> = ({
+  sx,
+  date,
+  shift,
+  holidayName,
+  onShiftChange,
+}) => {
   const dateColor = date.inRange ? E_COLOR.BLACK : E_COLOR.GREY;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +40,13 @@ export const Day: React.FC<IProps> = ({ sx, date, shift, holidayName, onShiftCha
             : 'transparent',
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+        }}
+      >
         <TypoText color={dateColor} bold={date.inRange}>
           {date.dateTime.toFormatString('dd日')}
         </TypoText>

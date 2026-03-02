@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Box, IconButton, Button, Paper } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
+import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { DateTime } from '@/script/Common/DateTime';
@@ -11,11 +12,18 @@ import {
   E_WEEK_DAY,
   getWeekDayShortLabel,
 } from '@/script/Enum/Server/App/EWeekDay';
-import { ShiftEntry, ShiftType } from '@/script/Pages/ShiftSchedule/Index';
+import {
+  ShiftEntry,
+  ShiftPageProps,
+  ShiftType,
+} from '@/script/Pages/ShiftSchedule/Index';
 import { TypoH2 } from '@/script/Component/Typography/TypoH2';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { Icon } from '@/script/Component/Misc/Icon';
 import { E_ICON } from '@/script/Enum/EIcon';
+import { useProgressContext } from '@/script/Provider/ProgressProvider';
+import { useSnackbar } from '@/script/Provider/SnackbarProvider';
+import { E_PAGES, getPagesHref } from '@/script/Enum/Server/App/EPages';
 
 interface IProps extends IPropsBase {
   shiftEntries?: ShiftEntry[];
@@ -27,6 +35,9 @@ export const MonthCalendar: React.FC<IProps> = ({
   shiftEntries,
   currentMonth,
 }) => {
+  const { onStart, onFinish } = useProgressContext();
+  const displaySnackbar = useSnackbar();
+
   const [currentDate, setCurrentDate] = useState(() => {
     if (currentMonth) {
       return DateTime.parseString(`${currentMonth}-01`);
@@ -47,6 +58,17 @@ export const MonthCalendar: React.FC<IProps> = ({
   );
 
   const dateList = useMemo(() => getMonthCalendar(currentDate), [currentDate]);
+
+  const handleFlash = (props: ShiftPageProps) => {
+    if (props.flash?.status === 'stored') {
+      displaySnackbar('シフトを保存しました');
+    } else if (props.flash?.status === 'stored_with_errors') {
+      const failCount = props.shiftSync?.failures.length ?? 0;
+      displaySnackbar(
+        `シフトを保存しましたが、${failCount}件のカレンダー同期に失敗しました`,
+      );
+    }
+  };
 
   const handlePrevMonth = () => {
     setCurrentDate(currentDate.subMonth(1));
@@ -88,8 +110,15 @@ export const MonthCalendar: React.FC<IProps> = ({
       target = target.addDay(1);
     }
 
-    console.log('Shift Data (Current):', entries);
-    alert('シフト状況（今月分）をログに出力しました。');
+    router.post(
+      getPagesHref(E_PAGES.SHIFT_SCHEDULE__STORE),
+      { shifts: entries },
+      {
+        onStart,
+        onFinish,
+        onSuccess: page => handleFlash(page.props as ShiftPageProps),
+      },
+    );
   };
 
   const weekDayList = Object.values(E_WEEK_DAY);

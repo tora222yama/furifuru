@@ -10,10 +10,20 @@ export type ShiftEntry = {
   type: ShiftType;
 };
 
-interface IProps extends IPropsBase {
+export type ShiftSyncResult = {
+  successes: ShiftEntry[];
+  failures: ShiftEntry[];
+};
+
+/** Inertia コントローラーから渡されるページ層の props 型定義 */
+export type ShiftPageProps = {
   shiftEntries?: ShiftEntry[];
   currentMonth?: string;
-}
+  shiftSync?: ShiftSyncResult;
+  flash?: { status?: string };
+};
+
+interface IProps extends IPropsBase, ShiftPageProps {}
 
 export const Index: React.FC<IProps> = ({
   shiftEntries,
