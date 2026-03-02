@@ -5,9 +5,17 @@ import { ShiftSchedule } from '@/script/Pages/ShiftSchedule/ShiftSchedule';
 
 export type ShiftType = 'remote' | 'office' | 'businessTrip' | 'holiday';
 
+/** DB の Google カレンダー同期ステータス（サーバーから渡される値） */
+export type CalendarSyncStatus = 'pending' | 'synced' | 'failed';
+
+/** フロントエンド表示用ステータス（未保存・未入力を含む） */
+export type DisplaySyncStatus = CalendarSyncStatus | 'unsaved' | 'unregistered';
+
 export type ShiftEntry = {
   date: string;
   type: ShiftType;
+  /** DB に保存済みのエントリのみ存在する */
+  syncStatus?: CalendarSyncStatus;
 };
 
 export type ShiftSyncResult = {

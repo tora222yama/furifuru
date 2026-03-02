@@ -1,22 +1,48 @@
 import * as React from 'react';
-import { Box, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Tooltip,
+} from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
 import { TypoText } from '@/script/Component/Typography/TypoText';
 import { E_COLOR } from '@/script/Enum/EColor';
 import { IDate } from '@/script/Common/getMonthCalendar';
-import { ShiftType } from '@/script/Pages/ShiftSchedule/Index';
+import {
+  DisplaySyncStatus,
+  ShiftType,
+} from '@/script/Pages/ShiftSchedule/Index';
 
 interface IProps extends IPropsBase {
   date: IDate;
   shift: ShiftType;
   holidayName?: string;
+  syncStatus?: DisplaySyncStatus;
   onShiftChange: (shift: ShiftType) => void;
 }
+
+type StatusConfig = {
+  label: string;
+  color: 'default' | 'warning' | 'success' | 'error';
+};
+
+const SYNC_STATUS_CONFIG: Record<DisplaySyncStatus, StatusConfig> = {
+  unregistered: { label: '未入力', color: 'default' },
+  unsaved: { label: '未保存', color: 'warning' },
+  pending: { label: '未連携', color: 'default' },
+  synced: { label: '同期済', color: 'success' },
+  failed: { label: '連携失敗', color: 'error' },
+};
+
 export const Day: React.FC<IProps> = ({
   sx,
   date,
   shift,
   holidayName,
+  syncStatus,
   onShiftChange,
 }) => {
   const dateColor = date.inRange ? E_COLOR.BLACK : E_COLOR.GREY;
@@ -57,6 +83,22 @@ export const Day: React.FC<IProps> = ({
         )}
       </Box>
       {date.inRange && (
+        <Box sx={{ marginTop: '4px', height: '18px' }}>
+          {syncStatus && (
+            <Chip
+              label={SYNC_STATUS_CONFIG[syncStatus].label}
+              color={SYNC_STATUS_CONFIG[syncStatus].color}
+              size="small"
+              sx={{
+                height: '18px',
+                fontSize: '10px',
+                '& .MuiChip-label': { px: '6px' },
+              }}
+            />
+          )}
+        </Box>
+      )}
+      {date.inRange && (
         <RadioGroup
           value={shift}
           onChange={handleChange}
@@ -65,7 +107,21 @@ export const Day: React.FC<IProps> = ({
           <FormControlLabel
             value="remote"
             control={<Radio size="small" />}
-            label={<TypoText size="xs">在宅</TypoText>}
+            label={
+              <Tooltip
+                title={
+                  syncStatus === 'unregistered' && shift === 'remote'
+                    ? '未入力のままでも送信時に在宅として同期されます'
+                    : ''
+                }
+                placement="top"
+                arrow
+              >
+                <span>
+                  <TypoText size="xs">在宅</TypoText>
+                </span>
+              </Tooltip>
+            }
           />
           <FormControlLabel
             value="office"

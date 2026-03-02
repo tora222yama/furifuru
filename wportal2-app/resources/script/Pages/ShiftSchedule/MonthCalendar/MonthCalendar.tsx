@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, IconButton, Button, Paper } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
@@ -13,6 +13,8 @@ import {
   getWeekDayShortLabel,
 } from '@/script/Enum/Server/App/EWeekDay';
 import {
+  CalendarSyncStatus,
+  DisplaySyncStatus,
   ShiftEntry,
   ShiftPageProps,
   ShiftType,
@@ -57,6 +59,105 @@ export const MonthCalendar: React.FC<IProps> = ({
     },
   );
 
+  // サーバーが最後に返したシフト種別（"未保存" 検出のために保持）
+  const [serverShiftData, setServerShiftData] = useState<{
+    [key: string]: ShiftType;
+  }>(() => {
+    const data: { [key: string]: ShiftType } = {};
+    if (shiftEntries) {
+      for (const entry of shiftEntries) {
+        data[entry.date] = entry.type;
+      }
+    }
+    return data;
+  });
+
+  // DB に保存された同期ステータス
+  const [syncStatusData, setSyncStatusData] = useState<{
+    [key: string]: CalendarSyncStatus;
+  }>(() => {
+    const data: { [key: string]: CalendarSyncStatus } = {};
+    if (shiftEntries) {
+      for (const entry of shiftEntries) {
+        if (entry.syncStatus) {
+          data[entry.date] = entry.syncStatus;
+        }
+      }
+    }
+    return data;
+  });
+
+  // Partial Reload で shiftEntries が更新されたとき、まだ shiftData にない日付だけマージする。
+  // すでに存在するキー（ユーザーが変更済みの日付）は上書きしない。
+  // serverShiftData / syncStatusData はサーバーが権威なので常に上書き。
+  const prevShiftEntriesRef = useRef(shiftEntries);
+  useEffect(() => {
+    if (shiftEntries === prevShiftEntriesRef.current) {
+      return;
+    }
+    prevShiftEntriesRef.current = shiftEntries;
+    if (!shiftEntries) {
+      return;
+    }
+
+    setShiftData(prev => {
+      const next = { ...prev };
+      for (const entry of shiftEntries) {
+        if (!(entry.date in next)) {
+          next[entry.date] = entry.type;
+        }
+      }
+      return next;
+    });
+
+    setServerShiftData(prev => {
+      const next = { ...prev };
+      for (const entry of shiftEntries) {
+        next[entry.date] = entry.type;
+      }
+      return next;
+    });
+
+    setSyncStatusData(prev => {
+      const next = { ...prev };
+      for (const entry of shiftEntries) {
+        if (entry.syncStatus) {
+          next[entry.date] = entry.syncStatus;
+        } else {
+          delete next[entry.date];
+        }
+      }
+      return next;
+    });
+  }, [shiftEntries]);
+
+  /**
+   * 表示用ステータスを返す。
+   * - ユーザーがサーバーと異なる値に変更済み → 'unsaved'
+   * - DB 保存済みでサーバーから来たステータスあり → そのステータス
+   * - 土日・祇日で未登録かつ未変更（送信時にスキップされる日）→ undefined（バッジ非表示）
+   * - それ以外の未登録・未変更 → 'unregistered'
+   */
+  const getDisplaySyncStatus = (
+    dateStr: string,
+    dateTime: DateTime,
+  ): DisplaySyncStatus | undefined => {
+    const localType = shiftData[dateStr];
+    const serverType = serverShiftData[dateStr];
+    if (localType !== undefined && localType !== serverType) {
+      return 'unsaved';
+    }
+    // 土日・祇日で未登録かつユーザーが未変更 → 送信スキップ対象なのでバッジ不要
+    if (
+      localType === undefined &&
+      !syncStatusData[dateStr] &&
+      getDefaultShift(dateTime) === 'holiday'
+    ) {
+      return undefined;
+    }
+    return syncStatusData[dateStr] ?? 'unregistered';
+  };
+
   const dateList = useMemo(() => getMonthCalendar(currentDate), [currentDate]);
 
   const handleFlash = (props: ShiftPageProps) => {
@@ -71,11 +172,35 @@ export const MonthCalendar: React.FC<IProps> = ({
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(currentDate.subMonth(1));
+    const newDate = currentDate.subMonth(1);
+    setCurrentDate(newDate);
+    router.get(
+      getPagesHref(E_PAGES.SHIFT_SCHEDULE),
+      { month: newDate.toFormatString('yyyy-MM') },
+      {
+        only: ['shiftEntries', 'currentMonth'],
+        preserveState: true,
+        preserveScroll: true,
+        onStart,
+        onFinish,
+      },
+    );
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(currentDate.addMonth(1));
+    const newDate = currentDate.addMonth(1);
+    setCurrentDate(newDate);
+    router.get(
+      getPagesHref(E_PAGES.SHIFT_SCHEDULE),
+      { month: newDate.toFormatString('yyyy-MM') },
+      {
+        only: ['shiftEntries', 'currentMonth'],
+        preserveState: true,
+        preserveScroll: true,
+        onStart,
+        onFinish,
+      },
+    );
   };
 
   const handleShiftChange = (dateStr: string, shift: ShiftType) => {
@@ -103,9 +228,17 @@ export const MonthCalendar: React.FC<IProps> = ({
     let target = startOfTarget;
     while (target.toJsTimeStamp() <= endOfTarget.toJsTimeStamp()) {
       const dateKey = target.toFormatString('yyyy-MM-dd');
+      const savedType = shiftData[dateKey];
+
+      // 土日・祇日で未登録かつユーザーが明示的に変更していない場合は送信スキップ
+      if (savedType === undefined && getDefaultShift(target) === 'holiday') {
+        target = target.addDay(1);
+        continue;
+      }
+
       entries.push({
         date: dateKey,
-        type: shiftData[dateKey] || getDefaultShift(target), // 未選択ならデフォルト値
+        type: savedType ?? getDefaultShift(target),
       });
       target = target.addDay(1);
     }
@@ -196,6 +329,7 @@ export const MonthCalendar: React.FC<IProps> = ({
                         shiftData[dateKey] || getDefaultShift(date.dateTime)
                       }
                       holidayName={isHoliday(date.dateTime.Date()) || undefined}
+                      syncStatus={getDisplaySyncStatus(dateKey, date.dateTime)}
                       onShiftChange={val => handleShiftChange(dateKey, val)}
                     />
                   );
