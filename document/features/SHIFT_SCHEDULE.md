@@ -263,14 +263,33 @@ Index
 
 ### 型定義
 
-場所: `resources/script/Pages/ShiftSchedule/Index.tsx`
+**規約: `Index.tsx` をサーバー↔フロント間のインターフェース定義の唯一の場所とする**
+
+Inertia のエントリーポイントである `Index.tsx` が「コントローラーが返す props の型」を集約して定義・export する。
+子コンポーネントはページ層の型を `Index.tsx` から import して使い、独自に再定義しない。
+これにより「サーバーとフロントが何をやり取りしているか」は `Index.tsx` を見るだけで把握できる。
 
 ```ts
+// Index.tsx に集約する型
+
 export type ShiftType = 'remote' | 'office' | 'businessTrip' | 'holiday';
 
 export type ShiftEntry = {
   date: string;    // 'yyyy-MM-dd'
   type: ShiftType;
+};
+
+export type ShiftSyncResult = {
+  successes: ShiftEntry[];
+  failures: ShiftEntry[];
+};
+
+/** コントローラーが返す全 props の型 */
+export type ShiftPageProps = {
+  shiftEntries?: ShiftEntry[];
+  currentMonth?: string;
+  shiftSync?: ShiftSyncResult;   // store 後のカレンダー同期結果（flash）
+  flash?: { status?: string };   // 汎用ステータス（HandleInertiaRequests 経由）
 };
 ```
 
@@ -283,7 +302,7 @@ export type ShiftEntry = {
 | 初期表示月 | コントローラーから渡された `currentMonth`（`yyyy-MM` 形式）。未指定時は当月 |
 | シフト初期値 | `shiftEntries` に含まれる日付はそのまま反映。未登録の日は平日→`remote`、土日祝→`holiday` をデフォルト表示 |
 | 祝日の表示 | `japanese-holidays` の `isHoliday()` で判定し、祝日名を日付と同行・右寄せ・赤テキストで表示 |
-| 送信 | 当月全日付分の `ShiftEntry[]` を `console.log`（実APIとの接続は未実装） |
+| 送信 | 当月全日付分の `ShiftEntry[]` を `POST /shift_schedule/store` へ送信。ローディング表示→スナックバーで結果通知 |
 
 ### フロントエンドのファイル一覧
 
@@ -301,7 +320,6 @@ export type ShiftEntry = {
 | 機能 | 概要 |
 |---|---|
 | 再同期の定期実行 | `shift:sync-calendar` を cron（Laravel Scheduler 等）で定期実行する設定 |
-| フロントエンド送信処理 | `handleSubmit` を実際の API（GraphQL / Inertia POST）に接続する |
 
 ---
 
@@ -401,3 +419,30 @@ return $description !== null && str_contains($description, ShiftScheduleConstant
 **テスト**
 - `FakeGoogleCalendarService`: フィルタを実際に適用して `$deletedEvents` に記録するよう更新
 - `ShiftRegistrationUseCaseTest`: `test_execute_does_not_throw_when_calendar_has_null_description_event` を追加（回帰テスト）
+
+---
+
+### Phase 5: フロントエンド送信処理の実装
+
+**概要**  
+`MonthCalendar` の送信ボタンを `console.log` + `alert` から実際の Inertia POST に接続した。
+保存結果（成功 / 一部失敗）をスナックバーで通知する。
+
+**新規作成**
+- なし
+
+**修正**
+- `app/Enum/App/EPages.php`: `SHIFT_SCHEDULE__STORE` case を追加（`ShiftScheduleController@store`）
+- `routes/web.php`: `Route::post('/store', ...)` を `shift_schedule` グループに追加
+- `app/Http/Middleware/HandleInertiaRequests.php`: `share()` に `flash`（`status` / `shiftSync`）を追加。クロージャで遅延評価し、セッション未起動時の `Session store not set` エラーを回避
+- `resources/script/Enum/Server/App/EPages.ts`: `SHIFT_SCHEDULE__STORE` と `getPagesHref` ケースを追加
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/MonthCalendar.tsx`: `handleSubmit` を `router.post()` に置き換え。`onSuccess` コールバックで `flash` を読んでスナックバー表示
+- `resources/script/Pages/ShiftSchedule/MonthCalendar/Day.tsx`: `ShiftType` の import 先を `MonthCalendar.tsx` → `Index.tsx` に修正（既存バグ）
+
+**トラブルシューティング記録**
+
+| 事象 | 原因 | 対処 |
+|---|---|---|
+| `Session store not set on request` | `HandleInertiaRequests` がグローバルミドルウェア（`$middleware->append()`）のため `StartSession` より先に `share()` が評価される | `flash` の値をクロージャ `fn () => [...]` にして遅延評価に変更 |
+| flash が常に null | 上記と同様の評価タイミング問題。`hasSession()` ガードでエラーは消えたが値が null のまま | クロージャ化で解決 |
+| `router.post` + `useEffect` で flash が届かない | `useEffect` は `props.flash?.status` の変化を検知できないケースがある | `router.post()` の `onSuccess(page => ...)` コールバックで直接 `page.props.flash` を読む方式に変更 |
