@@ -14,7 +14,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isHoliday } from 'japanese-holidays';
 import { router } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
@@ -115,6 +115,45 @@ export const MonthCalendar: React.FC<IProps> = ({
     }
     return data;
   });
+
+  // ── 未保存変更の検知 ──
+  const hasUnsavedChanges = useCallback((): boolean => {
+    for (const [date, localType] of Object.entries(shiftData)) {
+      if (localType !== serverShiftData[date]) {
+        return true;
+      }
+    }
+    return false;
+  }, [shiftData, serverShiftData]);
+
+  // タブ閉じ・リロード時の離脱確認
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges()) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [hasUnsavedChanges]);
+
+  // Inertia ナビゲーション（メニュー遷移等）時の離脱確認
+  // 月送り（preserveState）や送信（POST）は対象外
+  useEffect(() => {
+    const removeListener = router.on('before', event => {
+      const visit = event.detail.visit;
+      if (visit.preserveState || visit.method !== 'get') {
+        return;
+      }
+      if (
+        hasUnsavedChanges() &&
+        !window.confirm('変更が保存されていません。ページを離れますか？')
+      ) {
+        event.preventDefault();
+      }
+    });
+    return () => removeListener();
+  }, [hasUnsavedChanges]);
 
   // Partial Reload で shiftEntries が更新されたとき、まだ shiftData にない日付だけマージする。
   // すでに存在するキー（ユーザーが変更済みの日付）は上書きしない。
