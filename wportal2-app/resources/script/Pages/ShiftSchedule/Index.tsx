@@ -5,7 +5,7 @@ import { ShiftSchedule } from '@/script/Pages/ShiftSchedule/ShiftSchedule';
 
 export type ShiftType = 'remote' | 'office' | 'businessTrip' | 'holiday';
 
-/** DB の Google カレンダー同期ステータス（サーバーから渡される値） */
+/** DB の Google カレンダー反映ステータス（サーバーから渡される値） */
 export type CalendarSyncStatus = 'pending' | 'synced' | 'failed';
 
 /** フロントエンド表示用ステータス（未保存・未入力を含む） */
