@@ -303,8 +303,12 @@ export const MonthCalendar: React.FC<IProps> = ({
       const dateKey = target.toFormatString('yyyy-MM-dd');
       const savedType = shiftData[dateKey];
 
-      // 土日・祇日で未登録かつユーザーが明示的に変更していない場合は送信スキップ
-      if (savedType === undefined && getDefaultShift(target) === 'holiday') {
+      // 土日・祝日でサーバーと比べて変更なし（休日のまま）の場合は送信スキップ
+      if (
+        getDefaultShift(target) === 'holiday' &&
+        savedType === serverShiftData[dateKey] &&
+        (savedType === undefined || savedType === 'holiday')
+      ) {
         target = target.addDay(1);
         continue;
       }
