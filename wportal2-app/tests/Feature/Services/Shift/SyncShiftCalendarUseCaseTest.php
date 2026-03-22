@@ -9,9 +9,11 @@ use App\Dto\Shift\SyncShiftCalendarCommand;
 use App\Enum\App\ECalendarSyncStatus;
 use App\Services\Shift\ShiftCalendarSyncer;
 use App\Services\Shift\SyncShiftCalendarUseCase;
+use App\ValueObjects\ShiftStartSettings;
 use Carbon\CarbonImmutable;
 use Tests\Fakes\External\FakeGoogleCalendarService;
 use Tests\Fakes\Shift\FakeShiftScheduleRepository;
+use Tests\Fakes\Shift\FakeShiftSettingsRepository;
 use Tests\TestCase;
 
 final class SyncShiftCalendarUseCaseTest extends TestCase
@@ -19,12 +21,14 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
     private function makeUseCase(
         ?FakeGoogleCalendarService $calendarService = null,
         ?FakeShiftScheduleRepository $repository = null,
+        ?FakeShiftSettingsRepository $settingsRepository = null,
     ): SyncShiftCalendarUseCase {
         $calendarService ??= new FakeGoogleCalendarService;
 
         return new SyncShiftCalendarUseCase(
             new ShiftCalendarSyncer($calendarService),
-            $repository ?? new FakeShiftScheduleRepository,
+            $repository         ?? new FakeShiftScheduleRepository,
+            $settingsRepository ?? new FakeShiftSettingsRepository,
         );
     }
 
@@ -176,7 +180,8 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
     {
         $fakeCalendar     = new FakeGoogleCalendarService;
         $fakeRepository   = new FakeShiftScheduleRepository;
-        $useCase          = $this->makeUseCase($fakeCalendar, $fakeRepository);
+        $fakeSettings     = new FakeShiftSettingsRepository;
+        $useCase          = $this->makeUseCase($fakeCalendar, $fakeRepository, $fakeSettings);
 
         $fakeRepository->seed(1, ShiftEntries::fromArray([
             ['date' => '2024-07-15', 'type' => 'holiday'],
@@ -194,8 +199,30 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
         $this->assertSame('[SHIFT_SYNC]', $allDay['descriptionPrefix']);
 
         $this->assertSame('休暇', $timed['summary']);
-        $this->assertSame('09:00', $timed['start']->format('H:i'));
-        $this->assertSame('18:00', $timed['end']->format('H:i'));
+        $this->assertSame('05:00', $timed['start']->format('H:i'));
+        $this->assertSame('22:00', $timed['end']->format('H:i'));
+    }
+
+    public function test_execute_uses_user_shift_start_settings(): void
+    {
+        $fakeCalendar                    = new FakeGoogleCalendarService;
+        $fakeRepository                  = new FakeShiftScheduleRepository;
+        $fakeSettings                    = new FakeShiftSettingsRepository;
+        $useCase                         = $this->makeUseCase($fakeCalendar, $fakeRepository, $fakeSettings);
+
+        $fakeRepository->seed(1, ShiftEntries::fromArray([
+            ['date' => '2024-07-01', 'type' => 'office'],
+            ['date' => '2024-07-02', 'type' => 'remote'],
+        ]));
+        $fakeSettings->seed(1, new ShiftStartSettings('10:00', '11:00'));
+
+        $useCase->execute($this->makeCommand('2024-07'));
+
+        [, $officeTimed, , $remoteTimed] = $fakeCalendar->blockCalls;
+
+        $this->assertSame([1], $fakeSettings->findOrDefaultCalls);
+        $this->assertSame('10:00', $officeTimed['end']->format('H:i'));
+        $this->assertSame('11:00', $remoteTimed['end']->format('H:i'));
     }
 
     public function test_execute_syncs_already_synced_shifts(): void

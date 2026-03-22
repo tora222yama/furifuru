@@ -19,6 +19,7 @@ interface GoogleCalendarServiceInterface
     /**
      * @param  Collection<int, string>  $calendarIdList
      * @param  string|null  $transparency  'opaque'（予定あり）または 'transparent'（予定なし）。null の場合は API デフォルトに委ねる
+     * @param  bool  $allDay  true の場合は Google Calendar の終日イベント（date フィールド）として登録する
      */
     public function blockSchedule(
         string $authEmail,
@@ -30,6 +31,7 @@ interface GoogleCalendarServiceInterface
         string $description = '',
         ?string $descriptionPrefix = null,
         ?string $transparency = null,
+        bool $allDay = false,
     ): void;
 
     /**

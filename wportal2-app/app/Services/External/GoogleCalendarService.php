@@ -75,27 +75,30 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
         string $description = '',
         ?string $descriptionPrefix = null,
         ?string $transparency = null,
+        bool $allDay = false,
     ): void {
         // サービス取得.
-        $service    = new Google_Service_Calendar(
+        $service     = new Google_Service_Calendar(
             $this->getClient($authEmail)
         );
 
         // 全参加者のリスト.
-        $attendList = collect([$authEmail])
+        $attendList  = collect([$authEmail])
             ->concat($calendarIdList->toArray());
+
+        // 終日イベントは date フィールド（翌日が終了日）、通常イベントは dateTime フィールドを使用.
+        $startField  = $allDay
+            ? ['date' => $start->format('Y-m-d')]
+            : ['dateTime' => $start->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
+        $endField    = $allDay
+            ? ['date' => $end->copy()->addDay()->format('Y-m-d')]
+            : ['dateTime' => $end->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
 
         // 登録パラメータ.
         $eventParams = [
             'summary'         => $summary,
-            'start'           => [
-                'dateTime' => $start->toIso8601String(),
-                'timeZone' => 'Asia/Tokyo',
-            ],
-            'end'             => [
-                'dateTime' => $end->toIso8601String(),
-                'timeZone' => 'Asia/Tokyo',
-            ],
+            'start'           => $startField,
+            'end'             => $endField,
             'location'        => $location,
             'description'     => $this->buildDescription($descriptionPrefix, $description),
             'guestsCanModify' => true,
@@ -106,7 +109,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
             })->toArray(),
         ];
 
-        $params = new Google_Service_Calendar_Event($eventParams);
+        $params      = new Google_Service_Calendar_Event($eventParams);
 
         if ($transparency !== null) {
             $params->setTransparency($transparency);
@@ -116,7 +119,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
 
         // 登録を実施.
         // 結果を取得.
-        $result     = $service->events->insert(
+        $result      = $service->events->insert(
             $authEmail,
             $params,
             [

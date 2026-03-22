@@ -107,7 +107,6 @@ final readonly class ShiftCalendarSyncer
     private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'opaque'): bool
     {
         $start   = $date->copy()->startOfDay();
-        $end     = $date->copy()->endOfDay();
         $summary = $this->summaryForType($type, true);
 
         try {
@@ -115,10 +114,11 @@ final readonly class ShiftCalendarSyncer
                 $authEmail,
                 $calendarIdList,
                 $start,
-                $end,
+                $start,
                 $summary,
                 descriptionPrefix: ShiftScheduleConstant::MARKER,
                 transparency: $transparency,
+                allDay: true,
             );
 
             return true;
@@ -183,7 +183,7 @@ final readonly class ShiftCalendarSyncer
     {
         return match ($type) {
             ShiftType::Remote       => $allDay ? '在宅' : '出勤（在宅）',
-            ShiftType::Office       => $allDay ? '出社' : '出勤（出社）',
+            ShiftType::Office       => $allDay ? 'オフィス出社' : '出勤（オフィス）',
             ShiftType::BusinessTrip => $allDay ? '出張' : '出勤（出張）',
             ShiftType::Holiday      => '休暇',
         };

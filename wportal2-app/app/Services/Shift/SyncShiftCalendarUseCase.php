@@ -21,7 +21,7 @@ final readonly class SyncShiftCalendarUseCase
     public function __construct(
         private ShiftCalendarSyncer $calendarSyncer,
         private ShiftScheduleRepositoryInterface $shiftScheduleRepository,
-        private ShiftSettingsRepository $shiftSettingsRepository,
+        private ShiftSettingsRepositoryInterface $shiftSettingsRepository,
     ) {}
 
     /**

@@ -7,7 +7,7 @@ namespace App\Services\Shift;
 use App\Models\App\Trn\TrnUserShiftSetting;
 use App\ValueObjects\ShiftStartSettings;
 
-final class ShiftSettingsRepository
+final class ShiftSettingsRepository implements ShiftSettingsRepositoryInterface
 {
     /**
      * ユーザーの勤務開始時刻設定を upsert する。
