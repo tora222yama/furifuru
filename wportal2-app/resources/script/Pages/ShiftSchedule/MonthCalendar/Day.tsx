@@ -30,11 +30,11 @@ type StatusConfig = {
 };
 
 const SYNC_STATUS_CONFIG: Record<DisplaySyncStatus, StatusConfig> = {
-  unregistered: { label: '未入力', color: 'default' },
-  unsaved: { label: '未保存', color: 'warning' },
-  pending: { label: '未連携', color: 'default' },
-  synced: { label: '同期済', color: 'success' },
-  failed: { label: '連携失敗', color: 'error' },
+  unregistered: { label: '未反映', color: 'default' },
+  unsaved: { label: '未反映', color: 'warning' },
+  pending: { label: '未反映', color: 'default' },
+  synced: { label: '反映', color: 'success' },
+  failed: { label: '反映失敗', color: 'error' },
 };
 
 export const Day: React.FC<IProps> = ({
@@ -111,7 +111,7 @@ export const Day: React.FC<IProps> = ({
               <Tooltip
                 title={
                   syncStatus === 'unregistered' && shift === 'remote'
-                    ? '未入力のままでも送信時に在宅として同期されます'
+                    ? '未反映のまま送信すると在宅として反映されます'
                     : ''
                 }
                 placement="top"

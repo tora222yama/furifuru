@@ -195,7 +195,7 @@ export const MonthCalendar: React.FC<IProps> = ({
     } else if (props.flash?.status === 'stored_with_errors') {
       const failCount = props.shiftSync?.failures.length ?? 0;
       displaySnackbar(
-        `シフトを保存しましたが、${failCount}件のカレンダー同期に失敗しました`,
+        `シフトを保存しましたが、${failCount}件のカレンダー反映に失敗しました`,
       );
     }
   };
@@ -436,7 +436,7 @@ export const MonthCalendar: React.FC<IProps> = ({
           <DialogContentText>
             表示している1ヶ月分のシフトを登録します
             <br />
-            ※同期に1〜2分ほどかかります
+            ※反映に1〜2分ほどかかります
           </DialogContentText>
         </DialogContent>
         <DialogActions>
