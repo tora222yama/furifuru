@@ -30,5 +30,8 @@ export const E_COLOR = {
   TEXT_PRIMARY: '#333333',
   TEXT_BLUE: '#155B94',
   TEXT_RED: '#DC3C31',
+
+  // ベータ.
+  BETA: '#0320c1',
 } as const;
 export type EColor = (typeof E_COLOR)[keyof typeof E_COLOR];
