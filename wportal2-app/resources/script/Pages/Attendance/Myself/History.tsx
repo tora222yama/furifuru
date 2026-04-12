@@ -119,7 +119,7 @@ export const History: React.FC<IProps> = ({ sx }) => {
             sx={{
               textDecoration: 'underline',
             }}
-            color={E_COLOR.TEXT_BLUE}
+            color={E_COLOR.TEXT_GREEN}
           >
             ＞時刻修正
           </TypoText>

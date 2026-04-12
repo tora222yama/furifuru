@@ -107,7 +107,7 @@ export const Achievement: React.FC<IProps> = ({ sx, trnUserReward }) => {
           />
         </Closable>
         <Closable open={!enableReceiveCount}>
-          <TypoText bold color={E_COLOR.TEXT_BLUE}>
+          <TypoText bold color={E_COLOR.TEXT_GREEN}>
             受取済
           </TypoText>
         </Closable>
