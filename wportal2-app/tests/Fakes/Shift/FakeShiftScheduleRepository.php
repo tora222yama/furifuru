@@ -99,4 +99,19 @@ final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterf
 
         return $this->pendingOrFailedStore[$key] ?? ShiftEntries::empty();
     }
+
+    public function getAllUsersMonthlyShifts(CarbonImmutable $targetMonth): array
+    {
+        $month   = $targetMonth->format('Y-m');
+        $grouped = [];
+
+        foreach ($this->store as $key => $entries) {
+            [$userId, $m] = explode(':', $key);
+            if ($m === $month) {
+                $grouped[(int) $userId] = $entries;
+            }
+        }
+
+        return $grouped;
+    }
 }

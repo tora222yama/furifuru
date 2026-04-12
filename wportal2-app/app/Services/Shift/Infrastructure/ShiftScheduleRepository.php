@@ -124,4 +124,38 @@ final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface
 
         return ShiftEntries::fromArray($shifts);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllUsersMonthlyShifts(CarbonImmutable $targetMonth): array
+    {
+        $start   = $targetMonth->startOfMonth()->toDateString();
+        $end     = $targetMonth->endOfMonth()->toDateString();
+
+        $records = TrnShiftSchedule::query()
+            ->whereBetween('shift_date', [$start, $end])
+            ->orderBy('trn_user_id')
+            ->orderBy('shift_date')
+            ->get();
+
+        /** @var array<int, ShiftEntries> $grouped */
+        $grouped = [];
+        foreach ($records as $record) {
+            /** @var TrnShiftSchedule $record */
+            $userId = (int) $record->trn_user_id;
+
+            if (! isset($grouped[$userId])) {
+                $grouped[$userId] = ShiftEntries::empty();
+            }
+
+            $grouped[$userId]->push(new ShiftEntry(
+                new ShiftDate($record->shift_date),
+                ShiftType::from($record->shift_type),
+                ECalendarSyncStatus::from((int) $record->e_calendar_sync_status),
+            ));
+        }
+
+        return $grouped;
+    }
 }

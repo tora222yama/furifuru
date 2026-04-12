@@ -31,4 +31,11 @@ interface ShiftScheduleRepositoryInterface
      * shift_date 昇順で返す。
      */
     public function getPendingOrFailedShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries;
+
+    /**
+     * 指定月の全ユーザーのシフトを取得する。
+     *
+     * @return array<int, ShiftEntries> trnUserId => ShiftEntries
+     */
+    public function getAllUsersMonthlyShifts(CarbonImmutable $targetMonth): array;
 }

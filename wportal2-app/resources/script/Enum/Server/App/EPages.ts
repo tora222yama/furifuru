@@ -28,6 +28,7 @@ export const E_PAGES = {
   REWARD__ACHIEVE: 'reward__achieve', // 報酬達成.
   SHIFT_SCHEDULE: 'shift_schedule', // シフト管理.
   SHIFT_SCHEDULE__STORE: 'shift_schedule__store', // シフト管理 保存.
+  SHIFT_SCHEDULE__EXPORT: 'shift_schedule__export', // シフト管理 CSV出力.
   DIVISION: 'division', // 課一覧.
   DIVISION__SHOW: 'division__show', // 課詳細.
   DIVISION__EDIT: 'division__edit', // 課編集.
@@ -126,6 +127,8 @@ const getHref = (page: EPages): string => {
       return '/shift_schedule';
     case E_PAGES.SHIFT_SCHEDULE__STORE:
       return '/shift_schedule/store';
+    case E_PAGES.SHIFT_SCHEDULE__EXPORT:
+      return '/shift_schedule/export';
     case E_PAGES.ATTENDANCE__EDIT:
       return '/attendance/edit';
     case E_PAGES.ATTENDANCE__EDIT__UPDATE:

@@ -34,6 +34,7 @@ enum EPages: string
     case REWARD__ACHIEVE                   = 'reward__achieve'; // 報酬達成.
     case SHIFT_SCHEDULE                    = 'shift_schedule'; // シフト予定表.
     case SHIFT_SCHEDULE__STORE             = 'shift_schedule__store'; // シフト予定表 保存.
+    case SHIFT_SCHEDULE__EXPORT            = 'shift_schedule__export'; // シフト予定表 CSV出力.
     case DIVISION                          = 'division'; // 課一覧.
     case DIVISION__SHOW                    = 'division__show'; // 課詳細.
     case DIVISION__EDIT                    = 'division__edit'; // 課編集.
@@ -107,6 +108,7 @@ enum EPages: string
             self::REWARD__ACHIEVE                => '\App\Http\Controllers\Pages\RewardController@achieve',
             self::SHIFT_SCHEDULE                 => '\App\Http\Controllers\Pages\ShiftScheduleController@index',
             self::SHIFT_SCHEDULE__STORE          => '\App\Http\Controllers\Pages\ShiftScheduleController@store',
+            self::SHIFT_SCHEDULE__EXPORT         => '\App\Http\Controllers\Pages\ShiftScheduleController@export',
             self::ATTENDANCE__EDIT               => '\App\Http\Controllers\Pages\AttendanceEditController@invoke',
             self::ATTENDANCE__EDIT__UPDATE       => '\App\Http\Controllers\Pages\AttendanceEditController@update',
             self::DIVISION                       => '\App\Http\Controllers\Pages\DivisionController@invoke',

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
 use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
 use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\UseCase\ExportMonthlyShiftCommand;
+use App\Services\Shift\UseCase\ExportMonthlyShiftUseCase;
 use App\Services\Shift\UseCase\ShiftRegistrationCommand;
 use App\Services\Shift\UseCase\ShiftRegistrationUseCase;
 use Carbon\CarbonImmutable;
@@ -17,11 +19,13 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Inertia\Response;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ShiftScheduleController extends Controller
 {
     public function __construct(
         private readonly ShiftRegistrationUseCase $shiftRegistrationService,
+        private readonly ExportMonthlyShiftUseCase $exportUseCase,
         private readonly ShiftScheduleRepositoryInterface $shiftScheduleRepository,
         private readonly ShiftSettingsRepositoryInterface $shiftSettingsRepository,
     ) {}
@@ -92,7 +96,36 @@ class ShiftScheduleController extends Controller
             ]);
     }
 
-    private function resolveMonth(?string $month): CarbonImmutable
+    public function export(Request $request): StreamedResponse
+    {
+        $targetMonth = $this->resolveMonth($request->query('month'));
+
+        $command     = new ExportMonthlyShiftCommand($targetMonth);
+        $fileName    = "shift_{$targetMonth->format('Y-m')}.csv";
+
+        return new StreamedResponse(
+            function () use ($command): void {
+                $handle = fopen('php://output', 'w');
+                assert($handle !== false);
+
+                // BOM for Excel UTF-8 recognition
+                fwrite($handle, "\xEF\xBB\xBF");
+
+                foreach ($this->exportUseCase->execute($command) as $row) {
+                    fputcsv($handle, $row);
+                }
+
+                fclose($handle);
+            },
+            200,
+            [
+                'Content-Type'        => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+            ],
+        );
+    }
+
+    private function resolveMonth(mixed $month): CarbonImmutable
     {
         if ($month === null || $month === '') {
             return CarbonImmutable::now()->startOfMonth();

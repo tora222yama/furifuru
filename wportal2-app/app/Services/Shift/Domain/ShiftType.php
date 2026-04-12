@@ -10,4 +10,14 @@ enum ShiftType: string
     case Remote       = 'remote';
     case BusinessTrip = 'businessTrip';
     case Holiday      = 'holiday';
+
+    public function toJapanese(): string
+    {
+        return match ($this) {
+            self::Office       => '出社',
+            self::Remote       => '在宅',
+            self::BusinessTrip => '出張',
+            self::Holiday      => '休暇',
+        };
+    }
 }
