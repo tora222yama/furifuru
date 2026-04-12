@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
+namespace App\Services\Shift\Domain;
 
-use App\Collections\ShiftEntries;
 use App\Constant\ShiftScheduleConstant;
-use App\Dto\Shift\ShiftSyncResult;
 use App\Services\External\GoogleCalendarServiceInterface;
-use App\ValueObjects\ShiftStartSettings;
-use App\ValueObjects\ShiftType;
+use App\Services\Shift\UseCase\ShiftSyncResult;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Google\Service\Calendar\Event;

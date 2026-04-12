@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Collections;
 
-use App\Collections\ShiftEntries;
 use App\Exceptions\ShiftEntryValidationException;
-use App\ValueObjects\ShiftDate;
-use App\ValueObjects\ShiftEntry;
-use App\ValueObjects\ShiftType;
+use App\Services\Shift\Domain\ShiftDate;
+use App\Services\Shift\Domain\ShiftEntries;
+use App\Services\Shift\Domain\ShiftEntry;
+use App\Services\Shift\Domain\ShiftType;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

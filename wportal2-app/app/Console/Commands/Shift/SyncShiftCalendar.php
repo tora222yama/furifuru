@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Shift;
 
-use App\Dto\Shift\SyncShiftCalendarCommand;
 use App\Models\App\Auth\AuthUser;
-use App\Services\Shift\SyncShiftCalendarUseCase;
+use App\Services\Shift\UseCase\SyncShiftCalendarCommand;
+use App\Services\Shift\UseCase\SyncShiftCalendarUseCase;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 

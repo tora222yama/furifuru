@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
+namespace App\Services\Shift\Infrastructure;
 
 use App\Models\App\Trn\TrnUserShiftSetting;
-use App\ValueObjects\ShiftStartSettings;
+use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\Domain\ShiftStartSettings;
 
 final class ShiftSettingsRepository implements ShiftSettingsRepositoryInterface
 {

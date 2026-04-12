@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
+namespace App\Services\Shift\Infrastructure;
 
-use App\Collections\ShiftEntries;
 use App\Enum\App\ECalendarSyncStatus;
 use App\Models\App\Trn\TrnShiftSchedule;
-use App\ValueObjects\ShiftDate;
-use App\ValueObjects\ShiftEntry;
-use App\ValueObjects\ShiftType;
+use App\Services\Shift\Domain\ShiftDate;
+use App\Services\Shift\Domain\ShiftEntries;
+use App\Services\Shift\Domain\ShiftEntry;
+use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\Domain\ShiftType;
 use Carbon\CarbonImmutable;
 
 final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface

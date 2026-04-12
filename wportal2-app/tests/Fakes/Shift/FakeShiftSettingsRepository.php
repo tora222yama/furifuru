@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Fakes\Shift;
 
-use App\Services\Shift\ShiftSettingsRepositoryInterface;
-use App\ValueObjects\ShiftStartSettings;
+use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\Domain\ShiftStartSettings;
 
 final class FakeShiftSettingsRepository implements ShiftSettingsRepositoryInterface
 {

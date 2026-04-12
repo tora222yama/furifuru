@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Fakes\Shift;
 
-use App\Collections\ShiftEntries;
 use App\Enum\App\ECalendarSyncStatus;
-use App\Services\Shift\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\Domain\ShiftEntries;
+use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
 use Carbon\CarbonImmutable;
 
 final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterface

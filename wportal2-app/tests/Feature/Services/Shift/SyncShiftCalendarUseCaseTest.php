@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Services\Shift;
 
-use App\Collections\ShiftEntries;
-use App\Dto\Shift\SyncShiftCalendarCommand;
 use App\Enum\App\ECalendarSyncStatus;
-use App\Services\Shift\ShiftCalendarSyncer;
-use App\Services\Shift\SyncShiftCalendarUseCase;
-use App\ValueObjects\ShiftStartSettings;
+use App\Services\Shift\Domain\ShiftCalendarSyncer;
+use App\Services\Shift\Domain\ShiftEntries;
+use App\Services\Shift\Domain\ShiftStartSettings;
+use App\Services\Shift\UseCase\SyncShiftCalendarCommand;
+use App\Services\Shift\UseCase\SyncShiftCalendarUseCase;
 use Carbon\CarbonImmutable;
 use Tests\Fakes\External\FakeGoogleCalendarService;
 use Tests\Fakes\Shift\FakeShiftScheduleRepository;

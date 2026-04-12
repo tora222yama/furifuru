@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
-use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
-use App\Services\Shift\ShiftRegistrationUseCase;
-use App\Services\Shift\ShiftScheduleRepositoryInterface;
-use App\Services\Shift\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\UseCase\ShiftRegistrationCommand;
+use App\Services\Shift\UseCase\ShiftRegistrationUseCase;
 use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\RedirectResponse;

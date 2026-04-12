@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Test;
 
-use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Models\App\Auth\AuthUser;
-use App\Services\Shift\ShiftRegistrationUseCase;
-use App\ValueObjects\ShiftType;
+use App\Services\Shift\Domain\ShiftType;
+use App\Services\Shift\UseCase\ShiftRegistrationCommand;
+use App\Services\Shift\UseCase\ShiftRegistrationUseCase;
 use Illuminate\Console\Command;
 use InvalidArgumentException;
 

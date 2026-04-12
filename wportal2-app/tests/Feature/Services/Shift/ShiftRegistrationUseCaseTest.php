@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Services\Shift;
 
-use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Enum\App\ECalendarSyncStatus;
-use App\Services\Shift\ShiftCalendarSyncer;
-use App\Services\Shift\ShiftRegistrationUseCase;
-use App\ValueObjects\ShiftStartSettings;
+use App\Services\Shift\Domain\ShiftCalendarSyncer;
+use App\Services\Shift\Domain\ShiftStartSettings;
+use App\Services\Shift\UseCase\ShiftRegistrationCommand;
+use App\Services\Shift\UseCase\ShiftRegistrationUseCase;
 use Google\Service\Calendar\Event;
 use InvalidArgumentException;
 use Tests\Fakes\External\FakeGoogleCalendarService;

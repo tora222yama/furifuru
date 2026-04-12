@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Shift;
+namespace App\Services\Shift\UseCase;
 
-use App\Collections\ShiftEntries;
+use App\Services\Shift\Domain\ShiftEntries;
 
 final readonly class ShiftSyncResult
 {

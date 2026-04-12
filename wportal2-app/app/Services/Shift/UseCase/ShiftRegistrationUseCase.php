@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
+namespace App\Services\Shift\UseCase;
 
-use App\Collections\ShiftEntries;
-use App\Dto\Shift\ShiftRegistrationCommand;
-use App\Dto\Shift\ShiftSyncResult;
 use App\Enum\App\ECalendarSyncStatus;
+use App\Services\Shift\Domain\ShiftCalendarSyncer;
+use App\Services\Shift\Domain\ShiftEntries;
+use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 final readonly class ShiftRegistrationUseCase

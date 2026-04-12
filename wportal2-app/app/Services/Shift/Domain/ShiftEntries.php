@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Collections;
+namespace App\Services\Shift\Domain;
 
 use App\Exceptions\ShiftEntryValidationException;
-use App\ValueObjects\ShiftEntry;
 use ArrayIterator;
 use Countable;
 use InvalidArgumentException;

@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
+namespace App\Services\Shift\Domain;
 
-use App\Collections\ShiftEntries;
 use App\Enum\App\ECalendarSyncStatus;
 use Carbon\CarbonImmutable;
 

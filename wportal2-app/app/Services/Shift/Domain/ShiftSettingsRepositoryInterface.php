@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shift;
-
-use App\ValueObjects\ShiftStartSettings;
+namespace App\Services\Shift\Domain;
 
 interface ShiftSettingsRepositoryInterface
 {

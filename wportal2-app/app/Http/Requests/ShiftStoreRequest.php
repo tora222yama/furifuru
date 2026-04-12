@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\ValueObjects\ShiftStartSettings;
+use App\Services\Shift\Domain\ShiftStartSettings;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShiftStoreRequest extends FormRequest

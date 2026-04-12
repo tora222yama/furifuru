@@ -6,10 +6,10 @@ namespace App\Providers;
 
 use App\Services\External\GoogleCalendarService;
 use App\Services\External\GoogleCalendarServiceInterface;
-use App\Services\Shift\ShiftScheduleRepository;
-use App\Services\Shift\ShiftScheduleRepositoryInterface;
-use App\Services\Shift\ShiftSettingsRepository;
-use App\Services\Shift\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\Domain\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\Domain\ShiftSettingsRepositoryInterface;
+use App\Services\Shift\Infrastructure\ShiftScheduleRepository;
+use App\Services\Shift\Infrastructure\ShiftSettingsRepository;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
