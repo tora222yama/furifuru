@@ -8,9 +8,10 @@ use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiftStoreRequest;
 use App\Services\Shift\ShiftRegistrationUseCase;
-use App\Services\Shift\ShiftScheduleQueryService;
-use App\Services\Shift\ShiftSettingsRepository;
+use App\Services\Shift\ShiftScheduleRepositoryInterface;
+use App\Services\Shift\ShiftSettingsRepositoryInterface;
 use Carbon\CarbonImmutable;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -21,8 +22,8 @@ class ShiftScheduleController extends Controller
 {
     public function __construct(
         private readonly ShiftRegistrationUseCase $shiftRegistrationService,
-        private readonly ShiftScheduleQueryService $shiftScheduleQueryService,
-        private readonly ShiftSettingsRepository $shiftSettingsRepository,
+        private readonly ShiftScheduleRepositoryInterface $shiftScheduleRepository,
+        private readonly ShiftSettingsRepositoryInterface $shiftSettingsRepository,
     ) {}
 
     public function index(Request $request): Response
@@ -38,7 +39,7 @@ class ShiftScheduleController extends Controller
 
         return $this->render('ShiftSchedule/Index', [
             'currentMonth'  => $targetMonth->format('Y-m'),
-            'shiftEntries'  => fn () => $this->shiftScheduleQueryService->getMonthlyShifts(
+            'shiftEntries'  => fn () => $this->shiftScheduleRepository->getMonthlyShifts(
                 $trnUser->id,
                 $targetMonth,
             )->toArray(),
@@ -97,7 +98,11 @@ class ShiftScheduleController extends Controller
             return CarbonImmutable::now()->startOfMonth();
         }
 
-        $parsed = CarbonImmutable::createFromFormat('Y-m', $month);
+        try {
+            $parsed = CarbonImmutable::createFromFormat('Y-m', $month);
+        } catch (InvalidFormatException) {
+            return CarbonImmutable::now()->startOfMonth();
+        }
 
         if ($parsed === null) {
             return CarbonImmutable::now()->startOfMonth();

@@ -8,10 +8,12 @@ use App\Dto\Shift\ShiftRegistrationCommand;
 use App\Enum\App\ECalendarSyncStatus;
 use App\Services\Shift\ShiftCalendarSyncer;
 use App\Services\Shift\ShiftRegistrationUseCase;
+use App\ValueObjects\ShiftStartSettings;
 use Google\Service\Calendar\Event;
 use InvalidArgumentException;
 use Tests\Fakes\External\FakeGoogleCalendarService;
 use Tests\Fakes\Shift\FakeShiftScheduleRepository;
+use Tests\Fakes\Shift\FakeShiftSettingsRepository;
 use Tests\TestCase;
 
 final class ShiftRegistrationUseCaseTest extends TestCase
@@ -19,12 +21,14 @@ final class ShiftRegistrationUseCaseTest extends TestCase
     private function makeUseCase(
         ?FakeGoogleCalendarService $calendarService = null,
         ?FakeShiftScheduleRepository $repository = null,
+        ?FakeShiftSettingsRepository $settingsRepository = null,
     ): ShiftRegistrationUseCase {
         $calendarService ??= new FakeGoogleCalendarService;
 
         return new ShiftRegistrationUseCase(
             new ShiftCalendarSyncer($calendarService),
-            $repository ?? new FakeShiftScheduleRepository,
+            $repository         ?? new FakeShiftScheduleRepository,
+            $settingsRepository ?? new FakeShiftSettingsRepository,
         );
     }
 
@@ -34,7 +38,7 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $fakeRepository  = new FakeShiftScheduleRepository;
         $useCase         = $this->makeUseCase($fakeCalendar, $fakeRepository);
 
-        $command         = new ShiftRegistrationCommand(trnUserId: 1, authEmail: 'user@example.com', shifts: []);
+        $command         = new ShiftRegistrationCommand(trnUserId: 1, authEmail: 'user@example.com', shifts: [], startSettings: ShiftStartSettings::default());
 
         $result          = $useCase->execute($command);
 
@@ -54,7 +58,7 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $command                                                   = new ShiftRegistrationCommand(1, 'user@example.com', [
             ['date' => '2024-07-01', 'type' => 'office'],
             ['date' => '2024-07-02', 'type' => 'remote'],
-        ]);
+        ], ShiftStartSettings::default());
 
         $result                                                    = $useCase->execute($command);
 
@@ -81,9 +85,9 @@ final class ShiftRegistrationUseCaseTest extends TestCase
 
         [$allDayOffice, $timedOffice, $allDayRemote, $timedRemote] = $fakeCalendar->blockCalls;
 
-        $this->assertSame('出社', $allDayOffice['summary']);
+        $this->assertSame('オフィス出社', $allDayOffice['summary']);
         $this->assertSame('[SHIFT_SYNC]', $allDayOffice['descriptionPrefix']);
-        $this->assertSame('出勤（出社）', $timedOffice['summary']);
+        $this->assertSame('出勤（オフィス）', $timedOffice['summary']);
 
         $this->assertSame('在宅', $allDayRemote['summary']);
         $this->assertSame('[SHIFT_SYNC]', $allDayRemote['descriptionPrefix']);
@@ -98,7 +102,7 @@ final class ShiftRegistrationUseCaseTest extends TestCase
 
         $command         = new ShiftRegistrationCommand(1, 'user@example.com', [
             ['date' => '2024-07-10', 'type' => 'office'],
-        ]);
+        ], ShiftStartSettings::default());
 
         $result          = $useCase->execute($command);
 
@@ -138,7 +142,7 @@ final class ShiftRegistrationUseCaseTest extends TestCase
 
         $command              = new ShiftRegistrationCommand(1, 'user@example.com', [
             ['date' => '2024-07-01', 'type' => 'office'],
-        ]);
+        ], ShiftStartSettings::default());
 
         // null description のイベントが混在していても例外なく完了すること
         $result               = $useCase->execute($command);
@@ -163,7 +167,7 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $command         = new ShiftRegistrationCommand(1, 'user@example.com', [
             ['date' => '2024-07-31', 'type' => 'office'],
             ['date' => '2024-08-01', 'type' => 'remote'],
-        ]);
+        ], ShiftStartSettings::default());
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('All shifts must belong to the same month');
