@@ -49,6 +49,7 @@ export interface IMenu {
 }
 
 export const MenuList: IMenu[] = [
+  /*
   {
     menu: E_MENU.DASHBOARD,
     pages: E_PAGES.DASHBOARD,
@@ -57,13 +58,38 @@ export const MenuList: IMenu[] = [
     name: 'ダッシュボード',
     icon: E_ICON.DASHBOARD,
   },
+   */
   {
     menu: E_MENU.ATTENDANCE,
     pages: E_PAGES.ATTENDANCE,
     parent: E_MENU.INVALID,
     back: E_PAGES.INVALID,
-    name: '勤怠共有',
+    name: '勤怠',
     icon: E_ICON.ATTENDANCE,
+  },
+  {
+    menu: E_MENU.SHIFT_SCHEDULE,
+    pages: E_PAGES.SHIFT_SCHEDULE,
+    parent: E_MENU.INVALID,
+    back: E_PAGES.INVALID,
+    name: 'シフト表',
+    icon: E_ICON.CALENDAR_MONTH,
+  },
+  {
+    menu: E_MENU.REWARD,
+    pages: E_PAGES.REWARD,
+    parent: E_MENU.INVALID,
+    back: E_PAGES.INVALID,
+    name: '報酬',
+    icon: E_ICON.MILITARY_TECH,
+  },
+  {
+    menu: E_MENU.SHOP,
+    pages: E_PAGES.SHOP,
+    parent: E_MENU.INVALID,
+    back: E_PAGES.INVALID,
+    name: 'ショップ',
+    icon: E_ICON.SHOP,
   },
   {
     menu: E_MENU.SHUFFLE_LUNCH,
@@ -83,30 +109,6 @@ export const MenuList: IMenu[] = [
     icon: E_ICON.FAVORITE,
   },
    */
-  {
-    menu: E_MENU.SHOP,
-    pages: E_PAGES.SHOP,
-    parent: E_MENU.INVALID,
-    back: E_PAGES.INVALID,
-    name: 'ショップ',
-    icon: E_ICON.SHOP,
-  },
-  {
-    menu: E_MENU.REWARD,
-    pages: E_PAGES.REWARD,
-    parent: E_MENU.INVALID,
-    back: E_PAGES.INVALID,
-    name: '報酬',
-    icon: E_ICON.MILITARY_TECH,
-  },
-  {
-    menu: E_MENU.SHIFT_SCHEDULE,
-    pages: E_PAGES.SHIFT_SCHEDULE,
-    parent: E_MENU.INVALID,
-    back: E_PAGES.INVALID,
-    name: 'シフト管理',
-    icon: E_ICON.CALENDAR_MONTH,
-  },
   {
     menu: E_MENU.ATTENDANCE_ROOT,
     pages: E_PAGES.INVALID,
@@ -203,6 +205,7 @@ export const MenuList: IMenu[] = [
     name: '座席表',
     icon: E_ICON.ADMIN_PANEL,
   },
+  /*
   {
     menu: E_MENU.SAMPLE_INTERN_ROOT,
     pages: E_PAGES.INVALID,
@@ -267,6 +270,7 @@ export const MenuList: IMenu[] = [
     name: 'Lv--.Slackログ',
     icon: E_ICON.BUILD,
   },
+   */
 ];
 
 /**
