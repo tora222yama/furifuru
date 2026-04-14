@@ -81,6 +81,7 @@ enum EPages: string
     case SAMPLE_INTERN                     = 'sample_intern'; // インターン.
     case SAMPLE_INERTIA_DATA               = 'sample_inertia_data'; // Inertiaデータ.
     case SEATING_CHART                     = 'seating_chart'; // 座席表.
+    case QMART                             = 'qmart'; // Qマート.
 
     /**
      * routing時のinvokeパスの取得.
@@ -157,6 +158,7 @@ enum EPages: string
             self::SAMPLE_INTERN                  => '\App\Http\Controllers\Pages\Sample\InternController@invoke',
             self::SAMPLE_INERTIA_DATA            => '\App\Http\Controllers\Pages\Sample\InertiaDataController@invoke',
             self::SEATING_CHART                  => '\App\Http\Controllers\Pages\SeatingChartController@invoke',
+            self::QMART                          => '\App\Http\Controllers\Pages\QmartController@invoke',
 
             default                              => '',
         };

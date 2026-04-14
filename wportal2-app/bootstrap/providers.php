@@ -57,6 +57,11 @@ return [
     App\Providers\Models\App\Trn\TrnUserRewardServiceProvider::class,
     App\Providers\Models\App\Trn\TrnUserSlackProfileServiceProvider::class,
 
+    // Models.App.Trn.Qmart.
+    App\Providers\Models\App\Trn\TrnQmartItemServiceProvider::class,
+    App\Providers\Models\App\Trn\TrnQmartItemImageServiceProvider::class,
+    App\Providers\Models\App\Trn\TrnQmartCommentServiceProvider::class,
+
     // Usecases.
     App\Providers\Usecases\UsecasesShuffleLunchServiceProvider::class,
 ];
