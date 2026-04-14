@@ -32,6 +32,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { ArrowBackIos } from '@mui/icons-material';
 import { E_ICON, EIcon, getIconPath, getIconSize } from '@/script/Enum/EIcon';
 import { IPropsBase } from '@/script/System/System';
@@ -136,6 +137,8 @@ export const Icon: React.FC<IProps> = ({
       return <StarIcon sx={iconSx} onClick={onClick} />;
     case E_ICON.STAR_OUTLINE:
       return <StarOutlineIcon sx={iconSx} onClick={onClick} />;
+    case E_ICON.CALENDAR_MONTH:
+      return <CalendarMonthIcon sx={iconSx} onClick={onClick} />;
     default:
       break;
   }

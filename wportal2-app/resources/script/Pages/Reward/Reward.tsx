@@ -107,7 +107,7 @@ export const Reward: React.FC<IProps> = () => {
               textDecoration: 'underline',
             }}
             align="right"
-            color={E_COLOR.TEXT_BLUE}
+            color={E_COLOR.TEXT_GREEN}
           >
             報酬リスト
           </TypoText>

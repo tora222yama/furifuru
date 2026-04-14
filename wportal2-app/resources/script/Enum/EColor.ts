@@ -15,19 +15,23 @@ export const E_COLOR = {
   BLUE_LIGHT: '#D3ECF6',
 
   // 設定カラー.
-  PRIMARY_LIGHT: '#d3ecf6',
-  PRIMARY_MAIN: '#229bbf',
-  PRIMARY_DARK: '#0074a1',
+  PRIMARY_LIGHT: '#D7F0E3',
+  PRIMARY_MAIN: '#0F9D58',
+  PRIMARY_DARK: '#0B7B44',
   PRIMARY_TEXT: '#FFFFFF',
   SECONDARY_LIGHT: '#ffddc6',
   SECONDARY_MAIN: '#F47629',
   SECONDARY_DARK: '#EDC836',
   SECONDARY_TEXT: '#242424',
   BACKGROUND: '#EEEEEE',
+  BACKGROUND_GRAYOUT: '#9c9c9c',
 
   // 文字色.
   TEXT_PRIMARY: '#333333',
-  TEXT_BLUE: '#155B94',
+  TEXT_GREEN: '#0B7B44',
   TEXT_RED: '#DC3C31',
+
+  // ベータ.
+  BETA: '#0320c1',
 } as const;
 export type EColor = (typeof E_COLOR)[keyof typeof E_COLOR];

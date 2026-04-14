@@ -40,6 +40,7 @@ export const E_ICON = {
   SHOP: 'shop',
   STAR: 'star',
   STAR_OUTLINE: 'star_outline',
+  CALENDAR_MONTH: 'calendar_month',
 } as const;
 export type EIcon = (typeof E_ICON)[keyof typeof E_ICON];
 
@@ -84,6 +85,7 @@ export const getIconSize = (icon: EIcon): { w: number; h: number } => {
     case E_ICON.SHOP:
     case E_ICON.STAR:
     case E_ICON.STAR_OUTLINE:
+    case E_ICON.CALENDAR_MONTH:
       return { w: 20, h: 20 };
 
     case E_ICON.ARROW_LEFT:

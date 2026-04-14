@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { IPropsBase } from '@/script/System/System';
-import { IDate } from '@/script/Pages/AttendanceEdit/MonthCalendar/IDate';
-import { TypoText } from '@/script/Component/Typography/TypoText';
+import { IAttendanceDate } from '@/script/Pages/AttendanceEdit/MonthCalendar/DateArea';
 import { E_COLOR } from '@/script/Enum/EColor';
+import { TypoText } from '@/script/Component/Typography/TypoText';
 
 interface IProps extends IPropsBase {
-  date: IDate;
-  handleSelect: (date: IDate) => void;
+  date: IAttendanceDate;
+  handleSelect: (date: IAttendanceDate) => void;
 }
 export const DateCell: React.FC<IProps> = ({ sx, date, handleSelect }) => {
   const dateColor = date.inRange ? E_COLOR.BLACK : E_COLOR.GREY;
