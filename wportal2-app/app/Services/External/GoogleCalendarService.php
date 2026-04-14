@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\External;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Google\Exception;
 use Google\Service\Calendar\Event;
 use Google_Client;
@@ -15,10 +16,7 @@ use Google_Service_PeopleService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Google Calendarに対する処理.
- */
-class GoogleCalendarService
+class GoogleCalendarService implements GoogleCalendarServiceInterface
 {
     /**
      * 指定期間の予定を取得.
@@ -29,8 +27,8 @@ class GoogleCalendarService
      */
     public function listSchedule(
         string $calendarId,
-        Carbon $startDate,
-        Carbon $endDate
+        CarbonImmutable $startDate,
+        CarbonImmutable $endDate
     ): Collection {
         // サービス取得.
         $service = new Google_Service_Calendar(
@@ -73,47 +71,102 @@ class GoogleCalendarService
         Carbon $start,
         Carbon $end,
         string $summary,
-        string $location,
-        string $description,
+        string $location = '',
+        string $description = '',
+        ?string $descriptionPrefix = null,
+        ?string $transparency = null,
+        bool $allDay = false,
     ): void {
         // サービス取得.
-        $service    = new Google_Service_Calendar(
+        $service     = new Google_Service_Calendar(
             $this->getClient($authEmail)
         );
 
         // 全参加者のリスト.
-        $attendList = collect([$authEmail])
-            ->concat($calendarIdList);
+        $attendList  = collect([$authEmail])
+            ->concat($calendarIdList->toArray());
+
+        // 終日イベントは date フィールド（翌日が終了日）、通常イベントは dateTime フィールドを使用.
+        $startField  = $allDay
+            ? ['date' => $start->format('Y-m-d')]
+            : ['dateTime' => $start->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
+        $endField    = $allDay
+            ? ['date' => $end->copy()->addDay()->format('Y-m-d')]
+            : ['dateTime' => $end->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
 
         // 登録パラメータ.
-        $params     = new Google_Service_Calendar_Event([
+        $eventParams = [
             'summary'         => $summary,
-            'start'           => [
-                'dateTime' => $start->toIso8601String(),
-                'timeZone' => 'Asia/Tokyo',
-            ],
-            'end'             => [
-                'dateTime' => $end->toIso8601String(),
-                'timeZone' => 'Asia/Tokyo',
-            ],
+            'start'           => $startField,
+            'end'             => $endField,
             'location'        => $location,
-            'description'     => $description,
+            'description'     => $this->buildDescription($descriptionPrefix, $description),
             'guestsCanModify' => true,
-            'attendees'       => $attendList->map(function ($calendarId) {
-                return ['email' => $calendarId];
+            'attendees'       => $attendList->map(function ($calendarId) use ($authEmail) {
+                return $calendarId === $authEmail
+                    ? ['email' => $calendarId, 'responseStatus' => 'accepted']
+                    : ['email' => $calendarId];
             })->toArray(),
-        ]);
+        ];
+
+        $params      = new Google_Service_Calendar_Event($eventParams);
+
+        if ($transparency !== null) {
+            $params->setTransparency($transparency);
+        }
+
+        Log::debug('google calendar insert params: '.json_encode($params->toSimpleObject()));
 
         // 登録を実施.
         // 結果を取得.
-        $result     = $service->events->insert(
+        $result      = $service->events->insert(
             $authEmail,
             $params,
             [
                 'sendUpdates' => 'all',
             ]
         );
-        Log::info(print_r($result, true));
+        Log::info('google calendar insert result: transparency='.$result->getTransparency().' id='.$result->getId());
+    }
+
+    /**
+     * 指定期間の予定を削除（任意フィルタで対象を限定可能）。
+     *
+     * @param  callable(Event):bool|null  $filter
+     *
+     * @throws Exception
+     */
+    public function deleteSchedules(string $calendarId, CarbonImmutable $startDate, CarbonImmutable $endDate, ?callable $filter = null): void
+    {
+        $service = new Google_Service_Calendar(
+            $this->getClient($calendarId)
+        );
+
+        $events  = $this->listSchedule($calendarId, $startDate, $endDate);
+        if ($filter !== null) {
+            $events = $events->filter(static fn (Event $event): bool => (bool) $filter($event));
+        }
+
+        foreach ($events as $event) {
+            try {
+                $service->events->delete(
+                    $calendarId,
+                    $event->getId(),
+                    ['sendUpdates' => 'all']
+                );
+            } catch (\Exception $e) {
+                Log::warning('google calendar delete failed: '.$e->getMessage());
+            }
+        }
+    }
+
+    private function buildDescription(?string $prefix, string $description): string
+    {
+        if ($prefix === null || $prefix === '') {
+            return $description;
+        }
+
+        return trim($prefix.' '.$description);
     }
 
     /**

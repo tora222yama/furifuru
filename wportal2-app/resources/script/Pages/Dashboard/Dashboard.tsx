@@ -4,5 +4,5 @@ import { Page } from '@/script/Pages/Page';
 
 interface IProps extends IPropsBase {}
 export const Dashboard: React.FC<IProps> = () => {
-  return <Page>※Web本部ポータル2.0へ移行中です</Page>;
+  return <Page>※Web本部ポータル3.0へ移行中です</Page>;
 };
