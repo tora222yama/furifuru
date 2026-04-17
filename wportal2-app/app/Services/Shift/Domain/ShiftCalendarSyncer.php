@@ -101,7 +101,7 @@ final readonly class ShiftCalendarSyncer
     }
 
     /** @param Collection<int, string> $calendarIdList */
-    private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'opaque'): bool
+    private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'transparent'): bool
     {
         $start   = $date->copy()->startOfDay();
         $summary = $this->summaryForType($type, true);
