@@ -196,7 +196,7 @@ final class SyncShiftCalendarUseCaseTest extends TestCase
         [$allDay, $timed] = $fakeCalendar->blockCalls;
 
         $this->assertSame('休暇', $allDay['summary']);
-        $this->assertSame('[SHIFT_SYNC]', $allDay['descriptionPrefix']);
+        $this->assertSame('shift_sync', $allDay['source']);
 
         $this->assertSame('休暇', $timed['summary']);
         $this->assertSame('05:00', $timed['start']->format('H:i'));

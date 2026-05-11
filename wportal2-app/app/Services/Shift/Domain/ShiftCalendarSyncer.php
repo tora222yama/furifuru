@@ -10,6 +10,7 @@ use App\Services\Shift\UseCase\ShiftSyncResult;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Google\Service\Calendar\Event;
+use Google\Service\Calendar\EventExtendedProperties;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
@@ -121,12 +122,10 @@ final readonly class ShiftCalendarSyncer
                 $start,
                 $start,
                 $summary,
-                '', // location
-                '', // description
-                ShiftScheduleConstant::MARKER, // descriptionPrefix
-                $transparency,
-                true, // allDay
-                $eventType,
+                transparency: $transparency,
+                allDay: true,
+                eventType: $eventType,
+                source: ShiftScheduleConstant::SOURCE_EXTENDED_VALUE,
             );
 
             return true;
@@ -170,8 +169,8 @@ final readonly class ShiftCalendarSyncer
                 $start,
                 $end,
                 $summary,
-                descriptionPrefix: ShiftScheduleConstant::MARKER,
                 transparency: $transparency,
+                source: ShiftScheduleConstant::SOURCE_EXTENDED_VALUE,
             );
 
             return true;
@@ -184,6 +183,20 @@ final readonly class ShiftCalendarSyncer
 
     private function isShiftEvent(Event $event): bool
     {
+        // 新方式: extendedProperties.shared['source'] = 'shift_sync' で判定
+        $extProps = $event->getExtendedProperties();
+        // getExtendedProperties() は PHPDoc 上 non-nullable だが実際は null を返す場合があるため instanceof で確認
+        // @phpstan-ignore instanceof.alwaysTrue
+        $shared   = $extProps instanceof EventExtendedProperties ? $extProps->getShared() : [];
+
+        if (($shared[ShiftScheduleConstant::SOURCE_EXTENDED_KEY] ?? null)
+            === ShiftScheduleConstant::SOURCE_EXTENDED_VALUE
+        ) {
+            return true;
+        }
+
+        // 旧方式: description に '[SHIFT_SYNC]' マーカーを埋め込んでいた旧イベントも削除対象とする。
+        // 全イベントが extendedProperties ベースに移行完了したら、以下の行は削除してよい。
         return str_contains((string) $event->getDescription(), ShiftScheduleConstant::MARKER);
     }
 

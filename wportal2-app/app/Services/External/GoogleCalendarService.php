@@ -77,6 +77,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
         ?string $transparency = null,
         bool $allDay = false,
         ?string $eventType = null,
+        ?string $source = null,
     ): void {
         // サービス取得.
         $service     = new Google_Service_Calendar(
@@ -109,13 +110,17 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
                     : ['email' => $calendarId];
             })->toArray(),
         ];
-        // eventTypeが指定されていればextendedProperties.sharedにセット
+
+        // extendedProperties.shared に source / eventType を設定
+        $sharedProps = [];
+        if ($source !== null) {
+            $sharedProps['source'] = $source;
+        }
         if ($eventType !== null) {
-            $eventParams['extendedProperties'] = [
-                'shared' => [
-                    'eventType' => $eventType,
-                ],
-            ];
+            $sharedProps['eventType'] = $eventType;
+        }
+        if ($sharedProps !== []) {
+            $eventParams['extendedProperties'] = ['shared' => $sharedProps];
         }
 
         $params      = new Google_Service_Calendar_Event($eventParams);

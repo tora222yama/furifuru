@@ -23,7 +23,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
     /** @var list<Event> フィルタを通過し削除対象となったイベント */
     public array $deletedEvents     = [];
 
-    /** @var array<int, array{authEmail:string,start:Carbon,end:Carbon,summary:string,location:string,description:string,descriptionPrefix:?string,transparency:?string,allDay:bool,eventType:?string}> */
+    /** @var array<int, array{authEmail:string,start:Carbon,end:Carbon,summary:string,location:string,description:string,descriptionPrefix:?string,transparency:?string,allDay:bool,eventType:?string,source:?string}> */
     public array $blockCalls        = [];
 
     /** @var list<int> */
@@ -101,6 +101,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
         ?string $transparency = null,
         bool $allDay = false,
         ?string $eventType = null,
+        ?string $source = null,
     ): void {
         $index              = count($this->blockCalls);
         $this->blockCalls[] = [
@@ -114,6 +115,7 @@ final class FakeGoogleCalendarService implements GoogleCalendarServiceInterface
             'transparency'      => $transparency,
             'allDay'            => $allDay,
             'eventType'         => $eventType,
+            'source'            => $source,
         ];
 
         if (in_array($index, $this->throwOnBlockCallIndices, true)) {

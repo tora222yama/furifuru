@@ -33,6 +33,7 @@ interface GoogleCalendarServiceInterface
         ?string $transparency = null,
         bool $allDay = false,
         ?string $eventType = null,
+        ?string $source = null,
     ): void;
 
     /**
