@@ -103,8 +103,16 @@ final readonly class ShiftCalendarSyncer
     /** @param Collection<int, string> $calendarIdList */
     private function createAllDayEvent(string $authEmail, Collection $calendarIdList, Carbon $date, ShiftType $type, string $transparency = 'transparent'): bool
     {
-        $start   = $date->copy()->startOfDay();
-        $summary = $this->summaryForType($type, true);
+        $start     = $date->copy()->startOfDay();
+        $summary   = $this->summaryForType($type, true);
+
+        // eventType判定
+        $eventType = match ($type) {
+            ShiftType::Remote       => 'other',
+            ShiftType::Holiday      => 'rest',
+            ShiftType::BusinessTrip => 'bizTrip',
+            ShiftType::Office       => null, // オフィス出社は設定無し
+        };
 
         try {
             $this->googleCalendarService->blockSchedule(
@@ -113,9 +121,12 @@ final readonly class ShiftCalendarSyncer
                 $start,
                 $start,
                 $summary,
-                descriptionPrefix: ShiftScheduleConstant::MARKER,
-                transparency: $transparency,
-                allDay: true,
+                '', // location
+                '', // description
+                ShiftScheduleConstant::MARKER, // descriptionPrefix
+                $transparency,
+                true, // allDay
+                $eventType,
             );
 
             return true;

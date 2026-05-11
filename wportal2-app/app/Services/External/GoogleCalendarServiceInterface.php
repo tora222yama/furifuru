@@ -32,6 +32,7 @@ interface GoogleCalendarServiceInterface
         ?string $descriptionPrefix = null,
         ?string $transparency = null,
         bool $allDay = false,
+        ?string $eventType = null,
     ): void;
 
     /**
