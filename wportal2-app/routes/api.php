@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\ShiftScheduleApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/**
+ * シフト管理 API
+ *
+ * 認証: Sanctum パーソナルアクセストークン（Authorization: Bearer <token>）
+ * 用途: GAS など外部クライアントからのシフトCSV取得
+ * 詳細: document/features/SHIFT_SCHEDULE_API.md を参照
+ */
+Route::middleware('auth:sanctum')->prefix('shift_schedule')->group(function () {
+    // 全ユーザーの月次シフト CSV ダウンロード
+    // GET /api/shift_schedule/export?month=YYYY-MM
+    Route::get('/export', [ShiftScheduleApiController::class, 'export']);
 });
 
 // ヘルスチェック用
