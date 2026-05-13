@@ -170,6 +170,7 @@ final readonly class ShiftCalendarSyncer
                 $end,
                 $summary,
                 transparency: $transparency,
+                eventType: 'outOfOffice',
                 source: ShiftScheduleConstant::SOURCE_EXTENDED_VALUE,
             );
 

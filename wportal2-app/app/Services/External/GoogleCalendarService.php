@@ -80,50 +80,66 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
         ?string $source = null,
     ): void {
         // サービス取得.
-        $service     = new Google_Service_Calendar(
+        $service            = new Google_Service_Calendar(
             $this->getClient($authEmail)
         );
 
         // 全参加者のリスト.
-        $attendList  = collect([$authEmail])
+        $attendList         = collect([$authEmail])
             ->concat($calendarIdList->toArray());
 
         // 終日イベントは date フィールド（翌日が終了日）、通常イベントは dateTime フィールドを使用.
-        $startField  = $allDay
+        $startField         = $allDay
             ? ['date' => $start->format('Y-m-d')]
             : ['dateTime' => $start->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
-        $endField    = $allDay
+        $endField           = $allDay
             ? ['date' => $end->copy()->addDay()->format('Y-m-d')]
             : ['dateTime' => $end->toIso8601String(), 'timeZone' => 'Asia/Tokyo'];
 
         // 登録パラメータ.
-        $eventParams = [
+        $eventParams        = [
             'summary'         => $summary,
             'start'           => $startField,
             'end'             => $endField,
             'location'        => $location,
             'description'     => $this->buildDescription($descriptionPrefix, $description),
             'guestsCanModify' => true,
-            'attendees'       => $attendList->map(function ($calendarId) use ($authEmail) {
+        ];
+
+        // outOfOffice イベントは attendees フィールドを含めると malformedOutOfOfficeEvent エラーになるため除外する
+        if ($eventType !== 'outOfOffice') {
+            $eventParams['attendees'] = $attendList->map(function ($calendarId) use ($authEmail) {
                 return $calendarId === $authEmail
                     ? ['email' => $calendarId, 'responseStatus' => 'accepted']
                     : ['email' => $calendarId];
-            })->toArray(),
-        ];
+            })->toArray();
+        }
 
-        // extendedProperties.shared に source / eventType を設定
-        $sharedProps = [];
+        // extendedProperties.shared に source と独自分類値を設定
+        $sharedProps        = [];
         if ($source !== null) {
             $sharedProps['source'] = $source;
         }
-        if ($eventType !== null) {
+
+        // Google Calendar API の公式 eventType 値（outOfOffice 等）はトップレベルに設定する。
+        // 独自の分類値（other / rest / bizTrip 等）は公式フィールドではないため extendedProperties.shared に保存する。
+        $officialEventTypes = ['default', 'focusTime', 'outOfOffice', 'workingLocation', 'birthday'];
+        $isOfficialType     = $eventType !== null && in_array($eventType, $officialEventTypes, true);
+
+        if ($eventType !== null && ! $isOfficialType) {
             $sharedProps['eventType'] = $eventType;
         }
+
         if ($sharedProps !== []) {
             $eventParams['extendedProperties'] = ['shared' => $sharedProps];
         }
 
-        $params      = new Google_Service_Calendar_Event($eventParams);
+        // 公式 eventType のみトップレベルに設定
+        if ($isOfficialType) {
+            $eventParams['eventType'] = $eventType;
+        }
+
+        $params             = new Google_Service_Calendar_Event($eventParams);
 
         if ($transparency !== null) {
             $params->setTransparency($transparency);
@@ -133,7 +149,7 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
 
         // 登録を実施.
         // 結果を取得.
-        $result      = $service->events->insert(
+        $result             = $service->events->insert(
             $authEmail,
             $params,
             [

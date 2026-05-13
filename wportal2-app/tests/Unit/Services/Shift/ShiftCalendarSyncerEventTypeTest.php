@@ -48,9 +48,10 @@ class ShiftCalendarSyncerEventTypeTest extends TestCase
         $this->assertSame($expectedEventType, $allDayCall['eventType']);
         $this->assertSame('shift_sync', $allDayCall['source'], '終日予定にsource=shift_syncが設定されること');
 
-        // 時刻指定予定にも source が設定されていること
+        // 時刻指定予定にも source / eventType が設定されていること
         $timedCall  = collect($fake->blockCalls)->firstWhere('allDay', false);
         $this->assertNotNull($timedCall, '時刻指定予定のblockSchedule呼び出しが存在すること');
         $this->assertSame('shift_sync', $timedCall['source'], '時刻指定予定にもsource=shift_syncが設定されること');
+        $this->assertSame('outOfOffice', $timedCall['eventType'], '時刻指定予定はoutOfOffice（不在）で登録されること');
     }
 }
