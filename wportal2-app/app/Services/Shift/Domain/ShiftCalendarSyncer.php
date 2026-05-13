@@ -160,7 +160,8 @@ final readonly class ShiftCalendarSyncer
             $end        = $date->copy()->setTime($endTime['hour'], $endTime['minute']);
         }
 
-        $summary = $this->summaryForType($type, false);
+        $summary   = $this->summaryForType($type, false);
+        $eventType = $type === ShiftType::Holiday ? 'rest' : 'outOfOffice';
 
         try {
             $this->googleCalendarService->blockSchedule(
@@ -170,7 +171,7 @@ final readonly class ShiftCalendarSyncer
                 $end,
                 $summary,
                 transparency: $transparency,
-                eventType: 'outOfOffice',
+                eventType: $eventType,
                 source: ShiftScheduleConstant::SOURCE_EXTENDED_VALUE,
             );
 
