@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleCalendarService implements GoogleCalendarServiceInterface
 {
+    /** @var array<string, Google_Client> */
+    private array $clientCache = [];
+
     /**
      * 指定期間の予定を取得.
      *
@@ -206,6 +209,10 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
      */
     private function getClient(string $executorCalendarId): Google_Client
     {
+        if (isset($this->clientCache[$executorCalendarId])) {
+            return $this->clientCache[$executorCalendarId];
+        }
+
         // 認証パラメータ.
         $rawData            = (string) config('services.google.calendar_sa');
         $jsonKey            = (array) json_decode($rawData, true);
@@ -224,6 +231,8 @@ class GoogleCalendarService implements GoogleCalendarServiceInterface
         $client->setScopes($scope);
         $client->setAuthConfig($jsonKey);
         $client->setConfig('subject', $executorCalendarId);
+
+        $this->clientCache[$executorCalendarId] = $client;
 
         return $client;
     }
