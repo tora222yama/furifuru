@@ -31,7 +31,7 @@ type StatusConfig = {
 
 const SYNC_STATUS_CONFIG: Record<DisplaySyncStatus, StatusConfig> = {
   unregistered: { label: '未反映', color: 'default' },
-  unsaved: { label: '未反映', color: 'warning' },
+  unsaved: { label: '未反映', color: 'default' },
   pending: { label: '未反映', color: 'default' },
   synced: { label: '反映', color: 'success' },
   failed: { label: '反映失敗', color: 'error' },

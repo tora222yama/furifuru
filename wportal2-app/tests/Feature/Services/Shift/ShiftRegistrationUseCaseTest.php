@@ -86,11 +86,11 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         [$allDayOffice, $timedOffice, $allDayRemote, $timedRemote] = $fakeCalendar->blockCalls;
 
         $this->assertSame('オフィス出社', $allDayOffice['summary']);
-        $this->assertSame('[SHIFT_SYNC]', $allDayOffice['descriptionPrefix']);
+        $this->assertSame('shift_sync', $allDayOffice['source']);
         $this->assertSame('出勤（オフィス）', $timedOffice['summary']);
 
         $this->assertSame('在宅', $allDayRemote['summary']);
-        $this->assertSame('[SHIFT_SYNC]', $allDayRemote['descriptionPrefix']);
+        $this->assertSame('shift_sync', $allDayRemote['source']);
         $this->assertSame('出勤（在宅）', $timedRemote['summary']);
     }
 
@@ -123,20 +123,20 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertCount(2, $fakeCalendar->blockCalls);
     }
 
-    public function test_execute_does_not_throw_when_calendar_has_null_description_event(): void
+    public function test_execute_does_not_throw_when_calendar_has_null_extended_properties_event(): void
     {
-        // description が null のイベント（説明なしの Google Calendar 予定）と
-        // SHIFT_SYNC マーカー付きのシフトイベントが混在するケースを再現する。
-        // 修正前は isShiftEvent 内の str_contains(null, ...) が TypeError を投げて
-        // 削除処理全体がスキップされ、シフトが重複登録される不具合があった。
-        $nullDescriptionEvent = new Event;
-        // description を設定しない → getDescription() が null を返す
+        // extendedProperties が null のイベント（外部から登録された通常の Google Calendar 予定）と
+        // シフト同期イベントが混在するケースを再現する。
+        $nullExtPropsEvent    = new Event;
+        // extendedProperties を設定しない → getExtendedProperties() が null を返す
 
         $shiftEvent           = new Event;
-        $shiftEvent->setDescription('[SHIFT_SYNC] 終日');
+        $extProps             = new \Google\Service\Calendar\EventExtendedProperties;
+        $extProps->setShared(['source' => 'shift_sync']);
+        $shiftEvent->setExtendedProperties($extProps);
 
         $fakeCalendar         = new FakeGoogleCalendarService;
-        $fakeCalendar->seedListScheduleEvents([$nullDescriptionEvent, $shiftEvent]);
+        $fakeCalendar->seedListScheduleEvents([$nullExtPropsEvent, $shiftEvent]);
         $fakeRepository       = new FakeShiftScheduleRepository;
         $useCase              = $this->makeUseCase($fakeCalendar, $fakeRepository);
 
@@ -144,15 +144,19 @@ final class ShiftRegistrationUseCaseTest extends TestCase
             ['date' => '2024-07-01', 'type' => 'office'],
         ], ShiftStartSettings::default());
 
-        // null description のイベントが混在していても例外なく完了すること
+        // extendedProperties が null のイベントが混在していても例外なく完了すること
         $result               = $useCase->execute($command);
 
         $this->assertSame(1, $result->successes->count());
         $this->assertSame(0, $result->failures->count());
 
-        // SHIFT_SYNC マーカー付きのイベントのみ削除対象となっていること
+        // source=shift_sync のイベントのみ削除対象となっていること
         $this->assertCount(1, $fakeCalendar->deletedEvents);
-        $this->assertStringContainsString('[SHIFT_SYNC]', (string) $fakeCalendar->deletedEvents[0]->getDescription());
+        $extProps             = $fakeCalendar->deletedEvents[0]->getExtendedProperties();
+        // getExtendedProperties() は PHPDoc 上 non-nullable だが実際は null を返す場合があるため instanceof で確認
+        // @phpstan-ignore instanceof.alwaysTrue
+        $deletedShared        = $extProps instanceof \Google\Service\Calendar\EventExtendedProperties ? $extProps->getShared() : [];
+        $this->assertSame('shift_sync', $deletedShared['source'] ?? null);
 
         // 新規シフトは正常に登録されていること（1 shift x (all-day + timed)）
         $this->assertCount(2, $fakeCalendar->blockCalls);

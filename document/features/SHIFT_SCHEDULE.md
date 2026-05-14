@@ -211,8 +211,8 @@ ShiftScheduleQueryService::getMonthlyShifts(trnUserId, targetMonth)
 | 種類 | 時間帯 | 備考 |
 |---|---|---|
 | 終日イベント | 終日 | カレンダー上の視認性向上のため |
-| 時刻付きイベント（休暇以外） | `startTime` 〜 `startTime + 5h` | ブロック用。`startTime` は `ShiftStartSettings` で設定 |
-| 時刻付きイベント（休暇） | 09:00〜18:00 | ブロック用（固定） |
+| 時刻付きイベント（休暇以外） | `startTime` 〜 `startTime + 5h` | ブロック用。`startTime` は `ShiftStartSettings` で設定 。`eventType: outOfOffice` |
+| 時刻付きイベント（休暇） | 05:00〜22:00 | ブロック用（固定）。`eventType: rest`（終日イベントと同じ） |
 
 **シフトイベントの識別方法**
 description の先頭に `[SHIFT_SYNC]`（`ShiftScheduleConstant::MARKER`）を付与する。
