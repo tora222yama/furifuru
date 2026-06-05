@@ -3,6 +3,10 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 
+type PageModule = {
+  default: React.ComponentType;
+};
+
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob<{ default: React.ComponentType }>(
