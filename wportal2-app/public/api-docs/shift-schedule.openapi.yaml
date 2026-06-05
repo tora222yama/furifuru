@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: Shift Schedule API
+  version: 1.0.0
+  description: |
+    GAS などの外部クライアント向けに、全ユーザーの月次シフトを取得する API。
+servers:
+  - url: /
+paths:
+  /api/shift_schedule/export:
+    get:
+      summary: 月次シフト取得
+      description: 全ユーザーの指定月シフトを JSON 形式で返却します。
+      operationId: exportShiftSchedule
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: month
+          required: false
+          schema:
+            type: string
+            pattern: '^\\d{4}-\\d{2}$'
+          description: 対象月 (YYYY-MM)。省略時は当月。
+      responses:
+        '200':
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - month
+                  - generatedAt
+                  - dates
+                  - users
+                  - meta
+                properties:
+                  month:
+                    type: string
+                    example: '2026-05'
+                  generatedAt:
+                    type: string
+                    format: date-time
+                  dates:
+                    type: array
+                    items:
+                      type: string
+                      format: date
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - name
+                        - email
+                        - shifts
+                      properties:
+                        name:
+                          type: string
+                          example: 山田 太郎
+                        email:
+                          type: string
+                          format: email
+                          example: yamada@example.com
+                        shifts:
+                          type: object
+                          additionalProperties:
+                            type: object
+                            required:
+                              - shift
+                            properties:
+                              shift:
+                                type: string
+                                example: 出社
+                  meta:
+                    type: object
+                    required:
+                      - userCount
+                      - dateCount
+                    properties:
+                      userCount:
+                        type: integer
+                        example: 42
+                      dateCount:
+                        type: integer
+                        example: 31
+              example:
+                month: '2026-05'
+                generatedAt: '2026-05-18T12:34:56+09:00'
+                dates:
+                  - '2026-05-01'
+                  - '2026-05-02'
+                users:
+                  - name: 山田 太郎
+                    email: yamada@example.com
+                    shifts:
+                      '2026-05-01':
+                        shift: 出社
+                      '2026-05-02':
+                        shift: 在宅
+                meta:
+                  userCount: 1
+                  dateCount: 31
+        '401':
+          description: 未認証
+        '403':
+          description: 権限不足（ability 不一致）
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum PAT

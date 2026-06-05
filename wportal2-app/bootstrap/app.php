@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'ability'   => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+            'abilities' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+        ]);
+
         $middleware->append([
             // アクティビティログの出力.
             \App\Http\Middleware\ActivityLog::class,

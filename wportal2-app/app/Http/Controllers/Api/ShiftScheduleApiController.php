@@ -9,8 +9,8 @@ use App\Services\Shift\UseCase\ExportMonthlyShiftCommand;
 use App\Services\Shift\UseCase\ExportMonthlyShiftUseCase;
 use Carbon\CarbonImmutable;
 use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * シフトスケジュール API コントローラー
@@ -25,7 +25,7 @@ class ShiftScheduleApiController extends Controller
     ) {}
 
     /**
-     * 全ユーザーの月次シフトを CSV 形式で返す。
+     * 全ユーザーの月次シフトを JSON 形式で返す。
      *
      * - 認証: Bearer トークン（Sanctum パーソナルアクセストークン）
      * - クエリパラメータ:
@@ -33,32 +33,42 @@ class ShiftScheduleApiController extends Controller
      *
      * @example GET /api/shift_schedule/export?month=2026-05
      */
-    public function export(Request $request): StreamedResponse
+    public function export(Request $request): JsonResponse
     {
         $targetMonth = $this->resolveMonth($request->query('month'));
         $command     = new ExportMonthlyShiftCommand($targetMonth);
-        $fileName    = "shift_{$targetMonth->format('Y-m')}.csv";
+        $rows        = iterator_to_array($this->exportUseCase->execute($command), false);
 
-        return new StreamedResponse(
-            function () use ($command): void {
-                $handle = fopen('php://output', 'w');
-                assert($handle !== false);
+        $header      = $rows[0] ?? [];
+        $dateColumns = array_slice($header, 2);
 
-                // BOM for Excel UTF-8 recognition
-                fwrite($handle, "\xEF\xBB\xBF");
+        $records     = array_map(function (array $row) use ($dateColumns): array {
+            $shiftValues = array_slice($row, 2);
 
-                foreach ($this->exportUseCase->execute($command) as $row) {
-                    fputcsv($handle, $row);
-                }
+            $shifts      = [];
+            foreach ($dateColumns as $index => $date) {
+                $shifts[$date] = [
+                    'shift' => $shiftValues[$index] ?? '',
+                ];
+            }
 
-                fclose($handle);
-            },
-            200,
-            [
-                'Content-Type'        => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+            return [
+                'name'   => $row[0] ?? '',
+                'email'  => $row[1] ?? '',
+                'shifts' => $shifts,
+            ];
+        }, array_slice($rows, 1));
+
+        return response()->json([
+            'month'       => $targetMonth->format('Y-m'),
+            'generatedAt' => CarbonImmutable::now()->toIso8601String(),
+            'dates'       => $dateColumns,
+            'users'       => $records,
+            'meta'        => [
+                'userCount' => count($records),
+                'dateCount' => count($dateColumns),
             ],
-        );
+        ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     private function resolveMonth(mixed $month): CarbonImmutable

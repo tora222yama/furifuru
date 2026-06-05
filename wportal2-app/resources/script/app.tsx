@@ -3,17 +3,21 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 
+type PageModule = {
+  default: React.ComponentType;
+};
+
 createInertiaApp({
   resolve: name => {
-    const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true });
+    const pages = import.meta.glob('./Pages/**/*.tsx', {
+      eager: true,
+    }) as Record<string, PageModule>;
     return pages[`./Pages/${name}.tsx`];
   },
   setup({ el, App, props }) {
     if (import.meta.env.VITE_APP_ENV === 'production') {
-      // eslint-disable-next-line react/jsx-props-no-spreading
       hydrateRoot(el, <App {...props} />);
     } else {
-      // eslint-disable-next-line react/jsx-props-no-spreading
       createRoot(el).render(<App {...props} />);
     }
   },

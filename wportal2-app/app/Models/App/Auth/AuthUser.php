@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @mixin AuthUser
@@ -19,7 +20,7 @@ use Illuminate\Notifications\Notifiable;
 class AuthUser extends Authenticatable
 {
     /** @use HasFactory<AuthUserFactory> */
-    use EagerLoadHelper, HasFactory, Notifiable;
+    use EagerLoadHelper, HasApiTokens, HasFactory, Notifiable;
 
     protected $table    = 'auth_user';
 
