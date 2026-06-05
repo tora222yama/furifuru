@@ -9,9 +9,10 @@ type PageModule = {
 
 createInertiaApp({
   resolve: name => {
-    const pages = import.meta.glob('./Pages/**/*.tsx', {
-      eager: true,
-    }) as Record<string, PageModule>;
+    const pages = import.meta.glob<{ default: React.ComponentType }>(
+      './Pages/**/*.tsx',
+      { eager: true },
+    );
     return pages[`./Pages/${name}.tsx`];
   },
   setup({ el, App, props }) {
