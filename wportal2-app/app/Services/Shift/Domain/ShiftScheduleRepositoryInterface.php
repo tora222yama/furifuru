@@ -16,6 +16,12 @@ interface ShiftScheduleRepositoryInterface
     public function replaceMonthlyShifts(int $trnUserId, ShiftEntries $shifts): void;
 
     /**
+     * 指定シフトのみを PENDING 状態で登録・更新する。
+     * トランザクション内で呼び出すこと。
+     */
+    public function upsertShifts(int $trnUserId, ShiftEntries $shifts): void;
+
+    /**
      * 指定月のシフト一覧をDBから取得する。
      */
     public function getMonthlyShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries;

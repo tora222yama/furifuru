@@ -47,6 +47,29 @@ final readonly class ShiftCalendarSyncer
     }
 
     /**
+     * 渡されたシフトの日付だけ Google Calendar を削除し、再作成する.
+     */
+    public function replaceCalendarDates(
+        string $authEmail,
+        ShiftEntries $shifts,
+        ?ShiftStartSettings $startSettings = null,
+    ): ShiftSyncResult {
+        $deletedDates = [];
+
+        foreach ($shifts as $shift) {
+            $dateKey                = $shift->date->toDateString();
+            if (isset($deletedDates[$dateKey])) {
+                continue;
+            }
+
+            $this->deleteGoogleCalendarDay($authEmail, $shift->date->toCarbonImmutable());
+            $deletedDates[$dateKey] = true;
+        }
+
+        return $this->syncShifts($authEmail, $shifts, $startSettings ?? ShiftStartSettings::default());
+    }
+
+    /**
      * @param  array{start:string,end:string}  $monthRange
      *
      * @throws InvalidArgumentException
@@ -72,6 +95,20 @@ final readonly class ShiftCalendarSyncer
             );
         } catch (Throwable $e) {
             Log::warning('google calendar month delete failed: '.$e->getMessage());
+        }
+    }
+
+    private function deleteGoogleCalendarDay(string $authEmail, CarbonImmutable $date): void
+    {
+        try {
+            $this->googleCalendarService->deleteSchedules(
+                $authEmail,
+                $date->startOfDay(),
+                $date->endOfDay(),
+                fn (Event $event): bool => $this->isShiftEvent($event),
+            );
+        } catch (Throwable $e) {
+            Log::warning('google calendar day delete failed: '.$e->getMessage());
         }
     }
 

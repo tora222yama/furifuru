@@ -50,6 +50,13 @@ interface IProps extends IPropsBase {
   startSettings?: ShiftStartSettings;
 }
 
+const defaultStartSettings = (
+  settings?: ShiftStartSettings,
+): ShiftStartSettings => ({
+  officeStartTime: settings?.officeStartTime ?? '09:00',
+  remoteStartTime: settings?.remoteStartTime ?? '09:00',
+});
+
 export const MonthCalendar: React.FC<IProps> = ({
   sx,
   shiftEntries,
@@ -60,14 +67,20 @@ export const MonthCalendar: React.FC<IProps> = ({
   const displaySnackbar = useSnackbar();
 
   const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const initialStartSettings = useMemo(
+    () => defaultStartSettings(startSettings),
+    [startSettings],
+  );
 
   // 在宅・出社の勤務開始時刻（9:00〜11:00、30分刻り）
   const [officeStartTime, setOfficeStartTime] = React.useState<ShiftStartTime>(
-    (startSettings?.officeStartTime as ShiftStartTime) ?? '09:00',
+    initialStartSettings.officeStartTime as ShiftStartTime,
   );
   const [remoteStartTime, setRemoteStartTime] = React.useState<ShiftStartTime>(
-    (startSettings?.remoteStartTime as ShiftStartTime) ?? '09:00',
+    initialStartSettings.remoteStartTime as ShiftStartTime,
   );
+  const [serverStartSettings, setServerStartSettings] =
+    React.useState<ShiftStartSettings>(initialStartSettings);
 
   const [currentDate, setCurrentDate] = useState(() => {
     if (currentMonth) {
@@ -118,13 +131,26 @@ export const MonthCalendar: React.FC<IProps> = ({
 
   // ── 未保存変更の検知 ──
   const hasUnsavedChanges = useCallback((): boolean => {
+    if (
+      officeStartTime !== serverStartSettings.officeStartTime ||
+      remoteStartTime !== serverStartSettings.remoteStartTime
+    ) {
+      return true;
+    }
+
     for (const [date, localType] of Object.entries(shiftData)) {
       if (localType !== serverShiftData[date]) {
         return true;
       }
     }
     return false;
-  }, [shiftData, serverShiftData]);
+  }, [
+    officeStartTime,
+    remoteStartTime,
+    serverStartSettings,
+    shiftData,
+    serverShiftData,
+  ]);
 
   // タブ閉じ・リロード時の離脱確認
   useEffect(() => {
@@ -288,6 +314,11 @@ export const MonthCalendar: React.FC<IProps> = ({
   };
 
   const handleSubmitConfirm = () => {
+    if (!hasUnsavedChanges()) {
+      displaySnackbar('変更されたシフトがありません');
+      return;
+    }
+
     setConfirmOpen(true);
   };
 
@@ -296,28 +327,52 @@ export const MonthCalendar: React.FC<IProps> = ({
     const entries: ShiftEntry[] = [];
     const startOfTarget = currentDate.startOfMonth();
     const endOfTarget = currentDate.endOfMonth();
+    const officeStartTimeChanged =
+      officeStartTime !== serverStartSettings.officeStartTime;
+    const remoteStartTimeChanged =
+      remoteStartTime !== serverStartSettings.remoteStartTime;
+    const startTimeChanged = officeStartTimeChanged || remoteStartTimeChanged;
 
     // 現在の月の日数をループしてデータを収集
     let target = startOfTarget;
     while (target.toJsTimeStamp() <= endOfTarget.toJsTimeStamp()) {
       const dateKey = target.toFormatString('yyyy-MM-dd');
       const savedType = shiftData[dateKey];
+      const serverType = serverShiftData[dateKey];
+      const localChanged = savedType !== serverType;
+      const effectiveType = savedType ?? getDefaultShift(target);
 
-      // 土日・祝日でサーバーと比べて変更なし（休日のまま）の場合は送信スキップ
-      if (
-        getDefaultShift(target) === 'holiday' &&
-        savedType === serverShiftData[dateKey] &&
-        (savedType === undefined || savedType === 'holiday')
-      ) {
+      if (!localChanged && !startTimeChanged) {
         target = target.addDay(1);
         continue;
       }
 
+      if (!localChanged && startTimeChanged) {
+        if (serverType === undefined) {
+          target = target.addDay(1);
+          continue;
+        }
+
+        const shouldResyncByStartTime =
+          (serverType === 'office' && officeStartTimeChanged) ||
+          (serverType === 'remote' && remoteStartTimeChanged);
+
+        if (!shouldResyncByStartTime) {
+          target = target.addDay(1);
+          continue;
+        }
+      }
+
       entries.push({
         date: dateKey,
-        type: savedType ?? getDefaultShift(target),
+        type: effectiveType,
       });
       target = target.addDay(1);
+    }
+
+    if (entries.length === 0 && !startTimeChanged) {
+      displaySnackbar('変更されたシフトがありません');
+      return;
     }
 
     router.post(
@@ -330,7 +385,10 @@ export const MonthCalendar: React.FC<IProps> = ({
       {
         onStart,
         onFinish,
-        onSuccess: page => handleFlash(page.props as ShiftPageProps),
+        onSuccess: page => {
+          setServerStartSettings({ officeStartTime, remoteStartTime });
+          handleFlash(page.props as ShiftPageProps);
+        },
       },
     );
   };
@@ -477,7 +535,7 @@ export const MonthCalendar: React.FC<IProps> = ({
         <DialogTitle>シフト登録の確認</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            表示している1ヶ月分のシフトを登録します
+            変更したシフトを登録します
             <br />
             ※反映に1〜2分ほどかかります
           </DialogContentText>
