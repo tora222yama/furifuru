@@ -11,7 +11,7 @@
         "aws/aws-sdk-php-laravel": "^3.9",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^v2.0.19",
+        "inertiajs/inertia-laravel": "^3.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.13",
