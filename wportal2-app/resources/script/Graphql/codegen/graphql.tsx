@@ -516,6 +516,27 @@ export function useAppTrnUserListLazyQuery(
     options,
   );
 }
+// @ts-ignore
+export function useAppTrnUserListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AppTrnUserListQuery,
+    AppTrnUserListQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnUserListQuery,
+  AppTrnUserListQueryVariables
+>;
+export function useAppTrnUserListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        AppTrnUserListQuery,
+        AppTrnUserListQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnUserListQuery | undefined,
+  AppTrnUserListQueryVariables
+>;
 export function useAppTrnUserListSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -594,6 +615,27 @@ export function useAppTrnDivisionListLazyQuery(
     AppTrnDivisionListQueryVariables
   >(AppTrnDivisionListDocument, options);
 }
+// @ts-ignore
+export function useAppTrnDivisionListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AppTrnDivisionListQuery,
+    AppTrnDivisionListQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnDivisionListQuery,
+  AppTrnDivisionListQueryVariables
+>;
+export function useAppTrnDivisionListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        AppTrnDivisionListQuery,
+        AppTrnDivisionListQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnDivisionListQuery | undefined,
+  AppTrnDivisionListQueryVariables
+>;
 export function useAppTrnDivisionListSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -672,6 +714,27 @@ export function useAppTrnProjectListLazyQuery(
     AppTrnProjectListQueryVariables
   >(AppTrnProjectListDocument, options);
 }
+// @ts-ignore
+export function useAppTrnProjectListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AppTrnProjectListQuery,
+    AppTrnProjectListQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnProjectListQuery,
+  AppTrnProjectListQueryVariables
+>;
+export function useAppTrnProjectListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        AppTrnProjectListQuery,
+        AppTrnProjectListQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  AppTrnProjectListQuery | undefined,
+  AppTrnProjectListQueryVariables
+>;
 export function useAppTrnProjectListSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -884,6 +947,27 @@ export function useSamplePaginationLazyQuery(
     SamplePaginationQueryVariables
   >(SamplePaginationDocument, options);
 }
+// @ts-ignore
+export function useSamplePaginationSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    SamplePaginationQuery,
+    SamplePaginationQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  SamplePaginationQuery,
+  SamplePaginationQueryVariables
+>;
+export function useSamplePaginationSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SamplePaginationQuery,
+        SamplePaginationQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  SamplePaginationQuery | undefined,
+  SamplePaginationQueryVariables
+>;
 export function useSamplePaginationSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -966,6 +1050,24 @@ export function useSampleRedisLazyQuery(
     options,
   );
 }
+// @ts-ignore
+export function useSampleRedisSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    SampleRedisQuery,
+    SampleRedisQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<SampleRedisQuery, SampleRedisQueryVariables>;
+export function useSampleRedisSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SampleRedisQuery,
+        SampleRedisQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  SampleRedisQuery | undefined,
+  SampleRedisQueryVariables
+>;
 export function useSampleRedisSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -1065,6 +1167,27 @@ export function useUsecasesCalendarUserScheduleListLazyQuery(
     UsecasesCalendarUserScheduleListQueryVariables
   >(UsecasesCalendarUserScheduleListDocument, options);
 }
+// @ts-ignore
+export function useUsecasesCalendarUserScheduleListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    UsecasesCalendarUserScheduleListQuery,
+    UsecasesCalendarUserScheduleListQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  UsecasesCalendarUserScheduleListQuery,
+  UsecasesCalendarUserScheduleListQueryVariables
+>;
+export function useUsecasesCalendarUserScheduleListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        UsecasesCalendarUserScheduleListQuery,
+        UsecasesCalendarUserScheduleListQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  UsecasesCalendarUserScheduleListQuery | undefined,
+  UsecasesCalendarUserScheduleListQueryVariables
+>;
 export function useUsecasesCalendarUserScheduleListSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
