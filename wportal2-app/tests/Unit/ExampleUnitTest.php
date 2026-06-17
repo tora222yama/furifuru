@@ -13,9 +13,9 @@ class ExampleUnitTest extends TestCase
      */
     public function test_simple_arithmetic(): void
     {
-        $a      = 3;
-        $b      = 4;
-        $c      = 2;
+        $a = 3;
+        $b = 4;
+        $c = 2;
 
         $result = ($a + $b) * $c;
 

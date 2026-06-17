@@ -25,13 +25,13 @@ class ExampleFeatureTest extends FeatureTestCase
     public function test_create_user_in_db(): void
     {
         $user = AuthUser::factory()->create([
-            'name'      => 'Test User',
-            'password'  => Hash::make('password123'),
-            'email'     => 'test@example.com',
+            'name' => 'Test User',
+            'password' => Hash::make('password123'),
+            'email' => 'test@example.com',
             'google_id' => 'dummy-google-id',
         ]);
         $this->assertDatabaseHas('auth_user', [
-            'name'  => 'Test User',
+            'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
     }
