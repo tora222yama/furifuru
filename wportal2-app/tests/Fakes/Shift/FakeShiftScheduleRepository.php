@@ -14,6 +14,9 @@ final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterf
     /** @var array<int, array{trnUserId:int,shifts:ShiftEntries}> */
     public array $replaceMonthlyShiftsCalls = [];
 
+    /** @var array<int, array{trnUserId:int,shifts:ShiftEntries}> */
+    public array $upsertShiftsCalls         = [];
+
     /** @var array<int, array{trnUserId:int,targetMonth:CarbonImmutable}> */
     public array $getMonthlyShiftsCalls     = [];
 
@@ -41,6 +44,38 @@ final class FakeShiftScheduleRepository implements ShiftScheduleRepositoryInterf
         $key                               = "{$trnUserId}:{$month}";
 
         $this->store[$key]                 = $shifts;
+    }
+
+    public function upsertShifts(int $trnUserId, ShiftEntries $shifts): void
+    {
+        $this->upsertShiftsCalls[] = [
+            'trnUserId' => $trnUserId,
+            'shifts'    => $shifts,
+        ];
+
+        if ($shifts->isEmpty()) {
+            return;
+        }
+
+        $monthRange                = $shifts->monthRangeOrFail();
+        $month                     = CarbonImmutable::createFromFormat('Y-m-d', $monthRange['start'])?->format('Y-m') ?? '';
+        $key                       = "{$trnUserId}:{$month}";
+        $existing                  = [];
+
+        foreach (($this->store[$key] ?? ShiftEntries::empty()) as $shift) {
+            $existing[$shift->date->toDateString()] = $shift;
+        }
+
+        foreach ($shifts as $shift) {
+            $existing[$shift->date->toDateString()] = $shift;
+        }
+
+        $merged                    = ShiftEntries::empty();
+        foreach ($existing as $shift) {
+            $merged->push($shift);
+        }
+
+        $this->store[$key]         = $merged;
     }
 
     public function getMonthlyShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries

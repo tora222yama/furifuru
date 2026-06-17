@@ -12,21 +12,21 @@ use Tests\Fakes\External\FakeGoogleCalendarService;
 
 class ShiftCalendarSyncerEventTypeTest extends TestCase
 {
-    /** @return array<string, array{ShiftType, ?string}> */
+    /** @return array<string, array{ShiftType, ?string, string}> */
     public static function eventTypeProvider(): array
     {
         return [
-            'オフィス出社はeventType無し' => [ShiftType::Office, null],
-            '在宅はother'                 => [ShiftType::Remote, 'other'],
-            '休暇はrest'                  => [ShiftType::Holiday, 'rest'],
-            '出張はbizTrip'               => [ShiftType::BusinessTrip, 'bizTrip'],
+            'オフィス出社はeventType無し' => [ShiftType::Office, null, 'outOfOffice'],
+            '在宅はother'                 => [ShiftType::Remote, 'other', 'outOfOffice'],
+            '休暇はrest'                  => [ShiftType::Holiday, 'rest', 'rest'],
+            '出張はbizTrip'               => [ShiftType::BusinessTrip, 'bizTrip', 'outOfOffice'],
         ];
     }
 
     /**
      * @dataProvider eventTypeProvider
      */
-    public function test_all_day_event_has_correct_event_type(ShiftType $type, ?string $expectedEventType): void
+    public function test_all_day_event_has_correct_event_type(ShiftType $type, ?string $expectedEventType, string $expectedTimedEventType): void
     {
         $fake       = new FakeGoogleCalendarService;
         $syncer     = new ShiftCalendarSyncer($fake);
@@ -52,6 +52,6 @@ class ShiftCalendarSyncerEventTypeTest extends TestCase
         $timedCall  = collect($fake->blockCalls)->firstWhere('allDay', false);
         $this->assertNotNull($timedCall, '時刻指定予定のblockSchedule呼び出しが存在すること');
         $this->assertSame('shift_sync', $timedCall['source'], '時刻指定予定にもsource=shift_syncが設定されること');
-        $this->assertSame('outOfOffice', $timedCall['eventType'], '時刻指定予定はoutOfOffice（不在）で登録されること');
+        $this->assertSame($expectedTimedEventType, $timedCall['eventType'], '時刻指定予定のeventTypeが正しいこと');
     }
 }

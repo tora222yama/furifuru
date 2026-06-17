@@ -36,7 +36,8 @@ final class ShiftRegistrationUseCaseTest extends TestCase
     {
         $fakeCalendar    = new FakeGoogleCalendarService;
         $fakeRepository  = new FakeShiftScheduleRepository;
-        $useCase         = $this->makeUseCase($fakeCalendar, $fakeRepository);
+        $fakeSettings    = new FakeShiftSettingsRepository;
+        $useCase         = $this->makeUseCase($fakeCalendar, $fakeRepository, $fakeSettings);
 
         $command         = new ShiftRegistrationCommand(trnUserId: 1, authEmail: 'user@example.com', shifts: [], startSettings: ShiftStartSettings::default());
 
@@ -47,9 +48,11 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertSame([], $fakeCalendar->deleteCalls);
         $this->assertSame([], $fakeCalendar->blockCalls);
         $this->assertSame([], $fakeRepository->replaceMonthlyShiftsCalls);
+        $this->assertSame([], $fakeRepository->upsertShiftsCalls);
+        $this->assertCount(1, $fakeSettings->upsertCalls);
     }
 
-    public function test_execute_saves_to_db_and_syncs_all_shifts(): void
+    public function test_execute_upserts_only_submitted_shifts_and_syncs_their_dates(): void
     {
         $fakeCalendar                                              = new FakeGoogleCalendarService;
         $fakeRepository                                            = new FakeShiftScheduleRepository;
@@ -66,20 +69,22 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertSame(0, $result->failures->count());
 
         // DBへの保存が呼ばれていること
-        $this->assertCount(1, $fakeRepository->replaceMonthlyShiftsCalls);
-        $this->assertSame(1, $fakeRepository->replaceMonthlyShiftsCalls[0]['trnUserId']);
-        $this->assertSame(2, $fakeRepository->replaceMonthlyShiftsCalls[0]['shifts']->count());
+        $this->assertCount(0, $fakeRepository->replaceMonthlyShiftsCalls);
+        $this->assertCount(1, $fakeRepository->upsertShiftsCalls);
+        $this->assertSame(1, $fakeRepository->upsertShiftsCalls[0]['trnUserId']);
+        $this->assertSame(2, $fakeRepository->upsertShiftsCalls[0]['shifts']->count());
 
         // 全件成功で SYNCED に更新されていること
         $this->assertCount(1, $fakeRepository->updateSyncStatusesCalls);
         $this->assertSame(ECalendarSyncStatus::SYNCED, $fakeRepository->updateSyncStatusesCalls[0]['status']);
 
-        // Google Calendar の削除・登録が呼ばれていること
-        $this->assertCount(1, $fakeCalendar->deleteCalls);
-        $deleteCall                                                = $fakeCalendar->deleteCalls[0];
-        $this->assertSame('user@example.com', $deleteCall['authEmail']);
-        $this->assertSame('2024-07-01', $deleteCall['start']->toDateString());
-        $this->assertSame('2024-07-31', $deleteCall['end']->toDateString());
+        // Google Calendar は送信された日付だけ削除・登録すること
+        $this->assertCount(2, $fakeCalendar->deleteCalls);
+        $this->assertSame('user@example.com', $fakeCalendar->deleteCalls[0]['authEmail']);
+        $this->assertSame('2024-07-01', $fakeCalendar->deleteCalls[0]['start']->toDateString());
+        $this->assertSame('2024-07-01', $fakeCalendar->deleteCalls[0]['end']->toDateString());
+        $this->assertSame('2024-07-02', $fakeCalendar->deleteCalls[1]['start']->toDateString());
+        $this->assertSame('2024-07-02', $fakeCalendar->deleteCalls[1]['end']->toDateString());
 
         $this->assertCount(4, $fakeCalendar->blockCalls); // 2 shifts x (all-day + timed)
 
@@ -110,7 +115,8 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertSame(1, $result->failures->count());
 
         // DBへの保存は成功していること
-        $this->assertCount(1, $fakeRepository->replaceMonthlyShiftsCalls);
+        $this->assertCount(0, $fakeRepository->replaceMonthlyShiftsCalls);
+        $this->assertCount(1, $fakeRepository->upsertShiftsCalls);
 
         // 失敗分が FAILED に更新されていること
         $failedUpdates   = array_filter(
@@ -120,6 +126,8 @@ final class ShiftRegistrationUseCaseTest extends TestCase
         $this->assertCount(1, $failedUpdates);
 
         $this->assertCount(1, $fakeCalendar->deleteCalls);
+        $this->assertSame('2024-07-10', $fakeCalendar->deleteCalls[0]['start']->toDateString());
+        $this->assertSame('2024-07-10', $fakeCalendar->deleteCalls[0]['end']->toDateString());
         $this->assertCount(2, $fakeCalendar->blockCalls);
     }
 

@@ -28,22 +28,26 @@ final readonly class ShiftRegistrationUseCase
     public function execute(ShiftRegistrationCommand $command): ShiftSyncResult
     {
         $shifts     = ShiftEntries::fromArray($command->shifts);
-
-        if ($shifts->isEmpty()) {
-            return new ShiftSyncResult(ShiftEntries::empty(), ShiftEntries::empty());
+        $hasShifts  = ! $shifts->isEmpty();
+        if ($hasShifts) {
+            $shifts->monthRangeOrFail();
         }
 
         // DBへの保存（トランザクション内）
-        DB::transaction(function () use ($command, $shifts): void {
-            $this->shiftScheduleRepository->replaceMonthlyShifts($command->trnUserId, $shifts);
+        DB::transaction(function () use ($command, $shifts, $hasShifts): void {
+            if ($hasShifts) {
+                $this->shiftScheduleRepository->upsertShifts($command->trnUserId, $shifts);
+            }
             $this->shiftSettingsRepository->upsert($command->trnUserId, $command->startSettings);
         });
 
+        if (! $hasShifts) {
+            return new ShiftSyncResult(ShiftEntries::empty(), ShiftEntries::empty());
+        }
+
         // Google Calendar 連携（トランザクション外・ベストエフォート）
-        $monthRange = $shifts->monthRangeOrFail();
-        $result     = $this->calendarSyncer->replaceCalendarMonth(
+        $result     = $this->calendarSyncer->replaceCalendarDates(
             $command->authEmail,
-            $monthRange,
             $shifts,
             $command->startSettings,
         );

@@ -51,6 +51,36 @@ final class ShiftScheduleRepository implements ShiftScheduleRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function upsertShifts(int $trnUserId, ShiftEntries $shifts): void
+    {
+        $rows = [];
+        $now  = now();
+
+        foreach ($shifts as $shift) {
+            $rows[] = [
+                'trn_user_id'            => $trnUserId,
+                'shift_date'             => $shift->date->toDateString(),
+                'shift_type'             => $shift->type->value,
+                'e_calendar_sync_status' => ECalendarSyncStatus::PENDING->value,
+                'created_at'             => $now,
+                'updated_at'             => $now,
+            ];
+        }
+
+        if ($rows === []) {
+            return;
+        }
+
+        TrnShiftSchedule::query()->upsert(
+            $rows,
+            ['trn_user_id', 'shift_date'],
+            ['shift_type', 'e_calendar_sync_status', 'updated_at'],
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMonthlyShifts(int $trnUserId, CarbonImmutable $targetMonth): ShiftEntries
     {
         $start   = $targetMonth->startOfMonth()->toDateString();
