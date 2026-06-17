@@ -11,7 +11,6 @@ export const E_MENU = {
   GOOD_JOB: 'good_job', // 感謝を記録する.
   SHOP: 'shop', // ショップ.
   REWARD: 'reward', // 報酬.
-  SHIFT_SCHEDULE: 'shift_schedule', // シフト管理.
   ATTENDANCE_ROOT: 'attendance_root', // 勤怠確認.
   ATTENDANCE_EDIT: 'attendance_edit', // 勤怠修正.
   ATTENDANCE_TABLE: 'attendance_table', // 勤怠一覧表.
@@ -66,14 +65,6 @@ export const MenuList: IMenu[] = [
     back: E_PAGES.INVALID,
     name: '勤怠',
     icon: E_ICON.ATTENDANCE,
-  },
-  {
-    menu: E_MENU.SHIFT_SCHEDULE,
-    pages: E_PAGES.SHIFT_SCHEDULE,
-    parent: E_MENU.INVALID,
-    back: E_PAGES.INVALID,
-    name: 'シフト表',
-    icon: E_ICON.CALENDAR_MONTH,
   },
   {
     menu: E_MENU.REWARD,

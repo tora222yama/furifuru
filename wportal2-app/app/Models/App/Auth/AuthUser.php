@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @mixin AuthUser
@@ -20,9 +19,9 @@ use Laravel\Sanctum\HasApiTokens;
 class AuthUser extends Authenticatable
 {
     /** @use HasFactory<AuthUserFactory> */
-    use EagerLoadHelper, HasApiTokens, HasFactory, Notifiable;
+    use EagerLoadHelper, HasFactory, Notifiable;
 
-    protected $table    = 'auth_user';
+    protected $table = 'auth_user';
 
     /**
      * The attributes that are mass assignable.
@@ -41,7 +40,7 @@ class AuthUser extends Authenticatable
      *
      * @var list<string>
      */
-    protected $hidden   = [
+    protected $hidden = [
         'password',
         'remember_token',
         'sp_password',
@@ -52,10 +51,10 @@ class AuthUser extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts    = [
+    protected $casts = [
         'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
-        'sp_password'       => 'hashed',
+        'password' => 'hashed',
+        'sp_password' => 'hashed',
     ];
 
     /**
@@ -90,14 +89,14 @@ class AuthUser extends Authenticatable
     public function toPayload(array $with = [], array $history = []): array
     {
         return [
-            'id'                 => $this->id,
-            'name'               => $this->name                  ?? '',
-            'email'              => $this->email                 ?? '',
+            'id' => $this->id,
+            'name' => $this->name ?? '',
+            'email' => $this->email ?? '',
             'eEnableLegacyLogin' => $this->e_enable_legacy_login ?? 0,
-            'eEnableSpLogin'     => $this->e_enable_sp_login     ?? 0,
+            'eEnableSpLogin' => $this->e_enable_sp_login ?? 0,
             'spLoginFailedCount' => $this->sp_login_failed_count ?? 0,
 
-            'trnUser'            => $this->isExistKeyInWith($with, 'TrnUser', $history)
+            'trnUser' => $this->isExistKeyInWith($with, 'TrnUser', $history)
                 ? $this->TrnUser?->toPayload($with, [...$history, 'TrnUser'])
                 : null,
 
