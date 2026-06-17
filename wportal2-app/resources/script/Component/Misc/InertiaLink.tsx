@@ -1,7 +1,6 @@
 import React from 'react';
-import { InertiaLinkProps } from '@inertiajs/react/types/Link';
 import { Box } from '@mui/material';
-import { Link } from '@inertiajs/react';
+import { InertiaLinkProps, Link } from '@inertiajs/react';
 import { IPropsBase } from '@/script/System/System';
 import { useProgressContext } from '@/script/Provider/ProgressProvider';
 
