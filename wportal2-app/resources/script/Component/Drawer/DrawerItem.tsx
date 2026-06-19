@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Badge,
   Box,
-  Chip,
   Collapse,
   List,
   ListItem,
@@ -88,20 +87,6 @@ export const DrawerItem: React.FC<IProps> = ({ sx, menu, depth }) => {
         >
           <Icon sx={{ marginRight: '10px' }} icon={menu.icon} />
           <ListItemText>{menu.name}</ListItemText>
-          <Closable open={menu.menu === E_MENU.SHIFT_SCHEDULE}>
-            <Chip
-              label="Beta"
-              size="small"
-              variant="outlined"
-              sx={{
-                fontSize: '0.65rem',
-                height: '18px',
-                mr: 0.5,
-                color: E_COLOR.BETA,
-                borderColor: E_COLOR.BETA,
-              }}
-            />
-          </Closable>
           <Closable open={menu.menu === E_MENU.REWARD}>
             <Badge badgeContent={achievementCount} color="primary" />
           </Closable>

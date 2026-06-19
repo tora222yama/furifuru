@@ -68,15 +68,6 @@ Route::group(['middleware' => ['auth:web']], function () {
     });
 
     /**
-     * シフト管理.
-     */
-    Route::prefix('/shift_schedule')->group(function () {
-        Route::match(['get'], '/', EPages::SHIFT_SCHEDULE->getInvokePath());
-        Route::post('/store', EPages::SHIFT_SCHEDULE__STORE->getInvokePath());
-        Route::get('/export', EPages::SHIFT_SCHEDULE__EXPORT->getInvokePath());
-    });
-
-    /**
      * 勤怠確認・修正.
      */
     Route::prefix('/attendance/edit')->group(function () {
@@ -165,25 +156,6 @@ Route::group(['middleware' => ['auth:web']], function () {
      * 座席表
      */
     Route::get('/seating_chart', EPages::SEATING_CHART->getInvokePath());
-
-    /**
-     * 管理画面: API トークン管理
-     */
-    Route::prefix('/admin')->group(function () {
-        Route::prefix('/api-tokens')->group(function () {
-            Route::get('/', '\App\Http\Controllers\Admin\ApiTokenManagementController@index')
-                ->name('admin.api-tokens.index');
-            Route::post('/issue', '\App\Http\Controllers\Admin\ApiTokenManagementController@issue')
-                ->name('admin.api-tokens.issue');
-            Route::get('/show', '\App\Http\Controllers\Admin\ApiTokenManagementController@show')
-                ->name('admin.api-tokens.show');
-            Route::post('/{tokenId}/destroy', '\App\Http\Controllers\Admin\ApiTokenManagementController@destroy')
-                ->name('admin.api-tokens.destroy')
-                ->where('tokenId', '[0-9]+');
-            Route::post('/rotate', '\App\Http\Controllers\Admin\ApiTokenManagementController@rotate')
-                ->name('admin.api-tokens.rotate');
-        });
-    });
 });
 
 Route::get('/image/{path?}', '\App\Http\Controllers\ImageController@invoke')
