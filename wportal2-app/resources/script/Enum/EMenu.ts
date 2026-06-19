@@ -196,7 +196,6 @@ export const MenuList: IMenu[] = [
     name: '座席表',
     icon: E_ICON.ADMIN_PANEL,
   },
-  /*
   {
     menu: E_MENU.SAMPLE_INTERN_ROOT,
     pages: E_PAGES.INVALID,
@@ -261,7 +260,6 @@ export const MenuList: IMenu[] = [
     name: 'Lv--.Slackログ',
     icon: E_ICON.BUILD,
   },
-   */
 ];
 
 /**
