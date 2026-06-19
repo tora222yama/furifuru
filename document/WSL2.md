@@ -1,96 +1,116 @@
-### Ubuntu22.04のセットアップ
+# WSL2 + Ubuntuのセットアップ
 
-※少し古い情報となります、適宜最新バージョンを選び、インストール方法の変更などは利用PJで吸収してください
+## 各種機能の有効化
 
-基本のインストール手順は[こちら](https://www.docker.com/products/docker-desktop/)を参照
-
-- PowerShellを管理者モードで開き、下記を実行 
-- **（※要管理者権限）** 
+### Linux用Windowsサブシステムの有効化
+1. PowerShellを管理者として開く 
+2. PowerShellで以下のコマンドを実行する
 
 ```
-# 手順 1 - Linux 用 Windows サブシステムを有効にする
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
 
-# 手順 3: 仮想マシンの機能を有効にする
+### 仮想マシンの有効化
+
+1. PowerShellで以下のコマンドを実行する
+2. PCを再起動する
+
+```
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 ```
 
-- 下記を実行
+## Ubuntuの設定
 
-[x64 マシン用 WSL2 Linux カーネル更新プログラム パッケージ](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
- **（※要管理者権限）** 
-
-- PowerShellで下記を実行
+1. PowerShellで以下のコマンドを実行する
 
 ```
-# 手順 5 - WSL 2 を既定のバージョンとして設定する
-wsl --set-default-version 2
-
-# 手順 6 -  ディストリビューションのダウンロード
-Invoke-WebRequest -Uri https://aka.ms/wslubuntu2204 -OutFile Ubuntu2204.appx -UseBasicParsing
-※社内回線では時間がかかるor失敗する可能性あり、その場合は再トライを
+wsl --install
 ```
 
-- 上記appxを起動してUbuntuをインストール
-- 初回起動のユーザー・パスワードはPCと同じものを設定しておいてください
+2. PowerShellで以下の入力を行う
 
+```
+Create a default Unix user account:（任意のアカウント名）
+New password:（任意のパスワード）
+Retype new password:（任意のパスワードを再入力）
+```
 
-![image][pasted-2024.02.28-16.57.43.png]
+※入力したパスワードは表示されませんが正しく入力できています
 
-- Windowsターミナルを[GitHub](https://github.com/microsoft/terminal/releases)からダウンロード
-    - exeは```C:\Users\user name\AppData\Local\Microsoft\WindowsApps\wt.exe```にあります
-    - 起動したら規定のプロファイルをUbuntuにしておく
+3. 以下のメッセージが表示されることを確認する
 
-- Ubuntuのメモリ上限の設定
-    - ```C:\Users\user name\.wslconfig```を作成
-    - 下記の設定を記入
-    - ※これを行わないとUbuntuがメモリの上限まで使います
+```
+We will save your answer to Windows and will only ask you once.
+Would you like to opt-in to platform metrics collection (Y/n)? To see an example of the data collected, enter 'e'.
+```
+
+4. 以下の入力（選択）を行う
+
+```
+[Y/n/e]: n
+```
+
+## Ubuntuのメモリ上限の設定
+
+1. `C:\Users\（ユーザ名）`に`.wslconfig`を作成する
+2. 以下の値を入力して保存する
 
 ```
 [wsl2]
 memory=8GB
 ```
 
-- この状態で下記となります、一度再起動して確認しておいてください
-    - Windowsを起動するとUbuntuは立ち上がっている
-    - ターミナルを開けばUbuntuのコンソールを開ける
-    - エクスプローラーで```¥¥wsl$```を開くとUbuntuのファイルシステムにアクセスできる
+※こちらを設定しないとUbuntuがメモリの上限まで使います
 
-- 上記コンソールでnodeのバージョンを18まで上げておきます
+## Node.jsのバージョンアップ
+
+1. Ubuntuのアプリを開く
+2. Ubuntuで以下のコマンドを順に実行する
+
+### アップデートが可能なパッケージのリストを更新する
 
 ```
-# apt update
 sudo apt update
-
-# curlのインストール
-sudo apt install -y curl
-
-# v18をインストールする場合(使用するバージョンに合わせること)
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo bash -
-sudo apt-get install -y nodejs
-
-# バージョンを確認 
-node -v
-v18.15.0
-
-# 自動的にnpmもインストールされる
-npm -v
-9.5.0
 ```
 
-### その他の設定
+### curlをインストールする
 
-- hostsファイルの編集
-    - ```C:\Windows\System32\drivers\etc```
-    - メモ帳を管理者権限で開き、hostsファイルを編集
+```
+sudo apt install -y curl
+```
+
+### Node.jsをインストールする（v22の場合）
+
+```
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash -
+sudo apt-get install -y nodejs
+```
+
+### バージョンを確認する
+
+```
+node -v
+# v22.23.0に近いバージョンが表示されたらOK
+
+npm -v
+# 10.9.8に近いバージョンが表示されたらOK
+```
+
+## その他の設定
+
+### hostsファイルの編集
+1. `C:\Windows\System32\drivers\etc`のフォルダを開く
+2. `hosts`のファイルをメモ帳で管理者として開く
+3. 以下の値を追記して保存する
 
 ```
 127.0.0.1 localhost minio
 ```
 
-- IntelliJ IDEAは最初からインストールされている認識ですが、なければダウンロードサイトから入手
-    - アクティベートコードは３課から入手
+### gitのcrlfを無効化
 
-- 利用するgitのcrlfを無効にしておいてください
-    - '''git config --global core.autoCRLF false'''
-    - Ubuntu上のgit/Source Treeのgitなど
+以下のコマンドを実行する
+
+```
+git config --global core.autoCRLF false
+```
