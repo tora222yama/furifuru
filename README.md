@@ -39,7 +39,7 @@ cd wportal2-app
 cp .env.local.sample .env
 ```
 
-2. Backlogのwiki「接続情報」に記載の以下の環境変数を設定する
+2. Backlogのwiki[[接続情報]]に記載の以下の環境変数を設定する
 
 ```
 GOOGLE_CLIENT_ID=
