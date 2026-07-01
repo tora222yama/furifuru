@@ -1,5 +1,168 @@
-# wportal2
-Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
+# 環境構築の手順
+
+## 前提
+
+### Windows
+
+- Docker Desktop for Windowsが利用可能になっている
+- WSL2 + Ubuntuのセットアップが完了している
+  - 参考）[WSL2 + Ubuntuのセットアップ](./document/WSL2.md)
+- hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
+
+### Mac
+
+- Docker Desktop for Mac が利用可能になっている
+- hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
+
+## 注意事項
+- 以降の構築手順はエディター内のターミナルタブ、Windowsターミナルなどどこから実施してもOKです
+- dockerディレクトリ以下に```CRLF```ファイルがあるとビルドに失敗します
+- CTRL+選択した状態でCTRL+SHIFT+Aでアクションを実施→```LF - Unix and MacOS```を実施すると一括でLFに変更できます
+- インストール時の権限でファイル所有者がrootなどになっていると正常に動作しない場合があるので、その場合はchownで対応してください
+    - 例）`sudo chown {name}:{group} -R {target_dir}`
+
+## 環境構築
+
+### リポジトリをcloneする
+
+1. 任意の場所にディレクトリを作成する
+  - 例 `/home/user-name/workspace/wportal2`
+2. 上記のディレクトリをエディターで開く
+3. 本リポジトリをcloneする
+
+### .envファイルを用意する
+
+1. 以下のコマンドを実行する
+
+```
+cd wportal2-app
+cp .env.local.sample .env
+```
+
+2. Backlogのwiki「接続情報」に記載の以下の環境変数を設定する
+
+```
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+### コンテナを起動する
+
+```
+cd ..
+docker-compose build
+docker-compose up -d
+```
+
+### composerとnpmをインストールする
+
+```
+docker exec -it wportal2_web bash
+> composer install
+> npm ci
+```
+
+### データベースを初期化する
+
+```
+## 初めて初期化する場合
+> php artisan migrate
+
+## 再度初期化する場合
+> php artisan migrate:refresh
+```
+
+### ログファイルの権限を修正する
+
+- コンテナから抜け出してUbuntu上などのターミナルで実行する
+- /wportal2-appの直下で実行する
+
+```
+sudo chmod -R 777 storage/
+```
+
+### minioの設定
+
+1. http://localhost:19001/login へアクセスする
+2. `.env`に記載の以下の情報でログインする
+
+```
+WPORTAL_STORAGE_ACCESS_KEY=
+WPORTAL_STORAGE_SECRET_KEY=
+```
+
+3. http://localhost:19001/buckets へアクセスする
+4. `Create Bucket +`のボタンをクリックする
+5. `Bucket Name`に`.env`に記載の以下の情報を入力する
+
+```
+WPORTAL_STORAGE_BUCKET=
+```
+
+6. `Create Bucket`のボタンをクリックする
+
+### 初期データを投入する
+
+```
+docker exec -it wportal2_web bash
+> php artisan db:seed --class=TestCaseSeeder
+```
+
+### 環境構築後の動作確認
+
+1. 以下のコマンドを実行する
+
+```
+docker exec -it wportal2_web bash
+> npm run dev
+```
+
+2. [http://localhost:9190](http://localhost:9190)へアクセスする
+3. Googleアカウントで認証する
+4. [http://localhost:9190/attendance](http://localhost:9190/attendance)へアクセスする
+5. 以下のような画面が表示されることを確認する<br/>※「他メンバーの状況」に表示される情報が異なっても問題ありません
+
+<div align="center"><img src="document/images/attendance.png" width="800" alt="attendance.png"></div>
+
+## precommitの設定
+
+### precommitを設定する
+
+- コンテナから抜け出してUbuntu上などのターミナルで実行する
+- /wportal2-appの直下で実行する
+
+```
+(> exit)
+npm run prepare
+```
+
+### コミット時の動作確認
+
+1. 任意のブランチを作成する
+2. `wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx`に動作確認のコードを追加する
+
+```
+const i = 0;
+```
+
+3. 下記のコマンドを実施する
+
+```
+git add .
+docker exec -it wportal2_web bash
+> npm run lefthook
+```
+
+4. 以下のようなエラー表示がされてコミットができないことを確認する
+
+```
+/var/www/html/wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx
+  10:9  error  'i' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (1 error, 0 warnings)
+```
+
+## 付録
 
 - [利用パッケージについて](document/PACKAGE.md)
 - [Laravel/Inertiaの基本的な導線とページ作成ガイド](./document/PAGE_CREATION_GUIDE.md)
@@ -11,168 +174,3 @@ Laravel + Inertia + SSR + (React/Vite) + (MUI)のサンプル
 - [InertiaLinkとPartialLoadについて](./document/INERTIA_LINK_AND_PARTIAL_LOAD.md)
 - [TIPS](./document/TIPS.md)
 - [テスト実行ガイド（VS Code: チャット/フラスコ対応）](./document/TESTING.md)
-
-# 環境構築
-
-## 前提
-
-### Windows
-
-- Docker Desktop for Windows が利用可能になっている
-- clone先にWSL2+Ubuntu環境が構築済み
-  - 参考）[Ubuntu22.04のセットアップ](./document/WSL2.md)
-- hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
-
-### Mac
-
-- Docker Desktop for Mac が利用可能になっている
-- hostsファイルに ```127.0.0.1 localhost```のような記載があり、localhostでアクセスが可能になっている
-
-## サンプル環境のセットアップ
-
-- ディレクトリを作成
-  - 例 ```/home/user-name/dev/wportal2```
-- 上記ディレクトリをIntellij Ideaで開く
-  - 以下、構築手順はIntellij Ideaの下側のTerminalタブで実施可能ですが、Windowsターミナルなどから実施してもOKです
-- Gitからコード取得
-  - URL: ```https://github.com/quick-wpd/wportal2```
-- dockerディレクトリ以下に```CRLF```ファイルがあるとビルドに失敗します
-  - CTRL+選択した状態でCTRL+SHIFT+Aでアクションを実施→```LF - Unix and MacOS```を実施すると一括でLFに変更できます
-
-### コピー環境の作成
-
-※サンプル環境での起動確認、追加、編集を行う場合は本ステップは不要
-※ダウンロードしたディレクトリで「セットアップ手順」以降の対応を実施してください
-
-新規プロジェクトなど、新しい環境を作成する場合は下記の手順を参考にしてください
-
-- 新規リポジトリを作成
-  - 例はgit名称を```new_project.git```とし、プロジェクト名を```newp```とします
-  - 作成時のルールは[Backlog](https://scat919.backlog.jp/alias/wiki/1276308)を参考にしてください
-- ダウンロード済みのテンプレート環境から、新規リポジトリにmirror-pushする
-  - 新規で作成したリポジトリにtemplate環境のhistory含めてすべてpushされる
-
-```
-※テンプレート環境のディレクトリで実施
-$ git push --mirror https://github.com/quick-wpd/new_project.git
-```
-
-- アプリケーション名を変更
-  - 事故に気を付けつつCTRL+SHIFT+Rの一括置換でも問題ありません
-  - そのままでも利用は可能ですが、諸々利用PJにあわせた最適化を推奨します
-  - ディレクトリ名の修正
-    - ```wportal2-app``` -> ```newp-app```
-  - ファイル内の宣言の修正
-    - ```wportal2-app``` -> ```newp-app```
-    - ```wportal2``` -> ```newp```
-    - ```wportal2_``` -> ```newp_```
-      - 主にdocker-composeの宣言が修正されます
-
-### セットアップ手順
-
-- インストール時の権限でファイル所有者がrootなどになっていると正常に動作しない場合があるので、その場合はchownで対応してください
-- 例）```sudo chown {name}:{group} -R {target_dir}```
-
-```
-cd wportal2-app
-cp .env.local .env
-cd ..
-docker-compose build
-docker-compose up -d
-
-# webコンテナにログインしてcomposerとnpmのインストール
-docker exec -it wportal2_web bash
-> composer install
-> npm ci
-
-# webコンテナでデータベース初期化
-> php artisan migrate
-> (php artisan migrate:refresh // 再初期化する場合)
-
-# precommitの設定（Ubuntu上など、ターミナル側のwportal2-app直下で実施する）
-(> exit)
-npm run prepare
-(husky - Git hooks installed と表示されればOK)
-
-# ログファイルの権限を修正（Ubuntu上など、ターミナル側のwportal2-app直下で実施する）
-sudo chmod 777 -R storage/
-
-# webコンテナでビルドテスト
-docker exec -it wportal2_web bash
-> npm run build
-※念のため画面が表示されるかチェック http://localhost:9190/first_page
-```
-
-### minio(ローカル向けS3)の設定
-
-※コンテナ追加したら追記する
-
-### 初期データ投入
-
-seederを利用してテストデータを投入する
-
-```
-docker exec -it wportal2_web bash
-> php artisan db:seed --class=TestCaseSeeder
-```
-
-### コミット動作テスト
-
-- テスト用ブランチを作成する
-- ```wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx```に下記のような意味のないコードを追加
-
-```
-const i = 0; // 追加箇所
-```
-
-- 下記のコマンドを実施して、error表示がされることを確認する
-
-```
-docker exec -it wportal2_web bash
-git add .
-npm run lefthook
-```
-
-- 表示されるエラーの例
-
-```
-/var/www/html/wportal2-app/resources/script/Pages/MvcValue/MvcValue.tsx
-  10:9  error  'i' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-✖ 1 problem (1 error, 0 warnings)
-```
-
-- gitコミットを実施して、コミットが できない ことを確認する
-
-### 開発作業
-
-- 実際に開発を行う場合は下記を実施してください
-
-```
-docker exec -it wportal2_web bash
-npm run dev
-```
-
-実行後に```localhost:9190/first_page```ページにアクセスするとHMR(Hot Module Reload)が有効な状態でページに接続します。
-この状態で対象ページのTypeScriptの更新を行うとページが自動でリロードされます。
-
-
-### 本番相当のSSRアクセス
-
-- ビルドは下記で行います
-
-```
-docker exec -it wportal2_web bash
-npm run build
-
-※2024/03時点では大量のwarningが出ますが、無視してください
-```
-
-- ビルド後に下記を実施し、SSRのhydrate待ち受けを実施します
-
-```
-php artisan inertia:start-ssr
-```
-
-- 実行後に```localhost:9190```ページにアクセスすると、サーバー側で描画した結果を受け取れます
-
