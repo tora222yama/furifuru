@@ -104,7 +104,7 @@ npm -v
 3. 以下の値を追記して保存する
 
 ```
-127.0.0.1 localhost minio
+127.0.0.1 localhost wportal2-minio
 ```
 
 ### gitのcrlfを無効化

@@ -22,6 +22,9 @@ yarn-error.log
 local-opensearch
 .pint.cache
 
+# Nodeの実行環境バイナリを除外
+wportal2-app/node-v20.11.0-linux-arm64/
+wportal2-app/node-v22.11.0-linux-arm64/
 #  Local .terraform directories
 **/.terraform/*
 
